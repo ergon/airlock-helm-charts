@@ -3,6 +3,35 @@ entries:
   microgateway:
   - apiVersion: v1
     appVersion: "1"
+    created: "2020-04-27T15:29:49.806203799Z"
+    dependencies:
+    - condition: redis.enabled
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: 10.6.0
+    - condition: echo-server.enabled
+      name: echo-server
+      repository: https://ealenn.github.io/charts
+      version: 0.3.0
+    description: Web Application firewall (WAF) as a container to protect other containers.
+    digest: 3fbdcf99408e493cc6277b7ce0909fe06aec5e72954776a4862e853dfe3ab365
+    home: https://www.airlock.com
+    keywords:
+    - WAF
+    - Web Application Firewall
+    - Airlock
+    - MicroGateway
+    - Security
+    - Filtering
+    maintainers:
+    - email: support@airlock.com
+      name: Airlock
+    name: microgateway
+    urls:
+    - https://github.com/ergon/airlock-helm-charts/releases/download/microgateway-0.4.0/microgateway-0.4.0.tgz
+    version: 0.4.0
+  - apiVersion: v1
+    appVersion: "1"
     created: "2020-04-27T11:55:23.06817898Z"
     dependencies:
     - condition: redis.enabled
