@@ -23,18 +23,18 @@ helm repo add airlock https://ergon.github.io/airlock-helm-charts/
 
 ## Installing the Chart
 
-To install the chart with the release name `waf`:
+To install the chart with the release name `microgateway`:
 
 ```console
-helm upgrade -i waf airlock/microgateway
+helm upgrade -i microgateway airlock/microgateway
 ```
 
 ## Uninstalling the Chart
 
-To uninstall the chart with the release name `waf`:
+To uninstall the chart with the release name `microgateway`:
 
 ```console
-helm uninstall waf
+helm uninstall microgateway
 ```
 
 ## <a name="dsl-configuration"></a> DSL Configuration
@@ -94,7 +94,7 @@ The helm chart has optional dependencies which can be activated.
 To use redis the value `redis.enabled` must be set to true
 
 ```console
-helm upgrade -i airlock-waf airlock/microgateway --set redis.enabled=true
+helm upgrade -i microgateway airlock/microgateway --set redis.enabled=true
 ```
 
 To see all possible settings for this dependency please go to the following URL: [Helm Hub bitnami/redis](https://hub.helm.sh/charts/bitnami/redis)
