@@ -1,7 +1,7 @@
 Airlock microgateway
 ============
 
-Current chart version is `0.4.1`
+Current chart version is `0.3.9`
 
 Web Application firewall (WAF) as a container to protect other containers.
 
@@ -19,7 +19,7 @@ More details about the installation of the microgateway helm chart can be found 
 To add the chart repository:
 
 ```console
-helm repo add airlock https://ergon.github.io/airlock-helm-charts/
+helm repo add airlock https://libuweber.github.io/microgateway/
 ```
 
 ## Installing the Chart
