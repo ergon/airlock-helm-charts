@@ -273,3 +273,9 @@ redis:
     disableCommands: ["FLUSHDB"]  # "FLUSHALL" must not be deactivated, because the WAF needs this command for the configuration of the redis store.
   slave:
     command: redis-server
+
+echo-server:
+  enabled: false
+  fullnameOverride: echo-server
+  service:
+    port: 8080
