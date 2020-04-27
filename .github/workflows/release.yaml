@@ -15,9 +15,9 @@ jobs:
         uses: actions/checkout@v1
       - name: Configure Git
         run: |
-          git config user.name "'${{ secrets.GITHUB_USER }}'"
-          git config user.email "'${{ secrets.GITHUB_USER }}'@users.noreply.github.com"
+          git config user.name "'${{ secrets.TECHNICAL_USER }}'"
+          git config user.email "'${{ secrets.TECHNICAL_USER }}'@users.noreply.github.com"
       - name: Run chart-releaser
         uses: helm/chart-releaser-action@master
         env:
-          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
+          TECHNICAL_USER_TOKEN: '${{ secrets.TECHNICAL_USER_TOKEN }}'
