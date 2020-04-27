@@ -22,10 +22,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v1
+      - name: Install helm-docs
+        run: .github/helm-docs-install.sh
+        env:
+          HELM_DOCS_VERSION: "0.12.0"
       - name: Run helm-docs
         id: validatedocs
         run: .github/helm-docs-verify.sh
-      - name: Generate Docs on failure
+      - name: Generate helm-docs (on failure)
         if: failure()
         run: .github/helm-docs-generate.sh
         env:
@@ -76,7 +80,7 @@ jobs:
           kubectl get pods -n kube-system
           echo "current-context:" $(kubectl config current-context)
           kubectl create namespace microgateway-validation
-          kubectl create secret docker-registry dockersecret --docker-username=julianbe --docker-password=${{ secrets.DOCKER_ACCESS_TOKEN }} --namespace microgateway-validation
+          kubectl create secret docker-registry dockersecret --docker-username=${{ secrets.DOCKER_USER }} --docker-password=${{ secrets.DOCKER_USER_TOKEN }} --namespace microgateway-validation
           echo "${{ secrets.WAF_LICENSE }}" >> tmplicense.txt
           echo "${{ secrets.WAF_PASSPHRASE }}" >> tmppassphrase.txt
           kubectl create secret generic microgatewaysecrets --from-file=license=tmplicense.txt --from-file=passphrase=tmppassphrase.txt --namespace microgateway-validation
