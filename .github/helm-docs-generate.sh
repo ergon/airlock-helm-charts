@@ -5,9 +5,9 @@ set -euox pipefail
 echo -e "\033[0;31m ######## The helm-docs validation failed. ######## \033[0m" >&2
 echo -e "\033[0;31m Make sure that the documentation has been updated. \033[0m" >&2
 
-git config user.name "$GITHUB_ACTOR"
-git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
-          
+git config user.name "$TECHNICAL_USER"
+git config user.email "$TECHNICAL_USER@users.noreply.github.com"
+
 ./helm-docs
 
 READMES_CHANGED=$(git diff --name-only HEAD -- 'charts/**/README.md')
