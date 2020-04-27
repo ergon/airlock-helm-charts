@@ -5,3 +5,4 @@ namespace: microgateway-validation
 release-label: release
 chart-repos: 
         - bitnami=https://charts.bitnami.com/bitnami
+        - ealenn=https://ealenn.github.io/charts
