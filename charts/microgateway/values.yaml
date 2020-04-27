@@ -29,7 +29,7 @@ config:
         logOnly: false
     backend:
       # config.default.backend.hostname -- Backend Hostname
-      hostname: echo-server
+      hostname: backend-service
       # config.default.backend.port -- Backend Port
       port: 8080
       # config.default.backend.protocol -- Backend Protocol
@@ -276,6 +276,6 @@ redis:
 
 echo-server:
   enabled: false
-  fullnameOverride: echo-server
+  fullnameOverride: backend-service
   service:
     port: 8080
