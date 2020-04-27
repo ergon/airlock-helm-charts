@@ -54,10 +54,10 @@ config:
         # config.default.virtualHost.tls.cipherSuite -- Virtual Host TLS cipherSuite. `ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256:DHE-RSA-AES256-SHA256:DHE-RSA-AES128-SHA256:AES256-GCM-SHA384:AES128-GCM-SHA256:AES256-SHA256:AES128-SHA256:ECDHE-ECDSA-AES256-SHA:ECDHE-RSA-AES256-SHA:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES128-SHA:AES256-SHA:AES128-SHA:DHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA`
         cipherSuite: ""
 
-  expert:
-    # config.expert.apache -- (string) Expert settings for Apache (multiline string)
+  expert_settings:
+    # config.expert_settings.apache -- (string) Global Apache Expert Settings (multiline string)
     apache:
-    # config.expert.security_gate -- (string) Expert settings for security gateway (multiline string)
+    # config.expert_settings.security_gate -- (string) Global SecurityGate Expert Settings (multiline string)
     security_gate:
 
   # config.env -- List of environment variables (YAML array)
