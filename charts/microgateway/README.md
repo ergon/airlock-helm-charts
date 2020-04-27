@@ -19,7 +19,7 @@ More details about the installation of the microgateway helm chart can be found 
 To add the chart repository:
 
 ```console
-helm repo add airlock https://libuweber.github.io/microgateway/
+helm repo add airlock https://ergon.github.io/airlock-helm-charts/
 ```
 
 ## Installing the Chart
