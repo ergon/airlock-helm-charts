@@ -1,7 +1,7 @@
 Airlock microgateway
 ============
 
-Current chart version is `0.4.1`
+Current chart version is `0.4.0`
 
 Web Application firewall (WAF) as a container to protect other containers.
 
