@@ -182,7 +182,7 @@ Depending on the requirements and knowledge level, one or the other example may 
 
 ## <a name="dsl-configuration-examples"></a>DSL Configuration Examples
 The chapter [DSL Configuration](#dsl-configuration) already described how to configure the DSL with the helm chart.   
-In the following chapters, various examples of these configuration options are given to help you better understand the DLS mechanism in order to use it as efficiently as possible.  
+In the following chapters, various examples of these configuration options are given to help you better understand the DSL mechanism in order to use it as efficiently as possible.  
 Depending on the requirements of the Microgateway configuration, a different DSL must be created.   
 
 ### Simple setup example 
@@ -406,22 +406,22 @@ With the helm chart environment variables can be set.
 These can then be used in the DSL configuration.   
 Below is an example of how to set environment variables and then use them in the DSL.   
 
-env-varibles-values.yaml
+env-variables.yaml
 ```
 config:
   env:
-    - name: "@@WAF_CFG_OperationalMode@@"
-      value: "PRODUCTION"
-    - name: "@@WAF_CFG_LOGONLY@@"
+    - name: "WAF_CFG_OPERATIONALMODE"
+      value: "production"
+    - name: "WAF_CFG_LOGONLY"
       value: "false"
 ```
 
-dls-values.yaml
+dsl-values.yaml
 ```
 config:
   default: 
     mapping:
-      operationalMode: "@@WAF_CFG_OperationalMode@@"
+      operationalMode: "@@WAF_CFG_OPERATIONALMODE@@"
       denyRules:
         logOnly: "@@WAF_CFG_LOGONLY@@"
 ```
