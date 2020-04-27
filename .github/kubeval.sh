@@ -1,5 +1,5 @@
-#!/bin/bash
-#set -euox pipefail
+#!/bin/bash 
+set -euox pipefail
 
 CHART_DIRS="$(git diff --find-renames --name-only "$(git rev-parse --abbrev-ref HEAD)" remotes/origin/master -- charts | grep '[cC]hart.yaml' | sed -e 's#/[Cc]hart.yaml##g')"
 KUBEVAL_VERSION="0.15.0"
