@@ -91,7 +91,7 @@ Overwrites all config defaults of this chart.
 | config.IPHeader.header | string | `"X-Forwarded-For"` | HTTP header to extract the client IP address. |
 | config.IPHeader.trustedProxies | list | `[]` | Trusted IP addresses to extract the client IP from HTTP header. Important: IP addresses are only extracted if trustedProxies are configured. |
 | config.apps | list | `[]` | Custom apps definition (YAML array). Overwrites default apps of this chart |
-| config.default.backend.hostname | string | `"backend-service"` | Backend Hostname |
+| config.default.backend.hostname | string | `"echo-server"` | Backend Hostname |
 | config.default.backend.port | int | `8080` | Backend Port |
 | config.default.backend.protocol | string | `"http"` | Backend Protocol |
 | config.default.backend.tls.cipherSuite | string | `""` | Set the back-end SSL cipher list (up to TLS 1.2). For documentation visit [openssl.org](www.openssl.org) and search for "ciphers" |
@@ -118,6 +118,9 @@ Overwrites all config defaults of this chart.
 | config.passphrase | string | `nil` | Encryption passphrase used for the session. A random one is generated on each upgrade if not specified here or in `config.existingSecret` |
 | config.redisService | list | `[]` | List of Redis service hostname. If `redis.enabled true`, `redis-master` is set as hostname by default. |
 | config.tlsSecretName | string | `nil` | Name of an existing secret containing the TLS Secrets for the Microgateway. Virtual Host TLS needs the keys `tls.crt`, `tls.key` and `ca.crt`. Make sure to update `route.tls.destinationCACertificate` accordingly, if used. Backend TLS needs the keys `backend-client.crt`, `backend-client.key` and `backend-server-validation-ca.crt`. |
+| echo-server.enabled | bool | `false` |  |
+| echo-server.fullnameOverride | string | `"echo-server"` |  |
+| echo-server.service.port | int | `8080` |  |
 | fullnameOverride | string | `""` | Provide a name to substitute for the full names of resources |
 | image.pullPolicy | string | `"Always"` | Pull policy (`Always`, `IfNotPresent`, `Never`) |
 | image.repository | string | `"docker.ergon.ch/airlock/microgateway"` | Image repository |
@@ -177,6 +180,7 @@ The helm chart has optional dependencies which can be activated.
 | Repository | Name | Version |
 |------------|------|---------|
 | https://charts.bitnami.com/bitnami | redis | 10.6.0 |
+| https://ealenn.github.io/charts | echo-server | 0.3.0 |
 
 ### Redis
 To use redis the value `redis.enabled` must be set to true
