@@ -1,0 +1,51 @@
+{{- $route := .Values.route -}}
+{{- $ingress := .Values.ingress -}}
+
+The Airlock microgateway has been installed.
+
+{{ if and $route.enabled $ingress.enabled }}
+* External connectivity:
+    Route:
+      {{- range $route.hosts }}
+        - http{{ if $route.tls.enabled }}s{{ end }}://{{ . }}{{ if $route.path }}{{ $route.path }}{{ end }}
+      {{- end }}
+    Ingress:
+      {{- range $ingress.hosts }}
+        - http{{ if $ingress.tls }}s{{ end }}://{{ . }}{{ $ingress.path }}
+      {{- end }}
+{{- else if $route.enabled }}
+* External connectivity:
+    Route
+      {{- range $route.hosts }}
+        - http{{ if $route.tls.enabled }}s{{ end }}://{{ . }}{{ if $route.path }}{{ $route.path }}{{ end }}
+      {{- end }}
+{{- else if $ingress.enabled }}
+* External connectivity:
+    Ingress:
+      {{- range $ingress.hosts }}
+        - http{{ if $ingress.tls }}s{{ end }}://{{ . }}{{ $ingress.path }}
+      {{- end }}
+{{- else }}
+    ###############################################################################
+    ######       WARNING: `microgateway.network` has not been declared!       #####
+    ###### For the connectivity of the microgateway this setting is required. #####
+    ###############################################################################
+{{- end }}
+
+* ConfigMap: 
+  To see the Microgateway DSL run the follwing command: 
+  kubectl describe configmap {{ template "microgateway.fullname" . }}
+
+* Microgateway Pods:
+  To see all the Microgateway Pods run the following command:
+  kubectl get pods --selector app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/name={{ include "microgateway.name" . }}
+
+* Microgateway Logs:
+  To see the Microgateway Logs of a Pod run the following commands:
+  export MICROGATEWAYPOD=$(kubectl get pods --selector app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/name={{ include "microgateway.name" . }} | grep {{ template "microgateway.fullname" . }} | head -1 | cut -d ' ' -f 1)
+  kubectl logs $MICROGATEWAYPOD -f
+
+* Microgateway Console:
+  To connect to the console of the Microgateway run the follwing commands:
+  export MICROGATEWAYPOD=$(kubectl get pods --selector app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/name={{ include "microgateway.name" . }} | grep {{ template "microgateway.fullname" . }} | head -1 | cut -d ' ' -f 1)
+  kubectl exec -it $MICROGATEWAYPOD -- /bin/bash

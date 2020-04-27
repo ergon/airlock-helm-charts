@@ -1,0 +1,275 @@
+# replicaCount -- Desired number of Microgateway pods
+replicaCount: 1
+
+image:
+  # image.repository -- Image repository
+  repository: docker.ergon.ch/airlock/microgateway
+  # image.tag -- Image tag
+  tag: 7.4.sprint10_Build008
+  # image.pullPolicy -- Pull policy (`Always`, `IfNotPresent`, `Never`)
+  pullPolicy: Always
+
+## Microgateway Config
+##
+config:
+  default:
+    mapping:
+      # config.default.mapping.entryPath -- The `entry_path` for this app
+      entryPath: /
+      # config.default.mapping.operationalMode -- Specifies the operational mode of this mapping (`production`, `integration`)
+      operationalMode: production
+      # config.default.mapping.sessionHandling -- Session handling for this app. If redis enabled this value is `enforce_session`, if redis disabled false this value is `ignore_session`.
+      sessionHandling: ""
+      denyRules:
+        # config.default.mapping.denyRules.enabled -- If deny rules should be enabled
+        enabled: true
+        # config.default.mapping.denyRules.level -- Deny rule level (`basic`, `standard`, `strict`)
+        level: standard
+        # config.default.mapping.denyRules.logOnly -- Deny rule log only
+        logOnly: false
+    backend:
+      # config.default.backend.hostname -- Backend Hostname
+      hostname: backend-service
+      # config.default.backend.port -- Backend Port
+      port: 8080
+      # config.default.backend.protocol -- Backend Protocol
+      protocol: http
+      tls:
+        # config.default.backend.tls.serverCa -- Backend TLS serverCa ('true', 'false'). Uses the Certificate from 'config.tlsSecretName'
+        serverCa: false
+        # config.default.backend.tls.clientCert -- Backend TLS clientCert ('true', 'false'). Uses the Certificate from 'config.tlsSecretName'
+        clientCert: false
+        # config.default.backend.tls.verifyHost -- Backend TLS certificate verifyHost ('true', 'false')
+        verifyHost: false
+        # config.default.backend.tls.version -- Backend TLS Version. Set the back-end SSL protocol version: (`Default`, `SSLv3`, `TLSv1.0`, `TLSv1.1`, `TLSv1.2`, `TLSv1.3`, `TLSv1.x`). Note: TLSv1 is a legacy value with the same meaning as TLSv1.0
+        version: ""
+        # config.default.backend.tls.cipherSuite -- Set the back-end SSL cipher list (up to TLS 1.2). For documentation visit [openssl.org](www.openssl.org) and search for "ciphers"
+        cipherSuite: ""
+        # config.default.backend.tls.cipherSuitev13 -- Set the back-end SSL cipher list (TLS 1.3). For documentation visit [openssl.org](www.openssl.org) and search for "ciphers"
+        cipherSuitev13: ""
+    virtualHost:
+      tls:
+        # config.default.virtualHost.tls.protocol -- Virtual Host TLS Protocol. (`all`, `SSLv3`, `TLSv1`, `TLSv1.1`, `TLSv1.2`) Versions can be excluded with -<Version_Name>.
+        protocol: ""
+        # config.default.virtualHost.tls.cipherSuite -- Virtual Host TLS cipherSuite. `ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256:DHE-RSA-AES256-SHA256:DHE-RSA-AES128-SHA256:AES256-GCM-SHA384:AES128-GCM-SHA256:AES256-SHA256:AES128-SHA256:ECDHE-ECDSA-AES256-SHA:ECDHE-RSA-AES256-SHA:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES128-SHA:AES256-SHA:AES128-SHA:DHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA`
+        cipherSuite: ""
+
+  expert:
+    # config.expert.apache -- (string) Expert settings for Apache (multiline string)
+    apache:
+    # config.expert.security_gate -- (string) Expert settings for security gateway (multiline string)
+    security_gate:
+
+  # config.env -- List of environment variables (YAML array)
+  env: []
+  #  - name: WAF_CFG_EXAMPLE
+  #    value: Example_Value
+
+  # config.tlsSecretName -- (string) Name of an existing secret containing the TLS Secrets for the Microgateway.
+  # Virtual Host TLS needs the keys `tls.crt`, `tls.key` and `ca.crt`. Make sure to update `route.tls.destinationCACertificate` accordingly, if used.
+  # Backend TLS needs the keys `backend-client.crt`, `backend-client.key` and `backend-server-validation-ca.crt`.
+  tlsSecretName:
+
+  # config.passphrase -- (string) Encryption passphrase used for the session.
+  # A random one is generated on each upgrade if not specified here or in `config.existingSecret`
+  passphrase:
+  # config.license -- (string) License for the Microgateway (multiline string)
+  license:
+  # config.existingSecret -- (string) An existing secret to be used,
+  # must contain the keys `license` and `passphrase`
+  existingSecret:
+  # config.logLevel -- Log level (`info`, `trace`)
+  logLevel: info
+  # config.redisService -- List of Redis service hostname. If `redis.enabled true`, `redis-master` is set as hostname by default.
+  redisService: []
+  IPHeader:
+    # config.IPHeader.header -- HTTP header to extract the client IP address.
+    header: X-Forwarded-For
+    # config.IPHeader.trustedProxies -- Trusted IP addresses to extract the client IP from HTTP header. Important: IP addresses are only extracted if trustedProxies are configured.
+    trustedProxies: []
+
+  # config.apps -- Custom apps definition (YAML array). Overwrites default apps of this chart
+  apps: []
+
+  # config.dsl -- Custom DSL to load (YAML). Overwrites all config defaults of this chart
+  dsl: {}
+
+# commonLabels -- Labels to apply to all resources
+commonLabels: {}
+# imagePullSecrets -- Reference to one or more secrets to be used when pulling images
+imagePullSecrets: []
+  # - name: "image-pull-secret"
+# nameOverride -- Provide a name in place of `microgateway`
+nameOverride: ""
+# fullnameOverride -- Provide a name to substitute for the full names of resources
+fullnameOverride: ""
+# podSecurityContext -- Security context for the pods (see [link](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod))
+podSecurityContext: {}
+  # fsGroup: 2000
+# securityContext -- Security context for the microgateway container (see [link](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container))
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+service:
+  # service.type -- [Service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types)
+  type: ClusterIP
+  # service.port -- Service port
+  port: 80
+  # service.tlsPort -- Service TLS port
+  tlsPort: 443
+  # service.annotations -- Annotations to set on the service
+  annotations: {}
+    # service.alpha.openshift.io/serving-cert-secret-name: microgateway
+  # service.labels -- Labels to set on the service
+  labels: {}
+
+ingress:
+  # ingress.enabled -- If an ingress should be created
+  enabled: false
+  # ingress.annotations -- Annotations to set on the ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    # kubernetes.io/tls-acme: "true"
+    # kubernetes.io/ingress.class: nginx
+    ## For reencrypt ingress, see https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/annotations/#backend-certificate-authentication
+    # nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    # nginx.ingress.kubernetes.io/proxy-ssl-verify: "true"
+    # nginx.ingress.kubernetes.io/proxy-ssl-secret: secretName
+  # ingress.labels -- Labels to set on the ingress
+  labels: {}
+  # ingress.hosts -- List of host names
+  hosts:
+    - chart-example.local
+  # ingress.path -- Path the ingress serves
+  path: /
+  # ingress.targetPort -- Target port of the service (`http`, `https` or number)
+  targetPort: http
+
+  # ingress.tls -- [Ingress TLS](https://kubernetes.io/docs/concepts/services-networking/ingress/#tls) configuration (YAML array)
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+## OpenShift route configuration.
+## ref: https://docs.openshift.com/container-platform/3.11/architecture/networking/routes.html
+##
+route:
+  # route.enabled -- If a route should be created
+  enabled: false
+  # route.annotations -- Annotations to set on the route
+  annotations: {}
+    # kubernetes.io/tls-acme: "true"
+    # haproxy.router.openshift.io/disable_cookies: "true"
+    # haproxy.router.openshift.io/balance: roundrobin
+  # route.labels -- Labels to set on the route
+  labels: {}
+  # route.hosts --  List of host names
+  hosts:
+    - chart-example.local
+  # route.path -- Path the route serves
+  path: /
+  # route.targetPort -- Target port of the service (`http`, `https` or number)
+  targetPort: https
+
+  ## TLS configuration
+  ## ref: https://docs.openshift.com/container-platform/3.11/architecture/networking/routes.html#secured-routes
+  ##
+  tls:
+    # route.tls.enabled -- Enable TLS for the route
+    enabled: true
+    # route.tls.insecureEdgeTerminationPolicy -- Define the insecureEdgeTerminationPolicy of the route (`Allow`, `Redirect`, `None`)
+    insecureEdgeTerminationPolicy: Redirect
+    # route.tls.termination -- Termination of the route (`edge`, `reencrypt`, `passthrough`)
+    termination: reencrypt
+    # route.tls.certificate -- (string) Certificate to be used (multiline string)
+    certificate:  # |
+      # -----BEGIN CERTIFICATE-----
+    # route.tls.key -- (string) Private key to be used for certificate (multiline string)
+    key:  # |
+      # -----BEGIN RSA PRIVATE KEY-----
+    # route.tls.destinationCACertificate -- Backend CA to trust with termination `reencrypt` (multiline string)
+    # @default -- Microgateway default certificate
+    destinationCACertificate: |
+      -----BEGIN CERTIFICATE-----
+      MIIDizCCAnOgAwIBAgIJAMQE1QewYs4QMA0GCSqGSIb3DQEBCwUAMFwxCzAJBgNV
+      BAYTAkNIMQ8wDQYDVQQIDAZadXJpY2gxDzANBgNVBAcMBlp1cmljaDEQMA4GA1UE
+      CgwHQWlybG9jazEZMBcGA1UEAwwQdGVzdC5jZXJ0aWZpY2F0ZTAeFw0xNjAyMTYx
+      NTE4NTZaFw0yNjAyMTUxNTE4NTZaMFwxCzAJBgNVBAYTAkNIMQ8wDQYDVQQIDAZa
+      dXJpY2gxDzANBgNVBAcMBlp1cmljaDEQMA4GA1UECgwHQWlybG9jazEZMBcGA1UE
+      AwwQdGVzdC5jZXJ0aWZpY2F0ZTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoC
+      ggEBAMtPaJ5q3HFeui6iKe5i9gBjAuZwbZ5a05MVbj0NnyCm6iOcuJOySUAPM2kF
+      JqUxrIXdz54xcilsKUoepQkn9e0bmIUVuiXWcQrr8iqjYC+hINNmiq+4YX4lWq2M
+      CeOSOpxrMPmvDX0kt+O9Qwr+6tTqzD5VKJDFvlrfJnYTQ4WXeiaG9SfgR06/+pSQ
+      +qDRWo7JmrVHcyv+3X0aRZ2JUP9cFy054GxF3dhRaZMZ7KdgjX5FkADY8MYiI2j5
+      9Q2SA8zBjfRfZlGCORm7vdwIzPbRRo19TMXeBoOOnO8XB/XWS+n/bBLkRYN+wcnf
+      tPZZuLggCQhRBVHy9ehKltkJMZkCAwEAAaNQME4wHQYDVR0OBBYEFP4M/uLWVuOh
+      8RkBDnlU5jJyR3cJMB8GA1UdIwQYMBaAFP4M/uLWVuOh8RkBDnlU5jJyR3cJMAwG
+      A1UdEwQFMAMBAf8wDQYJKoZIhvcNAQELBQADggEBAKItccRGDcX9pdkiHv/1PQtb
+      ykmxAMseVYt/6kJl3yUUd/tDTaAR4CHTvkX+4waMpnhToJ3SN9qNtbzID1/67X6D
+      9RQAaiXiJ0Y+/Z6cWY/Rx3HiWsgcJN7F0Xux6wR5gdX/oSCqxyomxR42Ovs61bjx
+      77RRptcoQJPvw50z9rJ4wkrb58raUKOqxgvpckQdYdtok0dR6tXbBfC4LHmqq0mo
+      Q4ph1jI/QLl5lsYtDm4SLt1ALvgRQj8QerJdZ/SrmfFmUkOx3lGpBChM0lT+wkrI
+      aw/GIcvwLSquzFBrlU3Jhg+wu8p/514lgiShy39fmzMOa3Q0/5jF3qM74+lGUsA=
+      -----END CERTIFICATE-----
+# resources -- [Resource limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for Microgateway
+resources:
+  requests:
+    memory: "512Mi"
+    cpu: "500m"
+  limits:
+    memory: "4048Mi"
+    cpu: "4"
+
+## Liveness and readiness probe values
+## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+##
+livenessProbe:
+  # livenessProbe.enabled -- Enable liveness probes
+  enabled: true
+  # livenessProbe.initialDelaySeconds -- Initial delay in seconds
+  initialDelaySeconds: 90
+
+readinessProbe:
+  # readinessProbe.enabled -- Enable readiness probes
+  enabled: true
+  # readinessProbe.initialDelaySeconds -- Initial delay in seconds
+  initialDelaySeconds: 30
+# nodeSelector -- Define which nodes the pods are scheduled on (YAML)
+nodeSelector: {}
+# tolerations -- Tolerations for use with node [taints](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/) (YAML array)
+tolerations: []
+
+# affinity -- (string) Assign custom [affinity rules](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/) (multiline string)
+affinity:
+  # podAntiAffinity:
+  #   requiredDuringSchedulingIgnoredDuringExecution:
+  #     - labelSelector:
+  #         matchLabels:
+  #           {{- include "microgateway.selectorLabels" . | nindent 10 }}
+  #       topologyKey: kubernetes.io/hostname
+
+redis:
+  # redis.enabled -- If true, the Redis chart will be installed. See [Redis chart](https://github.com/bitnami/charts/tree/master/bitnami/redis) for further documentation and available parameters
+  enabled: false
+  usePassword: false
+  image:
+    repository: redis
+    tag: 5.0.8
+  cluster:
+    enabled: true
+  fullnameOverride: redis
+  securityContext:
+    fsGroup: 1000140000
+    runAsUser: 1000140000
+  persistence:
+    enabled: false
+  master:
+    command: redis-server
+    disableCommands: ["FLUSHDB"]  # "FLUSHALL" must not be deactivated, because the WAF needs this command for the configuration of the redis store.
+  slave:
+    command: redis-server

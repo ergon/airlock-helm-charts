@@ -1,0 +1,105 @@
+{{- $config := .Values.config -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "microgateway.fullname" . }}
+  labels:
+    {{- include "microgateway.labels" . | nindent 4 }}
+data:
+{{- if not $config.dsl }}
+  config.yaml: |
+    license_file: /secret/config/license
+    session:
+      encryption_passphrase_file: /secret/config/passphrase
+    {{- if or .Values.redis.enabled $config.redisService }}
+      {{- if $config.redisService }}
+      redis_hosts:
+        {{- range $config.redisService }} 
+        - {{ . }}
+        {{- end }}
+      {{- else }}
+      redis_hosts: redis-master
+      {{- end }}
+    {{- end }}
+    log:
+      level: {{ $config.logLevel }}
+  {{- if or (include "microgateway.apacheExpertSettings" .) (include "microgateway.securityGateExpertSettings" .) }}
+    expert_settings:
+    {{- if (include "microgateway.apacheExpertSettings" .) }}
+      apache: |
+      {{- if $config.IPHeader.trustedProxies }}
+        RemoteIPHeader {{ $config.IPHeader.header }}
+        {{- range $config.IPHeader.trustedProxies }}
+        RemoteIPInternalProxy {{ . }}
+        {{- end }}
+      {{- end }}
+      {{- if $config.default.virtualHost.tls.protocol }}
+        SSLProtocol {{ $config.default.virtualHost.tls.protocol }}
+      {{- end }}
+      {{- if $config.default.virtualHost.tls.cipherSuite }}
+        SSLCipherSuite {{ $config.default.virtualHost.tls.cipherSuite }}
+      {{- end }}
+      {{- with $config.expert.apache }}
+        {{- . | nindent 8 }}
+      {{- end }}
+    {{- end }}
+    {{- if (include "microgateway.securityGateExpertSettings" .) }}
+      security_gate: |
+      {{- if $config.default.backend.tls.serverCa }}
+        BackendSSLServerCA /secret/tls/backend-server-validation-ca.crt
+      {{- end }}
+      {{- if $config.default.backend.tls.clientCert }}
+        BackendSSLClientCert /secret/tls/backend-client.crt
+        BackendSSLClientCertKey /secret/tls/backend-client.key
+      {{- end }}
+      {{- if $config.default.backend.tls.verifyHost }}
+        BackendSSLVerifyHost "true"
+      {{- end }}
+      {{- if $config.default.backend.tls.version }}
+        BackendSSLVersion {{ $config.default.backend.tls.version }}
+      {{- end }}
+      {{- if $config.default.backend.tls.cipherSuite }}
+        BackendSSLCipherSuite {{ $config.default.backend.tls.cipherSuite }}
+      {{- end }}
+      {{- if $config.default.backend.tls.cipherSuitev13 }}
+        BackendSSLCipherSuiteTls13 {{ $config.default.backend.tls.cipherSuitev13 }}
+      {{- end }}
+      {{- with $config.expert.security_gate }}
+        {{- . | nindent 8 }}
+      {{- end }}
+    {{- end }}
+  {{- end }}
+
+  {{- with $config.apps }}
+    apps: {{ . | toYaml | nindent 4 }}
+  {{- else }}
+    apps:
+    - mappings:
+      - entry_path: {{ $config.default.mapping.entryPath }}
+        operational_mode: {{ $config.default.mapping.operationalMode }}
+        {{- if $config.default.mapping.sessionHandling }}
+        session_handling: {{ $config.default.mapping.sessionHandling }}
+        {{- else if .Values.redis.enabled }}
+        session_handling: {{ "enforce_session" }}
+        {{- else }}
+        session_handling: {{ "ignore_session" }}
+        {{- end }}
+        deny_rules:
+        - enable: {{ $config.default.mapping.denyRules.enabled }}
+          log_only: {{ $config.default.mapping.denyRules.logOnly }}
+          level: {{ $config.default.mapping.denyRules.level }}
+      backend:
+        hostname: {{ $config.default.backend.hostname }}
+        port: {{ $config.default.backend.port }}
+        protocol: {{ $config.default.backend.protocol }}
+    {{- if $config.tlsSecretName }}
+      virtual_host:
+        certificate:
+          certificate_file: /secret/tls/tls.crt
+          privatekey_file: /secret/tls/tls.key
+          ca_chain_file: /secret/tls/ca.crt
+    {{- end }}
+  {{- end }}
+{{- else }}
+  config.yaml: |{{ toYaml $config.dsl | nindent 4 }}
+{{- end }}

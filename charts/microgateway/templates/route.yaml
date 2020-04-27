@@ -1,0 +1,46 @@
+{{- $route := .Values.route -}}
+{{- $fullName := include "microgateway.fullname" . -}}
+{{- if $route.enabled -}}
+{{- range $route.hosts }}
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: {{ . | replace "." "-" | lower }}
+  labels:
+    {{- include "microgateway.labels" $ | nindent 4 }}
+  {{- with $.Values.route.labels }}
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+{{- with $.Values.route.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+{{- end }}
+spec:
+  host: {{ . }}
+  path: {{ $route.path }}
+  port:
+    targetPort: {{ $route.targetPort }}
+  to:
+    kind: Service
+    name: {{ $fullName }}
+    weight: 100
+{{- if $route.tls.enabled }}
+  tls:
+    insecureEdgeTerminationPolicy: {{ $route.tls.insecureEdgeTerminationPolicy }}
+    termination: {{ $route.tls.termination }}
+{{- with $route.tls.certificate }}
+    certificate: {{ . | quote }}
+{{- end }}
+{{- with $route.tls.key }}
+    key: {{ . | quote }}
+{{- end }}
+{{- with $route.tls.destinationCACertificate }}
+    destinationCACertificate: {{ . | quote }}
+{{- end }}
+{{- end }}
+status:
+  ingress:
+  - host: ""
+{{- end }}
+{{- end }}

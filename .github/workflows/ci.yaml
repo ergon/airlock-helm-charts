@@ -1,0 +1,88 @@
+name: Lint and Test Charts
+
+on:
+  pull_request:
+    paths:
+      - 'charts/**'
+
+jobs:
+  lint-chart:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Run chart-testing (lint)
+        uses: helm/chart-testing-action@master
+        with:
+          command: lint
+          config: .github/ct.yaml
+  lint-docs:
+    runs-on: ubuntu-latest
+    needs: lint-chart
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Run helm-docs
+        id: validatedocs
+        run: .github/helm-docs-verify.sh
+      - name: Generate Docs on failure
+        if: failure()
+        run: .github/helm-docs-generate.sh
+        env:
+          BRANCH_NAME: ${{ github.head_ref }}
+          CR_TOKEN: ${{ secrets.CR_TOKEN }}
+  kubeval-chart:
+    runs-on: ubuntu-latest
+    needs:
+      - lint-chart
+      - lint-docs
+    strategy:
+      matrix:
+        k8s:
+          - v1.15.11
+          - v1.16.8
+          - v1.17.4
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Run kubeval
+        env:
+          KUBERNETES_VERSION: ${{ matrix.k8s }}
+        run: .github/kubeval.sh
+  install-chart:
+    name: install-chart
+    runs-on: ubuntu-latest
+    needs:
+      - lint-chart
+      - lint-docs
+      - kubeval-chart
+    strategy:
+      matrix:
+        k8s:
+          - v1.15.7
+          - v1.16.4
+          - v1.17.2
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Create kind ${{ matrix.k8s }} cluster
+        uses: helm/kind-action@master
+        with:
+          node_image: kindest/node:${{ matrix.k8s }}
+      - name: Create Secrets
+        run: |
+          kubectl cluster-info
+          kubectl get pods -n kube-system
+          echo "current-context:" $(kubectl config current-context)
+          kubectl create namespace microgateway-validation
+          kubectl create secret docker-registry dockersecret --docker-username=julianbe --docker-password=${{ secrets.DOCKER_ACCESS_TOKEN }} --namespace microgateway-validation
+          echo "${{ secrets.WAF_LICENSE }}" >> tmplicense.txt
+          echo "${{ secrets.WAF_PASSPHRASE }}" >> tmppassphrase.txt
+          kubectl create secret generic microgatewaysecrets --from-file=license=tmplicense.txt --from-file=passphrase=tmppassphrase.txt --namespace microgateway-validation
+          kubectl describe secret dockersecret --namespace microgateway-validation
+          kubectl describe secret microgatewaysecrets --namespace microgateway-validation
+      - name: Run chart-testing (install)
+        uses: helm/chart-testing-action@master
+        with:
+          command: install
+          config: .github/ct.yaml
