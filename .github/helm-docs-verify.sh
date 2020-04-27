@@ -1,5 +1,5 @@
 #!/bin/bash
-set -euo pipefail
+set -euox pipefail
 
 HELM_DOCS_VERSION="0.12.0"
 
