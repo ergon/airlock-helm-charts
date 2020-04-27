@@ -29,7 +29,7 @@ config:
         logOnly: false
     backend:
       # config.default.backend.hostname -- Backend Hostname
-      hostname: backend-service
+      hostname: echo-server
       # config.default.backend.port -- Backend Port
       port: 8080
       # config.default.backend.protocol -- Backend Protocol
