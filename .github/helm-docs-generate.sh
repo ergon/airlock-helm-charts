@@ -14,6 +14,6 @@ git checkout  ${BRANCH_NAME}
 git add charts/microgateway/README.md
 git commit -m "Automated README generation"
 echo "Push to ${BRANCH_NAME}"
-git push "https://$GITHUB_ACTOR:$CR_TOKEN@github.com/${GITHUB_REPOSITORY} ${BRANCH_NAME}
+git push "https://$GITHUB_ACTOR:$CR_TOKEN@github.com/${GITHUB_REPOSITORY}.git" ${BRANCH_NAME}
 
 rm helm-docs
