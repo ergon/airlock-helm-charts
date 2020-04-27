@@ -19,6 +19,6 @@ done
 
 git commit -m "Automated README generation"
 echo "Push to ${BRANCH_NAME}"
-git push "https://$GITHUB_ACTOR:$CR_TOKEN@github.com/libuweber/microgateway.git" ${BRANCH_NAME}
+git push "https://$TECHNICAL_USER:$TECHNICAL_USER_TOKEN@github.com/${GITHUB_REPOSITORY}.git" ${BRANCH_NAME}
 
 rm helm-docs
