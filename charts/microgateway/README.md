@@ -246,7 +246,7 @@ Please refer to the [Echo-Server Helm chart](https://ealenn.github.io/Echo-Serve
 ## DSL configuration
 
 The Helm chart provides three different possibilities to configure the Microgateway DSL.
-Depending on the environment and use-case, another option might suit better and is easier to implement it.
+Depending on the environment and use case, another option might suit better and is easier to implement.
 
 ### Simple DSL configuration
 
