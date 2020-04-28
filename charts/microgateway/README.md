@@ -315,7 +315,7 @@ Use Case 3)
 * Virtual Host 1: abc.com -> Mapping 1: / -> Backend Service 1
 * Virtual Host 2: xyz.com -> Mapping 2: / -> Backend Service 2
 
-These use cases are only examples which could also occur slightly different. But all of them have in common that they have more than one Virtual Hosts, Mappings or Backend Services. When ever this is the case, the [Advanced DSL app configuration](#advanced-dsl-app-configuration) should be preferred over the [Simple DSL configuration](#simple-dsl-configuration).
+These use cases are only examples which could also occur slightly different. But all of them have in common that they have more than one Virtual Hosts, Mappings or Backend Services. Whenever this is the case, the [Advanced DSL app configuration](#advanced-dsl-app-configuration) should be preferred over the [Simple DSL configuration](#simple-dsl-configuration).
 
 
 **Example:**
