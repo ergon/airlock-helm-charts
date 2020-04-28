@@ -12,6 +12,8 @@ image:
 ## Microgateway Config
 ##
 config:
+  # config.default -- See [Simple DSL configuration](#simple-dsl-configuration)
+  # @default -- See `config.default.*` parameters
   default:
     mapping:
       # config.default.mapping.entryPath -- The `entry_path` for this app
@@ -85,13 +87,14 @@ config:
   IPHeader:
     # config.IPHeader.header -- HTTP header to extract the client IP address.
     header: X-Forwarded-For
-    # config.IPHeader.trustedProxies -- Trusted IP addresses to extract the client IP from HTTP header. Important: IP addresses are only extracted if trustedProxies are configured.
+    # config.IPHeader.trustedProxies -- Trusted IP addresses to extract the client IP from HTTP header.<br>
+    # :exclamation: IP addresses are only extracted if `trustedProxies` are configured.
     trustedProxies: []
 
-  # config.apps -- Custom apps definition (YAML array). Overwrites default apps of this chart
+  # config.apps -- See [Advanced DSL app configuration](#advanced-dsl-app-configuration)
   apps: []
 
-  # config.dsl -- Custom DSL to load (YAML). Overwrites all config defaults of this chart
+  # config.dsl -- See [Expert DSL configuration](#expert-dsl-configuration)
   dsl: {}
 
 # commonLabels -- Labels to apply to all resources

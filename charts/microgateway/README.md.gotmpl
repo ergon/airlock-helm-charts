@@ -13,6 +13,10 @@ The current chart version is: {{ template "chart.version" . }}
   * [Uninstalling the chart](#uninstalling-the-chart)
 * [Configuration](#configuration)
 * [Dependencies](#dependencies)
+* [DSL Configuration](#dsl-configuration)
+  * [Simple DSL configuration](#simple-dsl-configuration)
+  * [Advanced DSL app configuration](#advanced-dsl-app-configuration)
+  * [Expert DSL configuration](#expert-dsl-configuration)
 
 ## Introduction
 This Helm chart bootstraps [Airlock Microgateway](https://www.airlock.com) on a [Kubernetes](https://kubernetes.io) or [Openshift](https://www.openshift.com) cluster using the [Helm](https://helm.sh) package manager. It provisions an Airlock Microgateway pod with a default configuration which can be adjusted to customer needs. For more details about the configuration options, see chapter [Helm basics](#helm-basics).
@@ -137,7 +141,7 @@ Depending on the environment and configuration, different values must be adjuste
 With the Helm chart you have three different possibilities to configure the DSL of the Microgateway. 
 Depending on the environment and use-case, another option may be the best and easiest choice for the implementation. 
 
-### Default DSL
+### Simple DSL configuration
 The Helm chart provides a simple configuration which can be configured with `config.default.*` parameters.
 All settings have already configured a default value. So only the values which differ from the default value have to be configured. 
 
@@ -151,7 +155,7 @@ config:
       hostname: custom-backend
 ```
 
-### Custom DSL App
+### Advanced DSL app configuration
 If the default app settings are not sufficient, you can define a custom app as YAML with the `config.apps` parameter. 
 This setting overwrites the default app (mapping & backend), but the remaining settings of the DSL can still be configured with the default DSL method. 
 Example code fragment:
@@ -173,7 +177,7 @@ config:
           backend_path: /app/
 ```
 
-### Custom DSL
+### Expert DSL configuration
 In case that both other configuration options are not sufficient, create a custom config using `config.dsl`. All the configuration of the DSL can be used.
 Overwrites all config defaults of this chart. 
 

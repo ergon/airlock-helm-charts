@@ -14,6 +14,10 @@ The current chart version is: 0.4.1
   * [Uninstalling the chart](#uninstalling-the-chart)
 * [Configuration](#configuration)
 * [Dependencies](#dependencies)
+* [DSL Configuration](#dsl-configuration)
+  * [Simple DSL configuration](#simple-dsl-configuration)
+  * [Advanced DSL app configuration](#advanced-dsl-app-configuration)
+  * [Expert DSL configuration](#expert-dsl-configuration)
 
 ## Introduction
 This Helm chart bootstraps [Airlock Microgateway](https://www.airlock.com) on a [Kubernetes](https://kubernetes.io) or [Openshift](https://www.openshift.com) cluster using the [Helm](https://helm.sh) package manager. It provisions an Airlock Microgateway pod with a default configuration which can be adjusted to customer needs. For more details about the configuration options, see chapter [Helm basics](#helm-basics).
@@ -60,8 +64,9 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | affinity | string | `nil` | Assign custom [affinity rules](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/) (multiline string) |
 | commonLabels | object | `{}` | Labels to apply to all resources |
 | config.IPHeader.header | string | `"X-Forwarded-For"` | HTTP header to extract the client IP address. |
-| config.IPHeader.trustedProxies | list | `[]` | Trusted IP addresses to extract the client IP from HTTP header. Important: IP addresses are only extracted if trustedProxies are configured. |
-| config.apps | list | `[]` | Custom apps definition (YAML array). Overwrites default apps of this chart |
+| config.IPHeader.trustedProxies | list | `[]` | Trusted IP addresses to extract the client IP from HTTP header.<br> :exclamation: IP addresses are only extracted if `trustedProxies` are configured. |
+| config.apps | list | `[]` | See [Advanced DSL app configuration](#advanced-dsl-app-configuration) |
+| config.default | object | See `config.default.*` parameters | See [Simple DSL configuration](#simple-dsl-configuration) |
 | config.default.backend.hostname | string | `"backend-service"` | Backend Hostname |
 | config.default.backend.port | int | `8080` | Backend Port |
 | config.default.backend.protocol | string | `"http"` | Backend Protocol |
@@ -79,7 +84,7 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | config.default.mapping.sessionHandling | string | `""` | Session handling for this app. If redis enabled this value is `enforce_session`, if redis disabled false this value is `ignore_session`. |
 | config.default.virtualHost.tls.cipherSuite | string | `""` | Virtual Host TLS cipherSuite. `ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256:DHE-RSA-AES256-SHA256:DHE-RSA-AES128-SHA256:AES256-GCM-SHA384:AES128-GCM-SHA256:AES256-SHA256:AES128-SHA256:ECDHE-ECDSA-AES256-SHA:ECDHE-RSA-AES256-SHA:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES128-SHA:AES256-SHA:AES128-SHA:DHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA` |
 | config.default.virtualHost.tls.protocol | string | `""` | Virtual Host TLS Protocol. (`all`, `SSLv3`, `TLSv1`, `TLSv1.1`, `TLSv1.2`) Versions can be excluded with -<Version_Name>. |
-| config.dsl | object | `{}` | Custom DSL to load (YAML). Overwrites all config defaults of this chart |
+| config.dsl | object | `{}` | See [Expert DSL configuration](#expert-dsl-configuration) |
 | config.env | list | `[]` | List of environment variables (YAML array) |
 | config.existingSecret | string | `nil` | An existing secret to be used, must contain the keys `license` and `passphrase` |
 | config.expert_settings.apache | string | `nil` | Global Apache Expert Settings (multiline string) |
@@ -225,7 +230,7 @@ Depending on the environment and configuration, different values must be adjuste
 With the Helm chart you have three different possibilities to configure the DSL of the Microgateway. 
 Depending on the environment and use-case, another option may be the best and easiest choice for the implementation. 
 
-### Default DSL
+### Simple DSL configuration
 The Helm chart provides a simple configuration which can be configured with `config.default.*` parameters.
 All settings have already configured a default value. So only the values which differ from the default value have to be configured. 
 
@@ -239,7 +244,7 @@ config:
       hostname: custom-backend
 ```
 
-### Custom DSL App
+### Advanced DSL app configuration
 If the default app settings are not sufficient, you can define a custom app as YAML with the `config.apps` parameter. 
 This setting overwrites the default app (mapping & backend), but the remaining settings of the DSL can still be configured with the default DSL method. 
 Example code fragment:
@@ -261,7 +266,7 @@ config:
           backend_path: /app/
 ```
 
-### Custom DSL
+### Expert DSL configuration
 In case that both other configuration options are not sufficient, create a custom config using `config.dsl`. All the configuration of the DSL can be used.
 Overwrites all config defaults of this chart. 
 
