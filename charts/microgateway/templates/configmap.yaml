@@ -79,7 +79,7 @@ data:
         operational_mode: {{ $config.default.mapping.operationalMode }}
         {{- if $config.default.mapping.sessionHandling }}
         session_handling: {{ $config.default.mapping.sessionHandling }}
-        {{- else if .Values.redis.enabled }}
+        {{- else if or .Values.redis.enabled $config.redisService }}
         session_handling: {{ "enforce_session" }}
         {{- else }}
         session_handling: {{ "ignore_session" }}
@@ -89,9 +89,9 @@ data:
           log_only: {{ $config.default.mapping.denyRules.logOnly }}
           level: {{ $config.default.mapping.denyRules.level }}
       backend:
+        protocol: {{ $config.default.backend.protocol }}
         hostname: {{ $config.default.backend.hostname }}
         port: {{ $config.default.backend.port }}
-        protocol: {{ $config.default.backend.protocol }}
     {{- if $config.tlsSecretName }}
       virtual_host:
         certificate:

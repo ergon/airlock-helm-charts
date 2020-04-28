@@ -13,16 +13,18 @@ The current chart version is: 0.4.1
   * [Installing the chart](#installing-the-chart)
   * [Uninstalling the chart](#uninstalling-the-chart)
 * [Configuration](#configuration)
+* [Getting started with Helm](#getting-started-with-helm)
+  * [Override the default values](#override-the-default-values)
 * [Dependencies](#dependencies)
   * [Redis](#redis)
   * [Echo-Server](#echo-server)
-* [DSL Configuration](#dsl-configuration)
+* [DSL configuration](#dsl-configuration)
   * [Simple DSL configuration](#simple-dsl-configuration)
   * [Advanced DSL app configuration](#advanced-dsl-app-configuration)
   * [Expert DSL configuration](#expert-dsl-configuration)
 
 ## Introduction
-This Helm chart bootstraps [Airlock Microgateway](https://www.airlock.com) on a [Kubernetes](https://kubernetes.io) or [Openshift](https://www.openshift.com) cluster using the [Helm](https://helm.sh) package manager. It provisions an Airlock Microgateway pod with a default configuration which can be adjusted to customer needs. For more details about the configuration options, see chapter [Helm basics](#helm-basics).
+This Helm chart bootstraps [Airlock Microgateway](https://www.airlock.com) on a [Kubernetes](https://kubernetes.io) or [Openshift](https://www.openshift.com) cluster using the [Helm](https://helm.sh) package manager. It provisions an Airlock Microgateway pod with a default configuration which can be adjusted to customer needs. For more details about the configuration options, see chapter [Helm Configuration](#dsl-configuration).
 
 ## Prerequisites
 * The Airlock Microgateway image
@@ -68,7 +70,7 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | config.IPHeader.header | string | `"X-Forwarded-For"` | HTTP header to extract the client IP address. |
 | config.IPHeader.trustedProxies | list | `[]` | Trusted IP addresses to extract the client IP from HTTP header.<br> :exclamation: IP addresses are only extracted if `trustedProxies` are configured. |
 | config.apps | list | `[]` | See [Advanced DSL app configuration](#advanced-dsl-app-configuration) |
-| config.default | object | See `config.default.*` parameters | See [Simple DSL configuration](#simple-dsl-configuration) |
+| config.default | object | See `config.default.*` parameters below: | See [DSL configuration](#dsl-configuration) |
 | config.default.backend.hostname | string | `"backend-service"` | Backend hostname |
 | config.default.backend.port | int | `8080` | Backend port |
 | config.default.backend.protocol | string | `"http"` | Backend protocol |
@@ -77,7 +79,7 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | config.default.backend.tls.clientCert | bool | `false` | Use TLS client certificate for backend connections. <br> :exclamation: Must be configured in `config.tlsSecretName` |
 | config.default.backend.tls.serverCa | bool | `false` | Validates the backend server certificate against the configured CA. <br> :exclamation: Must be configured in `config.tlsSecretName` |
 | config.default.backend.tls.verifyHost | bool | `false` | Verify the backend TLS certificate. |
-| config.default.backend.tls.version | string | `""` | Overwrite the default TLS version for backend connections. |
+| config.default.backend.tls.version | string | `""` | Overwrite the default TLS version for backend connections.<br> :exclamation: `config.default.tls.serverCA` must be configured in order to work. |
 | config.default.mapping.denyRules.enabled | bool | `true` | Enable all Deny rules. |
 | config.default.mapping.denyRules.level | string | `"standard"` | Set all Deny rules to Security Level (`basic`, `standard`, `strict`) |
 | config.default.mapping.denyRules.logOnly | bool | `false` | Set all Deny rules to log only |
@@ -87,8 +89,8 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | config.default.virtualHost.tls.cipherSuite | string | `""` | Overwrite the default TLS ciphers for frontend connections. |
 | config.default.virtualHost.tls.protocol | string | `""` | Overwrite the default TLS protocol for frontend connections. |
 | config.dsl | object | `{}` | See [Expert DSL configuration](#expert-dsl-configuration) |
-| config.env | list | `[]` | List of environment variables. See [Environment Variables](#environment-variables) |
-| config.existingSecret | string | `nil` |  |
+| config.env | list | `[]` | List of environment variables. See [Environment variables](#environment-variables) |
+| config.existingSecret | string | "" | Name of an existing secret containing the passphrase or license.<br> License: `license`<br> Passphrase: `passphrase` |
 | config.expert_settings.apache | string | "" | Global Apache Expert Settings (multiline string) |
 | config.expert_settings.security_gate | string | "" | Global SecurityGate Expert Settings (multiline string) |
 | config.license | string | "" | License for the Microgateway (multiline string) |
@@ -115,7 +117,7 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | podSecurityContext | object | `{}` | Security context for the pods (see [link](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod)) |
 | readinessProbe.enabled | bool | `true` | Enable readiness probes |
 | readinessProbe.initialDelaySeconds | int | `30` | Initial delay in seconds |
-| redis | object | See `redis.*` parameters | Redis service which can be used if no one is available. See [Redis](#redis) |
+| redis | object | See `redis.*` parameters below: | Redis service which can be used if no one is available. See [Redis](#redis) |
 | redis.enabled | bool | `false` | Create a Redis service. |
 | redis.securityContext.fsGroup | int | `1000140000` | Group ID for the container (both Redis master and slave pods) |
 | redis.securityContext.runAsUser | int | `1000140000` | User ID for the container (both Redis master and slave pods) |
@@ -141,9 +143,47 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | service.type | string | `"ClusterIP"` | [Service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) |
 | tolerations | list | `[]` | Tolerations for use with node [taints](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/) |
 
+## Getting started with Helm
+
+This chapter provides information to get started with Helm.
+
+### Override the default values
+
+The Airlock Microgateway Helm chart has many parameters and most of them have default values (see [Configuration](#configuration)). Depending on the environment, the defaults must be adapted. To override the default values, do the following:
+
+* Create a yaml file which contains the values differ to the default.
+* Apply this yaml file with the `-f` parameter.
+
+**Example:**
+
+The example below shows how certain default values could be adjusted.
+
+  custom-values.yaml
+  ```
+  config:
+    default:
+      backend:
+        hostname: other-service
+    existingSecret: "microgateway-secrets"
+  imagePullSecrets:
+    - name: "docker-secret"
+  ingress:
+    enabled: true
+    hosts:
+      - example.com
+  ```
+
+Afterwards apply the Helm chart configuration file with the `-f` parameter.
+```console
+helm upgrade -i microgateway airlock/microgateway -f custom-values.yaml
+```
+
+:point_up: **YAML indentation**:<br>
+YAML is very strict with indetation. To ensure that the YAML file itself is correct, check it's content with a YAML validator (e.g. [YAML Lint](http://www.yamllint.com/)).
+
 ## Dependencies
 
-The Airlock Microgateway Helm chart has the following optional dependencies which can be enabled for an easy start.
+The Airlock Microgateway Helm chart has the following optional dependencies, which can be enabled for an easy start.
 
 | Repository | Name | Version |
 |------------|------|---------|
@@ -165,104 +205,217 @@ In case that sessionhandling is enabled on Airlock Microgateway, a Redis service
     redisService:
       - <REDIS-SERVICE1>:<PORT>
       - <REDIS-SERVICE2>:<PORT>
+  redis:
+    enabled: false
   ```
 
-
-Finally, apply the adapted Helm chart configuration file with -f parameter.
+Finally, apply the Helm chart configuration file with `-f` parameter.
 
 ```console
 helm upgrade -i microgateway airlock/microgateway -f custom-values.yaml
 ```
 
-:information_source: **Possible settings**:
+:information_source: **Possible settings**:<br>
 Please refer to the [Redis Helm chart](https://hub.helm.sh/charts/bitnami/redis) to see all possible parameters of the Redis Helm chart.
 
-:warning: **Adjustments of the default settings**: 
-Please note that the dependend Redis service has been tested with the settings this Helm chart is delivered. Changing those settings can cause issues.
+:warning: **Adjustments of the default settings**:<br>
+Please note that the dependend Redis service has been tested with the settings this Helm chart is delivered. Adjusting those settings can cause issues.
 
 ### Echo-Server
 
-For the first deployment it could be very useful to have a backend service proceeding the requests. For this purpose the dependend echo-server can be deployed by doing the following:
+For the first deployment it could be very useful to have a backend service processing requests. For this purpose the dependend echo-server can be deployed by doing the following:
   custom-values.yaml
   ```
   echo-server:
     enabled: true
   ```
-Finally, apply the adapted Helm chart configuration file with -f parameter.
+
+Finally, apply the Helm chart configuration file with `-f` parameter.
 
 ```console
 helm upgrade -i microgateway airlock/microgateway -f custom-values.yaml
 ```
 
-:information_source: **Possible settings**:
+:information_source: **Possible settings**:<br>
 Please refer to the [Echo-Server Helm chart](https://ealenn.github.io/Echo-Server/pages/helm.html) to see all possible parameters of the Echo-Server Helm chart.
 
-## Helm basics
-In this chapter the Helm basics are described.
-The Helm charts already offers default values, so that as little as possible needs to be adjusted to ensure a secure installation of the Microgateway. 
-Depending on the environment and configuration, different values must be adjusted. There are various possibilities for that. 
+## DSL configuration
 
-* --values / -f  
-  The -f parameter can be used to specify a custom-values.yaml file that overwrites the default values of the Chart during deployment.
-  Such a file could look like the following. It is important that the indentation of the key value pairs is correct.
-  custom-values.yaml
-  ```
-  config:
-    default:
-      backend:
-        hostname: backend-hostname
-    existingSecret: "microgatewaysecrets"
-  imagePullSecrets:
-    - name: "dockersecret"
-  ingress:
-    enabled: true
-    hosts:
-        - virtinc.com
-  ```
-
-## DSL Configuration
-With the Helm chart you have three different possibilities to configure the DSL of the Microgateway. 
-Depending on the environment and use-case, another option may be the best and easiest choice for the implementation. 
+The Helm chart provides three different possibilities to configure the Microgateway DSL.
+Depending on the environment and use-case, another option might suit better and is easier to implement it.
 
 ### Simple DSL configuration
+
+The simple DSL configuration suites best for the following use case:
+
+Use Case)
+* Virtual Host 1: abc.com -> Mapping 1: / -> Backend Service 1
+
+This means that:
+* Only one Virtual Host is configured.
+* The Mapping configuration is applied to all requests sent to the backend service.
+* There is only one backend service.
+
+
+
 The Helm chart provides a simple configuration which can be configured with `config.default.*` parameters.
 All settings have already configured a default value. So only the values which differ from the default value have to be configured. 
 
-Example code fragment:
-Customization of the backend hostname.
+
+**Example:**
+
 custom-values.yaml
 ```
 config:
+  IPHeader:
+    trustedProxies:
+      - 10.0.0.0/28
   default:
+    mapping:
+      entryPath: /
     backend:
       hostname: custom-backend
+
+redis:
+  enabled: true
 ```
 
+**Parameters which can be used**:
+* All `config.*` parameters can be used.
+  * When using the `config.redisService` parameter:
+    * The Mapping will be configured with "enforce_session", except `config.default.mapping.sessionHandling` is configured.
+  * When using the `redis.enabled` parameter:
+    * The Mapping will be configured with "enforce_session", except `config.default.mapping.sessionHandling` is configured.
+* All `config.default.*` parameters can be used.
+  
+
+**Parameters which cannot be used**:
+* The `config.apps` parameter cannot be used. This would switch to the [Advanced DSL app configuration](#advanced-dsl-app-configuration)
+* The `config.dsl` parameter cannot be used. This would switch to the [Expert DSL app configuration](#expert-dsl-app-configuration)
+
+
 ### Advanced DSL app configuration
-If the default app settings are not sufficient, you can define a custom app as YAML with the `config.apps` parameter. 
-This setting overwrites the default app (mapping & backend), but the remaining settings of the DSL can still be configured with the default DSL method. 
-Example code fragment:
-Customization of the VirtualHost with Apache Expert Settings.
+
+In case that the [Simple DSL configuration](#simple-dsl-configuration) does not suite, the advanced configuration options might help. The following use cases might require this kind of configuration:
+
+
+Use Case 1)
+* Virtual Host 1: abc.com -> Mapping 1: / -> Backend Service 1
+* Virtual Host 2: xyz.com -> Mapping 2: / -> Backend Service 1
+
+Use Case 2)
+* Virtual Host 1: abc.com -> Mapping 1: /      -> Backend Service 1
+                          -> Mapping 2: /auth/ -> Backend Service 1
+
+Use Case 3)
+* Virtual Host 1: abc.com -> Mapping 1: / -> Backend Service 1
+* Virtual Host 2: xyz.com -> Mapping 2: / -> Backend Service 2
+
+These use cases are only examples which could also occur slightly different. But all of them have in common that they have more than one Virtual Hosts, Mappings or Backend Services. When ever this is the case, the [Advanced DSL app configuration](#advanced-dsl-app-configuration) should be preferred over the [Simple DSL configuration](#simple-dsl-configuration).
+
+
+**Example:**
+
 custom-values.yaml
 ```
 config:
-  expert_settings:
-    apache: |
-      LogLevel debug
+  IPHeader:
+    trustedProxies:
+      - 10.0.0.0/28
   apps:
     - virtual_host:
-        hostname: custom-hostname
-      backend:
-        hostname: backend-service
+        hostname: virtinc.com
       mappings:
-        - name: app
+        - name: webapp
           entry_path: /
-          backend_path: /app/
+          operational_mode: integartion
+          session_handling: enforce_session
+        - name: api
+          entry_path: /api/
+          session_handling: ignore_session
+          openapi:
+            spec_file: /config/virtinc_api_openapi.json
+      backend:
+        hostname: custom-backend
+
+redis:
+  enabled: true
 ```
 
+**Parameters which can be used**:
+* `config.apps` - **must** be used.
+* `config.*`
+* Only the following `config.default.*` parameters:
+  * `config.default.virtualHost.tls.*`
+  * `config.default.backend..tls.*`
+
+**Parameters which cannot be used**:
+* `config.dsl` - This would switch to the [Expert DSL app configuration](#expert-dsl-app-configuration)
+* `config.default.mapping.*`
+* `config.default.backend.protocol`
+* `config.default.backend.hostname`
+* `config.default.backend.port`
+
 ### Expert DSL configuration
-In case that both other configuration options are not sufficient, create a custom config using `config.dsl`. All the configuration of the DSL can be used.
-Overwrites all config defaults of this chart. 
+
+In case that the [Advanced DSL app configuration](#advanced-dsl-app-configuration) does not suite, the expert configuration options might help. The following reasons might this kind of configuration:
+
+* Microgateway DSL configuration options must be set and are not available as Helm chart parameters (e.g. base_template_file, session.store_mode, ...)
+* The same Microgateway DSL configuration file has been used elsewhere. The same configuration should be used.
+* Using of [Environment Variables](#environment-variables) in configuration sections the other configuration setup does not support it.
+
+
+**Example:**
+
+custom-values.yaml
+```
+config:
+  dsl:
+    base_template_file: /config/custom-base.xml
+    license_file: /secret/config/license
+    session:
+      encryption_passphrase_file: /secret/config/passphrase
+      redis_host: 
+        - redis-master
+    log:
+      level: info
+    expert_settings:
+      apache: |
+        RemoteIPHeader X-Forwarded-For
+        RemoteIPInternalProxy 10.0.0.0/28
+      
+    apps: 
+      - virtual_host:
+          hostname: virtinc.com
+        mappings:
+          - name: webapp
+            entry_path: /
+            operational_mode: integartion
+            session_handling: enforce_session
+          - name: api
+            entry_path: /api/
+            session_handling: ignore_session
+            openapi:
+              spec_file: /config/virtinc_api_openapi.json
+        backend:
+          hostname: backend-service
+
+redis:
+  enabled: true
+
+```
+
+**Parameters which can be used**:
+* `config.dsl` - **must** be used.
+* `config.env`
+* `config.license`
+* `config.passphrase`
+* `config.tlsSecretName`
+
+**Parameters which cannot be used**:
+* `config.apps`
+* `config.default.*`
+* All other `config.*` parameters not mentioned that they are available.
 
 ## Security (TBD)
 
@@ -541,7 +694,7 @@ route:
     termination: passthrough
 ```
 
-## Environment Variables
+## Environment variables
 With the Helm chart environment variables can be set.   
 These can then be used in the DSL configuration.   
 Below is an example of how to set environment variables and then use them in the DSL.   

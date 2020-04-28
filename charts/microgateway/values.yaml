@@ -12,8 +12,8 @@ image:
 ## Microgateway Config
 ##
 config:
-  # config.default -- See [Simple DSL configuration](#simple-dsl-configuration)
-  # @default -- See `config.default.*` parameters
+  # config.default -- See [DSL configuration](#dsl-configuration)
+  # @default -- See `config.default.*` parameters below:
   default:
     mapping:
       # config.default.mapping.entryPath -- The `entry_path` of the app.
@@ -46,7 +46,8 @@ config:
         clientCert: false
         # config.default.backend.tls.verifyHost -- Verify the backend TLS certificate.
         verifyHost: false
-        # config.default.backend.tls.version -- Overwrite the default TLS version for backend connections.
+        # config.default.backend.tls.version -- Overwrite the default TLS version for backend connections.<br>
+        # :exclamation: `config.default.tls.serverCA` must be configured in order to work.
         version: ""
         # config.default.backend.tls.cipherSuite -- Overwrite the default TLS ciphers (<TLS 1.2) for backend connections.
         cipherSuite: ""
@@ -67,7 +68,7 @@ config:
     # @default -- ""
     security_gate:
 
-  # config.env -- List of environment variables. See [Environment Variables](#environment-variables)
+  # config.env -- List of environment variables. See [Environment variables](#environment-variables)
   env: []
   #  - name: WAF_CFG_EXAMPLE
   #    value: Example_Value
@@ -85,7 +86,6 @@ config:
   # config.license -- (string) License for the Microgateway (multiline string)
   # @default -- ""
   license:
-  # @default -- ""
   # config.existingSecret -- (string) Name of an existing secret containing the passphrase or license.<br>
   # License: `license`<br>
   # Passphrase: `passphrase`
@@ -276,7 +276,7 @@ affinity:
   #       topologyKey: kubernetes.io/hostname
 
 # redis -- Redis service which can be used if no one is available. See [Redis](#redis)
-# @default -- See `redis.*` parameters
+# @default -- See `redis.*` parameters below:
 redis:
   # redis.enabled -- Create a Redis service.
   enabled: false
