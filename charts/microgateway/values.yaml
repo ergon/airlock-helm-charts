@@ -45,9 +45,9 @@ config:
         # :exclamation: Must be configured in `config.tlsSecretName`
         clientCert: false
         # config.default.backend.tls.verifyHost -- Verify the backend TLS certificate.
+        # :exclamation: `config.default.tls.serverCA` must be configured in order to work.
         verifyHost: false
         # config.default.backend.tls.version -- Overwrite the default TLS version for backend connections.<br>
-        # :exclamation: `config.default.tls.serverCA` must be configured in order to work.
         version: ""
         # config.default.backend.tls.cipherSuite -- Overwrite the default TLS ciphers (<TLS 1.2) for backend connections.
         cipherSuite: ""
