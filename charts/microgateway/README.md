@@ -1,4 +1,4 @@
-# Airlock microgateway
+Airlock microgateway
 ============
 
 Airlock Microgateway, a WAF container solution to protect other services.
