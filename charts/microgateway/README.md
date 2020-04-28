@@ -1,4 +1,4 @@
-# Airlock microgateway
+Airlock microgateway
 ============
 
 Airlock Microgateway, a WAF container solution to protect other services.
@@ -96,8 +96,11 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | config.license | string | "" | License for the Microgateway (multiline string) |
 | config.logLevel | string | `"info"` | Log level (`info`, `trace`).<br> :exclamation: Never use `trace` in production. |
 | config.passphrase | string | * If `passphrase` in `config.existringSecret`<br> * If no passphrase is available, a random is generated. | Passphrase used for different features (Cookie encryption, URL Encryption, ...) |
-| config.redisService | list | * If `redis.enabled=true` => `redis-master`<br>* If `redis.enabled=false` => "" | List of Redis services.  |
+| config.redisService | list | * If `redis.enabled=true` => `redis-master`<br>* If `redis.enabled=false` => "" | List of Redis services. |
 | config.tlsSecretName | string | "" | Name of an existing secret containing TLS files.<br> Virtual Host: Certificate: `tls.crt`, Private key: `tls.key` and CA: `ca.crt`. <br> :exclamation: Update`route.tls.destinationCACertificate` accordingly.<br> Backend: Certifate: `backend-client.crt`, Private key: `backend-client.key` and CA: `backend-server-validation-ca.crt`. |
+| echo-server.enabled | bool | `false` |  |
+| echo-server.fullnameOverride | string | `"backend-service"` |  |
+| echo-server.service.port | int | `8080` |  |
 | fullnameOverride | string | `""` | Provide a name to substitute for the full names of resources |
 | image.pullPolicy | string | `"Always"` | Pull policy (`Always`, `IfNotPresent`, `Never`) |
 | image.repository | string | `"docker.ergon.ch/airlock/microgateway"` | Image repository |
@@ -130,7 +133,7 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | route.path | string | `"/"` | Path for the route |
 | route.targetPort | string | `"https"` | Target port of the service (`http`, `https` or number) |
 | route.tls.certificate | string | "" | Certificate to be used (multiline string) |
-| route.tls.destinationCACertificate | string | Microgateway's default certificate | Validate the Microgateway server certificate  against this CA. (multiline string).<br> :exclamation: Must be configured with termination `reencrypt`. |
+| route.tls.destinationCACertificate | string | Microgateway's default certificate | Validate the Microgateway server certificate against this CA. (multiline string).<br> :exclamation: Must be configured with termination `reencrypt`. |
 | route.tls.enabled | bool | `true` | Enable TLS for the route |
 | route.tls.insecureEdgeTerminationPolicy | string | `"Redirect"` | Define the insecureEdgeTerminationPolicy of the route (`Allow`, `Redirect`, `None`) |
 | route.tls.key | string | "" | Private key to be used for certificate (multiline string) |
@@ -146,10 +149,6 @@ The following table lists configuration parameters of the Airlock Microgateway c
 ## Getting started with Helm
 
 This chapter provides information to get started with Helm.
-| Repository | Name | Version |
-|------------|------|---------|
-| https://charts.bitnami.com/bitnami | redis | 10.6.0 |
-| https://ealenn.github.io/charts | echo-server | 0.3.0 |
 
 ### Override the default values
 
@@ -192,6 +191,7 @@ The Airlock Microgateway Helm chart has the following optional dependencies, whi
 | Repository | Name | Version |
 |------------|------|---------|
 | https://charts.bitnami.com/bitnami | redis | 10.6.0 |
+| https://ealenn.github.io/charts | echo-server | 0.3.0 |
 
 ### Redis
 
