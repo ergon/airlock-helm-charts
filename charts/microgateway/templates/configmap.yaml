@@ -18,7 +18,7 @@ data:
         - {{ . }}
         {{- end }}
       {{- else }}
-      redis_hosts: redis-master
+      redis_hosts: [redis-master]
       {{- end }}
     {{- end }}
     log:
