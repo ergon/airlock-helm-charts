@@ -277,11 +277,11 @@ redis:
 
 ### Expert DSL configuration
 
-In case that the [Advanced DSL app configuration](#advanced-dsl-app-configuration) does not suite, the expert configuration options might help. The following reasons might this kind of configuration:
+In case that the [Advanced DSL app configuration](#advanced-dsl-app-configuration) does not suite, the expert configuration options must be used. There are a few reasons listed below:
 
 * Microgateway DSL configuration options must be set and are not available as Helm chart parameters (e.g. base_template_file, session.store_mode, ...)
+* Using of [Environment Variables](#environment-variables) in configuration sections the other configuration setups do not support it.
 * The same Microgateway DSL configuration file has been used elsewhere. The same configuration should be used.
-* Using of [Environment Variables](#environment-variables) in configuration sections the other configuration setup does not support it.
 
 
 **Example:**
