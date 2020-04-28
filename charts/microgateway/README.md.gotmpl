@@ -1,41 +1,138 @@
-Airlock {{ template "chart.header" . }}
-
-{{ template "chart.versionLine" . }}
-
+# Airlock {{ template "chart.header" . }} Helm Chart
 {{ template "chart.description" . }}
 
-# Introduction
+The current chart version is: {{ template "chart.version" . }}
+
+## Table of contents
+* [Introduction](#introduction)
+* [Prerequisites](#prerequisites)
+* [Quick start guide](#quick-start-guide)
+** [Adding the chart repository](#adding-the-chart-repository)
+** [Installing the chart](#installing-the-chart)
+** [Uninstalling the chart](#uninstalling-the-chart)
+* [Configuration](#configuration)
+* [Dependencies](#dependencies)
+
+## Introduction
 This chapter bootstraps [Airlock Microgateway](https://www.airlock.com) on a [Kubernetes](https://kubernetes.io) or [Openshift](https://www.openshift.com) cluster using the [Helm](https://helm.sh) package manager. It provisions an Airlock Microgateway pod with a default configuration which can be adjusted to customer needs. For more details about the configuration options, see chapter [Helm basics](#helm-basics).
 
-# Prerequisites
+## Prerequisites
 * The Airlock Microgateway image
 * A valid license for Airlock Microgateway
+* Redis service for sessionhandling (see chapter [Dependencies](#dependencies))
 
-## Adding the Helm Repository
+## Quick start guide
 
-To add the Helm Chart repository:
+The following subchapter describes how to use the Helm chart.
+
+### Adding the Chart repository
+
+To add the Chart repository:
 
 ```console
 helm repo add airlock https://ergon.github.io/airlock-helm-charts/
 ```
 
-## Installing the Helm Chart
+### Installing the Chart
 
-To install the Helm Chart with the release name `microgateway`:
+To install the Chart with the release name `microgateway`:
 
 ```console
 helm upgrade -i microgateway airlock/microgateway
 ```
 
-## Uninstalling the Helm Chart
+### Uninstalling the Chart
 
-To uninstall the Helm Chart with the release name `microgateway`:
+To uninstall the Chart with the release name `microgateway`:
 
 ```console
 helm uninstall microgateway
 ```
 
-## <a name="dsl-configuration"></a> DSL Configuration
+## Configuration
+
+The following table lists configuration parameters of the Airlock Microgateway chart and the default values.
+
+{{ template "chart.valuesTable" . }}
+
+## Dependencies
+
+The Airlock Microgateway Helm chart has the following optional dependencies which can be enabled for an easy start.
+
+{{ template "chart.requirementsTable" . }}
+
+### Redis
+
+In case that sessionhandling is enabled on Airlock Microgateway, a Redis service needs to be available. The Airlock Microgateway Helm chart has two options:
+* To deploy the dependend Redis service, adapt the Helm chart configuration as shown below:
+  custom-values.yaml
+  ```
+  redis:
+    enabled: true
+  ```
+* To use an existing Redis service, adapt the Helm chart configuration as shown below:
+  custom-values.yaml
+  ```
+  config:
+    redisService:
+      - <REDIS-SERVICE1>:<PORT>
+      - <REDIS-SERVICE2>:<PORT>
+  ```
+
+
+Finally, apply the adapted Helm chart configuration file with -f parameter.
+
+```console
+helm upgrade -i microgateway airlock/microgateway -f custom-values.yaml
+```
+
+:information_source: **Possible settings**:
+Please refer to the [Redis Helm chart](https://hub.helm.sh/charts/bitnami/redis) to see all possible parameters of the Redis Helm chart.
+
+:warning: **Adjustments of the default settings**: 
+Please note that the dependend Redis service has been tested with the settings this Helm chart is delivered. Changing those settings can cause issues.
+
+### Echo-Server
+
+For the first deployment it could be very useful to have a backend service proceeding the requests. For this purpose the dependend echo-server can be deployed by doing the following:
+  custom-values.yaml
+  ```
+  echo-server:
+    enabled: true
+  ```
+Finally, apply the adapted Helm chart configuration file with -f parameter.
+
+```console
+helm upgrade -i microgateway airlock/microgateway -f custom-values.yaml
+```
+
+:information_source: **Possible settings**:
+Please refer to the [Echo-Server Helm chart](https://ealenn.github.io/Echo-Server/pages/helm.html) to see all possible parameters of the Echo-Server Helm chart.
+
+## Helm basics
+In this chapter the Helm basics are described.
+The Helm charts already offers default values, so that as little as possible needs to be adjusted to ensure a secure installation of the Microgateway. 
+Depending on the environment and configuration, different values must be adjusted. There are various possibilities for that. 
+
+* --values / -f  
+  The -f parameter can be used to specify a custom-values.yaml file that overwrites the default values of the Chart during deployment.
+  Such a file could look like the following. It is important that the indentation of the key value pairs is correct.
+  custom-values.yaml
+  ```
+  config:
+    default:
+      backend:
+        hostname: backend-hostname
+    existingSecret: "microgatewaysecrets"
+  imagePullSecrets:
+    - name: "dockersecret"
+  ingress:
+    enabled: true
+    hosts:
+        - virtinc.com
+  ```
+
+## DSL Configuration
 With the Helm Chart you have three different possibilities to configure the DSL of the Microgateway. 
 Depending on the environment and use-case, another option may be the best and easiest choice for the implementation. 
 
@@ -79,61 +176,18 @@ config:
 In case that both other configuration options are not sufficient, create a custom config using `config.dsl`. All the configuration of the DSL can be used.
 Overwrites all config defaults of this Chart. 
 
-## Configuration
+## Security (TBD)
 
-{{ template "chart.valuesTable" . }}
+### Hardening (TBD)
 
-## Helm Chart dependencies
-The Helm Chart has optional dependencies which can be activated.
+### Deny Rule Handling (TBD)
 
-{{ template "chart.requirementsTable" . }}
-
-### Redis
-To use redis the value `redis.enabled` must be set to true
-
-```console
-helm upgrade -i microgateway airlock/microgateway --set redis.enabled=true
-```
-
-To see all possible settings for this dependency please go to the following URL: [Helm Hub bitnami/redis](https://hub.helm.sh/charts/bitnami/redis)
-
-:warning: **Adjustments of the default settings**: The Redis was tested only with this default settings. With all changes to these settings it cannot be assured that the Redis will work as expected.
-
-# <a name="helm-basics"></a>Helm basics
-In this chapter the Helm basics are described.
-The Helm charts already offers default values, so that as little as possible needs to be adjusted to ensure a secure installation of the Microgateway. 
-Depending on the environment and configuration, different values must be adjusted. There are various possibilities for that. 
-
-* --values / -f  
-  The -f parameter can be used to specify a custom-values.yaml file that overwrites the default values of the Chart during deployment.
-  Such a file could look like the following. It is important that the indentation of the key value pairs is correct.
-  custom-values.yaml
-  ```
-  config:
-    default:
-      backend:
-        hostname: backend-hostname
-    existingSecret: "microgatewaysecrets"
-  imagePullSecrets:
-    - name: "dockersecret"
-  ingress:
-    enabled: true
-    hosts:
-        - virtinc.com
-  ```
-
-# Security (TBD)
-
-## Hardening (TBD)
-
-## Deny Rule Handling (TBD)
-
-## Secrets
+### Secrets
 Several different Secrets are required to configure the Microgateway properly.  
 Some of these secrets can be generated during the installation of the Chart, others must be created in advance and then referenced in the Microgateway Chart.   
 The following examples show how to create a secret and how to use it with the Microgateway.  
 
-### existingSecret
+#### existingSecret
 This secret contains the license and the passphrase (for encryption). 
 For example, this secret can be created as follows:
 ```
@@ -145,7 +199,7 @@ config:
   existingSecret: "microgatewaysecrets"
 ```
 
-### imagePullSecrets
+#### imagePullSecrets
 To download the Microgateway image from a private docker repository, an imagePullSecret is required.
 For example, this secret can be created as follows:
 ```
@@ -157,7 +211,7 @@ imagePullSecrets:
     - name: "dockersecret"
 ```
 
-### tlsSecretName 
+#### tlsSecretName 
 The TLS certificates that are used by the Microgateway can be stored in a secret, so that only the secret name needs to be specified during deployment.  
 Microgateway certificates include both Virtual Host TLS certificates and the TLS certificates for the backend if the backend is to be connected via TLS.  
 Depending on the desired TLS configuration, other certificates are required in Secret.   
@@ -174,16 +228,16 @@ config:
   tlsSecretName: "microgatewaytls"
 ```
 
-# Examples
+## Examples
 Here are some examples of how the Microgateway could be installed.   
 Depending on the requirements and knowledge level, one or the other example may be more suitable for your environment.  
 
-## <a name="dsl-configuration-examples"></a>DSL Configuration Examples
+### DSL Configuration Examples
 The chapter [DSL Configuration](#dsl-configuration) already described how to configure the DSL with the Helm Chart.   
 In the following chapters, various examples of these configuration options are given to help you better understand the DSL mechanism in order to use it as efficiently as possible.  
 Depending on the requirements of the Microgateway configuration, a different DSL must be created.   
 
-### Simple setup example 
+#### Simple setup example 
 The Simple Setup assumes that it has a virtual host, mapping and backend each.   
 For the Simple Setup all settings `config.*` are available.  
 Thus, the user does not have to write and provide his own DSL. The generation of the DSL with the required values is done by the Helm Chart.  
@@ -201,7 +255,7 @@ config:
   logLevel: trace
 ```
 
-### Advanced setup example
+#### Advanced setup example
 The Advanced setup should be used if the settings of the Simple Setup are no longer sufficient.  
 Therefore, if more than one virtual host, mapping and backend is needed, or if the app requires different settings than those that can be set with the `config.default.*`.   
 Please note that a valid DSL app must be specified and the values config.default.* are no longer used.   
@@ -238,11 +292,11 @@ apps:
                   pattern: $exception.*value^  
 ```
 
-### Expert setup example
+#### Expert setup example
 In the expert setup you must dispense of all config.* settings of the Helm Chart, with the exception of the config.dsl setting.  
 This means that if you have DSL requirements that cannot be covered by the first two setups, you can specify your own DSL.   
 
-## External connectivity
+### External connectivity
 This section describes how the external connectivity can be configured.   
 There are two different scenarios if you are on Kubernetes or if you want to install on Openshift.   
 On Kubernetes an Ingress Controller is used and on Openshift a Route object.   
