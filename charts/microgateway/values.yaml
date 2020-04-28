@@ -299,3 +299,9 @@ redis:
     # to configure the redis session store.
   slave:
     command: redis-server
+
+echo-server:
+  enabled: false
+  fullnameOverride: backend-service
+  service:
+    port: 8080

@@ -3,3 +3,7 @@ dependencies:
     version: 10.6.0
     repository: https://charts.bitnami.com/bitnami
     condition: redis.enabled
+  - name: echo-server
+    version: 0.3.0
+    repository: https://ealenn.github.io/charts
+    condition: echo-server.enabled

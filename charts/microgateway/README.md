@@ -146,6 +146,10 @@ The following table lists configuration parameters of the Airlock Microgateway c
 ## Getting started with Helm
 
 This chapter provides information to get started with Helm.
+| Repository | Name | Version |
+|------------|------|---------|
+| https://charts.bitnami.com/bitnami | redis | 10.6.0 |
+| https://ealenn.github.io/charts | echo-server | 0.3.0 |
 
 ### Override the default values
 
