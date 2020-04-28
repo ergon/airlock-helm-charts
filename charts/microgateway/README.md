@@ -98,9 +98,7 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | config.passphrase | string | * If `passphrase` in `config.existringSecret`<br> * If no passphrase is available, a random is generated. | Passphrase used for different features (Cookie encryption, URL Encryption, ...) |
 | config.redisService | list | * If `redis.enabled=true` => `redis-master`<br>* If `redis.enabled=false` => "" | List of Redis services. |
 | config.tlsSecretName | string | "" | Name of an existing secret containing TLS files.<br> Virtual Host: Certificate: `tls.crt`, Private key: `tls.key` and CA: `ca.crt`. <br> :exclamation: Update`route.tls.destinationCACertificate` accordingly.<br> Backend: Certifate: `backend-client.crt`, Private key: `backend-client.key` and CA: `backend-server-validation-ca.crt`. |
-| echo-server.enabled | bool | `false` |  |
-| echo-server.fullnameOverride | string | `"backend-service"` |  |
-| echo-server.service.port | int | `8080` |  |
+| echo-server | object | See `echo-server.*` parameters below: | Echo service which can be used for an easy start. See [Echo-Server](#echo-server) |
 | fullnameOverride | string | `""` | Provide a name to substitute for the full names of resources |
 | image.pullPolicy | string | `"Always"` | Pull policy (`Always`, `IfNotPresent`, `Never`) |
 | image.repository | string | `"docker.ergon.ch/airlock/microgateway"` | Image repository |
@@ -121,7 +119,7 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | readinessProbe.enabled | bool | `true` | Enable readiness probes |
 | readinessProbe.initialDelaySeconds | int | `30` | Initial delay in seconds |
 | redis | object | See `redis.*` parameters below: | Redis service which can be used if no one is available. See [Redis](#redis) |
-| redis.enabled | bool | `false` | Create a Redis service. |
+| redis.enabled | bool | `false` | Create an Echo service. |
 | redis.securityContext.fsGroup | int | `1000140000` | Group ID for the container (both Redis master and slave pods) |
 | redis.securityContext.runAsUser | int | `1000140000` | User ID for the container (both Redis master and slave pods) |
 | replicaCount | int | `1` | Desired number of Microgateway pods |
