@@ -288,7 +288,6 @@ redis:
     * The Mapping will be configured with "enforce_session", except `config.default.mapping.sessionHandling` is configured.
   * When using the `redis.enabled` parameter:
     * The Mapping will be configured with "enforce_session", except `config.default.mapping.sessionHandling` is configured.
-* All `config.default.*` parameters can be used.
   
 
 **Parameters which cannot be used**:
