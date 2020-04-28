@@ -251,8 +251,6 @@ Depending on the environment and use-case, another option might suit better and 
 ### Simple DSL configuration
 
 The simple DSL configuration suites best for the following use case:
-
-**_Use Case)_**
 * Virtual Host 1: abc.com -> Mapping 1: / -> Backend Service 1
 
 This means that:
