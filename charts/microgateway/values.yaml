@@ -44,7 +44,7 @@ config:
         # config.default.backend.tls.clientCert -- Use TLS client certificate for backend connections. <br>
         # :exclamation: Must be configured in `config.tlsSecretName`
         clientCert: false
-        # config.default.backend.tls.verifyHost -- Verify the backend TLS certificate.
+        # config.default.backend.tls.verifyHost -- Verify the backend TLS certificate.<br>
         # :exclamation: `config.default.tls.serverCA` must be configured in order to work.
         verifyHost: false
         # config.default.backend.tls.version -- Overwrite the default TLS version for backend connections.<br>

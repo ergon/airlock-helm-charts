@@ -78,7 +78,7 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | config.default.backend.tls.cipherSuitev13 | string | `""` | Overwrite the default TLS ciphers (TLS 1.3) for backend connections. |
 | config.default.backend.tls.clientCert | bool | `false` | Use TLS client certificate for backend connections. <br> :exclamation: Must be configured in `config.tlsSecretName` |
 | config.default.backend.tls.serverCa | bool | `false` | Validates the backend server certificate against the configured CA. <br> :exclamation: Must be configured in `config.tlsSecretName` |
-| config.default.backend.tls.verifyHost | bool | `false` | Verify the backend TLS certificate. :exclamation: `config.default.tls.serverCA` must be configured in order to work. |
+| config.default.backend.tls.verifyHost | bool | `false` | Verify the backend TLS certificate.<br> :exclamation: `config.default.tls.serverCA` must be configured in order to work. |
 | config.default.backend.tls.version | string | `""` | Overwrite the default TLS version for backend connections.<br> |
 | config.default.mapping.denyRules.enabled | bool | `true` | Enable all Deny rules. |
 | config.default.mapping.denyRules.level | string | `"standard"` | Set all Deny rules to Security Level (`basic`, `standard`, `strict`) |
