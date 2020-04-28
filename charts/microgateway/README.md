@@ -90,7 +90,7 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | config.default.virtualHost.tls.protocol | string | `""` | Overwrite the default TLS protocol for frontend connections. |
 | config.dsl | object | `{}` | See [Expert DSL configuration](#expert-dsl-configuration) |
 | config.env | list | `[]` | List of environment variables. See [Environment variables](#environment-variables) |
-| config.existingSecret | string | "" | Name of an existing secret containing the passphrase or license.<br> License: `license`<br> Passphrase: `passphrase` |
+| config.existingSecret | string | "" | Name of an existing secret containing the passphrase or license.<br> license: `license`<br> passphrase: `passphrase` |
 | config.expert_settings.apache | string | "" | Global Apache Expert Settings (multiline string) |
 | config.expert_settings.security_gate | string | "" | Global SecurityGate Expert Settings (multiline string) |
 | config.license | string | "" | License for the Microgateway (multiline string) |
