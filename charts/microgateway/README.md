@@ -195,7 +195,7 @@ The Airlock Microgateway Helm chart has the following optional dependencies, whi
 
 ### Redis
 
-In case that sessionhandling is enabled on Airlock Microgateway, a Redis service needs to be available. The Airlock Microgateway Helm chart has two options:
+In case that session handling is enabled on Airlock Microgateway, a Redis service needs to be available. The Airlock Microgateway Helm chart has two options:
 * To deploy the dependend Redis service, adapt the Helm chart configuration as shown below:
   custom-values.yaml
   ```
