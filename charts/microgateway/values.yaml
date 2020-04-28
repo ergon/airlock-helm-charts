@@ -94,7 +94,7 @@ config:
   # config.logLevel -- Log level (`info`, `trace`).<br>
   # :exclamation: Never use `trace` in production.
   logLevel: info
-  # config.redisService -- List of Redis services. 
+  # config.redisService -- List of Redis services.
   # @default -- * If `redis.enabled=true` => `redis-master`<br>* If `redis.enabled=false` => ""
   redisService: []
   IPHeader:
@@ -210,7 +210,7 @@ route:
     key:  # |
       # -----BEGIN RSA PRIVATE KEY-----
       # -----END RSA PRIVATE KEY-----
-    # route.tls.destinationCACertificate -- Validate the Microgateway server certificate 
+    # route.tls.destinationCACertificate -- Validate the Microgateway server certificate
     # against this CA. (multiline string).<br>
     # :exclamation: Must be configured with termination `reencrypt`.
     # @default -- Microgateway's default certificate
@@ -294,8 +294,8 @@ redis:
     enabled: false
   master:
     command: redis-server
-    disableCommands: ["FLUSHDB"]  
-    # "FLUSHDB" must not be deactivated, because the Microgateway needs this command 
+    disableCommands: ["FLUSHDB"]
+    # "FLUSHDB" must not be deactivated, because the Microgateway needs this command
     # to configure the redis session store.
   slave:
     command: redis-server
