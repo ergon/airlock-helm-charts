@@ -87,8 +87,8 @@ config:
   # @default -- ""
   license:
   # config.existingSecret -- (string) Name of an existing secret containing the passphrase or license.<br>
-  # License: `license`<br>
-  # Passphrase: `passphrase`
+  # license: `license`<br>
+  # passphrase: `passphrase`
   # @default -- ""
   existingSecret:
   # config.logLevel -- Log level (`info`, `trace`).<br>
