@@ -173,7 +173,7 @@ The example below shows how certain default values could be adjusted.
   ingress:
     enabled: true
     hosts:
-      - example.com
+      - example.virtinc.com
   ```
 
 Afterwards apply the Helm chart configuration file with the `-f` parameter.
