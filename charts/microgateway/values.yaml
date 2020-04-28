@@ -300,7 +300,10 @@ redis:
   slave:
     command: redis-server
 
+# echo-server -- Echo service which can be used for an easy start. See [Echo-Server](#echo-server)
+# @default -- See `echo-server.*` parameters below:
 echo-server:
+  # redis.enabled -- Create an Echo service.
   enabled: false
   fullnameOverride: backend-service
   service:
