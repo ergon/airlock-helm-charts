@@ -18,7 +18,7 @@ data:
         - {{ . }}
         {{- end }}
       {{- else }}
-      redis_hosts: redis-master
+      redis_hosts: [redis-master]
       {{- end }}
     {{- end }}
     log:
@@ -39,7 +39,7 @@ data:
       {{- if $config.default.virtualHost.tls.cipherSuite }}
         SSLCipherSuite {{ $config.default.virtualHost.tls.cipherSuite }}
       {{- end }}
-      {{- with $config.expert.apache }}
+      {{- with $config.expert_settings.apache }}
         {{- . | nindent 8 }}
       {{- end }}
     {{- end }}
@@ -64,7 +64,7 @@ data:
       {{- if $config.default.backend.tls.cipherSuitev13 }}
         BackendSSLCipherSuiteTls13 {{ $config.default.backend.tls.cipherSuitev13 }}
       {{- end }}
-      {{- with $config.expert.security_gate }}
+      {{- with $config.expert_settings.security_gate }}
         {{- . | nindent 8 }}
       {{- end }}
     {{- end }}
@@ -79,7 +79,7 @@ data:
         operational_mode: {{ $config.default.mapping.operationalMode }}
         {{- if $config.default.mapping.sessionHandling }}
         session_handling: {{ $config.default.mapping.sessionHandling }}
-        {{- else if .Values.redis.enabled }}
+        {{- else if or .Values.redis.enabled $config.redisService }}
         session_handling: {{ "enforce_session" }}
         {{- else }}
         session_handling: {{ "ignore_session" }}
@@ -89,9 +89,9 @@ data:
           log_only: {{ $config.default.mapping.denyRules.logOnly }}
           level: {{ $config.default.mapping.denyRules.level }}
       backend:
+        protocol: {{ $config.default.backend.protocol }}
         hostname: {{ $config.default.backend.hostname }}
         port: {{ $config.default.backend.port }}
-        protocol: {{ $config.default.backend.protocol }}
     {{- if $config.tlsSecretName }}
       virtual_host:
         certificate:
