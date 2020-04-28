@@ -9,9 +9,9 @@ The current chart version is: 0.4.1
 * [Introduction](#introduction)
 * [Prerequisites](#prerequisites)
 * [Quick start guide](#quick-start-guide)
- * [Adding the chart repository](#adding-the-chart-repository)
- * [Installing the chart](#installing-the-chart)
- * [Uninstalling the chart](#uninstalling-the-chart)
+  * [Adding the chart repository](#adding-the-chart-repository)
+  * [Installing the chart](#installing-the-chart)
+  * [Uninstalling the chart](#uninstalling-the-chart)
 * [Configuration](#configuration)
 * [Dependencies](#dependencies)
 
