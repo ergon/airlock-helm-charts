@@ -1,5 +1,6 @@
 # Airlock microgateway
-============ Helm Chart
+============
+
 Airlock Microgateway, a WAF container solution to protect other services.
 
 The current chart version is: 0.4.1
@@ -8,14 +9,14 @@ The current chart version is: 0.4.1
 * [Introduction](#introduction)
 * [Prerequisites](#prerequisites)
 * [Quick start guide](#quick-start-guide)
-** [Adding the chart repository](#adding-the-chart-repository)
-** [Installing the chart](#installing-the-chart)
-** [Uninstalling the chart](#uninstalling-the-chart)
+ * [Adding the chart repository](#adding-the-chart-repository)
+ * [Installing the chart](#installing-the-chart)
+ * [Uninstalling the chart](#uninstalling-the-chart)
 * [Configuration](#configuration)
 * [Dependencies](#dependencies)
 
 ## Introduction
-This chapter bootstraps [Airlock Microgateway](https://www.airlock.com) on a [Kubernetes](https://kubernetes.io) or [Openshift](https://www.openshift.com) cluster using the [Helm](https://helm.sh) package manager. It provisions an Airlock Microgateway pod with a default configuration which can be adjusted to customer needs. For more details about the configuration options, see chapter [Helm basics](#helm-basics).
+This Helm chart bootstraps [Airlock Microgateway](https://www.airlock.com) on a [Kubernetes](https://kubernetes.io) or [Openshift](https://www.openshift.com) cluster using the [Helm](https://helm.sh) package manager. It provisions an Airlock Microgateway pod with a default configuration which can be adjusted to customer needs. For more details about the configuration options, see chapter [Helm basics](#helm-basics).
 
 ## Prerequisites
 * The Airlock Microgateway image
@@ -24,27 +25,27 @@ This chapter bootstraps [Airlock Microgateway](https://www.airlock.com) on a [Ku
 
 ## Quick start guide
 
-The following subchapter describes how to use the Helm chart.
+The following subchapters describe how to use the Helm chart.
 
-### Adding the Chart repository
+### Adding the chart repository
 
-To add the Chart repository:
+To add the chart repository:
 
 ```console
 helm repo add airlock https://ergon.github.io/airlock-helm-charts/
 ```
 
-### Installing the Chart
+### Installing the chart
 
-To install the Chart with the release name `microgateway`:
+To install the chart with the release name `microgateway`:
 
 ```console
 helm upgrade -i microgateway airlock/microgateway
 ```
 
-### Uninstalling the Chart
+### Uninstalling the chart
 
-To uninstall the Chart with the release name `microgateway`:
+To uninstall the chart with the release name `microgateway`:
 
 ```console
 helm uninstall microgateway
@@ -221,11 +222,11 @@ Depending on the environment and configuration, different values must be adjuste
   ```
 
 ## DSL Configuration
-With the Helm Chart you have three different possibilities to configure the DSL of the Microgateway. 
+With the Helm chart you have three different possibilities to configure the DSL of the Microgateway. 
 Depending on the environment and use-case, another option may be the best and easiest choice for the implementation. 
 
 ### Default DSL
-The Helm Chart provides a simple configuration which can be configured with `config.default.*` parameters.
+The Helm chart provides a simple configuration which can be configured with `config.default.*` parameters.
 All settings have already configured a default value. So only the values which differ from the default value have to be configured. 
 
 Example code fragment:
@@ -262,7 +263,7 @@ config:
 
 ### Custom DSL
 In case that both other configuration options are not sufficient, create a custom config using `config.dsl`. All the configuration of the DSL can be used.
-Overwrites all config defaults of this Chart. 
+Overwrites all config defaults of this chart. 
 
 ## Security (TBD)
 
@@ -272,7 +273,7 @@ Overwrites all config defaults of this Chart.
 
 ### Secrets
 Several different Secrets are required to configure the Microgateway properly.  
-Some of these secrets can be generated during the installation of the Chart, others must be created in advance and then referenced in the Microgateway Chart.   
+Some of these secrets can be generated during the installation of the chart, others must be created in advance and then referenced in the Microgateway chart.   
 The following examples show how to create a secret and how to use it with the Microgateway.  
 
 #### existingSecret
@@ -321,14 +322,14 @@ Here are some examples of how the Microgateway could be installed.
 Depending on the requirements and knowledge level, one or the other example may be more suitable for your environment.  
 
 ### DSL Configuration Examples
-The chapter [DSL Configuration](#dsl-configuration) already described how to configure the DSL with the Helm Chart.   
+The chapter [DSL Configuration](#dsl-configuration) already described how to configure the DSL with the Helm chart.   
 In the following chapters, various examples of these configuration options are given to help you better understand the DSL mechanism in order to use it as efficiently as possible.  
 Depending on the requirements of the Microgateway configuration, a different DSL must be created.   
 
 #### Simple setup example 
 The Simple Setup assumes that it has a virtual host, mapping and backend each.   
 For the Simple Setup all settings `config.*` are available.  
-Thus, the user does not have to write and provide his own DSL. The generation of the DSL with the required values is done by the Helm Chart.  
+Thus, the user does not have to write and provide his own DSL. The generation of the DSL with the required values is done by the Helm chart.  
 
 simple-values.yaml
 ```
@@ -381,7 +382,7 @@ apps:
 ```
 
 #### Expert setup example
-In the expert setup you must dispense of all config.* settings of the Helm Chart, with the exception of the config.dsl setting.  
+In the expert setup you must dispense of all config.* settings of the Helm chart, with the exception of the config.dsl setting.  
 This means that if you have DSL requirements that cannot be covered by the first two setups, you can specify your own DSL.   
 
 ### External connectivity
@@ -391,8 +392,8 @@ On Kubernetes an Ingress Controller is used and on Openshift a Route object.
 
 ### Kubernetes Ingress
 In the Kubernetes environments an Ingress Controller is required to make the Microgateway accessible from the Internet.  
-In our examples we will use the nginx-ingress-controller. However, this is not installed directly with the Helm Chart.   
-The Helm Chart only offers the possibility to create the required configuration for an existing Ingress Controller.   
+In our examples we will use the nginx-ingress-controller. However, this is not installed directly with the Helm chart.   
+The Helm chart only offers the possibility to create the required configuration for an existing Ingress Controller.   
 If no ingress controller is available in an environment, it can be installed with Helm.   
 
 [nginx-ingress](https://github.com/helm/charts/tree/master/stable/nginx-ingress)
@@ -435,10 +436,10 @@ ingress:
 
 ### Openshift Route
 In Openshift a route is needed to reach the Microgateway from the Internet.
-A route object must be created for its configuration. The creation of such an object is handled by the Microgateway Helm Chart.  
+A route object must be created for its configuration. The creation of such an object is handled by the Microgateway Helm chart.  
 
 #### Without TLS
-This example shows how to configure a route object without TLS using the Helm Chart.
+This example shows how to configure a route object without TLS using the Helm chart.
 
 ```
 route:
@@ -452,10 +453,10 @@ route:
 
 #### TLS Configuration
 There are three different TLS configuration options for the openshift route. These are edge, reencrypt and passthrough.  
-Below is a description of how these options can be configured using the Microgateway Chart.  
+Below is a description of how these options can be configured using the Microgateway chart.  
 
 Evtl. nur eine Möglichkeit. 
-There are two different options for specifying TLS certificates in the Helm Chart.   
+There are two different options for specifying TLS certificates in the Helm chart.   
 Either you create a secret (config.tlsSecretName) containing the required certificates or you provide the certificates in a custom-values.yaml file during deployment.   
 
 ##### Edge
@@ -542,7 +543,7 @@ route:
 ```
 
 ## Environment Variables
-With the Helm Chart environment variables can be set.   
+With the Helm chart environment variables can be set.   
 These can then be used in the DSL configuration.   
 Below is an example of how to set environment variables and then use them in the DSL.   
 
@@ -573,7 +574,7 @@ In Kubernetes and Openshift probes are used to determine if a pod is ready to pr
 The liveness Probe is used to find out when to restart a Pod.   
 If a liveness Probe fails, the Pod will restart.   
 
-The Helm Chart has already predefined a liveness probe.   
+The Helm chart has already predefined a liveness probe.   
 If this does not work, it can be adjusted as follows.   
 
 ```
@@ -588,7 +589,7 @@ Then the default of the environment on which the Microgateway is deployed is app
 The readiness Probe is used to set the status of a pod to Ready. This means that the pod is now ready to process requests.  
 If a readiness Probe fails, only the Ready status of the Pod is removed.   
 
-The Helm Chart has already predefined a readiness probe.   
+The Helm chart has already predefined a readiness probe.   
 If this does not work, it can be adjusted as follows.   
 
 ```
