@@ -102,7 +102,7 @@ config:
     # passphrase: `passphrase`
     # @default -- ""
     existingSecret:
-    
+
   # config.advanced.apps -- See [Advanced DSL app configuration](#advanced-dsl-app-configuration)
   advanced:
     apps: []

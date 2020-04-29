@@ -58,7 +58,7 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 Return true if a secret object should be created
 */}}
 {{- define "microgateway.createSecret" -}}
-{{- if not .Values.config.global.existingSecret -}}
+{{- if not .Values.config.generic.existingSecret -}}
   {{- true -}}
 {{- end -}}
 {{- end -}}
@@ -67,14 +67,14 @@ Return true if a secret object should be created
 Get the secret name
 */}}
 {{- define "microgateway.secretName" -}}
-{{- if and .Values.config.global.passphrase .Values.config.global.existingSecret }}
+{{- if and .Values.config.generic.passphrase .Values.config.generic.existingSecret }}
   {{- fail "Please either specify an existing secret or the passphrase itself" }}
 {{- end }}
-{{- if and .Values.config.global.license .Values.config.global.existingSecret }}
+{{- if and .Values.config.generic.license .Values.config.generic.existingSecret }}
   {{- fail "Please either specify an existing secret or the license itself" }}
 {{- end }}
-{{- if .Values.config.global.existingSecret }}
-  {{- printf "%s" .Values.config.global.existingSecret -}}
+{{- if .Values.config.generic.existingSecret }}
+  {{- printf "%s" .Values.config.generic.existingSecret -}}
 {{- else -}}
   {{- printf "%s" (include "microgateway.fullname" .) -}}
 {{- end -}}
@@ -84,7 +84,7 @@ Get the secret name
 Return true if apache expert settings should be created
 */}}
 {{- define "microgateway.apacheExpertSettings" -}}
-{{- if or .Values.config.advanced.expert_settings.apache .Values.config.advanced.IPHeader.trustedProxies .Values.config.advanced.tls.virtualHost.protocol .Values.config.advanced.tls.virtualHost.cipherSuite -}}
+{{- if or .Values.config.global.expert_settings.apache .Values.config.global.IPHeader.trustedProxies .Values.config.global.tls.virtualHost.protocol .Values.config.global.tls.virtualHost.cipherSuite -}}
   {{- true -}}
 {{- end -}}
 {{- end -}}
@@ -93,7 +93,7 @@ Return true if apache expert settings should be created
 Return true if securityGate expert settings should be created
 */}}
 {{- define "microgateway.securityGateExpertSettings" -}}
-{{- if or .Values.config.advanced.expert_settings.security_gate .Values.config.advanced.tls.backend.serverCa .Values.config.advanced.tls.backend.clientCert .Values.config.advanced.tls.backend.verifyHost .Values.config.advanced.tls.backend.version .Values.config.advanced.tls.backend.cipherSuite .Values.config.advanced.tls.backend.cipherSuitev13 -}}
+{{- if or .Values.config.global.expert_settings.security_gate .Values.config.global.tls.backend.serverCa .Values.config.global.tls.backend.clientCert .Values.config.global.tls.backend.verifyHost .Values.config.global.tls.backend.version .Values.config.global.tls.backend.cipherSuite .Values.config.global.tls.backend.cipherSuitev13 -}}
   {{- true -}}
 {{- end -}}
 {{- end -}}
