@@ -30,6 +30,12 @@ config:
         level: standard
         # config.simple.mapping.denyRules.logOnly -- Set all Deny rules to log only
         logOnly: false
+        # config.simple.mapping.denyRules.exceptions -- Specification of deny rule exceptions.
+        exceptions: []
+        # - parameter_name:
+        #     pattern: (PCRE Pattern-String)
+        #     ignore_case: (default: TRUE) 
+        #     invert: (default: FALSE)
     backend:
       # config.simple.backend.hostname -- Backend hostname
       hostname: backend-service
