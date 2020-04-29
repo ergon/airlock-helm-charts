@@ -120,7 +120,7 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | readinessProbe.enabled | bool | `true` | Enable readiness probes |
 | readinessProbe.initialDelaySeconds | int | `30` | Initial delay in seconds |
 | redis | object | See `redis.*` parameters below: | Redis service which can be used if no one is available. See [Redis](#redis) |
-| redis.enabled | bool | `false` | Create an Echo service. |
+| redis.enabled | bool | `false` | Create a Redis service. |
 | redis.securityContext.fsGroup | int | `1000140000` | Group ID for the container (both Redis master and slave pods) |
 | redis.securityContext.runAsUser | int | `1000140000` | User ID for the container (both Redis master and slave pods) |
 | replicaCount | int | `1` | Desired number of Microgateway pods |
