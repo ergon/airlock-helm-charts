@@ -67,27 +67,27 @@ The following table lists configuration parameters of the Airlock Microgateway c
 |-----|------|---------|-------------|
 | affinity | string | `nil` | Assign custom [affinity rules](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/) (multiline string) |
 | commonLabels | object | `{}` | Labels to apply to all resources |
-| config.advanced.IPHeader.header | string | `"X-Forwarded-For"` | HTTP header to extract the client IP address. |
-| config.advanced.IPHeader.trustedProxies | list | `[]` | Trusted IP addresses to extract the client IP from HTTP header.<br> :exclamation: IP addresses are only extracted if `trustedProxies` are configured. |
-| config.advanced.expert_settings.apache | string | "" | Global Apache Expert Settings (multiline string) |
-| config.advanced.expert_settings.security_gate | string | "" | Global SecurityGate Expert Settings (multiline string) |
-| config.advanced.logLevel | string | `"info"` |  |
-| config.advanced.redisService | list | * If `redis.enabled=true` => `redis-master`<br>* If `redis.enabled=false` => "" | List of Redis services. |
-| config.advanced.tls.backend.cipherSuite | string | `""` | Overwrite the default TLS ciphers (<TLS 1.2) for backend connections. |
-| config.advanced.tls.backend.cipherSuitev13 | string | `""` | Overwrite the default TLS ciphers (TLS 1.3) for backend connections. |
-| config.advanced.tls.backend.clientCert | bool | `false` | Use TLS client certificate for backend connections. <br> :exclamation: Must be configured in `config.tlsSecretName` |
-| config.advanced.tls.backend.serverCa | bool | `false` | Validates the backend server certificate against the configured CA. <br> :exclamation: Must be configured in `config.tlsSecretName` |
-| config.advanced.tls.backend.verifyHost | bool | `false` | Verify the backend TLS certificate.<br> :exclamation: `config.advanced.tls.serverCA` must be configured in order to work. |
-| config.advanced.tls.backend.version | string | `""` | Overwrite the default TLS version for backend connections.<br> |
-| config.advanced.tls.virtualHost.cipherSuite | string | `""` | Overwrite the default TLS ciphers for frontend connections. |
-| config.advanced.tls.virtualHost.protocol | string | `""` | Overwrite the default TLS protocol for frontend connections. |
-| config.apps | list | `[]` | See [Advanced DSL app configuration](#advanced-dsl-app-configuration) |
-| config.dsl | object | `{}` | See [Expert DSL configuration](#expert-dsl-configuration) |
-| config.global.env | list | `[]` | List of environment variables. See [Environment variables](#environment-variables) |
-| config.global.existingSecret | string | "" | Name of an existing secret containing the passphrase or license.<br> license: `license`<br> passphrase: `passphrase` |
-| config.global.license | string | "" | License for the Microgateway (multiline string) |
-| config.global.passphrase | string | * If `passphrase` in `config.global.existringSecret`<br> * If no passphrase is available, a random is generated. | Passphrase used for different features (Cookie encryption, URL Encryption, ...) |
-| config.global.tlsSecretName | string | "" | Name of an existing secret containing TLS files.<br> Virtual Host: Certificate: `tls.crt`, Private key: `tls.key` and CA: `ca.crt`. <br> :exclamation: Update`route.tls.destinationCACertificate` accordingly.<br> Backend: Certifate: `backend-client.crt`, Private key: `backend-client.key` and CA: `backend-server-validation-ca.crt`. |
+| config.advanced.apps | list | `[]` | See [Advanced DSL app configuration](#advanced-dsl-app-configuration) |
+| config.expert.dsl | object | `{}` | See [Expert DSL configuration](#expert-dsl-configuration) |
+| config.generic.env | list | `[]` | List of environment variables. See [Environment variables](#environment-variables) |
+| config.generic.existingSecret | string | "" | Name of an existing secret containing the passphrase or license.<br> license: `license`<br> passphrase: `passphrase` |
+| config.generic.license | string | "" | License for the Microgateway (multiline string) |
+| config.generic.passphrase | string | * If `passphrase` in `config.generic.existringSecret`<br> * If no passphrase is available, a random is generated. | Passphrase used for different features (Cookie encryption, URL Encryption, ...) |
+| config.generic.tlsSecretName | string | "" | Name of an existing secret containing TLS files.<br> Virtual Host: Certificate: `tls.crt`, Private key: `tls.key` and CA: `ca.crt`. <br> :exclamation: Update`route.tls.destinationCACertificate` accordingly.<br> Backend: Certifate: `backend-client.crt`, Private key: `backend-client.key` and CA: `backend-server-validation-ca.crt`. |
+| config.global.IPHeader.header | string | `"X-Forwarded-For"` | HTTP header to extract the client IP address. |
+| config.global.IPHeader.trustedProxies | list | `[]` | Trusted IP addresses to extract the client IP from HTTP header.<br> :exclamation: IP addresses are only extracted if `trustedProxies` are configured. |
+| config.global.expert_settings.apache | string | "" | Global Apache Expert Settings (multiline string) |
+| config.global.expert_settings.security_gate | string | "" | Global SecurityGate Expert Settings (multiline string) |
+| config.global.logLevel | string | `"info"` |  |
+| config.global.redisService | list | * If `redis.enabled=true` => `redis-master`<br>* If `redis.enabled=false` => "" | List of Redis services. |
+| config.global.tls.backend.cipherSuite | string | `""` | Overwrite the default TLS ciphers (<TLS 1.2) for backend connections. |
+| config.global.tls.backend.cipherSuitev13 | string | `""` | Overwrite the default TLS ciphers (TLS 1.3) for backend connections. |
+| config.global.tls.backend.clientCert | bool | `false` | Use TLS client certificate for backend connections. <br> :exclamation: Must be configured in `config.tlsSecretName` |
+| config.global.tls.backend.serverCa | bool | `false` | Validates the backend server certificate against the configured CA. <br> :exclamation: Must be configured in `config.tlsSecretName` |
+| config.global.tls.backend.verifyHost | bool | `false` | Verify the backend TLS certificate.<br> :exclamation: `config.global.tls.serverCA` must be configured in order to work. |
+| config.global.tls.backend.version | string | `""` | Overwrite the default TLS version for backend connections.<br> |
+| config.global.tls.virtualHost.cipherSuite | string | `""` | Overwrite the default TLS ciphers for frontend connections. |
+| config.global.tls.virtualHost.protocol | string | `""` | Overwrite the default TLS protocol for frontend connections. |
 | config.simple | object | See `config.simple.*` parameters below: | See [DSL configuration](#dsl-configuration) |
 | config.simple.backend.hostname | string | `"backend-service"` | Backend hostname |
 | config.simple.backend.port | int | `8080` | Backend port |
