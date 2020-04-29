@@ -57,7 +57,7 @@ config:
       # config.advanced.IPHeader.trustedProxies -- Trusted IP addresses to extract the client IP from HTTP header.<br>
       # :exclamation: IP addresses are only extracted if `trustedProxies` are configured.
       trustedProxies: []
-    tls: 
+    tls:
       backend:
         # config.advanced.tls.backend.serverCa -- Validates the backend server certificate against the configured CA. <br>
         # :exclamation: Must be configured in `config.tlsSecretName`
@@ -73,7 +73,7 @@ config:
         # config.advanced.tls.backend.cipherSuite -- Overwrite the default TLS ciphers (<TLS 1.2) for backend connections.
         cipherSuite: ""
         # config.advanced.tls.backend.cipherSuitev13 -- Overwrite the default TLS ciphers (TLS 1.3) for backend connections.
-        cipherSuitev13: ""      
+        cipherSuitev13: ""
       virtualHost:
         # config.advanced.tls.virtualHost.protocol -- Overwrite the default TLS protocol for frontend connections.
         protocol: ""
@@ -81,28 +81,28 @@ config:
         cipherSuite: ""
 
   global:
-      # config.global.env -- List of environment variables. See [Environment variables](#environment-variables)
-      env: []
-      #  - name: WAF_CFG_EXAMPLE
-      #    value: Example_Value
-      # config.global.tlsSecretName -- (string) Name of an existing secret containing TLS files.<br>
-      # Virtual Host: Certificate: `tls.crt`, Private key: `tls.key` and CA: `ca.crt`. <br>
-      # :exclamation: Update`route.tls.destinationCACertificate` accordingly.<br>
-      # Backend: Certifate: `backend-client.crt`, Private key: `backend-client.key` and CA: `backend-server-validation-ca.crt`.
-      # @default -- ""
-      tlsSecretName:
+    # config.global.env -- List of environment variables. See [Environment variables](#environment-variables)
+    env: []
+    #  - name: WAF_CFG_EXAMPLE
+    #    value: Example_Value
+    # config.global.tlsSecretName -- (string) Name of an existing secret containing TLS files.<br>
+    # Virtual Host: Certificate: `tls.crt`, Private key: `tls.key` and CA: `ca.crt`. <br>
+    # :exclamation: Update`route.tls.destinationCACertificate` accordingly.<br>
+    # Backend: Certifate: `backend-client.crt`, Private key: `backend-client.key` and CA: `backend-server-validation-ca.crt`.
+    # @default -- ""
+    tlsSecretName:
 
-      # config.global.passphrase -- Passphrase used for different features (Cookie encryption, URL Encryption, ...)
-      # @default -- * If `passphrase` in `config.global.existringSecret`<br> * If no passphrase is available, a random is generated.
-      passphrase:
-      # config.global.license -- (string) License for the Microgateway (multiline string)
-      # @default -- ""
-      license:
-      # config.global.existingSecret -- (string) Name of an existing secret containing the passphrase or license.<br>
-      # license: `license`<br>
-      # passphrase: `passphrase`
-      # @default -- ""
-      existingSecret:
+    # config.global.passphrase -- Passphrase used for different features (Cookie encryption, URL Encryption, ...)
+    # @default -- * If `passphrase` in `config.global.existringSecret`<br> * If no passphrase is available, a random is generated.
+    passphrase:
+    # config.global.license -- (string) License for the Microgateway (multiline string)
+    # @default -- ""
+    license:
+    # config.global.existingSecret -- (string) Name of an existing secret containing the passphrase or license.<br>
+    # license: `license`<br>
+    # passphrase: `passphrase`
+    # @default -- ""
+    existingSecret:
 
   # config.apps -- See [Advanced DSL app configuration](#advanced-dsl-app-configuration)
   apps: []
