@@ -61,7 +61,7 @@ config:
       # config.global.IPHeader.trustedProxies -- Trusted IP addresses to extract the client IP from HTTP header.<br>
       # :exclamation: IP addresses are only extracted if `trustedProxies` are configured.
       trustedProxies: []
-    
+
     backend:
       tls:
         # config.global.backend.tls.serverCa -- Validates the backend server certificate against the configured CA. <br>
@@ -78,8 +78,8 @@ config:
         # config.global.backend.tls.cipherSuite -- Overwrite the default TLS ciphers (<TLS 1.2) for backend connections.
         cipherSuite: ""
         # config.global.backend.tls.cipherSuitev13 -- Overwrite the default TLS ciphers (TLS 1.3) for backend connections.
-        cipherSuitev13: ""       
-    
+        cipherSuitev13: ""
+
     virtualHost:
       tls:
         # config.global.virtualHost.tls.protocol -- Overwrite the default TLS protocol for frontend connections.
