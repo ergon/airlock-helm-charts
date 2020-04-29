@@ -20,7 +20,7 @@ The current chart version is: 0.4.2
   * [Echo-Server](#echo-server)
 * [DSL configuration](#dsl-configuration)
   * [Simple DSL configuration](#simple-dsl-configuration)
-  * [Advanced DSL app configuration](#advanced-dsl-app-configuration)
+  * [Advanced DSL configuration](#advanced-dsl-configuration)
   * [Expert DSL configuration](#expert-dsl-configuration)
 
 ## Introduction
@@ -97,7 +97,7 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | config.simple.mapping.denyRules.logOnly | bool | `false` | Set all Deny rules to log only |
 | config.simple.mapping.entryPath | string | `"/"` | The `entry_path` of the app. |
 | config.simple.mapping.operationalMode | string | `"production"` | Operational mode (`production`, `integration`) |
-| config.simple.mapping.sessionHandling | string | * If `redis.enabled=true` => `enforce_session` <br> * If `redis.enabled=false` => `ignore_session` | Session handling behaviour. |
+| config.simple.mapping.sessionHandling | string | * If `redis.enabled=true` or `config.global.redisService` configured => `enforce_session` <br> * If `redis.enabled=false` => `ignore_session` | Session handling behaviour. |
 | echo-server | object | See `echo-server.*` parameters below: | Echo service which can be used for an easy start. See [Echo-Server](#echo-server) |
 | echo-server.enabled | bool | `false` | Create an Echo service. |
 | fullnameOverride | string | `""` | Provide a name to substitute for the full names of resources |
@@ -259,9 +259,7 @@ This means that:
 * The Mapping configuration is applied to all requests sent to the backend service.
 * There is only one backend service.
 
-The Helm chart provides a simple configuration which can be adjusted with the `config.default.*` parameters.
-All settings have already configured a default value. So only the values which differ from the default value have to be configured. 
-
+By default, the Airlock Microgateway is configured with the [Simple DSL configuration](#simple-dsl-configuration). The default values can be adjusted as outlinded below:
 
 **Example:**
 
@@ -282,18 +280,12 @@ redis:
   enabled: true
 ```
 
-**Parameters which can be used**:
-* All `config.*` parameters can be used.
-  * When using the `config.redisService` parameter:
-    * The Mapping will be configured with "enforce_session", except `config.default.mapping.sessionHandling` is configured.
-  * When using the `redis.enabled` parameter:
-    * The Mapping will be configured with "enforce_session", except `config.default.mapping.sessionHandling` is configured.
+** `config.*` Parameters which can be used**:
+* `config.simple.*`
+* `config.global.*`
+* `config.generic.*`
   
-**Parameters which cannot be used**:
-* The `config.advanced.apps` parameter cannot be used. This would switch to the [Advanced DSL app configuration](#advanced-dsl-app-configuration)
-* The `config.expert.dsl` parameter cannot be used. This would switch to the [Expert DSL app configuration](#expert-dsl-app-configuration)
-
-### Advanced DSL app configuration
+### Advanced DSL configuration
 
 In case that the [Simple DSL configuration](#simple-dsl-configuration) does not suite, the advanced configuration options might help. The following use cases might require this kind of configuration:
 
@@ -309,7 +301,7 @@ In case that the [Simple DSL configuration](#simple-dsl-configuration) does not 
 * Virtual Host 1: abc.com -> Mapping 1: / -> Backend Service 1
 * Virtual Host 2: xyz.com -> Mapping 2: / -> Backend Service 2
 
-These use cases are only examples which could also occur slightly different. But all of them have in common that they have more than one Virtual Hosts, Mappings or Backend Services. Whenever this is the case, the [Advanced DSL app configuration](#advanced-dsl-app-configuration) should be preferred over the [Simple DSL configuration](#simple-dsl-configuration).
+These use cases are only examples which could also occur slightly different. But all of them have in common that they have more than one Virtual Hosts, Mappings or Backend Services. Whenever this is the case, the [Advanced DSL configuration](#advanced-dsl-configuration) should be preferred over the [Simple DSL configuration](#simple-dsl-configuration).
 
 **Example:**
 
@@ -341,18 +333,14 @@ redis:
   enabled: true
 ```
 
-**Parameters which can be used**:
+** `config.*` Parameters which can be used**:
 * `config.advanced.apps` - **must** be used.
 * `config.global.*`
 * `config.generic.*`
 
-**Parameters which cannot be used**:
-* `config.expert.dsl` - This would switch to the [Expert DSL app configuration](#expert-dsl-app-configuration)
-* `config.simple.*` - These values can only be used with the simple setup.
-
 ### Expert DSL configuration
 
-In case that the [Advanced DSL app configuration](#advanced-dsl-app-configuration) does not suite, the expert configuration options must be used. There are a few reasons listed below:
+In case that the [Advanced DSL configuration](#advanced-dsl-configuration) does not suite, the expert configuration options must be used. There are a few reasons listed below:
 
 * Microgateway DSL configuration options must be set and are not available as Helm chart parameters (e.g. base_template_file, session.store_mode, ...)
 * The same Microgateway DSL configuration file has been used elsewhere. The same configuration should be used.
@@ -399,12 +387,9 @@ redis:
 
 ```
 
-**Parameters which can be used**:
-* `config.expert.dsl` - **must** be used.
+** `config.*` Parameters which can be used**:
+* `config.expert.dsl - **must** be used.
 * `config.generic.*`
-
-**Parameters which cannot be used**:
-* All other `config.*` parameters not mentioned that they are available.
 
 ## Security (TBD)
 
@@ -702,7 +687,7 @@ config:
         value: false
 ```
 
-dsl-values.yaml
+custom-values.yaml
 ```
 config:
   simple: 
