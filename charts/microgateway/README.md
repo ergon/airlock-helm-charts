@@ -98,9 +98,8 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | config.simple.mapping.entryPath | string | `"/"` | The `entry_path` of the app. |
 | config.simple.mapping.operationalMode | string | `"production"` | Operational mode (`production`, `integration`) |
 | config.simple.mapping.sessionHandling | string | * If `redis.enabled=true` => `enforce_session` <br> * If `redis.enabled=false` => `ignore_session` | Session handling behaviour. |
-| echo-server.enabled | bool | `false` |  |
-| echo-server.fullnameOverride | string | `"backend-service"` |  |
-| echo-server.service.port | int | `8080` |  |
+| echo-server | object | See `echo-server.*` parameters below: | Echo service which can be used for an easy start. See [Echo-Server](#echo-server) |
+| echo-server.enabled | bool | `false` | Create an Echo service. |
 | fullnameOverride | string | `""` | Provide a name to substitute for the full names of resources |
 | image.pullPolicy | string | `"Always"` | Pull policy (`Always`, `IfNotPresent`, `Never`) |
 | image.repository | string | `"docker.ergon.ch/airlock/microgateway"` | Image repository |
