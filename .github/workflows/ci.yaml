@@ -57,6 +57,8 @@ jobs:
   install-chart:
     name: install-chart
     runs-on: ubuntu-latest
+    env:
+      _v_namespace: validation-namespace
     needs:
       - lint-chart
       - lint-docs
@@ -79,13 +81,13 @@ jobs:
           kubectl cluster-info
           kubectl get pods -n kube-system
           echo "current-context:" $(kubectl config current-context)
-          kubectl create namespace microgateway-validation
-          kubectl create secret docker-registry dockersecret --docker-username=${{ secrets.DOCKER_USER }} --docker-password=${{ secrets.DOCKER_USER_TOKEN }} --namespace microgateway-validation
+          kubectl create namespace $_v_namespace
+          kubectl create secret docker-registry dockersecret --docker-username=${{ secrets.DOCKER_USER }} --docker-password=${{ secrets.DOCKER_USER_TOKEN }} --namespace $_v_namespace
           echo "${{ secrets.WAF_LICENSE }}" >> tmplicense.txt
           echo "${{ secrets.WAF_PASSPHRASE }}" >> tmppassphrase.txt
-          kubectl create secret generic microgatewaysecrets --from-file=license=tmplicense.txt --from-file=passphrase=tmppassphrase.txt --namespace microgateway-validation
-          kubectl describe secret dockersecret --namespace microgateway-validation
-          kubectl describe secret microgatewaysecrets --namespace microgateway-validation
+          kubectl create secret generic microgatewaysecrets --from-file=license=tmplicense.txt --from-file=passphrase=tmppassphrase.txt --namespace $_v_namespace
+          kubectl describe secret dockersecret --namespace $_v_namespace
+          kubectl describe secret microgatewaysecrets --namespace $_v_namespace
       - name: Run chart-testing (install)
         uses: helm/chart-testing-action@master
         with:
