@@ -86,6 +86,7 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | config.global.backend.tls.version | string | `""` | Overwrite the default TLS version for backend connections.<br> |
 | config.global.expert_settings.apache | string | "" | Global Apache Expert Settings (multiline string) |
 | config.global.expert_settings.security_gate | string | "" | Global SecurityGate Expert Settings (multiline string) |
+| config.global.logLevel | string | `"info"` | Log level (`info`, `trace`).<br> :exclamation: Never use `trace` in production. |
 | config.global.redisService | list | * If `redis.enabled=true` => `redis-master`<br>* If `redis.enabled=false` => "" | List of Redis services. |
 | config.global.virtualHost.tls.cipherSuite | string | `""` | Overwrite the default TLS ciphers for frontend connections. |
 | config.global.virtualHost.tls.protocol | string | `""` | Overwrite the default TLS protocol for frontend connections. |

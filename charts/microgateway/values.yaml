@@ -50,7 +50,8 @@ config:
       # config.global.expert_settings.security_gate -- Global SecurityGate Expert Settings (multiline string)
       # @default -- ""
       security_gate:
-
+    # config.global.logLevel -- Log level (`info`, `trace`).<br>
+    # :exclamation: Never use `trace` in production.
     logLevel: info
     # config.global.redisService -- List of Redis services.
     # @default -- * If `redis.enabled=true` => `redis-master`<br>* If `redis.enabled=false` => ""
