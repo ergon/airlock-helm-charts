@@ -95,7 +95,7 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | config.simple.backend.port | int | `8080` | Backend port |
 | config.simple.backend.protocol | string | `"http"` | Backend protocol |
 | config.simple.mapping.denyRules.enabled | bool | `true` | Enable all Deny rules. |
-| config.simple.mapping.denyRules.exceptions | list | `[]` | Deny rule exceptions configuration. |
+| config.simple.mapping.denyRules.exceptions | list | `[]` | Deny rule exception configuration. |
 | config.simple.mapping.denyRules.level | string | `"standard"` | Set all Deny rules to Security Level (`basic`, `standard`, `strict`) |
 | config.simple.mapping.denyRules.logOnly | bool | `false` | Set all Deny rules to log only |
 | config.simple.mapping.entryPath | string | `"/"` | The `entry_path` of the app. |
