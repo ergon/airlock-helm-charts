@@ -104,6 +104,11 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | echo-server | object | See `echo-server.*` parameters below: | Echo service which can be used for an easy start. See [Echo-Server](#echo-server) |
 | echo-server.enabled | bool | `false` | Create an Echo service. |
 | fullnameOverride | string | `""` | Provide a name to substitute for the full names of resources |
+| hpa.enabled | bool | `false` | Create a horizontal pod autoscaler |
+| hpa.maxReplicas | int | `10` | Maximum number of replicas the HPA can scale up to |
+| hpa.minReplicas | int | `1` | Minimum number of replicas the HPA can scale down to |
+| hpa.resource.cpu | int | `50` | Average CPU threshold in percentage for HPA to down/up-scale replicas |
+| hpa.resource.memory | string | `"2Gi"` | Average memory threshold for HPA to down/up-scale replicas |
 | image.pullPolicy | string | `"Always"` | Pull policy (`Always`, `IfNotPresent`, `Never`) |
 | image.repository | string | `"docker.ergon.ch/airlock/microgateway"` | Image repository |
 | image.tag | string | `"7.4.sprint10_Build008"` | Image tag |
