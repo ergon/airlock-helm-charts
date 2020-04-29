@@ -173,8 +173,6 @@ This means that:
 * The Mapping configuration is applied to all requests sent to the backend service.
 * There is only one backend service.
 
-
-
 The Helm chart provides a simple configuration which can be adjusted with the `config.default.*` parameters.
 All settings have already configured a default value. So only the values which differ from the default value have to be configured. 
 
@@ -184,10 +182,11 @@ All settings have already configured a default value. So only the values which d
 custom-values.yaml
 ```
 config:
-  IPHeader:
-    trustedProxies:
-      - 10.0.0.0/28
-  default:
+  advanced:
+    IPHeader:
+      trustedProxies:
+        - 10.0.0.0/28
+  simple:
     mapping:
       entryPath: /
     backend:
@@ -204,16 +203,13 @@ redis:
   * When using the `redis.enabled` parameter:
     * The Mapping will be configured with "enforce_session", except `config.default.mapping.sessionHandling` is configured.
   
-
 **Parameters which cannot be used**:
 * The `config.apps` parameter cannot be used. This would switch to the [Advanced DSL app configuration](#advanced-dsl-app-configuration)
 * The `config.dsl` parameter cannot be used. This would switch to the [Expert DSL app configuration](#expert-dsl-app-configuration)
 
-
 ### Advanced DSL app configuration
 
 In case that the [Simple DSL configuration](#simple-dsl-configuration) does not suite, the advanced configuration options might help. The following use cases might require this kind of configuration:
-
 
 **_Use Case 1)_**
 * Virtual Host 1: abc.com -> Mapping 1: / -> Backend Service 1
@@ -229,15 +225,15 @@ In case that the [Simple DSL configuration](#simple-dsl-configuration) does not 
 
 These use cases are only examples which could also occur slightly different. But all of them have in common that they have more than one Virtual Hosts, Mappings or Backend Services. Whenever this is the case, the [Advanced DSL app configuration](#advanced-dsl-app-configuration) should be preferred over the [Simple DSL configuration](#simple-dsl-configuration).
 
-
 **Example:**
 
 custom-values.yaml
 ```
 config:
-  IPHeader:
-    trustedProxies:
-      - 10.0.0.0/28
+  advanced:
+    IPHeader:
+      trustedProxies:
+        - 10.0.0.0/28
   apps:
     - virtual_host:
         hostname: virtinc.com
@@ -260,17 +256,12 @@ redis:
 
 **Parameters which can be used**:
 * `config.apps` - **must** be used.
-* `config.*`
-* Only the following `config.default.*` parameters:
-  * `config.default.virtualHost.tls.*`
-  * `config.default.backend.tls.*`
+* `config.advanced.*`
+* `config.global.*`
 
 **Parameters which cannot be used**:
 * `config.dsl` - This would switch to the [Expert DSL app configuration](#expert-dsl-app-configuration)
-* `config.default.mapping.*`
-* `config.default.backend.protocol`
-* `config.default.backend.hostname`
-* `config.default.backend.port`
+* `config.simple.*`
 
 ### Expert DSL configuration
 
@@ -322,14 +313,9 @@ redis:
 
 **Parameters which can be used**:
 * `config.dsl` - **must** be used.
-* `config.env`
-* `config.license`
-* `config.passphrase`
-* `config.tlsSecretName`
+* `config.global.*`
 
 **Parameters which cannot be used**:
-* `config.apps`
-* `config.default.*`
 * All other `config.*` parameters not mentioned that they are available.
 
 ## Security (TBD)

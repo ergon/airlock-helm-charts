@@ -12,97 +12,97 @@ image:
 ## Microgateway Config
 ##
 config:
-  # config.default -- See [DSL configuration](#dsl-configuration)
-  # @default -- See `config.default.*` parameters below:
-  default:
+  # config.simple -- See [DSL configuration](#dsl-configuration)
+  # @default -- See `config.simple.*` parameters below:
+  simple:
     mapping:
-      # config.default.mapping.entryPath -- The `entry_path` of the app.
+      # config.simple.mapping.entryPath -- The `entry_path` of the app.
       entryPath: /
-      # config.default.mapping.operationalMode -- Operational mode (`production`, `integration`)
+      # config.simple.mapping.operationalMode -- Operational mode (`production`, `integration`)
       operationalMode: production
-      # config.default.mapping.sessionHandling -- Session handling behaviour.
+      # config.simple.mapping.sessionHandling -- Session handling behaviour.
       # @default -- * If `redis.enabled=true` => `enforce_session` <br> * If `redis.enabled=false` => `ignore_session`
       sessionHandling: ""
       denyRules:
-        # config.default.mapping.denyRules.enabled -- Enable all Deny rules.
+        # config.simple.mapping.denyRules.enabled -- Enable all Deny rules.
         enabled: true
-        # config.default.mapping.denyRules.level -- Set all Deny rules to Security Level (`basic`, `standard`, `strict`)
+        # config.simple.mapping.denyRules.level -- Set all Deny rules to Security Level (`basic`, `standard`, `strict`)
         level: standard
-        # config.default.mapping.denyRules.logOnly -- Set all Deny rules to log only
+        # config.simple.mapping.denyRules.logOnly -- Set all Deny rules to log only
         logOnly: false
     backend:
-      # config.default.backend.hostname -- Backend hostname
+      # config.simple.backend.hostname -- Backend hostname
       hostname: backend-service
-      # config.default.backend.port -- Backend port
+      # config.simple.backend.port -- Backend port
       port: 8080
-      # config.default.backend.protocol -- Backend protocol
+      # config.simple.backend.protocol -- Backend protocol
       protocol: http
-      tls:
-        # config.default.backend.tls.serverCa -- Validates the backend server certificate against the configured CA. <br>
+
+  advanced:
+    expert_settings:
+      # config.advanced.expert_settings.apache -- Global Apache Expert Settings (multiline string)
+      # @default -- ""
+      apache:
+      # config.advanced.expert_settings.security_gate -- Global SecurityGate Expert Settings (multiline string)
+      # @default -- ""
+      security_gate:
+
+    logLevel: info
+    # config.advanced.redisService -- List of Redis services.
+    # @default -- * If `redis.enabled=true` => `redis-master`<br>* If `redis.enabled=false` => ""
+    redisService: []
+    IPHeader:
+      # config.advanced.IPHeader.header -- HTTP header to extract the client IP address.
+      header: X-Forwarded-For
+      # config.advanced.IPHeader.trustedProxies -- Trusted IP addresses to extract the client IP from HTTP header.<br>
+      # :exclamation: IP addresses are only extracted if `trustedProxies` are configured.
+      trustedProxies: []
+    tls: 
+      backend:
+        # config.advanced.tls.backend.serverCa -- Validates the backend server certificate against the configured CA. <br>
         # :exclamation: Must be configured in `config.tlsSecretName`
         serverCa: false
-        # config.default.backend.tls.clientCert -- Use TLS client certificate for backend connections. <br>
+        # config.advanced.tls.backend.clientCert -- Use TLS client certificate for backend connections. <br>
         # :exclamation: Must be configured in `config.tlsSecretName`
         clientCert: false
-        # config.default.backend.tls.verifyHost -- Verify the backend TLS certificate.<br>
-        # :exclamation: `config.default.tls.serverCA` must be configured in order to work.
+        # config.advanced.tls.backend.verifyHost -- Verify the backend TLS certificate.<br>
+        # :exclamation: `config.advanced.tls.serverCA` must be configured in order to work.
         verifyHost: false
-        # config.default.backend.tls.version -- Overwrite the default TLS version for backend connections.<br>
+        # config.advanced.tls.backend.version -- Overwrite the default TLS version for backend connections.<br>
         version: ""
-        # config.default.backend.tls.cipherSuite -- Overwrite the default TLS ciphers (<TLS 1.2) for backend connections.
+        # config.advanced.tls.backend.cipherSuite -- Overwrite the default TLS ciphers (<TLS 1.2) for backend connections.
         cipherSuite: ""
-        # config.default.backend.tls.cipherSuitev13 -- Overwrite the default TLS ciphers (TLS 1.3) for backend connections.
-        cipherSuitev13: ""
-    virtualHost:
-      tls:
-        # config.default.virtualHost.tls.protocol -- Overwrite the default TLS protocol for frontend connections.
+        # config.advanced.tls.backend.cipherSuitev13 -- Overwrite the default TLS ciphers (TLS 1.3) for backend connections.
+        cipherSuitev13: ""      
+      virtualHost:
+        # config.advanced.tls.virtualHost.protocol -- Overwrite the default TLS protocol for frontend connections.
         protocol: ""
-        # config.default.virtualHost.tls.cipherSuite -- Overwrite the default TLS ciphers for frontend connections.
+        # config.advanced.tls.virtualHost.cipherSuite -- Overwrite the default TLS ciphers for frontend connections.
         cipherSuite: ""
 
-  expert_settings:
-    # config.expert_settings.apache -- Global Apache Expert Settings (multiline string)
-    # @default -- ""
-    apache:
-    # config.expert_settings.security_gate -- Global SecurityGate Expert Settings (multiline string)
-    # @default -- ""
-    security_gate:
+  global:
+      # config.global.env -- List of environment variables. See [Environment variables](#environment-variables)
+      env: []
+      #  - name: WAF_CFG_EXAMPLE
+      #    value: Example_Value
+      # config.global.tlsSecretName -- (string) Name of an existing secret containing TLS files.<br>
+      # Virtual Host: Certificate: `tls.crt`, Private key: `tls.key` and CA: `ca.crt`. <br>
+      # :exclamation: Update`route.tls.destinationCACertificate` accordingly.<br>
+      # Backend: Certifate: `backend-client.crt`, Private key: `backend-client.key` and CA: `backend-server-validation-ca.crt`.
+      # @default -- ""
+      tlsSecretName:
 
-  # config.env -- List of environment variables. See [Environment variables](#environment-variables)
-  env: []
-  #  - name: WAF_CFG_EXAMPLE
-  #    value: Example_Value
-
-  # config.tlsSecretName -- (string) Name of an existing secret containing TLS files.<br>
-  # Virtual Host: Certificate: `tls.crt`, Private key: `tls.key` and CA: `ca.crt`. <br>
-  # :exclamation: Update`route.tls.destinationCACertificate` accordingly.<br>
-  # Backend: Certifate: `backend-client.crt`, Private key: `backend-client.key` and CA: `backend-server-validation-ca.crt`.
-  # @default -- ""
-  tlsSecretName:
-
-  # config.passphrase -- Passphrase used for different features (Cookie encryption, URL Encryption, ...)
-  # @default -- * If `passphrase` in `config.existringSecret`<br> * If no passphrase is available, a random is generated.
-  passphrase:
-  # config.license -- (string) License for the Microgateway (multiline string)
-  # @default -- ""
-  license:
-  # config.existingSecret -- (string) Name of an existing secret containing the passphrase or license.<br>
-  # license: `license`<br>
-  # passphrase: `passphrase`
-  # @default -- ""
-  existingSecret:
-  # config.logLevel -- Log level (`info`, `trace`).<br>
-  # :exclamation: Never use `trace` in production.
-  logLevel: info
-  # config.redisService -- List of Redis services.
-  # @default -- * If `redis.enabled=true` => `redis-master`<br>* If `redis.enabled=false` => ""
-  redisService: []
-  IPHeader:
-    # config.IPHeader.header -- HTTP header to extract the client IP address.
-    header: X-Forwarded-For
-    # config.IPHeader.trustedProxies -- Trusted IP addresses to extract the client IP from HTTP header.<br>
-    # :exclamation: IP addresses are only extracted if `trustedProxies` are configured.
-    trustedProxies: []
+      # config.global.passphrase -- Passphrase used for different features (Cookie encryption, URL Encryption, ...)
+      # @default -- * If `passphrase` in `config.global.existringSecret`<br> * If no passphrase is available, a random is generated.
+      passphrase:
+      # config.global.license -- (string) License for the Microgateway (multiline string)
+      # @default -- ""
+      license:
+      # config.global.existingSecret -- (string) Name of an existing secret containing the passphrase or license.<br>
+      # license: `license`<br>
+      # passphrase: `passphrase`
+      # @default -- ""
+      existingSecret:
 
   # config.apps -- See [Advanced DSL app configuration](#advanced-dsl-app-configuration)
   apps: []

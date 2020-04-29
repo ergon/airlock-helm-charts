@@ -67,37 +67,37 @@ The following table lists configuration parameters of the Airlock Microgateway c
 |-----|------|---------|-------------|
 | affinity | string | `nil` | Assign custom [affinity rules](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/) (multiline string) |
 | commonLabels | object | `{}` | Labels to apply to all resources |
-| config.IPHeader.header | string | `"X-Forwarded-For"` | HTTP header to extract the client IP address. |
-| config.IPHeader.trustedProxies | list | `[]` | Trusted IP addresses to extract the client IP from HTTP header.<br> :exclamation: IP addresses are only extracted if `trustedProxies` are configured. |
+| config.advanced.IPHeader.header | string | `"X-Forwarded-For"` | HTTP header to extract the client IP address. |
+| config.advanced.IPHeader.trustedProxies | list | `[]` | Trusted IP addresses to extract the client IP from HTTP header.<br> :exclamation: IP addresses are only extracted if `trustedProxies` are configured. |
+| config.advanced.expert_settings.apache | string | "" | Global Apache Expert Settings (multiline string) |
+| config.advanced.expert_settings.security_gate | string | "" | Global SecurityGate Expert Settings (multiline string) |
+| config.advanced.logLevel | string | `"info"` |  |
+| config.advanced.redisService | list | * If `redis.enabled=true` => `redis-master`<br>* If `redis.enabled=false` => "" | List of Redis services. |
+| config.advanced.tls.backend.cipherSuite | string | `""` | Overwrite the default TLS ciphers (<TLS 1.2) for backend connections. |
+| config.advanced.tls.backend.cipherSuitev13 | string | `""` | Overwrite the default TLS ciphers (TLS 1.3) for backend connections. |
+| config.advanced.tls.backend.clientCert | bool | `false` | Use TLS client certificate for backend connections. <br> :exclamation: Must be configured in `config.tlsSecretName` |
+| config.advanced.tls.backend.serverCa | bool | `false` | Validates the backend server certificate against the configured CA. <br> :exclamation: Must be configured in `config.tlsSecretName` |
+| config.advanced.tls.backend.verifyHost | bool | `false` | Verify the backend TLS certificate.<br> :exclamation: `config.advanced.tls.serverCA` must be configured in order to work. |
+| config.advanced.tls.backend.version | string | `""` | Overwrite the default TLS version for backend connections.<br> |
+| config.advanced.tls.virtualHost.cipherSuite | string | `""` | Overwrite the default TLS ciphers for frontend connections. |
+| config.advanced.tls.virtualHost.protocol | string | `""` | Overwrite the default TLS protocol for frontend connections. |
 | config.apps | list | `[]` | See [Advanced DSL app configuration](#advanced-dsl-app-configuration) |
-| config.default | object | See `config.default.*` parameters below: | See [DSL configuration](#dsl-configuration) |
-| config.default.backend.hostname | string | `"backend-service"` | Backend hostname |
-| config.default.backend.port | int | `8080` | Backend port |
-| config.default.backend.protocol | string | `"http"` | Backend protocol |
-| config.default.backend.tls.cipherSuite | string | `""` | Overwrite the default TLS ciphers (<TLS 1.2) for backend connections. |
-| config.default.backend.tls.cipherSuitev13 | string | `""` | Overwrite the default TLS ciphers (TLS 1.3) for backend connections. |
-| config.default.backend.tls.clientCert | bool | `false` | Use TLS client certificate for backend connections. <br> :exclamation: Must be configured in `config.tlsSecretName` |
-| config.default.backend.tls.serverCa | bool | `false` | Validates the backend server certificate against the configured CA. <br> :exclamation: Must be configured in `config.tlsSecretName` |
-| config.default.backend.tls.verifyHost | bool | `false` | Verify the backend TLS certificate.<br> :exclamation: `config.default.tls.serverCA` must be configured in order to work. |
-| config.default.backend.tls.version | string | `""` | Overwrite the default TLS version for backend connections.<br> |
-| config.default.mapping.denyRules.enabled | bool | `true` | Enable all Deny rules. |
-| config.default.mapping.denyRules.level | string | `"standard"` | Set all Deny rules to Security Level (`basic`, `standard`, `strict`) |
-| config.default.mapping.denyRules.logOnly | bool | `false` | Set all Deny rules to log only |
-| config.default.mapping.entryPath | string | `"/"` | The `entry_path` of the app. |
-| config.default.mapping.operationalMode | string | `"production"` | Operational mode (`production`, `integration`) |
-| config.default.mapping.sessionHandling | string | * If `redis.enabled=true` => `enforce_session` <br> * If `redis.enabled=false` => `ignore_session` | Session handling behaviour. |
-| config.default.virtualHost.tls.cipherSuite | string | `""` | Overwrite the default TLS ciphers for frontend connections. |
-| config.default.virtualHost.tls.protocol | string | `""` | Overwrite the default TLS protocol for frontend connections. |
 | config.dsl | object | `{}` | See [Expert DSL configuration](#expert-dsl-configuration) |
-| config.env | list | `[]` | List of environment variables. See [Environment variables](#environment-variables) |
-| config.existingSecret | string | "" | Name of an existing secret containing the passphrase or license.<br> license: `license`<br> passphrase: `passphrase` |
-| config.expert_settings.apache | string | "" | Global Apache Expert Settings (multiline string) |
-| config.expert_settings.security_gate | string | "" | Global SecurityGate Expert Settings (multiline string) |
-| config.license | string | "" | License for the Microgateway (multiline string) |
-| config.logLevel | string | `"info"` | Log level (`info`, `trace`).<br> :exclamation: Never use `trace` in production. |
-| config.passphrase | string | * If `passphrase` in `config.existringSecret`<br> * If no passphrase is available, a random is generated. | Passphrase used for different features (Cookie encryption, URL Encryption, ...) |
-| config.redisService | list | * If `redis.enabled=true` => `redis-master`<br>* If `redis.enabled=false` => "" | List of Redis services. |
-| config.tlsSecretName | string | "" | Name of an existing secret containing TLS files.<br> Virtual Host: Certificate: `tls.crt`, Private key: `tls.key` and CA: `ca.crt`. <br> :exclamation: Update`route.tls.destinationCACertificate` accordingly.<br> Backend: Certifate: `backend-client.crt`, Private key: `backend-client.key` and CA: `backend-server-validation-ca.crt`. |
+| config.global.env | list | `[]` | List of environment variables. See [Environment variables](#environment-variables) |
+| config.global.existingSecret | string | "" | Name of an existing secret containing the passphrase or license.<br> license: `license`<br> passphrase: `passphrase` |
+| config.global.license | string | "" | License for the Microgateway (multiline string) |
+| config.global.passphrase | string | * If `passphrase` in `config.global.existringSecret`<br> * If no passphrase is available, a random is generated. | Passphrase used for different features (Cookie encryption, URL Encryption, ...) |
+| config.global.tlsSecretName | string | "" | Name of an existing secret containing TLS files.<br> Virtual Host: Certificate: `tls.crt`, Private key: `tls.key` and CA: `ca.crt`. <br> :exclamation: Update`route.tls.destinationCACertificate` accordingly.<br> Backend: Certifate: `backend-client.crt`, Private key: `backend-client.key` and CA: `backend-server-validation-ca.crt`. |
+| config.simple | object | See `config.simple.*` parameters below: | See [DSL configuration](#dsl-configuration) |
+| config.simple.backend.hostname | string | `"backend-service"` | Backend hostname |
+| config.simple.backend.port | int | `8080` | Backend port |
+| config.simple.backend.protocol | string | `"http"` | Backend protocol |
+| config.simple.mapping.denyRules.enabled | bool | `true` | Enable all Deny rules. |
+| config.simple.mapping.denyRules.level | string | `"standard"` | Set all Deny rules to Security Level (`basic`, `standard`, `strict`) |
+| config.simple.mapping.denyRules.logOnly | bool | `false` | Set all Deny rules to log only |
+| config.simple.mapping.entryPath | string | `"/"` | The `entry_path` of the app. |
+| config.simple.mapping.operationalMode | string | `"production"` | Operational mode (`production`, `integration`) |
+| config.simple.mapping.sessionHandling | string | * If `redis.enabled=true` => `enforce_session` <br> * If `redis.enabled=false` => `ignore_session` | Session handling behaviour. |
 | echo-server.enabled | bool | `false` |  |
 | echo-server.fullnameOverride | string | `"backend-service"` |  |
 | echo-server.service.port | int | `8080` |  |
@@ -258,8 +258,6 @@ This means that:
 * The Mapping configuration is applied to all requests sent to the backend service.
 * There is only one backend service.
 
-
-
 The Helm chart provides a simple configuration which can be adjusted with the `config.default.*` parameters.
 All settings have already configured a default value. So only the values which differ from the default value have to be configured. 
 
@@ -269,10 +267,11 @@ All settings have already configured a default value. So only the values which d
 custom-values.yaml
 ```
 config:
-  IPHeader:
-    trustedProxies:
-      - 10.0.0.0/28
-  default:
+  advanced:
+    IPHeader:
+      trustedProxies:
+        - 10.0.0.0/28
+  simple:
     mapping:
       entryPath: /
     backend:
@@ -289,16 +288,13 @@ redis:
   * When using the `redis.enabled` parameter:
     * The Mapping will be configured with "enforce_session", except `config.default.mapping.sessionHandling` is configured.
   
-
 **Parameters which cannot be used**:
 * The `config.apps` parameter cannot be used. This would switch to the [Advanced DSL app configuration](#advanced-dsl-app-configuration)
 * The `config.dsl` parameter cannot be used. This would switch to the [Expert DSL app configuration](#expert-dsl-app-configuration)
 
-
 ### Advanced DSL app configuration
 
 In case that the [Simple DSL configuration](#simple-dsl-configuration) does not suite, the advanced configuration options might help. The following use cases might require this kind of configuration:
-
 
 **_Use Case 1)_**
 * Virtual Host 1: abc.com -> Mapping 1: / -> Backend Service 1
@@ -314,15 +310,15 @@ In case that the [Simple DSL configuration](#simple-dsl-configuration) does not 
 
 These use cases are only examples which could also occur slightly different. But all of them have in common that they have more than one Virtual Hosts, Mappings or Backend Services. Whenever this is the case, the [Advanced DSL app configuration](#advanced-dsl-app-configuration) should be preferred over the [Simple DSL configuration](#simple-dsl-configuration).
 
-
 **Example:**
 
 custom-values.yaml
 ```
 config:
-  IPHeader:
-    trustedProxies:
-      - 10.0.0.0/28
+  advanced:
+    IPHeader:
+      trustedProxies:
+        - 10.0.0.0/28
   apps:
     - virtual_host:
         hostname: virtinc.com
@@ -345,17 +341,12 @@ redis:
 
 **Parameters which can be used**:
 * `config.apps` - **must** be used.
-* `config.*`
-* Only the following `config.default.*` parameters:
-  * `config.default.virtualHost.tls.*`
-  * `config.default.backend.tls.*`
+* `config.advanced.*`
+* `config.global.*`
 
 **Parameters which cannot be used**:
 * `config.dsl` - This would switch to the [Expert DSL app configuration](#expert-dsl-app-configuration)
-* `config.default.mapping.*`
-* `config.default.backend.protocol`
-* `config.default.backend.hostname`
-* `config.default.backend.port`
+* `config.simple.*`
 
 ### Expert DSL configuration
 
@@ -407,14 +398,9 @@ redis:
 
 **Parameters which can be used**:
 * `config.dsl` - **must** be used.
-* `config.env`
-* `config.license`
-* `config.passphrase`
-* `config.tlsSecretName`
+* `config.global.*`
 
 **Parameters which cannot be used**:
-* `config.apps`
-* `config.default.*`
 * All other `config.*` parameters not mentioned that they are available.
 
 ## Security (TBD)
