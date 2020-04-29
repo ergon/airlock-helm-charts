@@ -61,27 +61,30 @@ config:
       # config.global.IPHeader.trustedProxies -- Trusted IP addresses to extract the client IP from HTTP header.<br>
       # :exclamation: IP addresses are only extracted if `trustedProxies` are configured.
       trustedProxies: []
-    tls:
-      backend:
-        # config.global.tls.backend.serverCa -- Validates the backend server certificate against the configured CA. <br>
+    
+    backend:
+      tls:
+        # config.global.backend.tls.serverCa -- Validates the backend server certificate against the configured CA. <br>
         # :exclamation: Must be configured in `config.global.tlsSecretName`
         serverCa: false
-        # config.global.tls.backend.clientCert -- Use TLS client certificate for backend connections. <br>
+        # config.global.backend.tls.clientCert -- Use TLS client certificate for backend connections. <br>
         # :exclamation: Must be configured in `config.global.tlsSecretName`
         clientCert: false
-        # config.global.tls.backend.verifyHost -- Verify the backend TLS certificate.<br>
+        # config.global.backend.tls.verifyHost -- Verify the backend TLS certificate.<br>
         # :exclamation: `config.global.tls.serverCA` must be configured in order to work.
         verifyHost: false
-        # config.global.tls.backend.version -- Overwrite the default TLS version for backend connections.<br>
+        # config.global.backend.tls.version -- Overwrite the default TLS version for backend connections.<br>
         version: ""
-        # config.global.tls.backend.cipherSuite -- Overwrite the default TLS ciphers (<TLS 1.2) for backend connections.
+        # config.global.backend.tls.cipherSuite -- Overwrite the default TLS ciphers (<TLS 1.2) for backend connections.
         cipherSuite: ""
-        # config.global.tls.backend.cipherSuitev13 -- Overwrite the default TLS ciphers (TLS 1.3) for backend connections.
-        cipherSuitev13: ""
-      virtualHost:
-        # config.global.tls.virtualHost.protocol -- Overwrite the default TLS protocol for frontend connections.
+        # config.global.backend.tls.cipherSuitev13 -- Overwrite the default TLS ciphers (TLS 1.3) for backend connections.
+        cipherSuitev13: ""       
+    
+    virtualHost:
+      tls:
+        # config.global.virtualHost.tls.protocol -- Overwrite the default TLS protocol for frontend connections.
         protocol: ""
-        # config.global.tls.virtualHost.cipherSuite -- Overwrite the default TLS ciphers for frontend connections.
+        # config.global.virtualHost.tls.cipherSuite -- Overwrite the default TLS ciphers for frontend connections.
         cipherSuite: ""
 
   # config.generic -- Available for:<br>

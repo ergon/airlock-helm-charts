@@ -84,7 +84,7 @@ Get the secret name
 Return true if apache expert settings should be created
 */}}
 {{- define "microgateway.apacheExpertSettings" -}}
-{{- if or .Values.config.global.expert_settings.apache .Values.config.global.IPHeader.trustedProxies .Values.config.global.tls.virtualHost.protocol .Values.config.global.tls.virtualHost.cipherSuite -}}
+{{- if or .Values.config.global.expert_settings.apache .Values.config.global.IPHeader.trustedProxies .Values.config.global.virtualHost.tls.protocol .Values.config.global.virtualHost.tls.cipherSuite -}}
   {{- true -}}
 {{- end -}}
 {{- end -}}
@@ -93,7 +93,7 @@ Return true if apache expert settings should be created
 Return true if securityGate expert settings should be created
 */}}
 {{- define "microgateway.securityGateExpertSettings" -}}
-{{- if or .Values.config.global.expert_settings.security_gate .Values.config.global.tls.backend.serverCa .Values.config.global.tls.backend.clientCert .Values.config.global.tls.backend.verifyHost .Values.config.global.tls.backend.version .Values.config.global.tls.backend.cipherSuite .Values.config.global.tls.backend.cipherSuitev13 -}}
+{{- if or .Values.config.global.expert_settings.security_gate .Values.config.global.backend.tls.serverCa .Values.config.global.backend.tls.clientCert .Values.config.global.backend.tls.verifyHost .Values.config.global.backend.tls.version .Values.config.global.backend.tls.cipherSuite .Values.config.global.backend.tls.cipherSuitev13 -}}
   {{- true -}}
 {{- end -}}
 {{- end -}}

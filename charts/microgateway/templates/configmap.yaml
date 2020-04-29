@@ -36,11 +36,11 @@ data:
         RemoteIPInternalProxy {{ . }}
         {{- end }}
       {{- end }}
-      {{- if $global.tls.virtualHost.protocol }}
-        SSLProtocol {{ $global.tls.virtualHost.protocol }}
+      {{- if $global.virtualHost.tls.protocol }}
+        SSLProtocol {{ $global.virtualHost.tls.protocol }}
       {{- end }}
-      {{- if $global.tls.virtualHost.cipherSuite }}
-        SSLCipherSuite {{ $global.tls.virtualHost.cipherSuite }}
+      {{- if $global.virtualHost.tls.cipherSuite }}
+        SSLCipherSuite {{ $global.virtualHost.tls.cipherSuite }}
       {{- end }}
       {{- with $global.expert_settings.apache }}
         {{- . | nindent 8 }}
@@ -48,24 +48,24 @@ data:
     {{- end }}
     {{- if (include "microgateway.securityGateExpertSettings" .) }}
       security_gate: |
-      {{- if $global.tls.backend.serverCa }}
+      {{- if $global.backend.tls.serverCa }}
         BackendSSLServerCA /secret/tls/backend-server-validation-ca.crt
       {{- end }}
-      {{- if $global.tls.backend.clientCert }}
+      {{- if $global.backend.tls.clientCert }}
         BackendSSLClientCert /secret/tls/backend-client.crt
         BackendSSLClientCertKey /secret/tls/backend-client.key
       {{- end }}
-      {{- if $global.tls.backend.verifyHost }}
+      {{- if $global.backend.tls.verifyHost }}
         BackendSSLVerifyHost "true"
       {{- end }}
-      {{- if $global.tls.backend.version }}
-        BackendSSLVersion {{ $global.tls.backend.version }}
+      {{- if $global.backend.tls.version }}
+        BackendSSLVersion {{ $global.backend.tls.version }}
       {{- end }}
-      {{- if $global.tls.backend.cipherSuite }}
-        BackendSSLCipherSuite {{ $global.tls.backend.cipherSuite }}
+      {{- if $global.backend.tls.cipherSuite }}
+        BackendSSLCipherSuite {{ $global.backend.tls.cipherSuite }}
       {{- end }}
-      {{- if $global.tls.backend.cipherSuitev13 }}
-        BackendSSLCipherSuiteTls13 {{ $global.tls.backend.cipherSuitev13 }}
+      {{- if $global.backend.tls.cipherSuitev13 }}
+        BackendSSLCipherSuiteTls13 {{ $global.backend.tls.cipherSuitev13 }}
       {{- end }}
       {{- with $global.expert_settings.security_gate }}
         {{- . | nindent 8 }}

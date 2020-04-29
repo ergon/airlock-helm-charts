@@ -78,17 +78,17 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | config.global | object | See `config.global.*` parameters below: | Available for:<br> * [Simple DSL configuration](#simple-dsl-configuration)<br> * [Advanced DSL configuration](#advanced-dsl-configuration) |
 | config.global.IPHeader.header | string | `"X-Forwarded-For"` | HTTP header to extract the client IP address. |
 | config.global.IPHeader.trustedProxies | list | `[]` | Trusted IP addresses to extract the client IP from HTTP header.<br> :exclamation: IP addresses are only extracted if `trustedProxies` are configured. |
+| config.global.backend.tls.cipherSuite | string | `""` | Overwrite the default TLS ciphers (<TLS 1.2) for backend connections. |
+| config.global.backend.tls.cipherSuitev13 | string | `""` | Overwrite the default TLS ciphers (TLS 1.3) for backend connections. |
+| config.global.backend.tls.clientCert | bool | `false` | Use TLS client certificate for backend connections. <br> :exclamation: Must be configured in `config.global.tlsSecretName` |
+| config.global.backend.tls.serverCa | bool | `false` | Validates the backend server certificate against the configured CA. <br> :exclamation: Must be configured in `config.global.tlsSecretName` |
+| config.global.backend.tls.verifyHost | bool | `false` | Verify the backend TLS certificate.<br> :exclamation: `config.global.tls.serverCA` must be configured in order to work. |
+| config.global.backend.tls.version | string | `""` | Overwrite the default TLS version for backend connections.<br> |
 | config.global.expert_settings.apache | string | "" | Global Apache Expert Settings (multiline string) |
 | config.global.expert_settings.security_gate | string | "" | Global SecurityGate Expert Settings (multiline string) |
 | config.global.redisService | list | * If `redis.enabled=true` => `redis-master`<br>* If `redis.enabled=false` => "" | List of Redis services. |
-| config.global.tls.backend.cipherSuite | string | `""` | Overwrite the default TLS ciphers (<TLS 1.2) for backend connections. |
-| config.global.tls.backend.cipherSuitev13 | string | `""` | Overwrite the default TLS ciphers (TLS 1.3) for backend connections. |
-| config.global.tls.backend.clientCert | bool | `false` | Use TLS client certificate for backend connections. <br> :exclamation: Must be configured in `config.global.tlsSecretName` |
-| config.global.tls.backend.serverCa | bool | `false` | Validates the backend server certificate against the configured CA. <br> :exclamation: Must be configured in `config.global.tlsSecretName` |
-| config.global.tls.backend.verifyHost | bool | `false` | Verify the backend TLS certificate.<br> :exclamation: `config.global.tls.serverCA` must be configured in order to work. |
-| config.global.tls.backend.version | string | `""` | Overwrite the default TLS version for backend connections.<br> |
-| config.global.tls.virtualHost.cipherSuite | string | `""` | Overwrite the default TLS ciphers for frontend connections. |
-| config.global.tls.virtualHost.protocol | string | `""` | Overwrite the default TLS protocol for frontend connections. |
+| config.global.virtualHost.tls.cipherSuite | string | `""` | Overwrite the default TLS ciphers for frontend connections. |
+| config.global.virtualHost.tls.protocol | string | `""` | Overwrite the default TLS protocol for frontend connections. |
 | config.simple | object | See `config.simple.*` parameters below: | See [Simple DSL configuration](#simple-dsl-configuration) |
 | config.simple.backend.hostname | string | `"backend-service"` | Backend hostname |
 | config.simple.backend.port | int | `8080` | Backend port |
