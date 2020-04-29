@@ -1,4 +1,7 @@
 {{- $config := .Values.config -}}
+{{- $simple := $config.simple -}}
+{{- $advanced := $config.advanced -}}
+{{- $global := $config.global -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -11,10 +14,10 @@ data:
     license_file: /secret/config/license
     session:
       encryption_passphrase_file: /secret/config/passphrase
-    {{- if or .Values.redis.enabled $config.redisService }}
-      {{- if $config.redisService }}
+    {{- if or .Values.redis.enabled $advanced.redisService }}
+      {{- if $advanced.redisService }}
       redis_hosts:
-        {{- range $config.redisService }} 
+        {{- range $advanced.redisService }} 
         - {{ . }}
         {{- end }}
       {{- else }}
@@ -22,49 +25,49 @@ data:
       {{- end }}
     {{- end }}
     log:
-      level: {{ $config.logLevel }}
+      level: {{ $advanced.logLevel }}
   {{- if or (include "microgateway.apacheExpertSettings" .) (include "microgateway.securityGateExpertSettings" .) }}
     expert_settings:
     {{- if (include "microgateway.apacheExpertSettings" .) }}
       apache: |
-      {{- if $config.IPHeader.trustedProxies }}
-        RemoteIPHeader {{ $config.IPHeader.header }}
-        {{- range $config.IPHeader.trustedProxies }}
+      {{- if $advanced.IPHeader.trustedProxies }}
+        RemoteIPHeader {{ $advanced.IPHeader.header }}
+        {{- range $advanced.IPHeader.trustedProxies }}
         RemoteIPInternalProxy {{ . }}
         {{- end }}
       {{- end }}
-      {{- if $config.default.virtualHost.tls.protocol }}
-        SSLProtocol {{ $config.default.virtualHost.tls.protocol }}
+      {{- if $advanced.tls.virtualHost.protocol }}
+        SSLProtocol {{ $advanced.tls.virtualHost.protocol }}
       {{- end }}
-      {{- if $config.default.virtualHost.tls.cipherSuite }}
-        SSLCipherSuite {{ $config.default.virtualHost.tls.cipherSuite }}
+      {{- if $advanced.tls.virtualHost.cipherSuite }}
+        SSLCipherSuite {{ $advanced.tls.virtualHost.cipherSuite }}
       {{- end }}
-      {{- with $config.expert_settings.apache }}
+      {{- with $advanced.expert_settings.apache }}
         {{- . | nindent 8 }}
       {{- end }}
     {{- end }}
     {{- if (include "microgateway.securityGateExpertSettings" .) }}
       security_gate: |
-      {{- if $config.default.backend.tls.serverCa }}
+      {{- if $advanced.tls.backend.serverCa }}
         BackendSSLServerCA /secret/tls/backend-server-validation-ca.crt
       {{- end }}
-      {{- if $config.default.backend.tls.clientCert }}
+      {{- if $advanced.tls.backend.clientCert }}
         BackendSSLClientCert /secret/tls/backend-client.crt
         BackendSSLClientCertKey /secret/tls/backend-client.key
       {{- end }}
-      {{- if $config.default.backend.tls.verifyHost }}
+      {{- if $advanced.tls.backend.verifyHost }}
         BackendSSLVerifyHost "true"
       {{- end }}
-      {{- if $config.default.backend.tls.version }}
-        BackendSSLVersion {{ $config.default.backend.tls.version }}
+      {{- if $advanced.tls.backend.version }}
+        BackendSSLVersion {{ $advanced.tls.backend.version }}
       {{- end }}
-      {{- if $config.default.backend.tls.cipherSuite }}
-        BackendSSLCipherSuite {{ $config.default.backend.tls.cipherSuite }}
+      {{- if $advanced.tls.backend.cipherSuite }}
+        BackendSSLCipherSuite {{ $advanced.tls.backend.cipherSuite }}
       {{- end }}
-      {{- if $config.default.backend.tls.cipherSuitev13 }}
-        BackendSSLCipherSuiteTls13 {{ $config.default.backend.tls.cipherSuitev13 }}
+      {{- if $advanced.tls.backend.cipherSuitev13 }}
+        BackendSSLCipherSuiteTls13 {{ $advanced.tls.backend.cipherSuitev13 }}
       {{- end }}
-      {{- with $config.expert_settings.security_gate }}
+      {{- with $advanced.expert_settings.security_gate }}
         {{- . | nindent 8 }}
       {{- end }}
     {{- end }}
@@ -75,24 +78,24 @@ data:
   {{- else }}
     apps:
     - mappings:
-      - entry_path: {{ $config.default.mapping.entryPath }}
-        operational_mode: {{ $config.default.mapping.operationalMode }}
-        {{- if $config.default.mapping.sessionHandling }}
-        session_handling: {{ $config.default.mapping.sessionHandling }}
-        {{- else if or .Values.redis.enabled $config.redisService }}
+      - entry_path: {{ $simple.mapping.entryPath }}
+        operational_mode: {{ $simple.mapping.operationalMode }}
+        {{- if $simple.mapping.sessionHandling }}
+        session_handling: {{ $simple.mapping.sessionHandling }}
+        {{- else if or .Values.redis.enabled $advanced.redisService }}
         session_handling: {{ "enforce_session" }}
         {{- else }}
         session_handling: {{ "ignore_session" }}
         {{- end }}
         deny_rules:
-        - enable: {{ $config.default.mapping.denyRules.enabled }}
-          log_only: {{ $config.default.mapping.denyRules.logOnly }}
-          level: {{ $config.default.mapping.denyRules.level }}
+        - enable: {{ $simple.mapping.denyRules.enabled }}
+          log_only: {{ $simple.mapping.denyRules.logOnly }}
+          level: {{ $simple.mapping.denyRules.level }}
       backend:
-        protocol: {{ $config.default.backend.protocol }}
-        hostname: {{ $config.default.backend.hostname }}
-        port: {{ $config.default.backend.port }}
-    {{- if $config.tlsSecretName }}
+        protocol: {{ $simple.backend.protocol }}
+        hostname: {{ $simple.backend.hostname }}
+        port: {{ $simple.backend.port }}
+    {{- if $global.tlsSecretName }}
       virtual_host:
         certificate:
           certificate_file: /secret/tls/tls.crt
