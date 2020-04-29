@@ -163,10 +163,11 @@ The example below shows how certain default values could be adjusted.
   custom-values.yaml
   ```
   config:
-    default:
+    simple:
       backend:
         hostname: other-service
-    existingSecret: "microgateway-secrets"
+    generic:
+      existingSecret: "microgateway-secrets"
   imagePullSecrets:
     - name: "docker-secret"
   ingress:
@@ -205,9 +206,10 @@ In case that session handling is enabled on Airlock Microgateway, a Redis servic
   custom-values.yaml
   ```
   config:
-    redisService:
-      - <REDIS-SERVICE1>:<PORT>
-      - <REDIS-SERVICE2>:<PORT>
+    global:
+      redisService:
+        - <REDIS-SERVICE1>:<PORT>
+        - <REDIS-SERVICE2>:<PORT>
   redis:
     enabled: false
   ```
@@ -424,7 +426,8 @@ kubectl create secret generic microgatewaysecrets --from-file=license=license_fi
 This secret can then be used with the following custom-values.yaml configuration:
 ```
 config:
-  existingSecret: "microgatewaysecrets"
+  generic:
+    existingSecret: "microgatewaysecrets"
 ```
 
 #### imagePullSecrets
@@ -453,7 +456,8 @@ kubectl create secret generic microgatewaytls --from-file=tls.crt=virtinc-tls.cr
 This secret can then be used with the following custom-values.yaml configuration:
 ```
 config:
-  tlsSecretName: "microgatewaytls"
+  generic:
+    tlsSecretName: "microgatewaytls"
 ```
 
 ## Examples
@@ -473,14 +477,15 @@ Thus, the user does not have to write and provide his own DSL. The generation of
 simple-values.yaml
 ```
 config:
-  default:
+  simple:
     mapping:
       operationalMode: integration
       denyRules:
         level: strict
     backend:
       hostname: backend-hostname
-  logLevel: trace
+  global:
+    logLevel: trace
 ```
 
 #### Advanced setup example
@@ -689,17 +694,18 @@ Below is an example of how to set environment variables and then use them in the
 env-variables.yaml
 ```
 config:
-  env:
-    - name: WAF_CFG_OPERATIONALMODE
-      value: production
-    - name: WAF_CFG_LOGONLY
-      value: false
+  global:
+    env:
+      - name: WAF_CFG_OPERATIONALMODE
+        value: production
+      - name: WAF_CFG_LOGONLY
+        value: false
 ```
 
 dsl-values.yaml
 ```
 config:
-  default: 
+  simple: 
     mapping:
       operationalMode: "@@WAF_CFG_OPERATIONALMODE@@"
       denyRules:
