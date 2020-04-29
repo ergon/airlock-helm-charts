@@ -192,13 +192,12 @@ config:
       denyRules:
         exceptions:
           - parameter_name:
-              pattern: ^my_param_name$
-              ignore_case: false
+              pattern: ^content$
+              ignore_case: true
+            path:
+              pattern: ^/mail/
             method:
-              pattern: ^my_method$
-          - parameter_value:
-              pattern: ^my_param_value$
-              invert: true
+              pattern: ^POST$
     backend:
       hostname: custom-backend
 
