@@ -189,6 +189,15 @@ config:
   simple:
     mapping:
       entryPath: /
+      denyRules:
+        exceptions:
+          - parameter_name:
+              pattern: ^content$
+              ignore_case: true
+            path:
+              pattern: ^/mail/
+            method:
+              pattern: ^POST$
     backend:
       hostname: custom-backend
 
