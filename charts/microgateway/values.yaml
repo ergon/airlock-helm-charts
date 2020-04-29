@@ -21,7 +21,7 @@ config:
       # config.simple.mapping.operationalMode -- Operational mode (`production`, `integration`)
       operationalMode: production
       # config.simple.mapping.sessionHandling -- Session handling behaviour.
-      # @default -- * If `redis.enabled=true` => `enforce_session` <br> * If `redis.enabled=false` => `ignore_session`
+      # @default -- * If `redis.enabled=true` or `config.global.redisService` configured => `enforce_session` <br> * If `redis.enabled=false` => `ignore_session`
       sessionHandling: ""
       denyRules:
         # config.simple.mapping.denyRules.enabled -- Enable all Deny rules.
