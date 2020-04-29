@@ -20,7 +20,7 @@ The current chart version is: 0.4.2
   * [Echo-Server](#echo-server)
 * [DSL configuration](#dsl-configuration)
   * [Simple DSL configuration](#simple-dsl-configuration)
-  * [Advanced DSL app configuration](#advanced-dsl-app-configuration)
+  * [Advanced DSL configuration](#advanced-dsl-configuration)
   * [Expert DSL configuration](#expert-dsl-configuration)
 
 ## Introduction
@@ -67,38 +67,41 @@ The following table lists configuration parameters of the Airlock Microgateway c
 |-----|------|---------|-------------|
 | affinity | string | `nil` | Assign custom [affinity rules](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/) (multiline string) |
 | commonLabels | object | `{}` | Labels to apply to all resources |
-| config.IPHeader.header | string | `"X-Forwarded-For"` | HTTP header to extract the client IP address. |
-| config.IPHeader.trustedProxies | list | `[]` | Trusted IP addresses to extract the client IP from HTTP header.<br> :exclamation: IP addresses are only extracted if `trustedProxies` are configured. |
-| config.apps | list | `[]` | See [Advanced DSL app configuration](#advanced-dsl-app-configuration) |
-| config.default | object | See `config.default.*` parameters below: | See [DSL configuration](#dsl-configuration) |
-| config.default.backend.hostname | string | `"backend-service"` | Backend hostname |
-| config.default.backend.port | int | `8080` | Backend port |
-| config.default.backend.protocol | string | `"http"` | Backend protocol |
-| config.default.backend.tls.cipherSuite | string | `""` | Overwrite the default TLS ciphers (<TLS 1.2) for backend connections. |
-| config.default.backend.tls.cipherSuitev13 | string | `""` | Overwrite the default TLS ciphers (TLS 1.3) for backend connections. |
-| config.default.backend.tls.clientCert | bool | `false` | Use TLS client certificate for backend connections. <br> :exclamation: Must be configured in `config.tlsSecretName` |
-| config.default.backend.tls.serverCa | bool | `false` | Validates the backend server certificate against the configured CA. <br> :exclamation: Must be configured in `config.tlsSecretName` |
-| config.default.backend.tls.verifyHost | bool | `false` | Verify the backend TLS certificate.<br> :exclamation: `config.default.tls.serverCA` must be configured in order to work. |
-| config.default.backend.tls.version | string | `""` | Overwrite the default TLS version for backend connections.<br> |
-| config.default.mapping.denyRules.enabled | bool | `true` | Enable all Deny rules. |
-| config.default.mapping.denyRules.level | string | `"standard"` | Set all Deny rules to Security Level (`basic`, `standard`, `strict`) |
-| config.default.mapping.denyRules.logOnly | bool | `false` | Set all Deny rules to log only |
-| config.default.mapping.entryPath | string | `"/"` | The `entry_path` of the app. |
-| config.default.mapping.operationalMode | string | `"production"` | Operational mode (`production`, `integration`) |
-| config.default.mapping.sessionHandling | string | * If `redis.enabled=true` => `enforce_session` <br> * If `redis.enabled=false` => `ignore_session` | Session handling behaviour. |
-| config.default.virtualHost.tls.cipherSuite | string | `""` | Overwrite the default TLS ciphers for frontend connections. |
-| config.default.virtualHost.tls.protocol | string | `""` | Overwrite the default TLS protocol for frontend connections. |
-| config.dsl | object | `{}` | See [Expert DSL configuration](#expert-dsl-configuration) |
-| config.env | list | `[]` | List of environment variables. See [Environment variables](#environment-variables) |
-| config.existingSecret | string | "" | Name of an existing secret containing the passphrase or license.<br> license: `license`<br> passphrase: `passphrase` |
-| config.expert_settings.apache | string | "" | Global Apache Expert Settings (multiline string) |
-| config.expert_settings.security_gate | string | "" | Global SecurityGate Expert Settings (multiline string) |
-| config.license | string | "" | License for the Microgateway (multiline string) |
-| config.logLevel | string | `"info"` | Log level (`info`, `trace`).<br> :exclamation: Never use `trace` in production. |
-| config.passphrase | string | * If `passphrase` in `config.existringSecret`<br> * If no passphrase is available, a random is generated. | Passphrase used for different features (Cookie encryption, URL Encryption, ...) |
-| config.redisService | list | * If `redis.enabled=true` => `redis-master`<br>* If `redis.enabled=false` => "" | List of Redis services. |
-| config.tlsSecretName | string | "" | Name of an existing secret containing TLS files.<br> Virtual Host: Certificate: `tls.crt`, Private key: `tls.key` and CA: `ca.crt`. <br> :exclamation: Update`route.tls.destinationCACertificate` accordingly.<br> Backend: Certifate: `backend-client.crt`, Private key: `backend-client.key` and CA: `backend-server-validation-ca.crt`. |
+| config.advanced.apps | list | `[]` | See [Advanced DSL configuration](#advanced-dsl-configuration) |
+| config.expert.dsl | object | `{}` | See [Expert DSL configuration](#expert-dsl-configuration) |
+| config.generic | object | See `config.generic.*` parameters below: | Available for:<br> * [Simple DSL configuration](#simple-dsl-configuration)<br> * [Advanced DSL configuration](#advanced-dsl-configuration)<br> * [Expert DSL configuration](#expert-dsl-configuration) |
+| config.generic.env | list | `[]` | List of environment variables. See [Environment variables](#environment-variables) |
+| config.generic.existingSecret | string | "" | Name of an existing secret containing the passphrase or license.<br> license: `license`<br> passphrase: `passphrase` |
+| config.generic.license | string | "" | License for the Microgateway (multiline string) |
+| config.generic.passphrase | string | * If `passphrase` in `config.generic.existringSecret`<br> * If no passphrase is available, a random is generated. | Passphrase used for different features (Cookie encryption, URL Encryption, ...) |
+| config.generic.tlsSecretName | string | "" | Name of an existing secret containing TLS files.<br> Virtual Host: Certificate: `tls.crt`, Private key: `tls.key` and CA: `ca.crt`. <br> :exclamation: Update`route.tls.destinationCACertificate` accordingly.<br> Backend: Certifate: `backend-client.crt`, Private key: `backend-client.key` and CA: `backend-server-validation-ca.crt`. |
+| config.global | object | See `config.global.*` parameters below: | Available for:<br> * [Simple DSL configuration](#simple-dsl-configuration)<br> * [Advanced DSL configuration](#advanced-dsl-configuration) |
+| config.global.IPHeader.header | string | `"X-Forwarded-For"` | HTTP header to extract the client IP address. |
+| config.global.IPHeader.trustedProxies | list | `[]` | Trusted IP addresses to extract the client IP from HTTP header.<br> :exclamation: IP addresses are only extracted if `trustedProxies` are configured. |
+| config.global.backend.tls.cipherSuite | string | `""` | Overwrite the default TLS ciphers (<TLS 1.2) for backend connections. |
+| config.global.backend.tls.cipherSuitev13 | string | `""` | Overwrite the default TLS ciphers (TLS 1.3) for backend connections. |
+| config.global.backend.tls.clientCert | bool | `false` | Use TLS client certificate for backend connections. <br> :exclamation: Must be configured in `config.generic.tlsSecretName` |
+| config.global.backend.tls.serverCa | bool | `false` | Validates the backend server certificate against the configured CA. <br> :exclamation: Must be configured in `config.generic.tlsSecretName` |
+| config.global.backend.tls.verifyHost | bool | `false` | Verify the backend TLS certificate.<br> :exclamation: `config.global.backend.tls.serverCa` must be configured in order to work. |
+| config.global.backend.tls.version | string | `""` | Overwrite the default TLS version for backend connections.<br> |
+| config.global.expert_settings.apache | string | "" | Global Apache Expert Settings (multiline string) |
+| config.global.expert_settings.security_gate | string | "" | Global SecurityGate Expert Settings (multiline string) |
+| config.global.logLevel | string | `"info"` | Log level (`info`, `trace`).<br> :exclamation: Never use `trace` in production. |
+| config.global.redisService | list | * If `redis.enabled=true` => `redis-master`<br>* If `redis.enabled=false` => "" | List of Redis services. |
+| config.global.virtualHost.tls.cipherSuite | string | `""` | Overwrite the default TLS ciphers for frontend connections. |
+| config.global.virtualHost.tls.protocol | string | `""` | Overwrite the default TLS protocol for frontend connections. |
+| config.simple | object | See `config.simple.*` parameters below: | See [Simple DSL configuration](#simple-dsl-configuration) |
+| config.simple.backend.hostname | string | `"backend-service"` | Backend hostname |
+| config.simple.backend.port | int | `8080` | Backend port |
+| config.simple.backend.protocol | string | `"http"` | Backend protocol |
+| config.simple.mapping.denyRules.enabled | bool | `true` | Enable all Deny rules. |
+| config.simple.mapping.denyRules.level | string | `"standard"` | Set all Deny rules to Security Level (`basic`, `standard`, `strict`) |
+| config.simple.mapping.denyRules.logOnly | bool | `false` | Set all Deny rules to log only |
+| config.simple.mapping.entryPath | string | `"/"` | The `entry_path` of the app. |
+| config.simple.mapping.operationalMode | string | `"production"` | Operational mode (`production`, `integration`) |
+| config.simple.mapping.sessionHandling | string | * If `redis.enabled=true` or `config.global.redisService` configured => `enforce_session` <br> * If `redis.enabled=false` => `ignore_session` | Session handling behaviour. |
 | echo-server | object | See `echo-server.*` parameters below: | Echo service which can be used for an easy start. See [Echo-Server](#echo-server) |
+| echo-server.enabled | bool | `false` | Create an Echo service. |
 | fullnameOverride | string | `""` | Provide a name to substitute for the full names of resources |
 | image.pullPolicy | string | `"Always"` | Pull policy (`Always`, `IfNotPresent`, `Never`) |
 | image.repository | string | `"docker.ergon.ch/airlock/microgateway"` | Image repository |
@@ -119,7 +122,7 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | readinessProbe.enabled | bool | `true` | Enable readiness probes |
 | readinessProbe.initialDelaySeconds | int | `30` | Initial delay in seconds |
 | redis | object | See `redis.*` parameters below: | Redis service which can be used if no one is available. See [Redis](#redis) |
-| redis.enabled | bool | `false` | Create an Echo service. |
+| redis.enabled | bool | `false` | Create a Redis service. |
 | redis.securityContext.fsGroup | int | `1000140000` | Group ID for the container (both Redis master and slave pods) |
 | redis.securityContext.runAsUser | int | `1000140000` | User ID for the container (both Redis master and slave pods) |
 | replicaCount | int | `1` | Desired number of Microgateway pods |
@@ -162,10 +165,11 @@ The example below shows how certain default values could be adjusted.
   custom-values.yaml
   ```
   config:
-    default:
+    simple:
       backend:
         hostname: other-service
-    existingSecret: "microgateway-secrets"
+    generic:
+      existingSecret: "microgateway-secrets"
   imagePullSecrets:
     - name: "docker-secret"
   ingress:
@@ -204,9 +208,10 @@ In case that session handling is enabled on Airlock Microgateway, a Redis servic
   custom-values.yaml
   ```
   config:
-    redisService:
-      - <REDIS-SERVICE1>:<PORT>
-      - <REDIS-SERVICE2>:<PORT>
+    global:
+      redisService:
+        - <REDIS-SERVICE1>:<PORT>
+        - <REDIS-SERVICE2>:<PORT>
   redis:
     enabled: false
   ```
@@ -256,21 +261,18 @@ This means that:
 * The Mapping configuration is applied to all requests sent to the backend service.
 * There is only one backend service.
 
-
-
-The Helm chart provides a simple configuration which can be adjusted with the `config.default.*` parameters.
-All settings have already configured a default value. So only the values which differ from the default value have to be configured. 
-
+By default, the Airlock Microgateway is configured with the [Simple DSL configuration](#simple-dsl-configuration). The default values can be adjusted as outlinded below:
 
 **Example:**
 
 custom-values.yaml
 ```
 config:
-  IPHeader:
-    trustedProxies:
-      - 10.0.0.0/28
-  default:
+  global:
+    IPHeader:
+      trustedProxies:
+        - 10.0.0.0/28
+  simple:
     mapping:
       entryPath: /
     backend:
@@ -280,23 +282,14 @@ redis:
   enabled: true
 ```
 
-**Parameters which can be used**:
-* All `config.*` parameters can be used.
-  * When using the `config.redisService` parameter:
-    * The Mapping will be configured with "enforce_session", except `config.default.mapping.sessionHandling` is configured.
-  * When using the `redis.enabled` parameter:
-    * The Mapping will be configured with "enforce_session", except `config.default.mapping.sessionHandling` is configured.
+** `config.*` Parameters which can be used**:
+* `config.simple.*`
+* `config.global.*`
+* `config.generic.*`
   
-
-**Parameters which cannot be used**:
-* The `config.apps` parameter cannot be used. This would switch to the [Advanced DSL app configuration](#advanced-dsl-app-configuration)
-* The `config.dsl` parameter cannot be used. This would switch to the [Expert DSL app configuration](#expert-dsl-app-configuration)
-
-
-### Advanced DSL app configuration
+### Advanced DSL configuration
 
 In case that the [Simple DSL configuration](#simple-dsl-configuration) does not suite, the advanced configuration options might help. The following use cases might require this kind of configuration:
-
 
 **_Use Case 1)_**
 * Virtual Host 1: abc.com -> Mapping 1: / -> Backend Service 1
@@ -310,79 +303,19 @@ In case that the [Simple DSL configuration](#simple-dsl-configuration) does not 
 * Virtual Host 1: abc.com -> Mapping 1: / -> Backend Service 1
 * Virtual Host 2: xyz.com -> Mapping 2: / -> Backend Service 2
 
-These use cases are only examples which could also occur slightly different. But all of them have in common that they have more than one Virtual Hosts, Mappings or Backend Services. Whenever this is the case, the [Advanced DSL app configuration](#advanced-dsl-app-configuration) should be preferred over the [Simple DSL configuration](#simple-dsl-configuration).
-
-
-**Example:**
-
-custom-values.yaml
-```
-config:
-  IPHeader:
-    trustedProxies:
-      - 10.0.0.0/28
-  apps:
-    - virtual_host:
-        hostname: virtinc.com
-      mappings:
-        - name: webapp
-          entry_path: /
-          operational_mode: integration
-          session_handling: enforce_session
-        - name: api
-          entry_path: /api/
-          session_handling: ignore_session
-          openapi:
-            spec_file: /config/virtinc_api_openapi.json
-      backend:
-        hostname: custom-backend
-
-redis:
-  enabled: true
-```
-
-**Parameters which can be used**:
-* `config.apps` - **must** be used.
-* `config.*`
-* Only the following `config.default.*` parameters:
-  * `config.default.virtualHost.tls.*`
-  * `config.default.backend.tls.*`
-
-**Parameters which cannot be used**:
-* `config.dsl` - This would switch to the [Expert DSL app configuration](#expert-dsl-app-configuration)
-* `config.default.mapping.*`
-* `config.default.backend.protocol`
-* `config.default.backend.hostname`
-* `config.default.backend.port`
-
-### Expert DSL configuration
-
-In case that the [Advanced DSL app configuration](#advanced-dsl-app-configuration) does not suite, the expert configuration options must be used. There are a few reasons listed below:
-
-* Microgateway DSL configuration options must be set and are not available as Helm chart parameters (e.g. base_template_file, session.store_mode, ...)
-* The same Microgateway DSL configuration file has been used elsewhere. The same configuration should be used.
-
+These use cases are only examples which could also occur slightly different. But all of them have in common that they have more than one Virtual Hosts, Mappings or Backend Services. Whenever this is the case, the [Advanced DSL configuration](#advanced-dsl-configuration) should be preferred over the [Simple DSL configuration](#simple-dsl-configuration).
 
 **Example:**
 
 custom-values.yaml
 ```
 config:
-  dsl:
-    base_template_file: /config/custom-base.xml
-    license_file: /secret/config/license
-    session:
-      encryption_passphrase_file: /secret/config/passphrase
-      redis_host: 
-        - redis-master
-    log:
-      level: info
-    expert_settings:
-      apache: |
-        RemoteIPHeader X-Forwarded-For
-        RemoteIPInternalProxy 10.0.0.0/28
-      
-    apps: 
+  global:
+    IPHeader:
+      trustedProxies:
+        - 10.0.0.0/28
+  advanced:
+    apps:
       - virtual_host:
           hostname: virtinc.com
         mappings:
@@ -396,24 +329,69 @@ config:
             openapi:
               spec_file: /config/virtinc_api_openapi.json
         backend:
-          hostname: backend-service
+          hostname: custom-backend
+
+redis:
+  enabled: true
+```
+
+** `config.*` Parameters which can be used**:
+* `config.advanced.apps` - **must** be used.
+* `config.global.*`
+* `config.generic.*`
+
+### Expert DSL configuration
+
+In case that the [Advanced DSL configuration](#advanced-dsl-configuration) does not suite, the expert configuration options must be used. There are a few reasons listed below:
+
+* Microgateway DSL configuration options must be set and are not available as Helm chart parameters (e.g. base_template_file, session.store_mode, ...)
+* The same Microgateway DSL configuration file has been used elsewhere. The same configuration should be used.
+
+
+**Example:**
+
+custom-values.yaml
+```
+config:
+  expert:
+    dsl:
+      base_template_file: /config/custom-base.xml
+      license_file: /secret/config/license
+      session:
+        encryption_passphrase_file: /secret/config/passphrase
+        redis_host: 
+          - redis-master
+      log:
+        level: info
+      expert_settings:
+        apache: |
+          RemoteIPHeader X-Forwarded-For
+          RemoteIPInternalProxy 10.0.0.0/28
+        
+      apps: 
+        - virtual_host:
+            hostname: virtinc.com
+          mappings:
+            - name: webapp
+              entry_path: /
+              operational_mode: integration
+              session_handling: enforce_session
+            - name: api
+              entry_path: /api/
+              session_handling: ignore_session
+              openapi:
+                spec_file: /config/virtinc_api_openapi.json
+          backend:
+            hostname: backend-service
 
 redis:
   enabled: true
 
 ```
 
-**Parameters which can be used**:
-* `config.dsl` - **must** be used.
-* `config.env`
-* `config.license`
-* `config.passphrase`
-* `config.tlsSecretName`
-
-**Parameters which cannot be used**:
-* `config.apps`
-* `config.default.*`
-* All other `config.*` parameters not mentioned that they are available.
+** `config.*` Parameters which can be used**:
+* `config.expert.dsl - **must** be used.
+* `config.generic.*`
 
 ## Security (TBD)
 
@@ -435,7 +413,8 @@ kubectl create secret generic microgatewaysecrets --from-file=license=license_fi
 This secret can then be used with the following custom-values.yaml configuration:
 ```
 config:
-  existingSecret: "microgatewaysecrets"
+  generic:
+    existingSecret: "microgatewaysecrets"
 ```
 
 #### imagePullSecrets
@@ -464,7 +443,8 @@ kubectl create secret generic microgatewaytls --from-file=tls.crt=virtinc-tls.cr
 This secret can then be used with the following custom-values.yaml configuration:
 ```
 config:
-  tlsSecretName: "microgatewaytls"
+  generic:
+    tlsSecretName: "microgatewaytls"
 ```
 
 ## Examples
@@ -484,14 +464,15 @@ Thus, the user does not have to write and provide his own DSL. The generation of
 simple-values.yaml
 ```
 config:
-  default:
+  simple:
     mapping:
       operationalMode: integration
       denyRules:
         level: strict
     backend:
       hostname: backend-hostname
-  logLevel: trace
+  global:
+    logLevel: trace
 ```
 
 #### Advanced setup example
@@ -700,17 +681,18 @@ Below is an example of how to set environment variables and then use them in the
 env-variables.yaml
 ```
 config:
-  env:
-    - name: WAF_CFG_OPERATIONALMODE
-      value: production
-    - name: WAF_CFG_LOGONLY
-      value: false
+  global:
+    env:
+      - name: WAF_CFG_OPERATIONALMODE
+        value: production
+      - name: WAF_CFG_LOGONLY
+        value: false
 ```
 
-dsl-values.yaml
+custom-values.yaml
 ```
 config:
-  default: 
+  simple: 
     mapping:
       operationalMode: "@@WAF_CFG_OPERATIONALMODE@@"
       denyRules:

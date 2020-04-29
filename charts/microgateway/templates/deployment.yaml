@@ -34,7 +34,7 @@ spec:
           containerPort: 8080
         - name: https
           containerPort: 8443
-        {{- with .Values.config.env }}
+        {{- with .Values.config.generic.env }}
         env: {{ toYaml . | nindent 10 }}
         {{- end }}
         volumeMounts:
@@ -44,7 +44,7 @@ spec:
         - name: secret
           mountPath: /secret/config/
           readOnly: true
-        {{- with .Values.config.tlsSecretName }}
+        {{- with .Values.config.generic.tlsSecretName }}
         - name: tls
           mountPath: /secret/tls/
           readOnly: true
@@ -74,7 +74,7 @@ spec:
       - name: secret
         secret:
           secretName: {{ template "microgateway.secretName" . }}
-      {{- with .Values.config.tlsSecretName }}
+      {{- with .Values.config.generic.tlsSecretName }}
       - name: tls
         secret:
           secretName: {{ . }}
