@@ -80,9 +80,9 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | config.global.IPHeader.trustedProxies | list | `[]` | Trusted IP addresses to extract the client IP from HTTP header.<br> :exclamation: IP addresses are only extracted if `trustedProxies` are configured. |
 | config.global.backend.tls.cipherSuite | string | `""` | Overwrite the default TLS ciphers (<TLS 1.2) for backend connections. |
 | config.global.backend.tls.cipherSuitev13 | string | `""` | Overwrite the default TLS ciphers (TLS 1.3) for backend connections. |
-| config.global.backend.tls.clientCert | bool | `false` | Use TLS client certificate for backend connections. <br> :exclamation: Must be configured in `config.global.tlsSecretName` |
-| config.global.backend.tls.serverCa | bool | `false` | Validates the backend server certificate against the configured CA. <br> :exclamation: Must be configured in `config.global.tlsSecretName` |
-| config.global.backend.tls.verifyHost | bool | `false` | Verify the backend TLS certificate.<br> :exclamation: `config.global.tls.serverCA` must be configured in order to work. |
+| config.global.backend.tls.clientCert | bool | `false` | Use TLS client certificate for backend connections. <br> :exclamation: Must be configured in `config.generic.tlsSecretName` |
+| config.global.backend.tls.serverCa | bool | `false` | Validates the backend server certificate against the configured CA. <br> :exclamation: Must be configured in `config.generic.tlsSecretName` |
+| config.global.backend.tls.verifyHost | bool | `false` | Verify the backend TLS certificate.<br> :exclamation: `config.global.backend.tls.serverCa` must be configured in order to work. |
 | config.global.backend.tls.version | string | `""` | Overwrite the default TLS version for backend connections.<br> |
 | config.global.expert_settings.apache | string | "" | Global Apache Expert Settings (multiline string) |
 | config.global.expert_settings.security_gate | string | "" | Global SecurityGate Expert Settings (multiline string) |

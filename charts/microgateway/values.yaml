@@ -65,13 +65,13 @@ config:
     backend:
       tls:
         # config.global.backend.tls.serverCa -- Validates the backend server certificate against the configured CA. <br>
-        # :exclamation: Must be configured in `config.global.tlsSecretName`
+        # :exclamation: Must be configured in `config.generic.tlsSecretName`
         serverCa: false
         # config.global.backend.tls.clientCert -- Use TLS client certificate for backend connections. <br>
-        # :exclamation: Must be configured in `config.global.tlsSecretName`
+        # :exclamation: Must be configured in `config.generic.tlsSecretName`
         clientCert: false
         # config.global.backend.tls.verifyHost -- Verify the backend TLS certificate.<br>
-        # :exclamation: `config.global.tls.serverCA` must be configured in order to work.
+        # :exclamation: `config.global.backend.tls.serverCa` must be configured in order to work.
         verifyHost: false
         # config.global.backend.tls.version -- Overwrite the default TLS version for backend connections.<br>
         version: ""
