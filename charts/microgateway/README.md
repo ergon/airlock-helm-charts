@@ -266,7 +266,7 @@ All settings have already configured a default value. So only the values which d
 custom-values.yaml
 ```
 config:
-  advanced:
+  global:
     IPHeader:
       trustedProxies:
         - 10.0.0.0/28
@@ -288,8 +288,8 @@ redis:
     * The Mapping will be configured with "enforce_session", except `config.default.mapping.sessionHandling` is configured.
   
 **Parameters which cannot be used**:
-* The `config.apps` parameter cannot be used. This would switch to the [Advanced DSL app configuration](#advanced-dsl-app-configuration)
-* The `config.dsl` parameter cannot be used. This would switch to the [Expert DSL app configuration](#expert-dsl-app-configuration)
+* The `config.advanced.apps` parameter cannot be used. This would switch to the [Advanced DSL app configuration](#advanced-dsl-app-configuration)
+* The `config.expert.dsl` parameter cannot be used. This would switch to the [Expert DSL app configuration](#expert-dsl-app-configuration)
 
 ### Advanced DSL app configuration
 
@@ -314,38 +314,39 @@ These use cases are only examples which could also occur slightly different. But
 custom-values.yaml
 ```
 config:
-  advanced:
+  global:
     IPHeader:
       trustedProxies:
         - 10.0.0.0/28
-  apps:
-    - virtual_host:
-        hostname: virtinc.com
-      mappings:
-        - name: webapp
-          entry_path: /
-          operational_mode: integration
-          session_handling: enforce_session
-        - name: api
-          entry_path: /api/
-          session_handling: ignore_session
-          openapi:
-            spec_file: /config/virtinc_api_openapi.json
-      backend:
-        hostname: custom-backend
+  advanced:
+    apps:
+      - virtual_host:
+          hostname: virtinc.com
+        mappings:
+          - name: webapp
+            entry_path: /
+            operational_mode: integration
+            session_handling: enforce_session
+          - name: api
+            entry_path: /api/
+            session_handling: ignore_session
+            openapi:
+              spec_file: /config/virtinc_api_openapi.json
+        backend:
+          hostname: custom-backend
 
 redis:
   enabled: true
 ```
 
 **Parameters which can be used**:
-* `config.apps` - **must** be used.
-* `config.advanced.*`
+* `config.advanced.apps` - **must** be used.
 * `config.global.*`
+* `config.generic.*`
 
 **Parameters which cannot be used**:
-* `config.dsl` - This would switch to the [Expert DSL app configuration](#expert-dsl-app-configuration)
-* `config.simple.*`
+* `config.expert.dsl` - This would switch to the [Expert DSL app configuration](#expert-dsl-app-configuration)
+* `config.simple.*` - These values can only be used with the simple setup.
 
 ### Expert DSL configuration
 
@@ -360,35 +361,36 @@ In case that the [Advanced DSL app configuration](#advanced-dsl-app-configuratio
 custom-values.yaml
 ```
 config:
-  dsl:
-    base_template_file: /config/custom-base.xml
-    license_file: /secret/config/license
-    session:
-      encryption_passphrase_file: /secret/config/passphrase
-      redis_host: 
-        - redis-master
-    log:
-      level: info
-    expert_settings:
-      apache: |
-        RemoteIPHeader X-Forwarded-For
-        RemoteIPInternalProxy 10.0.0.0/28
-      
-    apps: 
-      - virtual_host:
-          hostname: virtinc.com
-        mappings:
-          - name: webapp
-            entry_path: /
-            operational_mode: integration
-            session_handling: enforce_session
-          - name: api
-            entry_path: /api/
-            session_handling: ignore_session
-            openapi:
-              spec_file: /config/virtinc_api_openapi.json
-        backend:
-          hostname: backend-service
+  expert:
+    dsl:
+      base_template_file: /config/custom-base.xml
+      license_file: /secret/config/license
+      session:
+        encryption_passphrase_file: /secret/config/passphrase
+        redis_host: 
+          - redis-master
+      log:
+        level: info
+      expert_settings:
+        apache: |
+          RemoteIPHeader X-Forwarded-For
+          RemoteIPInternalProxy 10.0.0.0/28
+        
+      apps: 
+        - virtual_host:
+            hostname: virtinc.com
+          mappings:
+            - name: webapp
+              entry_path: /
+              operational_mode: integration
+              session_handling: enforce_session
+            - name: api
+              entry_path: /api/
+              session_handling: ignore_session
+              openapi:
+                spec_file: /config/virtinc_api_openapi.json
+          backend:
+            hostname: backend-service
 
 redis:
   enabled: true
@@ -396,8 +398,8 @@ redis:
 ```
 
 **Parameters which can be used**:
-* `config.dsl` - **must** be used.
-* `config.global.*`
+* `config.expert.dsl` - **must** be used.
+* `config.generic.*`
 
 **Parameters which cannot be used**:
 * All other `config.*` parameters not mentioned that they are available.
