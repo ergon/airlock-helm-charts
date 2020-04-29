@@ -189,6 +189,16 @@ config:
   simple:
     mapping:
       entryPath: /
+      denyRules:
+        exceptions:
+          - parameter_name:
+              pattern: ^my_param_name$
+              ignore_case: false
+            method:
+              pattern: ^my_method$
+          - parameter_value:
+              pattern: ^my_param_value$
+              invert: true
     backend:
       hostname: custom-backend
 
