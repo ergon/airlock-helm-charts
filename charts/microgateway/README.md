@@ -327,7 +327,7 @@ config:
       mappings:
         - name: webapp
           entry_path: /
-          operational_mode: integartion
+          operational_mode: integration
           session_handling: enforce_session
         - name: api
           entry_path: /api/
@@ -388,7 +388,7 @@ config:
         mappings:
           - name: webapp
             entry_path: /
-            operational_mode: integartion
+            operational_mode: integration
             session_handling: enforce_session
           - name: api
             entry_path: /api/
