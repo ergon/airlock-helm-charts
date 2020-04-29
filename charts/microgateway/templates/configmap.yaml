@@ -74,7 +74,7 @@ data:
   {{- end }}
 
   {{- with $config.advanced.apps }}
-    apps: {{ . | toYaml | nindent 4 }}
+    apps: {{ toYaml . | nindent 4 }}
   {{- else }}
     apps:
     - mappings:
@@ -92,7 +92,7 @@ data:
           log_only: {{ $simple.mapping.denyRules.logOnly }}
           level: {{ $simple.mapping.denyRules.level }}
           {{- with $simple.mapping.denyRules.exceptions }}
-          exceptions: {{ . | toYaml | nindent 12 }}
+          exceptions: {{ toYaml . | nindent 12 }}
           {{- end }}
       backend:
         protocol: {{ $simple.backend.protocol }}
