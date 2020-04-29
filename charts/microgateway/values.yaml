@@ -12,7 +12,7 @@ image:
 ## Microgateway Config
 ##
 config:
-  # config.simple -- See [DSL configuration](#dsl-configuration)
+  # config.simple -- See [Simple DSL configuration](#simple-dsl-configuration)
   # @default -- See `config.simple.*` parameters below:
   simple:
     mapping:
@@ -38,6 +38,10 @@ config:
       # config.simple.backend.protocol -- Backend protocol
       protocol: http
 
+  # config.global -- Available for:<br>
+  # * [Simple DSL configuration](#simple-dsl-configuration)<br>
+  # * [Advanced DSL configuration](#advanced-dsl-configuration)
+  # @default -- See `config.global.*` parameters below:
   global:
     expert_settings:
       # config.global.expert_settings.apache -- Global Apache Expert Settings (multiline string)
@@ -60,10 +64,10 @@ config:
     tls:
       backend:
         # config.global.tls.backend.serverCa -- Validates the backend server certificate against the configured CA. <br>
-        # :exclamation: Must be configured in `config.tlsSecretName`
+        # :exclamation: Must be configured in `config.global.tlsSecretName`
         serverCa: false
         # config.global.tls.backend.clientCert -- Use TLS client certificate for backend connections. <br>
-        # :exclamation: Must be configured in `config.tlsSecretName`
+        # :exclamation: Must be configured in `config.global.tlsSecretName`
         clientCert: false
         # config.global.tls.backend.verifyHost -- Verify the backend TLS certificate.<br>
         # :exclamation: `config.global.tls.serverCA` must be configured in order to work.
@@ -80,6 +84,11 @@ config:
         # config.global.tls.virtualHost.cipherSuite -- Overwrite the default TLS ciphers for frontend connections.
         cipherSuite: ""
 
+  # config.generic -- Available for:<br>
+  # * [Simple DSL configuration](#simple-dsl-configuration)<br>
+  # * [Advanced DSL configuration](#advanced-dsl-configuration)<br>
+  # * [Expert DSL configuration](#expert-dsl-configuration)
+  # @default -- See `config.generic.*` parameters below:
   generic:
     # config.generic.env -- List of environment variables. See [Environment variables](#environment-variables)
     env: []
@@ -103,7 +112,7 @@ config:
     # @default -- ""
     existingSecret:
 
-  # config.advanced.apps -- See [Advanced DSL app configuration](#advanced-dsl-app-configuration)
+  # config.advanced.apps -- See [Advanced DSL configuration](#advanced-dsl-configuration)
   advanced:
     apps: []
 

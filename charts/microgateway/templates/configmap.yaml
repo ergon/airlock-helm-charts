@@ -9,7 +9,7 @@ metadata:
   labels:
     {{- include "microgateway.labels" . | nindent 4 }}
 data:
-{{- if not $config.dsl }}
+{{- if not $config.expert.dsl }}
   config.yaml: |
     license_file: /secret/config/license
     session:
