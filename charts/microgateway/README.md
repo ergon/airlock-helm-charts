@@ -34,7 +34,7 @@ The current chart version is: 0.4.4
     * [Route terminating HTTP](#route-terminating-http)
     * [Route terminating secure HTTPS](#route-terminating-secure-https)
       * [Route Edge configuration](#route-edge-configuration)
-      * [Route Reencrypt configuration](#route-reencrypt-configuration)
+      * [Route Re-encrypt configuration](#route-re-encrypt-configuration)
       * [Route Passthrough configuration](#route-passthrough-configuration)
 * [Security](#security)
   * [Store sensitive information in secrets](#store-sensitive-information-in-secrets)
@@ -476,7 +476,7 @@ This can be accomplished by configuring the following parameter:
     initialDelaySeconds: 90
   ```
 
-If desired, the readiness probe can be disabled with `readinessProbe.enabled=false`.
+If desired, the readiness probe can be disabled with `readinessProbe.enabled=false`. This way, the Pod is ready immediately and receives requests.
 
 ### Liveness Probe
 The liveness Probe determines whether a pod is in good health. If the liveness probe fails, the Pod is terminated and one is started.
@@ -544,7 +544,7 @@ In case that multiple hosts are configured, TLS-SNI is used to distinguish what 
   ```
 
 ### Openshift Route
-The examples are based on the standard Openshift Route. Since this is already available in a Openshift environment, nothing special needs to be done. The Microgateway Helm chart allows to create a Route object.
+Since the Route is already available in a Openshift environment, nothing has to be installed additionally.
 
 #### Route terminating HTTP
 
@@ -560,7 +560,7 @@ The examples are based on the standard Openshift Route. Since this is already av
   ```
 
 #### Route terminating secure HTTPS
-Openshift has there three different TLS termination types which can be used. Edge, reencrypt and passthrough.
+Openshift has three different TLS termination types which can be used. Edge, re-encrypt and passthrough.
 The subchapters provide the required information to configure it, using the Microgateway Helm chart.
 
 ##### Route Edge configuration
@@ -590,8 +590,8 @@ Therefore, a valid certificate for the specified hosts must be applied.
         -----END RSA PRIVATE KEY-----
   ```
 
-##### Route Reencrypt configuration
-With the TLS termination type "Reencrypt", HTTPS is terminated on the Openshift Router and re-encrypted to the Microgateway service.
+##### Route Re-encrypt configuration
+With the TLS termination type "Re-encrypt", HTTPS is terminated on the Openshift Router and re-encrypted to the Microgateway service.
 Because the default in the Microgateway Helm chart for `route.targetPort` is `https`, traffic inside the Openshift cluster is by default encrypted.
 The difference to TLS termination type "Edge" is:
 * The Microgateway certificate is validated against `route.tls.destinationCACertificate`.
@@ -599,7 +599,7 @@ The difference to TLS termination type "Edge" is:
 
 In other words, the entire path of the connection is encrypted and verified, also within the Openshift cluster.
 
-  To setup Reencrypt TLS termination, use the following configuraion:
+  To setup Re-encrypt TLS termination, use the following configuraion:
   ```
   route:
     enabled: true
@@ -635,6 +635,7 @@ Therefore, no certificates need to be configured on the Route and termination ta
   ```
   route:
     enabled: true
+    path: ""
     hosts:
       - virtinc.com
     tls:
@@ -655,7 +656,7 @@ It is possible to use the following parameters of this Helm chart to configure l
 * Passphrase: `config.generic.passphrase`
 
 The Helm chart itself creates a secret and configure the Microgateway to use it. While this is already secure, because it is stored as secrets, these information might end in a Git repo or somewhere too many people have access to.
-This is why it would be much better to create a secret containing license and passphrase with a different process.
+This is why it is better to create a secret containing license and passphrase with a different process.
 
   The example below shows how to create a secret containing license and passphrase.
   ```
@@ -671,7 +672,7 @@ This is why it would be much better to create a secret containing license and pa
   ```
 
 #### Credentials to pull image from docker registry
-The Microgateway image is published in a private Docker registry to which only granted accounts have access to.
+The Microgateway image is published in a private Docker registry to which only granted accounts have access.
 In order to download this image, the credentials must be configured in a secret and passed to the Helm chart to use when downloading the image.
 
   The example below shows how to create a secret with the credentials to download the image from the Docker registry.
@@ -687,7 +688,7 @@ In order to download this image, the credentials must be configured in a secret 
   ```
 
 #### Certificates for Microgateway
-The Microgateway can be configured to use a specific certificate for frontend and/or backend connections. The certificate material must be stored in a secret 
+The Microgateway can be configured to use a specific certificate for frontend and/or backend connections. The certificate must be stored in a secret 
 and passed to the Helm chart to use it.
 
 Used for frontend connection:
@@ -695,7 +696,7 @@ Used for frontend connection:
 * Private key: `tls.key`
 * CA:          `ca.crt`
 
-:exclamation: In case that [Route Reencrypt configuration](#route-reencrypt-configuration) is used, ensure that `route.tls.destinationCACertificate` is updated accordingly.
+:exclamation: In case that [Route Re-encrypt configuration](#route-re-encrypt-configuration) is used, ensure that `route.tls.destinationCACertificate` is updated accordingly.
 
 Used for backend connection:
 * Certificate: `backend-client.crt`
