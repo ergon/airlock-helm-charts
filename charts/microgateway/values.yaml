@@ -12,25 +12,25 @@ image:
 ## Microgateway Config
 ##
 config:
-  # config.simple -- See [Simple DSL configuration](#simple-dsl-configuration)
-  # @default -- See `config.simple.*` parameters below:
+  # config.simple -- [Simple DSL configuration](#simple-dsl-configuration)
+  # @default -- See `config.simple.*`:
   simple:
     mapping:
       # config.simple.mapping.entryPath -- The `entry_path` of the app.
       entryPath: /
       # config.simple.mapping.operationalMode -- Operational mode (`production`, `integration`)
       operationalMode: production
-      # config.simple.mapping.sessionHandling -- Session handling behaviour.
-      # @default -- * If `redis.enabled=true` or `config.global.redisService` configured => `enforce_session` <br> * If `redis.enabled=false` => `ignore_session`
+      # config.simple.mapping.sessionHandling -- Session handling (`enforce_session`, `ignore_session`, `optional_session`, `optional_session_no_refresh`)
+      # @default -- - `enforce_session`<br> If `redis.enabled=true` <br> or `config.global.redisService`<br><br> - `ignore_session`<br> If `redis.enabled=false`
       sessionHandling: ""
       denyRules:
-        # config.simple.mapping.denyRules.enabled -- Enable all Deny rules.
+        # config.simple.mapping.denyRules.enabled -- Enable all Deny rules
         enabled: true
-        # config.simple.mapping.denyRules.level -- Set all Deny rules to Security Level (`basic`, `standard`, `strict`)
+        # config.simple.mapping.denyRules.level -- Security Level for all Deny rules (`basic`, `standard`, `strict`)
         level: standard
-        # config.simple.mapping.denyRules.logOnly -- Set all Deny rules to log only
+        # config.simple.mapping.denyRules.logOnly -- Enable log only for all Deny rules
         logOnly: false
-        # config.simple.mapping.denyRules.exceptions -- Deny rule exception configuration.
+        # config.simple.mapping.denyRules.exceptions -- Deny rule exceptions
         exceptions: []
         # - parameter_name:
         #     pattern: (PCRE Pattern-String)
@@ -45,9 +45,9 @@ config:
       protocol: http
 
   # config.global -- Available for:<br>
-  # * [Simple DSL configuration](#simple-dsl-configuration)<br>
-  # * [Advanced DSL configuration](#advanced-dsl-configuration)
-  # @default -- See `config.global.*` parameters below:
+  # - [Simple DSL configuration](#simple-dsl-configuration)<br>
+  # - [Advanced DSL configuration](#advanced-dsl-configuration)
+  # @default -- See `config.global.*`:
   global:
     expert_settings:
       # config.global.expert_settings.apache -- Global Apache Expert Settings (multiline string)
@@ -60,12 +60,12 @@ config:
     # :exclamation: Never use `trace` in production.
     logLevel: info
     # config.global.redisService -- List of Redis services.
-    # @default -- * If `redis.enabled=true` => `redis-master`<br>* If `redis.enabled=false` => ""
+    # @default -- - `redis-master`<br> If `redis.enabled=true`<br><br> - `""`<br> If `redis.enabled=false`
     redisService: []
     IPHeader:
       # config.global.IPHeader.header -- HTTP header to extract the client IP address.
       header: X-Forwarded-For
-      # config.global.IPHeader.trustedProxies -- Trusted IP addresses to extract the client IP from HTTP header.<br>
+      # config.global.IPHeader.trustedProxies -- Trusted IP addresses to extract the client IP from HTTP header.<br><br>
       # :exclamation: IP addresses are only extracted if `trustedProxies` are configured.
       trustedProxies: []
 
@@ -82,7 +82,7 @@ config:
         verifyHost: false
         # config.global.backend.tls.version -- Overwrite the default TLS version for backend connections.<br>
         version: ""
-        # config.global.backend.tls.cipherSuite -- Overwrite the default TLS ciphers (<TLS 1.2) for backend connections.
+        # config.global.backend.tls.cipherSuite -- Overwrite the default TLS ciphers (<=TLS 1.2) for backend connections.
         cipherSuite: ""
         # config.global.backend.tls.cipherSuitev13 -- Overwrite the default TLS ciphers (TLS 1.3) for backend connections.
         cipherSuitev13: ""
@@ -95,54 +95,60 @@ config:
         cipherSuite: ""
 
   # config.generic -- Available for:<br>
-  # * [Simple DSL configuration](#simple-dsl-configuration)<br>
-  # * [Advanced DSL configuration](#advanced-dsl-configuration)<br>
-  # * [Expert DSL configuration](#expert-dsl-configuration)
-  # @default -- See `config.generic.*` parameters below:
+  # - [Simple DSL configuration](#simple-dsl-configuration)<br>
+  # - [Advanced DSL configuration](#advanced-dsl-configuration)<br>
+  # - [Expert DSL configuration](#expert-dsl-configuration)
+  # @default -- See `config.generic.*`:
   generic:
-    # config.generic.env -- List of environment variables. See [Environment variables](#environment-variables)
+    # config.generic.env -- [Environment variables](#environment-variables)
     env: []
     #  - name: WAF_CFG_EXAMPLE
     #    value: Example_Value
-    # config.generic.tlsSecretName -- (string) Name of an existing secret containing TLS files.<br>
-    # Virtual Host: Certificate: `tls.crt`, Private key: `tls.key` and CA: `ca.crt`. <br>
-    # :exclamation: Update`route.tls.destinationCACertificate` accordingly.<br>
-    # Backend: Certifate: `backend-client.crt`, Private key: `backend-client.key` and CA: `backend-server-validation-ca.crt`.
+    # config.generic.tlsSecretName -- (string) Name of an existing secret containing:<br><br>
+    # _Virtual Host:_<br>
+    # Certificate: `tls.crt`<br>
+    # Private key: `tls.key`<br>
+    # CA: `ca.crt` <br>
+    # :exclamation: Update`route.tls.destinationCACertificate` accordingly.<br><br>
+    # _Backend:_<br>
+    # Certificate: `backend-client.crt`<br>
+    # Private key: `backend-client.key`<br>
+    # CA: `backend-server-validation-ca.crt`
     # @default -- ""
     tlsSecretName:
-    # config.generic.passphrase -- Passphrase used for different features (Cookie encryption, URL Encryption, ...)
-    # @default -- * If `passphrase` in `config.generic.existringSecret`<br> * If no passphrase is available, a random is generated.
+    # config.generic.passphrase -- Passphrase used for encryption
+    # @default -- - `passphrase`<br> If `passphrase` in `config.generic.existingSecret` <br><br> - `<generated passphrase>`<br> If no passphrase available.
     passphrase:
-    # config.generic.license -- (string) License for the Microgateway (multiline string)
+    # config.generic.license -- (string) License (multiline string)
     # @default -- ""
     license:
-    # config.generic.existingSecret -- (string) Name of an existing secret containing the passphrase or license.<br>
+    # config.generic.existingSecret -- (string) Name of an existing secret containing:<br><br>
     # license: `license`<br>
     # passphrase: `passphrase`
     # @default -- ""
     existingSecret:
 
-  # config.advanced.apps -- See [Advanced DSL configuration](#advanced-dsl-configuration)
+  # config.advanced.apps -- [Advanced DSL configuration](#advanced-dsl-configuration)
   advanced:
     apps: []
 
-  # config.expert.dsl -- See [Expert DSL configuration](#expert-dsl-configuration)
+  # config.expert.dsl -- [Expert DSL configuration](#expert-dsl-configuration)
   expert:
     dsl: {}
 
-# commonLabels -- Labels to apply to all resources
+# commonLabels -- Labels to add to all resources
 commonLabels: {}
-# imagePullSecrets -- Reference to one or more secrets to be used when pulling images
+# imagePullSecrets -- Reference to one or more secrets to use when pulling images
 imagePullSecrets: []
   # - name: "image-pull-secret"
 # nameOverride -- Provide a name in place of `microgateway`
 nameOverride: ""
 # fullnameOverride -- Provide a name to substitute for the full names of resources
 fullnameOverride: ""
-# podSecurityContext -- Security context for the pods (see [link](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod))
+# podSecurityContext -- [Security context for the pods](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod)
 podSecurityContext: {}
   # fsGroup: 2000
-# securityContext -- Security context for the Microgateway container (see [link](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container))
+# securityContext -- [Security context for a container](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container)
 securityContext: {}
   # capabilities:
   #   drop:
@@ -158,9 +164,11 @@ service:
   # service.annotations -- Annotations to set on the service
   annotations: {}
     # service.alpha.openshift.io/serving-cert-secret-name: microgateway
-  # service.labels -- Additional labels to set on the service
+  # service.labels -- Additional labels to add on the service
   labels: {}
 
+# ingress -- [Kubernetes Ingress](#kubernetes-ingress)
+# @default -- See `ingress.*`:
 ingress:
   # ingress.enabled -- Create an ingress object
   enabled: false
@@ -173,14 +181,14 @@ ingress:
     # nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
     # nginx.ingress.kubernetes.io/proxy-ssl-verify: "true"
     # nginx.ingress.kubernetes.io/proxy-ssl-secret: secretName
-  # ingress.labels -- Additional labels for the Microgateway ingress
+  # ingress.labels -- Additional labels to add on the Microgateway ingress
   labels: {}
   # ingress.hosts -- List of ingress hosts
   hosts:
     - virtinc.com
   # ingress.path -- Path for the ingress
   path: /
-  # ingress.targetPort -- Target port of the service (`http`, `https` or number)
+  # ingress.targetPort -- Target port of the service (`http`, `https` or `<number>`)
   targetPort: http
 
   # ingress.tls -- [Ingress TLS](https://kubernetes.io/docs/concepts/services-networking/ingress/#tls) configuration
@@ -191,23 +199,24 @@ ingress:
 
 ## OpenShift route configuration.
 ## ref: https://docs.openshift.com/container-platform/3.11/architecture/networking/routes.html
-##
+# route -- [Openshift Route](#openshift-route)
+# @default -- See `route.*`:
 route:
-  # route.enabled -- Create an route object
+  # route.enabled -- Create a route object
   enabled: false
   # route.annotations -- Annotations to set on the route
   annotations: {}
     # kubernetes.io/tls-acme: "true"
     # haproxy.router.openshift.io/disable_cookies: "true"
     # haproxy.router.openshift.io/balance: roundrobin
-  # route.labels -- Additional labels for the Microgateway route
+  # route.labels -- Additional labels add on the Microgateway route
   labels: {}
   # route.hosts --  List of host names
   hosts:
     - virtinc.com
   # route.path -- Path for the route
   path: /
-  # route.targetPort -- Target port of the service (`http`, `https` or number)
+  # route.targetPort -- Target port of the service (`http`, `https` or `<number>`)
   targetPort: https
 
   ## TLS configuration
@@ -256,7 +265,7 @@ route:
       Q4ph1jI/QLl5lsYtDm4SLt1ALvgRQj8QerJdZ/SrmfFmUkOx3lGpBChM0lT+wkrI
       aw/GIcvwLSquzFBrlU3Jhg+wu8p/514lgiShy39fmzMOa3Q0/5jF3qM74+lGUsA=
       -----END CERTIFICATE-----
-# resources -- [Resource limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for Microgateway
+# resources -- [Resource limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container)
 resources:
   requests:
     memory: "512Mi"
@@ -293,10 +302,10 @@ affinity:
   #           {{- include "microgateway.selectorLabels" . | nindent 10 }}
   #       topologyKey: kubernetes.io/hostname
 
-# redis -- Redis service which can be used if no one is available. See [Redis](#redis)
-# @default -- See `redis.*` parameters below:
+# redis -- Pre-configured [Redis](#redis) service.
+# @default -- See `redis.*`:
 redis:
-  # redis.enabled -- Create a Redis service.
+  # redis.enabled -- Deploy pre-configured [Redis](#redis).
   enabled: false
   usePassword: false
   image:
@@ -306,9 +315,11 @@ redis:
     enabled: true
   fullnameOverride: redis
   securityContext:
-    # redis.securityContext.fsGroup -- Group ID for the container (both Redis master and slave pods)
+    # redis.securityContext.fsGroup -- Group ID for the container<br>
+    # (Redis master and slave pods)
     fsGroup: 1000140000
-    # redis.securityContext.runAsUser -- User ID for the container (both Redis master and slave pods)
+    # redis.securityContext.runAsUser -- User ID for the container<br>
+    # (Redis master and slave pods)
     runAsUser: 1000140000
   persistence:
     enabled: false
@@ -320,10 +331,10 @@ redis:
   slave:
     command: redis-server
 
-# echo-server -- Echo service which can be used for an easy start. See [Echo-Server](#echo-server)
-# @default -- See `echo-server.*` parameters below:
+# echo-server -- Pre-configured [Echo-Server](#echo-server).
+# @default -- See `echo-server.*`:
 echo-server:
-  # echo-server.enabled -- Create an Echo service.
+  # echo-server.enabled -- Deploy pre-configured [Echo-Server](#echo-server).
   enabled: false
   fullnameOverride: backend-service
   service:
