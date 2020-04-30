@@ -167,6 +167,8 @@ service:
   # service.labels -- Additional labels to add on the service
   labels: {}
 
+# ingress -- [Kubernetes Ingress](#kubernetes-ingress)
+# @default -- See `ingress.*`:
 ingress:
   # ingress.enabled -- Create an ingress object
   enabled: false
@@ -197,7 +199,8 @@ ingress:
 
 ## OpenShift route configuration.
 ## ref: https://docs.openshift.com/container-platform/3.11/architecture/networking/routes.html
-##
+# route -- [Openshift Route](#openshift-route)
+# @default -- See `route.*`:
 route:
   # route.enabled -- Create a route object
   enabled: false
