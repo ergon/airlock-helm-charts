@@ -48,8 +48,10 @@ helm repo add airlock https://ergon.github.io/airlock-helm-charts/
 To install the chart with the release name `microgateway`:
 
 ```console
-helm upgrade -i microgateway airlock/microgateway
+helm upgrade -i microgateway airlock/microgateway -f license.yaml
 ```
+
+:exclamation: Airlock Microgateway will not work without a valid license. To order one, get in contact with sales@airlock.com.
 
 ### Uninstalling the chart
 

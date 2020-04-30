@@ -49,8 +49,10 @@ helm repo add airlock https://ergon.github.io/airlock-helm-charts/
 To install the chart with the release name `microgateway`:
 
 ```console
-helm upgrade -i microgateway airlock/microgateway
+helm upgrade -i microgateway airlock/microgateway -f license.yaml
 ```
+
+:exclamation: Airlock Microgateway will not work without a valid license. To order one, get in contact with sales@airlock.com.
 
 ### Uninstalling the chart
 
@@ -67,19 +69,19 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | affinity | string | `nil` | Assign custom [affinity rules](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/) (multiline string) |
-| commonLabels | object | `{}` | Labels to apply to all resources |
-| config.advanced.apps | list | `[]` | See [Advanced DSL configuration](#advanced-dsl-configuration) |
-| config.expert.dsl | object | `{}` | See [Expert DSL configuration](#expert-dsl-configuration) |
-| config.generic | object | See `config.generic.*` parameters below: | Available for:<br> * [Simple DSL configuration](#simple-dsl-configuration)<br> * [Advanced DSL configuration](#advanced-dsl-configuration)<br> * [Expert DSL configuration](#expert-dsl-configuration) |
-| config.generic.env | list | `[]` | List of environment variables. See [Environment variables](#environment-variables) |
-| config.generic.existingSecret | string | "" | Name of an existing secret containing the passphrase or license.<br> license: `license`<br> passphrase: `passphrase` |
-| config.generic.license | string | "" | License for the Microgateway (multiline string) |
-| config.generic.passphrase | string | * If `passphrase` in `config.generic.existringSecret`<br> * If no passphrase is available, a random is generated. | Passphrase used for different features (Cookie encryption, URL Encryption, ...) |
-| config.generic.tlsSecretName | string | "" | Name of an existing secret containing TLS files.<br> Virtual Host: Certificate: `tls.crt`, Private key: `tls.key` and CA: `ca.crt`. <br> :exclamation: Update`route.tls.destinationCACertificate` accordingly.<br> Backend: Certifate: `backend-client.crt`, Private key: `backend-client.key` and CA: `backend-server-validation-ca.crt`. |
-| config.global | object | See `config.global.*` parameters below: | Available for:<br> * [Simple DSL configuration](#simple-dsl-configuration)<br> * [Advanced DSL configuration](#advanced-dsl-configuration) |
+| commonLabels | object | `{}` | Labels to add to all resources |
+| config.advanced.apps | list | `[]` | [Advanced DSL configuration](#advanced-dsl-configuration) |
+| config.expert.dsl | object | `{}` | [Expert DSL configuration](#expert-dsl-configuration) |
+| config.generic | object | See `config.generic.*`: | Available for:<br> - [Simple DSL configuration](#simple-dsl-configuration)<br> - [Advanced DSL configuration](#advanced-dsl-configuration)<br> - [Expert DSL configuration](#expert-dsl-configuration) |
+| config.generic.env | list | `[]` | [Environment variables](#environment-variables) |
+| config.generic.existingSecret | string | "" | Name of an existing secret containing:<br><br> license: `license`<br> passphrase: `passphrase` |
+| config.generic.license | string | "" | License (multiline string) |
+| config.generic.passphrase | string | - `passphrase`<br> If `passphrase` in `config.generic.existingSecret` <br><br> - `<generated passphrase>`<br> If no passphrase available. | Passphrase used for encryption |
+| config.generic.tlsSecretName | string | "" | Name of an existing secret containing:<br><br> _Virtual Host:_<br> Certificate: `tls.crt`<br> Private key: `tls.key`<br> CA: `ca.crt` <br> :exclamation: Update`route.tls.destinationCACertificate` accordingly.<br><br> _Backend:_<br> Certificate: `backend-client.crt`<br> Private key: `backend-client.key`<br> CA: `backend-server-validation-ca.crt` |
+| config.global | object | See `config.global.*`: | Available for:<br> - [Simple DSL configuration](#simple-dsl-configuration)<br> - [Advanced DSL configuration](#advanced-dsl-configuration) |
 | config.global.IPHeader.header | string | `"X-Forwarded-For"` | HTTP header to extract the client IP address. |
-| config.global.IPHeader.trustedProxies | list | `[]` | Trusted IP addresses to extract the client IP from HTTP header.<br> :exclamation: IP addresses are only extracted if `trustedProxies` are configured. |
-| config.global.backend.tls.cipherSuite | string | `""` | Overwrite the default TLS ciphers (<TLS 1.2) for backend connections. |
+| config.global.IPHeader.trustedProxies | list | `[]` | Trusted IP addresses to extract the client IP from HTTP header.<br><br> :exclamation: IP addresses are only extracted if `trustedProxies` are configured. |
+| config.global.backend.tls.cipherSuite | string | `""` | Overwrite the default TLS ciphers (<=TLS 1.2) for backend connections. |
 | config.global.backend.tls.cipherSuitev13 | string | `""` | Overwrite the default TLS ciphers (TLS 1.3) for backend connections. |
 | config.global.backend.tls.clientCert | bool | `false` | Use TLS client certificate for backend connections. <br> :exclamation: Must be configured in `config.generic.tlsSecretName` |
 | config.global.backend.tls.serverCa | bool | `false` | Validates the backend server certificate against the configured CA. <br> :exclamation: Must be configured in `config.generic.tlsSecretName` |
@@ -88,62 +90,62 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | config.global.expert_settings.apache | string | "" | Global Apache Expert Settings (multiline string) |
 | config.global.expert_settings.security_gate | string | "" | Global SecurityGate Expert Settings (multiline string) |
 | config.global.logLevel | string | `"info"` | Log level (`info`, `trace`).<br> :exclamation: Never use `trace` in production. |
-| config.global.redisService | list | * If `redis.enabled=true` => `redis-master`<br>* If `redis.enabled=false` => "" | List of Redis services. |
+| config.global.redisService | list | - `redis-master`<br> If `redis.enabled=true`<br><br> - `""`<br> If `redis.enabled=false` | List of Redis services. |
 | config.global.virtualHost.tls.cipherSuite | string | `""` | Overwrite the default TLS ciphers for frontend connections. |
 | config.global.virtualHost.tls.protocol | string | `""` | Overwrite the default TLS protocol for frontend connections. |
-| config.simple | object | See `config.simple.*` parameters below: | See [Simple DSL configuration](#simple-dsl-configuration) |
+| config.simple | object | See `config.simple.*`: | [Simple DSL configuration](#simple-dsl-configuration) |
 | config.simple.backend.hostname | string | `"backend-service"` | Backend hostname |
 | config.simple.backend.port | int | `8080` | Backend port |
 | config.simple.backend.protocol | string | `"http"` | Backend protocol |
-| config.simple.mapping.denyRules.enabled | bool | `true` | Enable all Deny rules. |
-| config.simple.mapping.denyRules.exceptions | list | `[]` | Deny rule exception configuration. |
-| config.simple.mapping.denyRules.level | string | `"standard"` | Set all Deny rules to Security Level (`basic`, `standard`, `strict`) |
-| config.simple.mapping.denyRules.logOnly | bool | `false` | Set all Deny rules to log only |
+| config.simple.mapping.denyRules.enabled | bool | `true` | Enable all Deny rules |
+| config.simple.mapping.denyRules.exceptions | list | `[]` | Deny rule exceptions |
+| config.simple.mapping.denyRules.level | string | `"standard"` | Security Level for all Deny rules (`basic`, `standard`, `strict`) |
+| config.simple.mapping.denyRules.logOnly | bool | `false` | Enable log only for all Deny rules |
 | config.simple.mapping.entryPath | string | `"/"` | The `entry_path` of the app. |
 | config.simple.mapping.operationalMode | string | `"production"` | Operational mode (`production`, `integration`) |
-| config.simple.mapping.sessionHandling | string | * If `redis.enabled=true` or `config.global.redisService` configured => `enforce_session` <br> * If `redis.enabled=false` => `ignore_session` | Session handling behaviour. |
-| echo-server | object | See `echo-server.*` parameters below: | Echo service which can be used for an easy start. See [Echo-Server](#echo-server) |
-| echo-server.enabled | bool | `false` | Create an Echo service. |
+| config.simple.mapping.sessionHandling | string | - `enforce_session`<br> If `redis.enabled=true` <br> or `config.global.redisService`<br><br> - `ignore_session`<br> If `redis.enabled=false` | Session handling (`enforce_session`, `ignore_session`, `optional_session`, `optional_session_no_refresh`) |
+| echo-server | object | See `echo-server.*`: | Pre-configured [Echo-Server](#echo-server). |
+| echo-server.enabled | bool | `false` | Deploy pre-configured [Echo-Server](#echo-server). |
 | fullnameOverride | string | `""` | Provide a name to substitute for the full names of resources |
 | image.pullPolicy | string | `"Always"` | Pull policy (`Always`, `IfNotPresent`, `Never`) |
 | image.repository | string | `"docker.ergon.ch/airlock/microgateway"` | Image repository |
 | image.tag | string | `"7.4.sprint10_Build008"` | Image tag |
-| imagePullSecrets | list | `[]` | Reference to one or more secrets to be used when pulling images |
+| imagePullSecrets | list | `[]` | Reference to one or more secrets to use when pulling images |
 | ingress.annotations | object | `{"nginx.ingress.kubernetes.io/rewrite-target":"/"}` | Annotations to set on the ingress |
 | ingress.enabled | bool | `false` | Create an ingress object |
 | ingress.hosts | list | `["virtinc.com"]` | List of ingress hosts |
-| ingress.labels | object | `{}` | Additional labels for the Microgateway ingress |
+| ingress.labels | object | `{}` | Additional labels to add on the Microgateway ingress |
 | ingress.path | string | `"/"` | Path for the ingress |
-| ingress.targetPort | string | `"http"` | Target port of the service (`http`, `https` or number) |
+| ingress.targetPort | string | `"http"` | Target port of the service (`http`, `https` or `<number>`) |
 | ingress.tls | list | `[]` | [Ingress TLS](https://kubernetes.io/docs/concepts/services-networking/ingress/#tls) configuration |
 | livenessProbe.enabled | bool | `true` | Enable liveness probes |
 | livenessProbe.initialDelaySeconds | int | `90` | Initial delay in seconds |
 | nameOverride | string | `""` | Provide a name in place of `microgateway` |
 | nodeSelector | object | `{}` | Define which nodes the pods are scheduled on |
-| podSecurityContext | object | `{}` | Security context for the pods (see [link](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod)) |
+| podSecurityContext | object | `{}` | [Security context for the pods](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) |
 | readinessProbe.enabled | bool | `true` | Enable readiness probes |
 | readinessProbe.initialDelaySeconds | int | `30` | Initial delay in seconds |
-| redis | object | See `redis.*` parameters below: | Redis service which can be used if no one is available. See [Redis](#redis) |
-| redis.enabled | bool | `false` | Create a Redis service. |
-| redis.securityContext.fsGroup | int | `1000140000` | Group ID for the container (both Redis master and slave pods) |
-| redis.securityContext.runAsUser | int | `1000140000` | User ID for the container (both Redis master and slave pods) |
+| redis | object | See `redis.*`: | Pre-configured [Redis](#redis) service. |
+| redis.enabled | bool | `false` | Deploy pre-configured [Redis](#redis). |
+| redis.securityContext.fsGroup | int | `1000140000` | Group ID for the container<br> (Redis master and slave pods) |
+| redis.securityContext.runAsUser | int | `1000140000` | User ID for the container<br> (Redis master and slave pods) |
 | replicaCount | int | `1` | Desired number of Microgateway pods |
-| resources | object | `{"limits":{"cpu":"4","memory":"4048Mi"},"requests":{"cpu":"500m","memory":"512Mi"}}` | [Resource limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) for Microgateway |
+| resources | object | `{"limits":{"cpu":"4","memory":"4048Mi"},"requests":{"cpu":"500m","memory":"512Mi"}}` | [Resource limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) |
 | route.annotations | object | `{}` | Annotations to set on the route |
-| route.enabled | bool | `false` | Create an route object |
+| route.enabled | bool | `false` | Create a route object |
 | route.hosts | list | `["virtinc.com"]` |  List of host names |
-| route.labels | object | `{}` | Additional labels for the Microgateway route |
+| route.labels | object | `{}` | Additional labels add on the Microgateway route |
 | route.path | string | `"/"` | Path for the route |
-| route.targetPort | string | `"https"` | Target port of the service (`http`, `https` or number) |
+| route.targetPort | string | `"https"` | Target port of the service (`http`, `https` or `<number>`) |
 | route.tls.certificate | string | "" | Certificate to be used (multiline string) |
 | route.tls.destinationCACertificate | string | Microgateway's default certificate | Validate the Microgateway server certificate against this CA. (multiline string).<br> :exclamation: Must be configured with termination `reencrypt`. |
 | route.tls.enabled | bool | `true` | Enable TLS for the route |
 | route.tls.insecureEdgeTerminationPolicy | string | `"Redirect"` | Define the insecureEdgeTerminationPolicy of the route (`Allow`, `Redirect`, `None`) |
 | route.tls.key | string | "" | Private key to be used for certificate (multiline string) |
 | route.tls.termination | string | `"reencrypt"` | Termination of the route (`edge`, `reencrypt`, `passthrough`) |
-| securityContext | object | `{}` | Security context for the Microgateway container (see [link](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container)) |
+| securityContext | object | `{}` | [Security context for a container](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container) |
 | service.annotations | object | `{}` | Annotations to set on the service |
-| service.labels | object | `{}` | Additional labels to set on the service |
+| service.labels | object | `{}` | Additional labels to add on the service |
 | service.port | int | `80` | Service port |
 | service.tlsPort | int | `443` | Service TLS port |
 | service.type | string | `"ClusterIP"` | [Service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) |
