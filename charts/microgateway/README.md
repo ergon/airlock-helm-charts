@@ -36,6 +36,11 @@ The current chart version is: 0.4.4
       * [Route Edge configuration](#route-edge-configuration)
       * [Route Reencrypt configuration](#route-reencrypt-configuration)
       * [Route Passthrough configuration](#route-passthrough-configuration)
+* [Security](#security)
+  * [Store sensitive information in secrets](#store-sensitive-information-in-secrets)
+    * [Secure handling of license and passphrase](#secure-handling-of-license-and-passphrase)
+    * [Credentials to pull image from docker registry](#credentials-to-pull-image-from-docker-registry)
+    * [Certificates for Microgateway](#certificates-for-microgateway)
 
 ## Introduction
 This Helm chart bootstraps [Airlock Microgateway](https://www.airlock.com) on a [Kubernetes](https://kubernetes.io) or [Openshift](https://www.openshift.com) cluster using the [Helm](https://helm.sh) package manager. It provisions an Airlock Microgateway pod with a default configuration which can be adjusted to customer needs. For more details about the configuration options, see chapter [Helm Configuration](#dsl-configuration).
@@ -188,7 +193,7 @@ The Airlock Microgateway Helm chart has many parameters and most of them have de
       - example.virtinc.com
   ```
 
-Afterwards apply the Helm chart configuration file with the `-f` parameter.
+  Afterwards apply the Helm chart configuration file with the `-f` parameter.
   ```console
   helm upgrade -i microgateway airlock/microgateway -f custom-values.yaml
   ```
@@ -637,55 +642,82 @@ Therefore, no certificates need to be configured on the Route and termination ta
       termination: passthrough
   ```
 
+## Security
+The following subchapters describes how use and deploy the Microgateway in a secure manner.
 
-## Security (TBD)
+### Store sensitive information in secrets
+Airlock Microgateway uses a few sensitive information which should be protected accordingly. The way to do that in Kubernetes or Openshift environments is, to store them in secrets.
+The following subchapters describe which information should be protected and how this can be achieved.
 
-### Hardening (TBD)
+#### Secure handling of license and passphrase
+It is possible to use the following parameters of this Helm chart to configure license and passphrase:
+* License: `config.generic.license`
+* Passphrase: `config.generic.passphrase`
 
-### Secrets
-Several different Secrets are required to configure the Microgateway properly. 
-Some of these secrets can be generated during the installation of the chart, others must be created in advance and then referenced in the Microgateway chart.
-The following examples show how to create a secret and how to use it with the Microgateway.
+The Helm chart itself creates a secret and configure the Microgateway to use it. While this is already secure, because it is stored as secrets, these information might end in a Git repo or somewhere too many people have access to.
+This is why it would be much better to create a secret containing license and passphrase with a different process.
 
-#### existingSecret
-This secret contains the license and the passphrase (for encryption). 
-For example, this secret can be created as follows:
+  The example below shows how to create a secret containing license and passphrase.
   ```
-  kubectl create secret generic microgatewaysecrets --from-file=license=license_file --from-file=passphrase=passphrase_file
+  kubectl create secret generic microgateway-secrets --from-file=license=<license_file> --from-file=passphrase=<passphrase_file>
   ```
-This secret can then be used with the following custom-values.yaml configuration:
+
+  Afterwards use this secret in the Helm chart configuration file.
+  custom-values.yaml
   ```
   config:
     generic:
-      existingSecret: "microgatewaysecrets"
+      existingSecret: "microgateway-secrets"
   ```
 
-#### imagePullSecrets
-To download the Microgateway image from a private docker repository, an imagePullSecret is required.
-For example, this secret can be created as follows:
+#### Credentials to pull image from docker registry
+The Microgateway image is published in a private Docker registry to which only granted accounts have access to.
+In order to download this image, the credentials must be configured in a secret and passed to the Helm chart to use when downloading the image.
+
+  The example below shows how to create a secret with the credentials to download the image from the Docker registry.
   ```
-  kubectl create secret docker-registry dockersecret --docker-username=<Username> --docker-password=<Access_Token>
+  kubectl create secret docker-registry docker-secret --docker-username=<username> --docker-password=<access_token>
   ```
-This secret can then be used with the following custom-values.yaml configuration:
+
+  Afterwards use this secret in the Helm chart configuration file.
+  custom-values.yaml
   ```
   imagePullSecrets: 
-      - name: "dockersecret"
+      - name: "docker-secret"
   ```
 
-#### tlsSecretName 
-The TLS certificates that are used by the Microgateway can be stored in a secret, so that only the secret name needs to be specified during deployment.  
-Microgateway certificates include both Virtual Host TLS certificates and the TLS certificates for the backend if the backend is to be connected via TLS.  
-Depending on the desired TLS configuration, other certificates are required in Secret.   
-Virtual Host TLS needs the keys `tls.crt`, `tls.key` and `ca.crt`. Make sure to update `route.tls.destinationCACertificate` accordingly, if used.  
-Backend TLS needs the keys `backend-client.crt`, `backend-client.key` and `backend-server-validation-ca.crt`.  
+#### Certificates for Microgateway
+The Microgateway can be configured to use a specific certificate for frontend and/or backend connections. The certificate material must be stored in a secret 
+and passed to the Helm chart to use it.
 
-For example, this secret can be created as follows:
+Used for frontend connection:
+* Certificate: `tls.crt`
+* Private key: `tls.key`
+* CA:          `ca.crt`
+
+:exclamation: In case that [Route Reencrypt configuration](#route-reencrypt-configuration) is used, ensure that `route.tls.destinationCACertificate` is updated accordingly.
+
+Used for backend connection:
+* Certificate: `backend-client.crt`
+* Private key: `backend-client.key`
+* CA:          `backend-server-validation-ca.crt`
+
+
+  The example below shows how to create a secret containing certificates for frontend and backend connections.
   ```
-  kubectl create secret generic microgatewaytls --from-file=tls.crt=virtinc-tls.crt --from-file=tls.key=virtinc-tls.key --from-file=ca.crt=virtinc-ca.crt
+  kubectl create secret generic microgateway-tls \
+                                --from-file=tls.crt=<frontend_cert_file> \
+                                --from-file=tls.key=<frontend_key_file> \
+                                --from-file=ca.crt=<frontend_ca_file> \
+                                --from-file=backend-client.crt=<backend_cert_file> \
+                                --from-file=backend-client.key=<backend_key_file> \
+                                --from-file=backend-ca.crt=<backend_ca_file>
   ```
-This secret can then be used with the following custom-values.yaml configuration:
+
+  Afterwards use this secret in the Helm chart configuration file.
+  custom-values.yaml
   ```
   config:
     generic:
-      tlsSecretName: "microgatewaytls"
+      tlsSecretName: "microgateway-tls"
   ```
