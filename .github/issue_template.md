@@ -15,8 +15,10 @@ Please include a motivation for this issue request.
 Please describe what has been observed.
 
 **Expected behavior**
+Please describe which behavior was expected.
 
 **Current behavior**
+Please describe which behavior has been observed.
 
 **Additional information**
 - [ ] When did this behavior first occur? What has changed?
