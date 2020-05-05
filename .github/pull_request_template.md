@@ -32,7 +32,7 @@ Please describe the tests you ran to verify the changes. Provide instructions th
 * Kubernetes / Openshift:
 
 ## Checklist:
-- [ ] The code has been reviewd (self-review, ...).
+- [ ] The code has been reviewed (self-review, ...).
 - [ ] The parts of the code which are hard to understand are commented.
 - [ ] The corresponding documentation has been updated.
 - [ ] The changes do not cause warnings.
