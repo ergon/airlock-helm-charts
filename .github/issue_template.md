@@ -14,13 +14,13 @@ Please include a motivation for this issue request.
 ## Detail description
 Please describe what has been observed.
 
-**Expected behavior**
+### Expected behavior
 Please describe which behavior was expected.
 
-**Current behavior**
+### Current behavior
 Please describe which behavior has been observed.
 
-**Additional information**
+### Additional information
 - [ ] When did this behavior first occur? What has changed?
 - [ ] Can the issue be reproduced? Does it occur on regular basis?
 
