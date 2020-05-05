@@ -25,7 +25,7 @@ Please describe the tests you ran to verify the changes. Provide instructions th
 - [ ] Test A
 - [ ] Test B
 
-** Versions **
+**Versions**
 * Microgateway:
 * Helm Chart:
 * Helm client:
