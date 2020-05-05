@@ -4,8 +4,8 @@
 
 Please include a summary of the change and which issues are fixed or what feature it provides.
 
-Bug fix # (issue)
-Feature # (issue)
+- Bug fix # (issue)
+- Feature # (issue)
 
 ## Motivation
 Please include a motivation for this pull request.
@@ -25,7 +25,7 @@ Please describe the tests you ran to verify the changes. Provide instructions th
 - [ ] Test A
 - [ ] Test B
 
-*****Version********
+** Versions **
 * Microgateway:
 * Helm Chart:
 * Helm client:
