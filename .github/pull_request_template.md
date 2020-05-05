@@ -22,8 +22,8 @@ Please delete options that are irrelevant.
 ## How has this been tested?
 Please describe the tests you ran to verify the changes. Provide instructions that we can re-run the tests. Please list any relevant details for tests setup.
 
-- [ ] Test A
-- [ ] Test B
+- Test A
+- Test B
 
 **Versions**
 * Microgateway:
