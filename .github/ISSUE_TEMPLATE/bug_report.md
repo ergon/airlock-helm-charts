@@ -7,30 +7,34 @@ assignees: ''
 
 ---
 
-## Describe the bug
-A clear and concise description of what the bug is.
+## Description
+Please include a clear and concise description of what the bug is.
 
 ## To Reproduce
-Steps to reproduce the behavior:
-1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
+Please describe how to reproduce the issue:
+1. Use Helm chart '...'
+2. Apply config '....'
+3. On Kubernetes '....'
 4. See error
 
 ## Expected behavior
-A clear and concise description of what you expected to happen.
+Please describe which behavior was expected.
+
+## Current behavior
+Please describe which behavior has been observed.
 
 ## Screenshots / Logs
 If applicable, add screenshots or logs to help explain your problem.
+
+## Additional information
+- When did this behavior first occur? What has changed?
+- Can the issue be reproduced? Does it occur on regular basis?
 
 ## Versions
  - Microgateway:
  - Helm chart:
  - Helm client:
  - Kubernetes / Openshift:
-
-## Additional context
-Add any other context about the problem here.
 
 ## Checklist
 - [ ] The issue contains all necessary information a third party requires to understand.

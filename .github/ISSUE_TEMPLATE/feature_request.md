@@ -7,8 +7,8 @@ assignees: ''
 
 ---
 
-## Is your feature request related to a problem? Please describe.
-A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
+## Description
+Please include a clear and concise description of the feature request. Is the feature request related to a problem?
 
 ## Describe the solution you'd like
 A clear and concise description of what you want to happen.
@@ -16,5 +16,14 @@ A clear and concise description of what you want to happen.
 ## Describe alternatives you've considered
 A clear and concise description of any alternative solutions or features you've considered.
 
-## Additional context
-Add any other context or screenshots about the feature request here.
+## Additional information
+Please include further information about the feature request (screenshots, documentation, ...)
+
+## Versions
+ - Microgateway:
+ - Helm chart:
+ - Helm client:
+ - Kubernetes / Openshift:
+
+## Checklist
+- [ ] The issue contains all necessary information a third party requires to understand.
