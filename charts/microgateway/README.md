@@ -641,6 +641,7 @@ Therefore, no certificates need to be configured on the Route and termination ta
     tls:
       enabled: true
       termination: passthrough
+      destinationCACertificate: ""
   ```
 
 ## Security
