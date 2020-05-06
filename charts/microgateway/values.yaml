@@ -340,14 +340,14 @@ echo-server:
   service:
     port: 8080
 
-# hpa - HorizontalPodAutoscaler helps to scale up/down the number of replicas
-# based on the average load of all the pods of a deployment
+# hpa - HorizontalPodAutoscaler helps to scale up/down the number of
+# Microgateway replicas based on the average load of all the pods of a deployment
 hpa:
-  # hpa.enabled -- Create a horizontal pod autoscaler
+  # hpa.enabled -- Deploy a horizontal pod autoscaler
   enabled: false
-  # hpa.maxReplicas -- Maximum number of replicas the HPA can scale up to
+  # hpa.maxReplicas -- Maximum number of replicas the HPA scales up to
   maxReplicas: 10
-  # hpa.minReplicas -- Minimum number of replicas the HPA can scale down to
+  # hpa.minReplicas -- Minimum number of replicas the HPA scales down to
   minReplicas: 1
   resource:
     # hpa.resource.memory -- Average memory threshold for HPA to down/up-scale replicas
