@@ -3,7 +3,7 @@ Airlock microgateway
 
 Airlock Microgateway, a WAF container solution to protect other services.
 
-The current chart version is: 0.4.4
+The current chart version is: 0.4.5
 
 ## Table of contents
 * [Introduction](#introduction)
