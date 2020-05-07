@@ -3,7 +3,7 @@ Airlock microgateway
 
 Airlock Microgateway, an Airlock Gateway container solution to protect other services.
 
-The current chart version is: 0.4.4
+The current chart version is: 0.4.5
 
 ## Table of contents
 * [Introduction](#introduction)
@@ -120,6 +120,12 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | echo-server | object | See `echo-server.*`: | Pre-configured [Echo-Server](#echo-server). |
 | echo-server.enabled | bool | `false` | Deploy pre-configured [Echo-Server](#echo-server). |
 | fullnameOverride | string | `""` | Provide a name to substitute for the full names of resources. |
+| hpa | object | See `hpa.*`: | [Horizontal Pod Autoscaler](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) to scale <br> Microgateway based on Memory and CPU consumption.<br><br> :exclamation: Check [API versioning](https://kubernetes.io/docs/concepts/overview/kubernetes-api/#api-versioning) when using this Beta feature. |
+| hpa.enabled | bool | `false` | Deploy a horizontal pod autoscaler. |
+| hpa.maxReplicas | int | `10` | Maximum number of Microgateway replicas. |
+| hpa.minReplicas | int | `1` | Minimum number of Microgateway replicas. |
+| hpa.resource.cpu | int | `50` | Average Microgateway CPU consumption in percentage to scale up/down. |
+| hpa.resource.memory | string | `"2Gi"` | Average Microgateway Memory consumption to scale up/down.<br><br> :exclamation: Update this setting accordingly to `resources.limits.memory`. |
 | image.pullPolicy | string | `"Always"` | Pull policy (`Always`, `IfNotPresent`, `Never`) |
 | image.repository | string | `"docker.ergon.ch/airlock/microgateway"` | Image repository |
 | image.tag | string | `"7.4.sprint10_Build008"` | Image tag |
