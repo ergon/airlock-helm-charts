@@ -278,17 +278,17 @@ resources:
 ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
 ##
 livenessProbe:
-  # livenessProbe.enabled -- Enable liveness probes
+  # livenessProbe.enabled -- Enable liveness probes.
   enabled: true
-  # livenessProbe.initialDelaySeconds -- Initial delay in seconds
+  # livenessProbe.initialDelaySeconds -- Initial delay in seconds.
   initialDelaySeconds: 90
 
 readinessProbe:
-  # readinessProbe.enabled -- Enable readiness probes
+  # readinessProbe.enabled -- Enable readiness probes.
   enabled: true
-  # readinessProbe.initialDelaySeconds -- Initial delay in seconds
+  # readinessProbe.initialDelaySeconds -- Initial delay in seconds.
   initialDelaySeconds: 30
-# nodeSelector -- Define which nodes the pods are scheduled on
+# nodeSelector -- Define which nodes the pods are scheduled on.
 nodeSelector: {}
 # tolerations -- Tolerations for use with node [taints](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/).
 tolerations: []
