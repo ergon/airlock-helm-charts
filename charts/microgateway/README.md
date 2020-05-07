@@ -132,13 +132,13 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | ingress.path | string | `"/"` | Path for the ingress. |
 | ingress.targetPort | string | `"http"` | Target port of the service (`http`, `https` or `<number>`). |
 | ingress.tls | list | `[]` | [Ingress TLS](https://kubernetes.io/docs/concepts/services-networking/ingress/#tls) configuration. |
-| livenessProbe.enabled | bool | `true` | Enable liveness probes |
-| livenessProbe.initialDelaySeconds | int | `90` | Initial delay in seconds |
+| livenessProbe.enabled | bool | `true` | Enable liveness probes. |
+| livenessProbe.initialDelaySeconds | int | `90` | Initial delay in seconds. |
 | nameOverride | string | `""` | Provide a name in place of `microgateway` |
-| nodeSelector | object | `{}` | Define which nodes the pods are scheduled on |
+| nodeSelector | object | `{}` | Define which nodes the pods are scheduled on. |
 | podSecurityContext | object | `{}` | [Security context for the pods](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) |
-| readinessProbe.enabled | bool | `true` | Enable readiness probes |
-| readinessProbe.initialDelaySeconds | int | `30` | Initial delay in seconds |
+| readinessProbe.enabled | bool | `true` | Enable readiness probes. |
+| readinessProbe.initialDelaySeconds | int | `30` | Initial delay in seconds. |
 | redis | object | See `redis.*`: | Pre-configured [Redis](#redis) service. |
 | redis.enabled | bool | `false` | Deploy pre-configured [Redis](#redis). |
 | redis.securityContext.fsGroup | int | `1000140000` | Group ID for the container<br> (Redis master and slave pods). |
