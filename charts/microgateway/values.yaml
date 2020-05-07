@@ -18,19 +18,19 @@ config:
     mapping:
       # config.simple.mapping.entryPath -- The `entry_path` of the app.
       entryPath: /
-      # config.simple.mapping.operationalMode -- Operational mode (`production`, `integration`)
+      # config.simple.mapping.operationalMode -- Operational mode (`production`, `integration`).
       operationalMode: production
-      # config.simple.mapping.sessionHandling -- Session handling (`enforce_session`, `ignore_session`, `optional_session`, `optional_session_no_refresh`)
+      # config.simple.mapping.sessionHandling -- Session handling (`enforce_session`, `ignore_session`, `optional_session`, `optional_session_no_refresh`).
       # @default -- - `enforce_session`<br> If `redis.enabled=true` <br> or `config.global.redisService`<br><br> - `ignore_session`<br> If `redis.enabled=false`
       sessionHandling: ""
       denyRules:
-        # config.simple.mapping.denyRules.enabled -- Enable all Deny rules
+        # config.simple.mapping.denyRules.enabled -- Enable all Deny rules.
         enabled: true
-        # config.simple.mapping.denyRules.level -- Security Level for all Deny rules (`basic`, `standard`, `strict`)
+        # config.simple.mapping.denyRules.level -- Security Level for all Deny rules (`basic`, `standard`, `strict`).
         level: standard
-        # config.simple.mapping.denyRules.logOnly -- Enable log only for all Deny rules
+        # config.simple.mapping.denyRules.logOnly -- Enable log only for all Deny rules.
         logOnly: false
-        # config.simple.mapping.denyRules.exceptions -- Deny rule exceptions
+        # config.simple.mapping.denyRules.exceptions -- Deny rule exceptions.
         exceptions: []
         # - parameter_name:
         #     pattern: (PCRE Pattern-String)
@@ -50,10 +50,10 @@ config:
   # @default -- See `config.global.*`:
   global:
     expert_settings:
-      # config.global.expert_settings.apache -- Global Apache Expert Settings (multiline string)
+      # config.global.expert_settings.apache -- Global Apache Expert Settings (multiline string).
       # @default -- ""
       apache:
-      # config.global.expert_settings.security_gate -- Global SecurityGate Expert Settings (multiline string)
+      # config.global.expert_settings.security_gate -- Global SecurityGate Expert Settings (multiline string).
       # @default -- ""
       security_gate:
     # config.global.logLevel -- Log level (`info`, `trace`).<br>
@@ -72,10 +72,10 @@ config:
     backend:
       tls:
         # config.global.backend.tls.serverCa -- Validates the backend server certificate against the configured CA. <br>
-        # :exclamation: Must be configured in `config.generic.tlsSecretName`
+        # :exclamation: Must be configured in `config.generic.tlsSecretName`.
         serverCa: false
         # config.global.backend.tls.clientCert -- Use TLS client certificate for backend connections. <br>
-        # :exclamation: Must be configured in `config.generic.tlsSecretName`
+        # :exclamation: Must be configured in `config.generic.tlsSecretName`.
         clientCert: false
         # config.global.backend.tls.verifyHost -- Verify the backend TLS certificate.<br>
         # :exclamation: `config.global.backend.tls.serverCa` must be configured in order to work.
@@ -97,7 +97,7 @@ config:
   # config.generic -- Available for:<br>
   # - [Simple DSL configuration](#simple-dsl-configuration)<br>
   # - [Advanced DSL configuration](#advanced-dsl-configuration)<br>
-  # - [Expert DSL configuration](#expert-dsl-configuration)
+  # - [Expert DSL configuration](#expert-dsl-configuration).
   # @default -- See `config.generic.*`:
   generic:
     # config.generic.env -- [Environment variables](#environment-variables)
@@ -116,7 +116,7 @@ config:
     # CA: `backend-server-validation-ca.crt`
     # @default -- ""
     tlsSecretName:
-    # config.generic.passphrase -- Passphrase used for encryption
+    # config.generic.passphrase -- Passphrase used for encryption.
     # @default -- - `passphrase`<br> If `passphrase` in `config.generic.existingSecret` <br><br> - `<generated passphrase>`<br> If no passphrase available.
     passphrase:
     # config.generic.license -- (string) License (multiline string)
@@ -136,14 +136,14 @@ config:
   expert:
     dsl: {}
 
-# commonLabels -- Labels to add to all resources
+# commonLabels -- Labels to add to all resources.
 commonLabels: {}
-# imagePullSecrets -- Reference to one or more secrets to use when pulling images
+# imagePullSecrets -- Reference to one or more secrets to use when pulling images.
 imagePullSecrets: []
   # - name: "image-pull-secret"
 # nameOverride -- Provide a name in place of `microgateway`
 nameOverride: ""
-# fullnameOverride -- Provide a name to substitute for the full names of resources
+# fullnameOverride -- Provide a name to substitute for the full names of resources.
 fullnameOverride: ""
 # podSecurityContext -- [Security context for the pods](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod)
 podSecurityContext: {}
@@ -161,18 +161,18 @@ service:
   port: 80
   # service.tlsPort -- Service TLS port
   tlsPort: 443
-  # service.annotations -- Annotations to set on the service
+  # service.annotations -- Annotations to set on the service.
   annotations: {}
     # service.alpha.openshift.io/serving-cert-secret-name: microgateway
-  # service.labels -- Additional labels to add on the service
+  # service.labels -- Additional labels to add on the service.
   labels: {}
 
-# ingress -- [Kubernetes Ingress](#kubernetes-ingress)
+# ingress -- [Kubernetes Ingress](#kubernetes-ingress).
 # @default -- See `ingress.*`:
 ingress:
-  # ingress.enabled -- Create an ingress object
+  # ingress.enabled -- Create an ingress object.
   enabled: false
-  # ingress.annotations -- Annotations to set on the ingress
+  # ingress.annotations -- Annotations to set on the ingress.
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
     # kubernetes.io/tls-acme: "true"
@@ -181,17 +181,17 @@ ingress:
     # nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
     # nginx.ingress.kubernetes.io/proxy-ssl-verify: "true"
     # nginx.ingress.kubernetes.io/proxy-ssl-secret: secretName
-  # ingress.labels -- Additional labels to add on the Microgateway ingress
+  # ingress.labels -- Additional labels to add on the Microgateway ingress.
   labels: {}
-  # ingress.hosts -- List of ingress hosts
+  # ingress.hosts -- List of ingress hosts.
   hosts:
     - virtinc.com
-  # ingress.path -- Path for the ingress
+  # ingress.path -- Path for the ingress.
   path: /
-  # ingress.targetPort -- Target port of the service (`http`, `https` or `<number>`)
+  # ingress.targetPort -- Target port of the service (`http`, `https` or `<number>`).
   targetPort: http
 
-  # ingress.tls -- [Ingress TLS](https://kubernetes.io/docs/concepts/services-networking/ingress/#tls) configuration
+  # ingress.tls -- [Ingress TLS](https://kubernetes.io/docs/concepts/services-networking/ingress/#tls) configuration.
   tls: []
   #  - secretName: virtinc-tls
   #    hosts:
@@ -199,42 +199,42 @@ ingress:
 
 ## OpenShift route configuration.
 ## ref: https://docs.openshift.com/container-platform/3.11/architecture/networking/routes.html
-# route -- [Openshift Route](#openshift-route)
+# route -- [Openshift Route](#openshift-route).
 # @default -- See `route.*`:
 route:
-  # route.enabled -- Create a route object
+  # route.enabled -- Create a route object.
   enabled: false
-  # route.annotations -- Annotations to set on the route
+  # route.annotations -- Annotations to set on the route.
   annotations: {}
     # kubernetes.io/tls-acme: "true"
     # haproxy.router.openshift.io/disable_cookies: "true"
     # haproxy.router.openshift.io/balance: roundrobin
-  # route.labels -- Additional labels add on the Microgateway route
+  # route.labels -- Additional labels add on the Microgateway route.
   labels: {}
-  # route.hosts --  List of host names
+  # route.hosts --  List of host names.
   hosts:
     - virtinc.com
-  # route.path -- Path for the route
+  # route.path -- Path for the route.
   path: /
-  # route.targetPort -- Target port of the service (`http`, `https` or `<number>`)
+  # route.targetPort -- Target port of the service (`http`, `https` or `<number>`).
   targetPort: https
 
   ## TLS configuration
   ## ref: https://docs.openshift.com/container-platform/3.11/architecture/networking/routes.html#secured-routes
   ##
   tls:
-    # route.tls.enabled -- Enable TLS for the route
+    # route.tls.enabled -- Enable TLS for the route.
     enabled: true
-    # route.tls.insecureEdgeTerminationPolicy -- Define the insecureEdgeTerminationPolicy of the route (`Allow`, `Redirect`, `None`)
+    # route.tls.insecureEdgeTerminationPolicy -- Define the insecureEdgeTerminationPolicy of the route (`Allow`, `Redirect`, `None`).
     insecureEdgeTerminationPolicy: Redirect
-    # route.tls.termination -- Termination of the route (`edge`, `reencrypt`, `passthrough`)
+    # route.tls.termination -- Termination of the route (`edge`, `reencrypt`, `passthrough`).
     termination: reencrypt
-    # route.tls.certificate -- Certificate to be used (multiline string)
+    # route.tls.certificate -- Certificate to be used (multiline string).
     # @default -- ""
     certificate:  # |
       # -----BEGIN CERTIFICATE-----
       # -----END CERTIFICATE-----
-    # route.tls.key -- Private key to be used for certificate (multiline string)
+    # route.tls.key -- Private key to be used for certificate (multiline string).
     # @default -- ""
     key:  # |
       # -----BEGIN RSA PRIVATE KEY-----
@@ -265,7 +265,7 @@ route:
       Q4ph1jI/QLl5lsYtDm4SLt1ALvgRQj8QerJdZ/SrmfFmUkOx3lGpBChM0lT+wkrI
       aw/GIcvwLSquzFBrlU3Jhg+wu8p/514lgiShy39fmzMOa3Q0/5jF3qM74+lGUsA=
       -----END CERTIFICATE-----
-# resources -- [Resource limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container)
+# resources -- [Resource limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container).
 resources:
   requests:
     memory: "512Mi"
@@ -290,10 +290,10 @@ readinessProbe:
   initialDelaySeconds: 30
 # nodeSelector -- Define which nodes the pods are scheduled on
 nodeSelector: {}
-# tolerations -- Tolerations for use with node [taints](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/)
+# tolerations -- Tolerations for use with node [taints](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/).
 tolerations: []
 
-# affinity -- (string) Assign custom [affinity rules](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/) (multiline string)
+# affinity -- (string) Assign custom [affinity rules](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/) (multiline string).
 affinity:
   # podAntiAffinity:
   #   requiredDuringSchedulingIgnoredDuringExecution:
@@ -316,10 +316,10 @@ redis:
   fullnameOverride: redis
   securityContext:
     # redis.securityContext.fsGroup -- Group ID for the container<br>
-    # (Redis master and slave pods)
+    # (Redis master and slave pods).
     fsGroup: 1000140000
     # redis.securityContext.runAsUser -- User ID for the container<br>
-    # (Redis master and slave pods)
+    # (Redis master and slave pods).
     runAsUser: 1000140000
   persistence:
     enabled: false
