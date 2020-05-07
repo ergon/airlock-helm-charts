@@ -134,16 +134,16 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | ingress.tls | list | `[]` | [Ingress TLS](https://kubernetes.io/docs/concepts/services-networking/ingress/#tls) configuration. |
 | livenessProbe.enabled | bool | `true` | Enable liveness probes. |
 | livenessProbe.initialDelaySeconds | int | `90` | Initial delay in seconds. |
-| nameOverride | string | `""` | Provide a name in place of `microgateway` |
+| nameOverride | string | `""` | Provide a name in place of `microgateway`. |
 | nodeSelector | object | `{}` | Define which nodes the pods are scheduled on. |
-| podSecurityContext | object | `{}` | [Security context for the pods](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) |
+| podSecurityContext | object | `{}` | [Security context for the pods](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod). |
 | readinessProbe.enabled | bool | `true` | Enable readiness probes. |
 | readinessProbe.initialDelaySeconds | int | `30` | Initial delay in seconds. |
 | redis | object | See `redis.*`: | Pre-configured [Redis](#redis) service. |
 | redis.enabled | bool | `false` | Deploy pre-configured [Redis](#redis). |
 | redis.securityContext.fsGroup | int | `1000140000` | Group ID for the container<br> (Redis master and slave pods). |
 | redis.securityContext.runAsUser | int | `1000140000` | User ID for the container<br> (Redis master and slave pods). |
-| replicaCount | int | `1` | Desired number of Microgateway pods |
+| replicaCount | int | `1` | Desired number of Microgateway pods. |
 | resources | object | `{"limits":{"cpu":"4","memory":"4048Mi"},"requests":{"cpu":"500m","memory":"512Mi"}}` | [Resource limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container). |
 | route | object | See `route.*`: | [Openshift Route](#openshift-route). |
 | route.annotations | object | `{}` | Annotations to set on the route. |
@@ -158,7 +158,7 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | route.tls.insecureEdgeTerminationPolicy | string | `"Redirect"` | Define the insecureEdgeTerminationPolicy of the route (`Allow`, `Redirect`, `None`). |
 | route.tls.key | string | "" | Private key to be used for certificate (multiline string). |
 | route.tls.termination | string | `"reencrypt"` | Termination of the route (`edge`, `reencrypt`, `passthrough`). |
-| securityContext | object | `{}` | [Security context for a container](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container) |
+| securityContext | object | `{}` | [Security context for a container](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container). |
 | service.annotations | object | `{}` | Annotations to set on the service. |
 | service.labels | object | `{}` | Additional labels to add on the service. |
 | service.port | int | `80` | Service port |
