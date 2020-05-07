@@ -97,7 +97,7 @@ config:
   # config.generic -- Available for:<br>
   # - [Simple DSL configuration](#simple-dsl-configuration)<br>
   # - [Advanced DSL configuration](#advanced-dsl-configuration)<br>
-  # - [Expert DSL configuration](#expert-dsl-configuration).
+  # - [Expert DSL configuration](#expert-dsl-configuration)
   # @default -- See `config.generic.*`:
   generic:
     # config.generic.env -- [Environment variables](#environment-variables)
