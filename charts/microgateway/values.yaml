@@ -109,7 +109,7 @@ config:
     # Certificate: `tls.crt`<br>
     # Private key: `tls.key`<br>
     # CA: `ca.crt` <br>
-    # :exclamation: Update`route.tls.destinationCACertificate` accordingly.<br><br>
+    # :exclamation: Update `route.tls.destinationCACertificate` accordingly.<br><br>
     # _Backend:_<br>
     # Certificate: `backend-client.crt`<br>
     # Private key: `backend-client.key`<br>
@@ -340,17 +340,20 @@ echo-server:
   service:
     port: 8080
 
-# hpa - HorizontalPodAutoscaler helps to scale up/down the number of
-# Microgateway replicas based on the average load of all the pods of a deployment
+# hpa -- [Horizontal Pod Autoscaler](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) to scale <br>
+# Microgateway based on Memory and CPU consumption.<br><br>
+# :exclamation: Check [API versioning](https://kubernetes.io/docs/concepts/overview/kubernetes-api/#api-versioning) when using this Beta feature.
+# @default -- See `hpa.*`:
 hpa:
-  # hpa.enabled -- Deploy a horizontal pod autoscaler
+  # hpa.enabled -- Deploy a horizontal pod autoscaler.
   enabled: false
-  # hpa.maxReplicas -- Maximum number of replicas the HPA scales up to
+  # hpa.maxReplicas -- Maximum number of Microgateway replicas.
   maxReplicas: 10
-  # hpa.minReplicas -- Minimum number of replicas the HPA scales down to
+  # hpa.minReplicas -- Minimum number of Microgateway replicas.
   minReplicas: 1
   resource:
-    # hpa.resource.memory -- Average memory threshold for HPA to down/up-scale replicas
+    # hpa.resource.memory -- Average Microgateway Memory consumption to scale up/down.<br><br>
+    # :exclamation: Update this setting accordingly to `resources.limits.memory`.
     memory: 2Gi
-    # hpa.resource.cpu -- Average CPU threshold in percentage for HPA to down/up-scale replicas
+    # hpa.resource.cpu -- Average Microgateway CPU consumption in percentage to scale up/down.
     cpu: 50
