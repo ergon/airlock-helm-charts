@@ -1,4 +1,4 @@
-# replicaCount -- Desired number of Microgateway pods
+# replicaCount -- Desired number of Microgateway pods.
 replicaCount: 1
 
 image:
@@ -141,14 +141,14 @@ commonLabels: {}
 # imagePullSecrets -- Reference to one or more secrets to use when pulling images.
 imagePullSecrets: []
   # - name: "image-pull-secret"
-# nameOverride -- Provide a name in place of `microgateway`
+# nameOverride -- Provide a name in place of `microgateway`.
 nameOverride: ""
 # fullnameOverride -- Provide a name to substitute for the full names of resources.
 fullnameOverride: ""
-# podSecurityContext -- [Security context for the pods](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod)
+# podSecurityContext -- [Security context for the pods](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod).
 podSecurityContext: {}
   # fsGroup: 2000
-# securityContext -- [Security context for a container](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container)
+# securityContext -- [Security context for a container](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container).
 securityContext: {}
   # capabilities:
   #   drop:
