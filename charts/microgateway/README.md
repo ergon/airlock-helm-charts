@@ -85,7 +85,7 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | commonLabels | object | `{}` | Labels to add to all resources. |
 | config.advanced.apps | list | `[]` | [Advanced DSL configuration](#advanced-dsl-configuration) |
 | config.expert.dsl | object | `{}` | [Expert DSL configuration](#expert-dsl-configuration) |
-| config.generic | object | See `config.generic.*`: | Available for:<br> - [Simple DSL configuration](#simple-dsl-configuration)<br> - [Advanced DSL configuration](#advanced-dsl-configuration)<br> - [Expert DSL configuration](#expert-dsl-configuration). |
+| config.generic | object | See `config.generic.*`: | Available for:<br> - [Simple DSL configuration](#simple-dsl-configuration)<br> - [Advanced DSL configuration](#advanced-dsl-configuration)<br> - [Expert DSL configuration](#expert-dsl-configuration) |
 | config.generic.env | list | `[]` | [Environment variables](#environment-variables) |
 | config.generic.existingSecret | string | "" | Name of an existing secret containing:<br><br> license: `license`<br> passphrase: `passphrase` |
 | config.generic.license | string | "" | License (multiline string) |
