@@ -39,11 +39,11 @@ The current chart version is: 0.4.4
 * [Security](#security)
   * [Store sensitive information in secrets](#store-sensitive-information-in-secrets)
     * [Secure handling of license and passphrase](#secure-handling-of-license-and-passphrase)
-    * [Credentials to pull image from docker registry](#credentials-to-pull-image-from-docker-registry)
+    * [Credentials to pull image from Docker registry](#credentials-to-pull-image-from-docker-registry)
     * [Certificates for Microgateway](#certificates-for-microgateway)
 
 ## Introduction
-This Helm chart bootstraps [Airlock Microgateway](https://www.airlock.com) on a [Kubernetes](https://kubernetes.io) or [Openshift](https://www.openshift.com) cluster using the [Helm](https://helm.sh) package manager. It provisions an Airlock Microgateway pod with a default configuration that can be adjusted to customer needs. For more details about the configuration options, see chapter [Helm Configuration](#dsl-configuration).
+This Helm chart bootstraps [Airlock Microgateway](https://www.airlock.com) on a [Kubernetes](https://kubernetes.io) or [Openshift](https://www.openshift.com) cluster using the [Helm](https://helm.sh) package manager. It provisions an Airlock Microgateway Pod with a default configuration that can be adjusted to customer needs. For more details about the configuration options, see chapter [Helm Configuration](#dsl-configuration).
 
 ## Prerequisites
 * The Airlock Microgateway image
@@ -124,7 +124,7 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | image.repository | string | `"docker.ergon.ch/airlock/microgateway"` | Image repository |
 | image.tag | string | `"7.4.sprint10_Build008"` | Image tag |
 | imagePullSecrets | list | `[]` | Reference to one or more secrets to use when pulling images. |
-| ingress | object | See `ingress.*`: | [Kubernetes Ingress](#kubernetes-ingress) |
+| ingress | object | See `ingress.*`: | [Kubernetes Ingress](#kubernetes-ingress). |
 | ingress.annotations | object | `{"nginx.ingress.kubernetes.io/rewrite-target":"/"}` | Annotations to set on the ingress. |
 | ingress.enabled | bool | `false` | Create an ingress object. |
 | ingress.hosts | list | `["virtinc.com"]` | List of ingress hosts. |
@@ -132,20 +132,20 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | ingress.path | string | `"/"` | Path for the ingress. |
 | ingress.targetPort | string | `"http"` | Target port of the service (`http`, `https` or `<number>`). |
 | ingress.tls | list | `[]` | [Ingress TLS](https://kubernetes.io/docs/concepts/services-networking/ingress/#tls) configuration. |
-| livenessProbe.enabled | bool | `true` | Enable liveness probes. |
-| livenessProbe.initialDelaySeconds | int | `90` | Initial delay in seconds. |
-| nameOverride | string | `""` | Provide a name in place of `microgateway`. |
-| nodeSelector | object | `{}` | Define which nodes the pods are scheduled on. |
-| podSecurityContext | object | `{}` | [Security context for the pods.](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) |
-| readinessProbe.enabled | bool | `true` | Enable readiness probes. |
-| readinessProbe.initialDelaySeconds | int | `30` | Initial delay in seconds. |
+| livenessProbe.enabled | bool | `true` | Enable liveness probes |
+| livenessProbe.initialDelaySeconds | int | `90` | Initial delay in seconds |
+| nameOverride | string | `""` | Provide a name in place of `microgateway` |
+| nodeSelector | object | `{}` | Define which nodes the pods are scheduled on |
+| podSecurityContext | object | `{}` | [Security context for the pods](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod) |
+| readinessProbe.enabled | bool | `true` | Enable readiness probes |
+| readinessProbe.initialDelaySeconds | int | `30` | Initial delay in seconds |
 | redis | object | See `redis.*`: | Pre-configured [Redis](#redis) service. |
 | redis.enabled | bool | `false` | Deploy pre-configured [Redis](#redis). |
 | redis.securityContext.fsGroup | int | `1000140000` | Group ID for the container<br> (Redis master and slave pods). |
 | redis.securityContext.runAsUser | int | `1000140000` | User ID for the container<br> (Redis master and slave pods). |
-| replicaCount | int | `1` | Desired number of Microgateway pods. |
-| resources | object | `{"limits":{"cpu":"4","memory":"4048Mi"},"requests":{"cpu":"500m","memory":"512Mi"}}` | [Resource limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) |
-| route | object | See `route.*`: | [Openshift Route](#openshift-route) |
+| replicaCount | int | `1` | Desired number of Microgateway pods |
+| resources | object | `{"limits":{"cpu":"4","memory":"4048Mi"},"requests":{"cpu":"500m","memory":"512Mi"}}` | [Resource limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container). |
+| route | object | See `route.*`: | [Openshift Route](#openshift-route). |
 | route.annotations | object | `{}` | Annotations to set on the route. |
 | route.enabled | bool | `false` | Create a route object. |
 | route.hosts | list | `["virtinc.com"]` |  List of host names. |
@@ -158,7 +158,7 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | route.tls.insecureEdgeTerminationPolicy | string | `"Redirect"` | Define the insecureEdgeTerminationPolicy of the route (`Allow`, `Redirect`, `None`). |
 | route.tls.key | string | "" | Private key to be used for certificate (multiline string). |
 | route.tls.termination | string | `"reencrypt"` | Termination of the route (`edge`, `reencrypt`, `passthrough`). |
-| securityContext | object | `{}` | [Security context for a container.](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container) |
+| securityContext | object | `{}` | [Security context for a container](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container) |
 | service.annotations | object | `{}` | Annotations to set on the service. |
 | service.labels | object | `{}` | Additional labels to add on the service. |
 | service.port | int | `80` | Service port |
@@ -239,7 +239,7 @@ Finally, apply the Helm chart configuration file with `-f` parameter.
 Please refer to the [Redis Helm chart](https://hub.helm.sh/charts/bitnami/redis) to see all possible parameters of the Redis Helm chart.
 
 :warning: **Adjustments of the default settings**:<br>
-The delivered Helm chart comes preconfigured and tested for the dependent Redis service. Adjusting those settings can cause issues.
+The delivered Helm chart comes pre-configured and tested for the dependent Redis service. Adjusting those settings can cause issues.
 
 ### Echo-Server
 For the first deployment, it could be very useful to have a backend service processing requests. For this purpose the dependent Echo-Server can be deployed by doing the following:
@@ -380,7 +380,7 @@ The use cases outlined above can also occur slightly differently. But all of the
 In case that the [Advanced DSL configuration](#advanced-dsl-configuration) does not suite, the expert configuration options must be used. There are a few reasons listed below:
 
 * The Microgateway DSL configuration options are not available as Helm chart parameters (e.g. base_template_file, session.store_mode, ...)
-* The Microgateway DSL configuration file has already been used/tested thorougly. To reduce the risk of a broken or unsecure configuration, do not modify the preconfigured configuration file.
+* The Microgateway DSL configuration file has already been used/tested thorougly. To reduce the risk of a broken or unsecure configuration, do not modify the pre-configured configuration file.
 
 
 **Example:**
@@ -432,8 +432,7 @@ In case that the [Advanced DSL configuration](#advanced-dsl-configuration) does 
 
 ## Environment variables
 Environment variables can be configured with the Helm chart and used within the [DSL Configuration](#dsl-configuration).
-This works for all three DSL of the above configuration setups (simple, advanced and expert). The example below illustrates how to 
-configure environment variables in combination with the [Simple DSL configuration](#simple-dsl-configuration).
+This works for all three DSL of the above configuration setups (simple, advanced and expert). The example below illustrates how to configure environment variables in combination with the [Simple DSL configuration](#simple-dsl-configuration).
 
   env-variables.yaml
   ```
@@ -449,7 +448,7 @@ configure environment variables in combination with the [Simple DSL configuratio
   custom-values.yaml
   ```
   config:
-    simple: 
+    simple:
       mapping:
         operationalMode: "@@WAF_CFG_OPERATIONALMODE@@"
         denyRules:
@@ -463,13 +462,12 @@ Finally, apply the Helm chart configuration file with `-f` parameter.
   ```
 
 ## Probes
-Probes are used in Kubernetes and Openshift to determine if a pod is ready and in good health to process requests.
+Probes are used in Kubernetes and Openshift to determine if a Pod is ready and in good health to process requests.
 
 ### Readiness Probe
 The readiness probe determines whether a Pod is ready to process requests. This means that requests are only forwarded to this Pod once it is in ready state.
 
-The Helm chart is already pre-configured for the readiness probe endpoint of the Microgateway Pod. A huge Microgateway configuration could require to increase the initial delay time. 
-This can be accomplished by configuring the following parameter:
+The Helm chart is already pre-configured for the readiness probe endpoint of the Microgateway Pod. A huge Microgateway configuration could require to increase the initial delay time. This can be accomplished by configuring the following parameter:
 
   ```
   readinessProbe:
@@ -479,10 +477,9 @@ This can be accomplished by configuring the following parameter:
 If desired, the readiness probe can be disabled with `readinessProbe.enabled=false`. This way, the Pod is ready immediately and receives requests.
 
 ### Liveness Probe
-The liveness Probe determines whether a pod is in good health. If the liveness probe fails, the Pod is terminated and new one is started.
+The liveness Probe determines whether a Pod is in good health. If the liveness probe fails, the Pod is terminated and new one is started.
 
-The Helm chart is already pre-configured for the liveness probe endpoint of the Microgateway Pod. A huge Microgateway configuration could require to increase the initial delay time. 
-This can be accomplished by configuring the following parameter:
+The Helm chart is already pre-configured for the liveness probe endpoint of the Microgateway Pod. A huge Microgateway configuration could require to increase the initial delay time. This can be accomplished by configuring the following parameter:
 
   ```
   livenessProbe:
@@ -599,7 +596,7 @@ The difference to TLS termination type "Edge" is:
 
 In other words, the entire path of the connection is encrypted and verified, also within the Openshift cluster.
 
-  To setup Re-encrypt TLS termination, use the following configuration:
+  To setup Re-encrypt TLS termination, use the following configuration
   ```
   route:
     enabled: true
@@ -641,13 +638,14 @@ Therefore, no certificates need to be configured on the Route and termination ta
     tls:
       enabled: true
       termination: passthrough
+      destinationCACertificate: ""
   ```
 
 ## Security
 The following subchapters describes how to use and securely deploy the Microgateway.
 
 ### Store sensitive information in secrets
-Airlock Microgateway uses a few sensitive information that should be protected accordingly. E. g. in Kubernetes or Openshift environments these information should be stored in secrets.
+Airlock Microgateway uses a few sensitive information that should be protected accordingly. E.g. in Kubernetes or Openshift environments these information should be stored in secrets.
 The following subchapters describe which information should be protected and how this can be achieved.
 
 #### Secure handling of license and passphrase
