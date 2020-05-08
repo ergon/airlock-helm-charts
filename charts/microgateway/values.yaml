@@ -321,15 +321,17 @@ redis:
     # redis.securityContext.runAsUser -- User ID for the container<br>
     # (Redis master and slave pods).
     runAsUser: 1000140000
-  persistence:
-    enabled: false
   master:
     command: redis-server
     disableCommands: ["FLUSHDB"]
     # "FLUSHDB" must not be deactivated, because the Microgateway needs this command
     # to configure the redis session store.
+    persistence:
+      enabled: false
   slave:
     command: redis-server
+    persistence:
+      enabled: false
 
 # echo-server -- Pre-configured [Echo-Server](#echo-server).
 # @default -- See `echo-server.*`:
