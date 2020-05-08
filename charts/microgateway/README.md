@@ -270,7 +270,9 @@ Depending on the environment and use case, one of the options might suit better 
 
 ### Simple DSL configuration
 The simple DSL configuration suites best for the following use case:
-* Virtual Host 1: abc.com -> Mapping 1: / -> Backend Service 1
+| Virtual Host | Mapping | Backend Service |
+|--|--|--|
+| VH1, FQDN: virtinc.com | M1, Path: / | BE1 |
 
 Restrictions for Simple DSL configuration:
 * Only one Virtual Host is configured.
@@ -320,16 +322,21 @@ By default, the Airlock Microgateway is configured with the [Simple DSL configur
 In case that the [Simple DSL configuration](#simple-dsl-configuration) does not suite, the advanced configuration options might help. The following use cases might require this kind of configuration:
 
 **_Use Case 1)_**
-* Virtual Host 1: abc.com -> Mapping 1: / -> Backend Service 1
-* Virtual Host 2: xyz.com -> Mapping 2: / -> Backend Service 1
+| Virtual Host | Mapping | Backend Service |
+|--|--|--|
+| VH1, FQDN: virtinc.com | M1, Path: / | BE1 |
+| VH2, FQDN: example.com | M2, Path: / | BE1 |
 
 **_Use Case 2)_**
-* Virtual Host 1: abc.com -> Mapping 1: /      -> Backend Service 1
-                          -> Mapping 2: /auth/ -> Backend Service 1
+| Virtual Host | Mapping | Backend Service |
+|--|--|--|
+| VH1, FQDN: virtinc.com | M1, Path: /<br>M2, Path: /auth/ | BE1 |
 
 **_Use Case 3)_**
-* Virtual Host 1: abc.com -> Mapping 1: / -> Backend Service 1
-* Virtual Host 2: xyz.com -> Mapping 2: / -> Backend Service 2
+| Virtual Host | Mapping | Backend Service |
+|--|--|--|
+| VH1, FQDN: virtinc.com | M1, Path: / | BE1 |
+| VH2, FQDN: example.com | M2, Path: / | BE2 |
 
 The use cases outlined above can also occur slightly differently. But all of them have in common that more than one Virtual Hosts, Mappings or Backend Services are used. Whenever this is the case, the [Advanced DSL configuration](#advanced-dsl-configuration) should be preferred over the [Simple DSL configuration](#simple-dsl-configuration).
 
