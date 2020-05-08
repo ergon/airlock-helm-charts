@@ -167,7 +167,7 @@ service:
   # service.labels -- Additional labels to add on the service.
   labels: {}
 
-# ingress -- [Kubernetes Ingress](#kubernetes-ingress).
+# ingress -- [Kubernetes Ingress](#kubernetes-ingress)
 # @default -- See `ingress.*`:
 ingress:
   # ingress.enabled -- Create an ingress object.
@@ -199,7 +199,7 @@ ingress:
 
 ## OpenShift route configuration.
 ## ref: https://docs.openshift.com/container-platform/3.11/architecture/networking/routes.html
-# route -- [Openshift Route](#openshift-route).
+# route -- [Openshift Route](#openshift-route)
 # @default -- See `route.*`:
 route:
   # route.enabled -- Create a route object.
@@ -265,7 +265,7 @@ route:
       Q4ph1jI/QLl5lsYtDm4SLt1ALvgRQj8QerJdZ/SrmfFmUkOx3lGpBChM0lT+wkrI
       aw/GIcvwLSquzFBrlU3Jhg+wu8p/514lgiShy39fmzMOa3Q0/5jF3qM74+lGUsA=
       -----END CERTIFICATE-----
-# resources -- [Resource limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container).
+# resources -- [Resource limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container)
 resources:
   requests:
     memory: "512Mi"

@@ -130,7 +130,7 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | image.repository | string | `"docker.ergon.ch/airlock/microgateway"` | Image repository |
 | image.tag | string | `"7.4.sprint10_Build008"` | Image tag |
 | imagePullSecrets | list | `[]` | Reference to one or more secrets to use when pulling images. |
-| ingress | object | See `ingress.*`: | [Kubernetes Ingress](#kubernetes-ingress). |
+| ingress | object | See `ingress.*`: | [Kubernetes Ingress](#kubernetes-ingress) |
 | ingress.annotations | object | `{"nginx.ingress.kubernetes.io/rewrite-target":"/"}` | Annotations to set on the ingress. |
 | ingress.enabled | bool | `false` | Create an ingress object. |
 | ingress.hosts | list | `["virtinc.com"]` | List of ingress hosts. |
@@ -150,8 +150,8 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | redis.securityContext.fsGroup | int | `1000140000` | Group ID for the container<br> (Redis master and slave pods). |
 | redis.securityContext.runAsUser | int | `1000140000` | User ID for the container<br> (Redis master and slave pods). |
 | replicaCount | int | `1` | Desired number of Microgateway pods. |
-| resources | object | `{"limits":{"cpu":"4","memory":"4048Mi"},"requests":{"cpu":"500m","memory":"512Mi"}}` | [Resource limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container). |
-| route | object | See `route.*`: | [Openshift Route](#openshift-route). |
+| resources | object | `{"limits":{"cpu":"4","memory":"4048Mi"},"requests":{"cpu":"500m","memory":"512Mi"}}` | [Resource limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) |
+| route | object | See `route.*`: | [Openshift Route](#openshift-route) |
 | route.annotations | object | `{}` | Annotations to set on the route. |
 | route.enabled | bool | `false` | Create a route object. |
 | route.hosts | list | `["virtinc.com"]` |  List of host names. |
