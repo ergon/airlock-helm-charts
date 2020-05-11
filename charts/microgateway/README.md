@@ -3,7 +3,7 @@ Airlock microgateway
 
 Airlock Microgateway, an Airlock Gateway container solution to protect other services.
 
-The current chart version is: 0.4.5
+The current chart version is: 0.4.6
 
 ## Table of contents
 * [Introduction](#introduction)
