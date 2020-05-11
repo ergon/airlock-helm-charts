@@ -6,5 +6,3 @@ config:
     existingSecret: "microgatewaysecrets"
 imagePullSecrets:
   - name: "dockersecret"
-ingress:
-  enabled: true

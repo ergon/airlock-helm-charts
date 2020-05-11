@@ -1,0 +1,12 @@
+image:
+    repository: julianbe/microgateway
+    tag: 7.4.sprint10_Build008
+  config:
+    generic:
+      existingSecret: "microgatewaysecrets"
+  imagePullSecrets:
+    - name: "dockersecret"
+redis:
+    enabled: true
+echo-server:
+    enabled: true
