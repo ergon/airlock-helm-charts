@@ -128,7 +128,7 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | hpa.resource.memory | string | `"2Gi"` | Average Microgateway Memory consumption to scale up/down.<br><br> :exclamation: Update this setting accordingly to `resources.limits.memory`. |
 | image.pullPolicy | string | `"Always"` | Pull policy (`Always`, `IfNotPresent`, `Never`) |
 | image.repository | string | `"docker.ergon.ch/airlock/microgateway"` | Image repository |
-| image.tag | string | `"7.4.sprint10_Build008"` | Image tag |
+| image.tag | string | `"7.4.sprint11_Build009"` | Image tag |
 | imagePullSecrets | list | `[]` | Reference to one or more secrets to use when pulling images. |
 | ingress | object | See `ingress.*`: | [Kubernetes Ingress](#kubernetes-ingress) |
 | ingress.annotations | object | `{"nginx.ingress.kubernetes.io/rewrite-target":"/"}` | Annotations to set on the ingress. |
@@ -147,8 +147,6 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | readinessProbe.initialDelaySeconds | int | `30` | Initial delay in seconds. |
 | redis | object | See `redis.*`: | Pre-configured [Redis](#redis) service. |
 | redis.enabled | bool | `false` | Deploy pre-configured [Redis](#redis). |
-| redis.securityContext.fsGroup | int | `1000140000` | Group ID for the container<br> (Redis master and slave pods). |
-| redis.securityContext.runAsUser | int | `1000140000` | User ID for the container<br> (Redis master and slave pods). |
 | replicaCount | int | `1` | Desired number of Microgateway pods. |
 | resources | object | `{"limits":{"cpu":"4","memory":"4048Mi"},"requests":{"cpu":"500m","memory":"512Mi"}}` | [Resource limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) |
 | route | object | See `route.*`: | [Openshift Route](#openshift-route) |
@@ -212,7 +210,7 @@ The Airlock Microgateway Helm chart has the following optional dependencies, whi
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://charts.bitnami.com/bitnami | redis | 10.6.0 |
+| https://charts.bitnami.com/bitnami | redis | 10.6.12 |
 | https://ealenn.github.io/charts | echo-server | 0.3.0 |
 
 ### Redis
@@ -228,9 +226,7 @@ In case that session handling is enabled on Airlock Microgateway, a Redis servic
   ```
   config:
     global:
-      redisService:
-        - <REDIS-SERVICE1>:<PORT>
-        - <REDIS-SERVICE2>:<PORT>
+      redisService: [ <REDIS-SERVICE>:<PORT> ]
   redis:
     enabled: false
   ```
@@ -407,8 +403,7 @@ In case that the [Advanced DSL configuration](#advanced-dsl-configuration) does 
         license_file: /secret/config/license
         session:
           encryption_passphrase_file: /secret/config/passphrase
-          redis_host:
-            - redis-master
+          redis_hosts: [ redis-master ]
         log:
           level: info
         expert_settings:

@@ -5,7 +5,7 @@ image:
   # image.repository -- Image repository
   repository: docker.ergon.ch/airlock/microgateway
   # image.tag -- Image tag
-  tag: 7.4.sprint10_Build008
+  tag: 7.4.sprint11_Build009
   # image.pullPolicy -- Pull policy (`Always`, `IfNotPresent`, `Never`)
   pullPolicy: Always
 
@@ -307,29 +307,16 @@ affinity:
 redis:
   # redis.enabled -- Deploy pre-configured [Redis](#redis).
   enabled: false
-  usePassword: false
-  image:
-    repository: redis
-    tag: 5.0.8
-  cluster:
-    enabled: true
   fullnameOverride: redis
   securityContext:
-    # redis.securityContext.fsGroup -- Group ID for the container<br>
-    # (Redis master and slave pods).
-    fsGroup: 1000140000
-    # redis.securityContext.runAsUser -- User ID for the container<br>
-    # (Redis master and slave pods).
-    runAsUser: 1000140000
+    enabled: false
+  cluster:
+    enabled: false
+  usePassword: false
   master:
-    command: redis-server
-    disableCommands: ["FLUSHDB"]
-    # "FLUSHDB" must not be deactivated, because the Microgateway needs this command
+    disableCommands: []
+    # do not disable any commands since Microgateway needs full control
     # to configure the redis session store.
-    persistence:
-      enabled: false
-  slave:
-    command: redis-server
     persistence:
       enabled: false
 

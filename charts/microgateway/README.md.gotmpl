@@ -133,9 +133,7 @@ In case that session handling is enabled on Airlock Microgateway, a Redis servic
   ```
   config:
     global:
-      redisService:
-        - <REDIS-SERVICE1>:<PORT>
-        - <REDIS-SERVICE2>:<PORT>
+      redisService: [ <REDIS-SERVICE>:<PORT> ]
   redis:
     enabled: false
   ```
@@ -312,8 +310,7 @@ In case that the [Advanced DSL configuration](#advanced-dsl-configuration) does 
         license_file: /secret/config/license
         session:
           encryption_passphrase_file: /secret/config/passphrase
-          redis_host:
-            - redis-master
+          redis_hosts: [ redis-master ]
         log:
           level: info
         expert_settings:
