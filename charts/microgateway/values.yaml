@@ -302,12 +302,12 @@ affinity:
   #           {{- include "microgateway.selectorLabels" . | nindent 10 }}
   #       topologyKey: kubernetes.io/hostname
 
-# extraVolumes -- (list) Add additional volumes. [Volumes](https://kubernetes.io/docs/concepts/storage/volumes/)
+# extraVolumes -- Add additional volumes. [Volumes](https://kubernetes.io/docs/concepts/storage/volumes/)
 extraVolumes: []
     # - name: volumename
     #   configMap:
     #     name: config-map-name
-# extraVolumeMounts -- (list) Add additional volumes mounts.
+# extraVolumeMounts -- Add additional volume mounts.
 extraVolumeMounts: []
     # - name: mountname
     #   mountPath: /path/file.yaml
