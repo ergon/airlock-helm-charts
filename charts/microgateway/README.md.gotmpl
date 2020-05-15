@@ -393,7 +393,7 @@ extraVolumes:
         name: mapping-configmap
 extraVolumeMounts:
     - name: mapping
-      mountPath: /var/config/template/mapping.xml
+      mountPath: /config/template/mapping.xml
       subPath: mapping.xml
 
 config:
@@ -401,7 +401,7 @@ config:
     apps:
       - mappings:
         - name: virtinc
-          mapping_template_path: /var/config/template/mapping.xml   
+          mapping_template_path: /config/template/mapping.xml   
 ```
 
 ## Probes
