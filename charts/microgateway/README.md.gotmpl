@@ -378,8 +378,8 @@ Finally, apply the Helm chart configuration file with `-f` parameter.
   ```
 
 ## Extra Volumes
-The Helm Chart allows you to define extra volumes which can then be used in the Microgateway. 
-The configuration of such additional volumes could look like this, for example: 
+The Helm chart allows you to define extra volumes which can then be used in the Microgateway. 
+The configuration of such additional volumes could look like this: 
 
 ```
 extraVolumes:
@@ -390,6 +390,13 @@ extraVolumeMounts:
     - name: mapping
       mountPath: /var/config/template/mapping.xml
       subPath: mapping.xml
+
+config:
+  advanced:
+    apps:
+      - mappings:
+        - name: virtinc
+          mapping_template_path: /var/config/template/mapping.xml   
 ```
 
 ## Probes
