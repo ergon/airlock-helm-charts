@@ -1,5 +1,7 @@
 apiVersion: v1
-description: Airlock Microgateway, an Airlock Gateway container solution to protect other services.
+description: |
+The *Airlock Microgateway* is a component of the [Airlock Secure Access Hub](https://www.airlock.com/).  
+It is the lightweight, container-based deployment form of the *Airlock Gateway*, a software appliance with reverse-proxy, Web Application Firewall (WAF) and API security functionality.
 home: https://www.airlock.com
 keywords:
   - WAF
@@ -12,5 +14,5 @@ maintainers:
   - email: support@airlock.com
     name: Airlock
 name: microgateway
-version: 0.4.6
+version: 0.4.8
 appVersion: 1.0
