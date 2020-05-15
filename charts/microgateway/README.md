@@ -23,6 +23,7 @@ The current chart version is: 0.4.6
   * [Advanced DSL configuration](#advanced-dsl-configuration)
   * [Expert DSL configuration](#expert-dsl-configuration)
 * [Environment variables](#environment-variables)
+* [Extra Volumes](#extra-volumes)
 * [Probes](#probes)
   * [Readiness Probe](#readiness-probe)
   * [Liveness Probe](#liveness-probe)
