@@ -27,6 +27,7 @@ The current chart version is: {{ template "chart.version" . }}
   * [Advanced DSL configuration](#advanced-dsl-configuration)
   * [Expert DSL configuration](#expert-dsl-configuration)
 * [Environment variables](#environment-variables)
+* [Extra Volumes](#extra-volumes)
 * [Probes](#probes)
   * [Readiness Probe](#readiness-probe)
   * [Liveness Probe](#liveness-probe)
@@ -380,6 +381,28 @@ Finally, apply the Helm chart configuration file with `-f` parameter.
   ```console
   helm upgrade -i microgateway airlock/microgateway -f custom-values.yaml -f env-variables.yaml
   ```
+
+## Extra Volumes
+The Helm chart allows you to define extra volumes which can be used in the Microgateway. 
+The configuration of such additional volumes could look like this: 
+
+```
+extraVolumes:
+    - name: mapping
+      configMap:
+        name: mapping-configmap
+extraVolumeMounts:
+    - name: mapping
+      mountPath: /config/template/mapping.xml
+      subPath: mapping.xml
+
+config:
+  advanced:
+    apps:
+      - mappings:
+        - name: virtinc
+          mapping_template_path: /config/template/mapping.xml   
+```
 
 ## Probes
 Probes are used in Kubernetes and Openshift to determine if a Pod is ready and in good health to process requests.

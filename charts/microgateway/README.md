@@ -29,6 +29,7 @@ The current chart version is: 0.4.8
   * [Advanced DSL configuration](#advanced-dsl-configuration)
   * [Expert DSL configuration](#expert-dsl-configuration)
 * [Environment variables](#environment-variables)
+* [Extra Volumes](#extra-volumes)
 * [Probes](#probes)
   * [Readiness Probe](#readiness-probe)
   * [Liveness Probe](#liveness-probe)
@@ -125,6 +126,8 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | config.simple.mapping.sessionHandling | string | - `enforce_session`<br> If `redis.enabled=true` <br> or `config.global.redisService`<br><br> - `ignore_session`<br> If `redis.enabled=false` | Session handling (`enforce_session`, `ignore_session`, `optional_session`, `optional_session_no_refresh`). |
 | echo-server | object | See `echo-server.*`: | Pre-configured [Echo-Server](#echo-server). |
 | echo-server.enabled | bool | `false` | Deploy pre-configured [Echo-Server](#echo-server). |
+| extraVolumeMounts | list | `[]` | Add additional volume mounts. |
+| extraVolumes | list | `[]` | Add additional volumes. [Volumes](https://kubernetes.io/docs/concepts/storage/volumes/) |
 | fullnameOverride | string | `""` | Provide a name to substitute for the full names of resources. |
 | hpa | object | See `hpa.*`: | [Horizontal Pod Autoscaler](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) to scale <br> Microgateway based on Memory and CPU consumption.<br><br> :exclamation: Check [API versioning](https://kubernetes.io/docs/concepts/overview/kubernetes-api/#api-versioning) when using this Beta feature. |
 | hpa.enabled | bool | `false` | Deploy a horizontal pod autoscaler. |
@@ -474,6 +477,28 @@ Finally, apply the Helm chart configuration file with `-f` parameter.
   ```console
   helm upgrade -i microgateway airlock/microgateway -f custom-values.yaml -f env-variables.yaml
   ```
+
+## Extra Volumes
+The Helm chart allows you to define extra volumes which can be used in the Microgateway. 
+The configuration of such additional volumes could look like this: 
+
+```
+extraVolumes:
+    - name: mapping
+      configMap:
+        name: mapping-configmap
+extraVolumeMounts:
+    - name: mapping
+      mountPath: /config/template/mapping.xml
+      subPath: mapping.xml
+
+config:
+  advanced:
+    apps:
+      - mappings:
+        - name: virtinc
+          mapping_template_path: /config/template/mapping.xml   
+```
 
 ## Probes
 Probes are used in Kubernetes and Openshift to determine if a Pod is ready and in good health to process requests.

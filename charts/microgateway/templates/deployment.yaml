@@ -49,6 +49,9 @@ spec:
           mountPath: /secret/tls/
           readOnly: true
         {{- end }}
+        {{- with .Values.extraVolumeMounts }}
+          {{- toYaml . | nindent 8 }}
+        {{- end }}
         {{- if .Values.livenessProbe.enabled }}
         livenessProbe:
           httpGet:
@@ -78,6 +81,9 @@ spec:
       - name: tls
         secret:
           secretName: {{ . }}
+      {{- end }}
+      {{- with .Values.extraVolumes }}
+        {{- toYaml . | nindent 6 }}
       {{- end }}
     {{- with .Values.nodeSelector }}
       nodeSelector:
