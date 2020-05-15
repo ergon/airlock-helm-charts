@@ -119,6 +119,8 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | config.simple.mapping.sessionHandling | string | - `enforce_session`<br> If `redis.enabled=true` <br> or `config.global.redisService`<br><br> - `ignore_session`<br> If `redis.enabled=false` | Session handling (`enforce_session`, `ignore_session`, `optional_session`, `optional_session_no_refresh`). |
 | echo-server | object | See `echo-server.*`: | Pre-configured [Echo-Server](#echo-server). |
 | echo-server.enabled | bool | `false` | Deploy pre-configured [Echo-Server](#echo-server). |
+| extraVolumeMounts | list | `[]` | (list) Add additional volumes mounts. |
+| extraVolumes | list | `[]` | (list) Add additional volumes. [Volumes](https://kubernetes.io/docs/concepts/storage/volumes/) |
 | fullnameOverride | string | `""` | Provide a name to substitute for the full names of resources. |
 | hpa | object | See `hpa.*`: | [Horizontal Pod Autoscaler](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) to scale <br> Microgateway based on Memory and CPU consumption.<br><br> :exclamation: Check [API versioning](https://kubernetes.io/docs/concepts/overview/kubernetes-api/#api-versioning) when using this Beta feature. |
 | hpa.enabled | bool | `false` | Deploy a horizontal pod autoscaler. |
@@ -468,6 +470,21 @@ Finally, apply the Helm chart configuration file with `-f` parameter.
   ```console
   helm upgrade -i microgateway airlock/microgateway -f custom-values.yaml -f env-variables.yaml
   ```
+
+## Extra Volumes
+The Helm Chart allows you to define extra volumes which can then be used in the Microgateway. 
+The configuration of such additional volumes could look like this, for example: 
+
+```
+extraVolumes:
+    - name: mapping
+      configMap:
+        name: mapping-configmap
+extraVolumeMounts:
+    - name: mapping
+      mountPath: /var/config/template/mapping.xml
+      subPath: mapping.xml
+```
 
 ## Probes
 Probes are used in Kubernetes and Openshift to determine if a Pod is ready and in good health to process requests.

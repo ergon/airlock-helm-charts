@@ -376,6 +376,21 @@ Finally, apply the Helm chart configuration file with `-f` parameter.
   helm upgrade -i microgateway airlock/microgateway -f custom-values.yaml -f env-variables.yaml
   ```
 
+## Extra Volumes
+The Helm Chart allows you to define extra volumes which can then be used in the Microgateway. 
+The configuration of such additional volumes could look like this, for example: 
+
+```
+extraVolumes:
+    - name: mapping
+      configMap:
+        name: mapping-configmap
+extraVolumeMounts:
+    - name: mapping
+      mountPath: /var/config/template/mapping.xml
+      subPath: mapping.xml
+```
+
 ## Probes
 Probes are used in Kubernetes and Openshift to determine if a Pod is ready and in good health to process requests.
 
