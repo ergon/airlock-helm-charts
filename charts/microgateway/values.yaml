@@ -5,7 +5,7 @@ image:
   # image.repository -- Image repository
   repository: docker.ergon.ch/airlock/microgateway
   # image.tag -- Image tag
-  tag: 7.4.sprint11_Build009
+  tag: 7.4.sprint12_Build010
   # image.pullPolicy -- Pull policy (`Always`, `IfNotPresent`, `Never`)
   pullPolicy: Always
 
