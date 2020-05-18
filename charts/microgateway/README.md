@@ -110,7 +110,7 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | config.global.expert_settings.apache | string | "" | Global Apache Expert Settings (multiline string). |
 | config.global.expert_settings.security_gate | string | "" | Global SecurityGate Expert Settings (multiline string). |
 | config.global.logLevel | string | `"info"` | Log level (`info`, `trace`).<br> :exclamation: Never use `trace` in production. |
-| config.global.redisService | list | - `redis-master`<br> If `redis.enabled=true`<br><br> - `""`<br> If `redis.enabled=false` | List of Redis services. |
+| config.global.redisService | list | [] | List of Redis services. |
 | config.global.virtualHost.tls.cipherSuite | string | `""` | Overwrite the default TLS ciphers for frontend connections. |
 | config.global.virtualHost.tls.protocol | string | `""` | Overwrite the default TLS protocol for frontend connections. |
 | config.simple | object | See `config.simple.*`: | [Simple DSL configuration](#simple-dsl-configuration) |
@@ -137,7 +137,7 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | hpa.resource.memory | string | `"2Gi"` | Average Microgateway Memory consumption to scale up/down.<br><br> :exclamation: Update this setting accordingly to `resources.limits.memory`. |
 | image.pullPolicy | string | `"Always"` | Pull policy (`Always`, `IfNotPresent`, `Never`) |
 | image.repository | string | `"docker.ergon.ch/airlock/microgateway"` | Image repository |
-| image.tag | string | `"7.4.sprint11_Build009"` | Image tag |
+| image.tag | string | `"7.4.sprint12_Build010"` | Image tag |
 | imagePullSecrets | list | `[]` | Reference to one or more secrets to use when pulling images. |
 | ingress | object | See `ingress.*`: | [Kubernetes Ingress](#kubernetes-ingress) |
 | ingress.annotations | object | `{"nginx.ingress.kubernetes.io/rewrite-target":"/"}` | Annotations to set on the ingress. |
