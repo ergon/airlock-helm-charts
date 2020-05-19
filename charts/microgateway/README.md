@@ -298,7 +298,7 @@ By default, the Airlock Microgateway is configured with the [Simple DSL configur
     simple:
       mapping:
         entryPath: /
-          operationalMode: integration
+        operationalMode: integration
         denyRules:
           level: strict
           exceptions:
