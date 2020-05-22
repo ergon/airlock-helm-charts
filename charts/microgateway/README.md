@@ -484,13 +484,13 @@ The configuration of such additional volumes could look like this:
 
 ```
 extraVolumes:
-    - name: mapping
-      configMap:
-        name: mapping-configmap
+  - name: mapping
+    configMap:
+      name: mapping-configmap
 extraVolumeMounts:
-    - name: mapping
-      mountPath: /config/template/mapping.xml
-      subPath: mapping.xml
+  - name: mapping
+    mountPath: /config/template/mapping.xml
+    subPath: mapping.xml
 
 config:
   advanced:
