@@ -60,7 +60,7 @@ config:
     # :exclamation: Never use `trace` in production.
     logLevel: info
     # config.global.redisService -- List of Redis services.
-    # @default -- []
+    # @default -- `[]` if `redis.enabled=false` or <br> `[ redis-master ]` if `redis.enabled=true`
     redisService: []
     IPHeader:
       # config.global.IPHeader.header -- HTTP header to extract the client IP address.
