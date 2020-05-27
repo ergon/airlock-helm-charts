@@ -118,13 +118,13 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | config.simple.backend.hostname | string | `"backend-service"` | Backend hostname |
 | config.simple.backend.port | int | `8080` | Backend port |
 | config.simple.backend.protocol | string | `"http"` | Backend protocol |
-| config.simple.mapping.denyRules.enabled | bool | `true` | Enable all Deny rules. |
-| config.simple.mapping.denyRules.exceptions | list | `[]` | Deny rule exceptions. |
-| config.simple.mapping.denyRules.level | string | `"standard"` | Security Level for all Deny rules (`basic`, `standard`, `strict`). |
-| config.simple.mapping.denyRules.logOnly | bool | `false` | Enable log only for all Deny rules. |
+| config.simple.mapping.deny_rules.enabled | bool | `true` | Enable all Deny rules. |
+| config.simple.mapping.deny_rules.exceptions | list | `[]` | Deny rule exceptions. |
+| config.simple.mapping.deny_rules.level | string | `"standard"` | Security Level for all Deny rules (`basic`, `standard`, `strict`). |
+| config.simple.mapping.deny_rules.log_only | bool | `false` | Enable log only for all Deny rules. |
 | config.simple.mapping.entryPath | string | `"/"` | The `entry_path` of the app. |
-| config.simple.mapping.operationalMode | string | `"production"` | Operational mode (`production`, `integration`). |
-| config.simple.mapping.sessionHandling | string | - `enforce_session`<br> If `redis.enabled=true` <br> or `config.global.redis_hosts`<br><br> - `ignore_session`<br> If `redis.enabled=false` | Session handling (`enforce_session`, `ignore_session`, `optional_session`, `optional_session_no_refresh`). |
+| config.simple.mapping.operational_mode | string | `"production"` | Operational mode (`production`, `integration`). |
+| config.simple.mapping.session_handling | string | - `enforce_session`<br> If `redis.enabled=true` <br> or `config.global.redis_hosts`<br><br> - `ignore_session`<br> If `redis.enabled=false` | Session handling (`enforce_session`, `ignore_session`, `optional_session`, `optional_session_no_refresh`). |
 | echo-server | object | See `echo-server.*`: | Pre-configured [Echo-Server](#echo-server). |
 | echo-server.enabled | bool | `false` | Deploy pre-configured [Echo-Server](#echo-server). |
 | extraVolumeMounts | list | `[]` | Add additional volume mounts. |
@@ -338,8 +338,8 @@ By default, the Airlock Microgateway is configured with the [Simple DSL configur
     simple:
       mapping:
         entryPath: /
-        operationalMode: integration
-        denyRules:
+        operational_mode: integration
+        deny_rules:
           level: strict
           exceptions:
             - parameter_name:
@@ -403,7 +403,7 @@ The use cases outlined above can also occur slightly differently. But all of the
               entry_path: /
               operational_mode: integration
               session_handling: enforce_session
-              denyRules:
+              deny_rules:
                 level: standard
                 exceptions:
                   - parameter_name:
@@ -416,7 +416,7 @@ The use cases outlined above can also occur slightly differently. But all of the
             - name: api
               entry_path: /api/
               session_handling: ignore_session
-              denyRules:
+              deny_rules:
                 level: strict
               openapi:
                 spec_file: /config/virtinc_api_openapi.json
@@ -496,9 +496,9 @@ This works for all three DSL of the above configuration setups (simple, advanced
   config:
     generic:
       env:
-        - name: WAF_CFG_OPERATIONALMODE
+        - name: WAF_CFG_operational_mode
           value: production
-        - name: WAF_CFG_LOGONLY
+        - name: WAF_CFG_log_only
           value: false
   ```
 
@@ -507,9 +507,9 @@ This works for all three DSL of the above configuration setups (simple, advanced
   config:
     simple:
       mapping:
-        operationalMode: "@@WAF_CFG_OPERATIONALMODE@@"
-        denyRules:
-          logOnly: "@@WAF_CFG_LOGONLY@@"
+        operational_mode: "@@WAF_CFG_operational_mode@@"
+        deny_rules:
+          log_only: "@@WAF_CFG_log_only@@"
   ```
 
 Finally, apply the Helm chart configuration file with `-f` parameter.
