@@ -79,19 +79,19 @@ data:
     apps:
     - mappings:
       - entry_path: {{ $simple.mapping.entryPath }}
-        operational_mode: {{ $simple.mapping.operationalMode }}
-        {{- if $simple.mapping.sessionHandling }}
-        session_handling: {{ $simple.mapping.sessionHandling }}
+        operational_mode: {{ $simple.mapping.operational_mode }}
+        {{- if $simple.mapping.session_handling }}
+        session_handling: {{ $simple.mapping.session_handling }}
         {{- else if or .Values.redis.enabled $global.redis_hosts }}
         session_handling: {{ "enforce_session" }}
         {{- else }}
         session_handling: {{ "ignore_session" }}
         {{- end }}
         deny_rules:
-        - enable: {{ $simple.mapping.denyRules.enabled }}
-          log_only: {{ $simple.mapping.denyRules.logOnly }}
-          level: {{ $simple.mapping.denyRules.level }}
-          {{- with $simple.mapping.denyRules.exceptions }}
+        - enable: {{ $simple.mapping.deny_rules.enabled }}
+          log_only: {{ $simple.mapping.deny_rules.log_only }}
+          level: {{ $simple.mapping.deny_rules.level }}
+          {{- with $simple.mapping.deny_rules.exceptions }}
           exceptions: {{ toYaml . | nindent 12 }}
           {{- end }}
       backend:

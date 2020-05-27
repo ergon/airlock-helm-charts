@@ -242,8 +242,8 @@ By default, the Airlock Microgateway is configured with the [Simple DSL configur
     simple:
       mapping:
         entryPath: /
-        operationalMode: integration
-        denyRules:
+        operational_mode: integration
+        deny_rules:
           level: strict
           exceptions:
             - parameter_name:
@@ -307,7 +307,7 @@ The use cases outlined above can also occur slightly differently. But all of the
               entry_path: /
               operational_mode: integration
               session_handling: enforce_session
-              denyRules:
+              deny_rules:
                 level: standard
                 exceptions:
                   - parameter_name:
@@ -320,7 +320,7 @@ The use cases outlined above can also occur slightly differently. But all of the
             - name: api
               entry_path: /api/
               session_handling: ignore_session
-              denyRules:
+              deny_rules:
                 level: strict
               openapi:
                 spec_file: /config/virtinc_api_openapi.json
@@ -400,9 +400,9 @@ This works for all three DSL of the above configuration setups (simple, advanced
   config:
     generic:
       env:
-        - name: WAF_CFG_OPERATIONALMODE
+        - name: WAF_CFG_operational_mode
           value: production
-        - name: WAF_CFG_LOGONLY
+        - name: WAF_CFG_log_only
           value: false
   ```
 
@@ -411,9 +411,9 @@ This works for all three DSL of the above configuration setups (simple, advanced
   config:
     simple:
       mapping:
-        operationalMode: "@@WAF_CFG_OPERATIONALMODE@@"
-        denyRules:
-          logOnly: "@@WAF_CFG_LOGONLY@@"
+        operational_mode: "@@WAF_CFG_operational_mode@@"
+        deny_rules:
+          log_only: "@@WAF_CFG_log_only@@"
   ```
 
 Finally, apply the Helm chart configuration file with `-f` parameter.

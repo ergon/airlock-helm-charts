@@ -18,19 +18,19 @@ config:
     mapping:
       # config.simple.mapping.entryPath -- The `entry_path` of the app.
       entryPath: /
-      # config.simple.mapping.operationalMode -- Operational mode (`production`, `integration`).
-      operationalMode: production
-      # config.simple.mapping.sessionHandling -- Session handling (`enforce_session`, `ignore_session`, `optional_session`, `optional_session_no_refresh`).
+      # config.simple.mapping.operational_mode -- Operational mode (`production`, `integration`).
+      operational_mode: production
+      # config.simple.mapping.session_handling -- Session handling (`enforce_session`, `ignore_session`, `optional_session`, `optional_session_no_refresh`).
       # @default -- - `enforce_session`<br> If `redis.enabled=true` <br> or `config.global.redis_hosts`<br><br> - `ignore_session`<br> If `redis.enabled=false`
-      sessionHandling: ""
-      denyRules:
-        # config.simple.mapping.denyRules.enabled -- Enable all Deny rules.
+      session_handling: ""
+      deny_rules:
+        # config.simple.mapping.deny_rules.enabled -- Enable all Deny rules.
         enabled: true
-        # config.simple.mapping.denyRules.level -- Security Level for all Deny rules (`basic`, `standard`, `strict`).
+        # config.simple.mapping.deny_rules.level -- Security Level for all Deny rules (`basic`, `standard`, `strict`).
         level: standard
-        # config.simple.mapping.denyRules.logOnly -- Enable log only for all Deny rules.
-        logOnly: false
-        # config.simple.mapping.denyRules.exceptions -- Deny rule exceptions.
+        # config.simple.mapping.deny_rules.log_only -- Enable log only for all Deny rules.
+        log_only: false
+        # config.simple.mapping.deny_rules.exceptions -- Deny rule exceptions.
         exceptions: []
         # - parameter_name:
         #     pattern: (PCRE Pattern-String)
