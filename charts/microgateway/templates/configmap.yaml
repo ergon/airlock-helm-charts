@@ -14,10 +14,10 @@ data:
     license_file: /secret/config/license
     session:
       encryption_passphrase_file: /secret/config/passphrase
-    {{- if or .Values.redis.enabled $global.redisService }}
-      {{- if $global.redisService }}
+    {{- if or .Values.redis.enabled $global.redis_hosts }}
+      {{- if $global.redis_hosts }}
       redis_hosts:
-        {{- range $global.redisService }} 
+        {{- range $global.redis_hosts }} 
         - {{ . }}
         {{- end }}
       {{- else }}
@@ -82,7 +82,7 @@ data:
         operational_mode: {{ $simple.mapping.operationalMode }}
         {{- if $simple.mapping.sessionHandling }}
         session_handling: {{ $simple.mapping.sessionHandling }}
-        {{- else if or .Values.redis.enabled $global.redisService }}
+        {{- else if or .Values.redis.enabled $global.redis_hosts }}
         session_handling: {{ "enforce_session" }}
         {{- else }}
         session_handling: {{ "ignore_session" }}
