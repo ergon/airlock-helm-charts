@@ -124,7 +124,7 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | config.simple.mapping.denyRules.logOnly | bool | `false` | Enable log only for all Deny rules. |
 | config.simple.mapping.entryPath | string | `"/"` | The `entry_path` of the app. |
 | config.simple.mapping.operationalMode | string | `"production"` | Operational mode (`production`, `integration`). |
-| config.simple.mapping.sessionHandling | string | - `enforce_session`<br> If `redis.enabled=true` <br> or `config.global.redisService`<br><br> - `ignore_session`<br> If `redis.enabled=false` | Session handling (`enforce_session`, `ignore_session`, `optional_session`, `optional_session_no_refresh`). |
+| config.simple.mapping.sessionHandling | string | - `enforce_session`<br> If `redis.enabled=true` <br> or `config.global.redis_hosts`<br><br> - `ignore_session`<br> If `redis.enabled=false` | Session handling (`enforce_session`, `ignore_session`, `optional_session`, `optional_session_no_refresh`). |
 | echo-server | object | See `echo-server.*`: | Pre-configured [Echo-Server](#echo-server). |
 | echo-server.enabled | bool | `false` | Deploy pre-configured [Echo-Server](#echo-server). |
 | extraVolumeMounts | list | `[]` | Add additional volume mounts. |
@@ -275,7 +275,7 @@ In case that session handling is enabled on Airlock Microgateway, a Redis servic
   ```
   config:
     global:
-      redisService: [ <REDIS-SERVICE>:<PORT> ]
+      redis_hosts: [ <REDIS-SERVICE>:<PORT> ]
   redis:
     enabled: false
   ```
