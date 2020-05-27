@@ -59,7 +59,7 @@ config:
     # config.global.logLevel -- Log level (`info`, `trace`).<br>
     # :exclamation: Never use `trace` in production.
     logLevel: info
-    # config.global.redis_hosts -- List of Redis services.
+    # config.global.redis_hosts -- List of Redis hosts.
     # @default -- `[]` if `redis.enabled=false` or <br> `[ redis-master ]` if `redis.enabled=true`
     redis_hosts: []
     IPHeader:
