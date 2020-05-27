@@ -6,7 +6,7 @@ It is the lightweight, container-based deployment form of the *Airlock Gateway*,
 
 The Airlock helm charts are used internally for testing the *Airlock Microgateway*. We make them available publicly under the [MIT license](https://github.com/ergon/airlock-helm-charts/blob/master/LICENSE).
 
-The current chart version is: 0.4.8
+The current chart version is: 0.4.9
 
 ## About Ergon
 *Airlock* is a registered trademark of [Ergon](https://www.ergon.ch). Ergon is a Swiss leader in leveraging digitalisation to create unique and effective client benefits, from conception to market, the result of which is the international distribution of globally revered products.
@@ -21,6 +21,7 @@ The current chart version is: 0.4.8
 * [Configuration](#configuration)
 * [Getting started](#getting-started)
   * [Override default values](#override-default-values)
+  * [Quick start license](#quick-start-license)
 * [Dependencies](#dependencies)
   * [Redis](#redis)
   * [Echo-Server](#echo-server)
@@ -71,7 +72,7 @@ To add the chart repository:
 To install the chart with the release name `microgateway`:
 
   ```console
-  helm upgrade -i microgateway airlock/microgateway -f license.yaml
+  helm upgrade -i microgateway airlock/microgateway
   ```
 
 :exclamation: Airlock Microgateway will not work without a valid license. To order one, please contact sales@airlock.com.
@@ -97,7 +98,7 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | config.generic.existingSecret | string | "" | Name of an existing secret containing:<br><br> license: `license`<br> passphrase: `passphrase` |
 | config.generic.license | string | "" | License (multiline string) |
 | config.generic.passphrase | string | - `passphrase`<br> If `passphrase` in `config.generic.existingSecret` <br><br> - `<generated passphrase>`<br> If no passphrase available. | Passphrase used for encryption. |
-| config.generic.tlsSecretName | string | "" | Name of an existing secret containing:<br><br> _Virtual Host:_<br> Certificate: `tls.crt`<br> Private key: `tls.key`<br> CA: `ca.crt` <br> :exclamation: Update `route.tls.destinationCACertificate` accordingly.<br><br> _Backend:_<br> Certificate: `backend-client.crt`<br> Private key: `backend-client.key`<br> CA: `backend-server-validation-ca.crt` |
+| config.generic.tlsSecretName | string | "" | Name of an existing secret containing:<br><br> _Virtual Host:_<br> Certificate: `frontend-server.crt`<br> Private key: `frontend-server.key`<br> CA: `frontend-server-ca.crt` <br> :exclamation: Update `route.tls.destinationCACertificate` accordingly.<br><br> _Backend:_<br> Certificate: `backend-client.crt`<br> Private key: `backend-client.key`<br> CA: `backend-server-validation-ca.crt` |
 | config.global | object | See `config.global.*`: | Available for:<br> - [Simple DSL configuration](#simple-dsl-configuration)<br> - [Advanced DSL configuration](#advanced-dsl-configuration) |
 | config.global.IPHeader.header | string | `"X-Forwarded-For"` | HTTP header to extract the client IP address. |
 | config.global.IPHeader.trustedProxies | list | `[]` | Trusted IP addresses to extract the client IP from HTTP header.<br><br> :exclamation: IP addresses are only extracted if `trustedProxies` are configured. |
@@ -110,7 +111,7 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | config.global.expert_settings.apache | string | "" | Global Apache Expert Settings (multiline string). |
 | config.global.expert_settings.security_gate | string | "" | Global SecurityGate Expert Settings (multiline string). |
 | config.global.logLevel | string | `"info"` | Log level (`info`, `trace`).<br> :exclamation: Never use `trace` in production. |
-| config.global.redisService | list | `[]` if `redis.enabled=false` or <br> `[ redis-master ]` if `redis.enabled=true` | List of Redis services. |
+| config.global.redis_hosts | list | `[]` if `redis.enabled=false` or <br> `[ redis-master ]` if `redis.enabled=true` | List of Redis services. |
 | config.global.virtualHost.tls.cipherSuite | string | `""` | Overwrite the default TLS ciphers for frontend connections. |
 | config.global.virtualHost.tls.protocol | string | `""` | Overwrite the default TLS protocol for frontend connections. |
 | config.simple | object | See `config.simple.*`: | [Simple DSL configuration](#simple-dsl-configuration) |
@@ -137,7 +138,7 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | hpa.resource.memory | string | `"2Gi"` | Average Microgateway Memory consumption to scale up/down.<br><br> :exclamation: Update this setting accordingly to `resources.limits.memory`. |
 | image.pullPolicy | string | `"Always"` | Pull policy (`Always`, `IfNotPresent`, `Never`) |
 | image.repository | string | `"docker.ergon.ch/airlock/microgateway"` | Image repository |
-| image.tag | string | `"7.4.sprint12_Build010"` | Image tag |
+| image.tag | string | `"1.0.sprint13_Build011"` | Image tag |
 | imagePullSecrets | list | `[]` | Reference to one or more secrets to use when pulling images. |
 | ingress | object | See `ingress.*`: | [Kubernetes Ingress](#kubernetes-ingress) |
 | ingress.annotations | object | `{"nginx.ingress.kubernetes.io/rewrite-target":"/"}` | Annotations to set on the ingress. |
@@ -213,6 +214,45 @@ The Airlock Microgateway Helm chart has many parameters and most of them are alr
 
 :point_up: **YAML indentation**:<br>
 YAML is very strict with indentation. To ensure that the YAML file itself is correct, check it's content with a YAML validator (e.g. [YAML Lint](http://www.yamllint.com/)).
+
+### Quick start license
+The Airlock Microgateway cannot be used without a valid licence.  
+This section describes how to quickly configure a license for the Microgateway using a ConfigMap.
+:information_source: **Note**:<br>
+It is recommended to configure the license using a secret in a production environment. See: [Secure handling of license and passphrase](#secure-handling-of-license-and-passphrase)
+
+The Microgateway can be installed with a license as follows:
+License.yaml
+```
+---
+config:
+  generic:
+    license: |
+      -----BEGIN LICENSE-----
+      -----END LICENSE-----
+      -- Airlock WAF --
+      Owner                        virtinc.com
+      Environment                  Productive
+      Trial                        on
+      Deployment Form              microgateway
+      Platform Restriction         no
+      Number of Back-end Hosts     99
+      Number of CPUs               12
+      Number of Sessions           100
+      Policy Enforcement           on
+      ICAP                         on
+      Kerberos                     on
+      API Gateway                  on
+      SSL VPN                      on
+      Reporting                    on
+      Expiry                       2020-12-31
+      ---------------------
+```
+
+Installation:
+  ```console
+  helm upgrade -i microgateway airlock/microgateway -f license.yaml
+  ```
 
 ## Dependencies
 The Airlock Microgateway Helm chart has the following optional dependencies, which can be enabled for a smooth start.
@@ -729,9 +769,9 @@ The Microgateway can be configured to use a specific certificate for frontend an
 and passed to the Helm chart to use it.
 
 Used for frontend connection:
-* Certificate: `tls.crt`
-* Private key: `tls.key`
-* CA:          `ca.crt`
+* Certificate: `frontend-server.crt`
+* Private key: `frontend-server.key`
+* CA:          `frontend-server-ca.crt`
 
 :exclamation: In case that [Route Re-encrypt configuration](#route-re-encrypt-configuration) is used, ensure that `route.tls.destinationCACertificate` is updated accordingly.
 
@@ -744,9 +784,9 @@ Used for backend connection:
   The example below shows how to create a secret containing certificates for frontend and backend connections.
   ```
   kubectl create secret generic microgateway-tls \
-                                --from-file=tls.crt=<frontend_cert_file> \
-                                --from-file=tls.key=<frontend_key_file> \
-                                --from-file=ca.crt=<frontend_ca_file> \
+                                --from-file=frontend-server.crt=<frontend_cert_file> \
+                                --from-file=frontend-server.key=<frontend_key_file> \
+                                --from-file=frontend-server-ca.crt=<frontend_ca_file> \
                                 --from-file=backend-client.crt=<backend_cert_file> \
                                 --from-file=backend-client.key=<backend_key_file> \
                                 --from-file=backend-ca.crt=<backend_ca_file>
