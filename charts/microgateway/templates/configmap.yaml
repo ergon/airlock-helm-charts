@@ -25,7 +25,7 @@ data:
       {{- end }}
     {{- end }}
     log:
-      level: {{ $global.logLevel }}
+      level: {{ $global.log_level }}
   {{- if or (include "microgateway.apacheExpertSettings" .) (include "microgateway.securityGateExpertSettings" .) }}
     expert_settings:
     {{- if (include "microgateway.apacheExpertSettings" .) }}
