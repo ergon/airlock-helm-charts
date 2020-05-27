@@ -1,10 +1,12 @@
 # Airlock Microgateway
 
-The *Airlock Microgateway* is a component of the [Airlock Secure Access Hub](https://www.airlock.com/). It is the lightweight, container-based deployment form of the *Airlock Gateway*, a software appliance with reverse-proxy, Web Application Firewall (WAF) and API security functionality.
+The *Airlock Microgateway* is a component of the [Airlock Secure Access Hub](https://www.airlock.com/).
+It is the lightweight, container-based deployment form of the *Airlock Gateway*, a software appliance with reverse-proxy, Web Application Firewall (WAF) and API security functionality.
+
 
 The Airlock helm charts are used internally for testing the *Airlock Microgateway*. We make them available publicly under the [MIT license](https://github.com/ergon/airlock-helm-charts/blob/master/LICENSE).
 
-The current chart version is: 0.4.7
+The current chart version is: 0.4.8
 
 ## About Ergon
 *Airlock* is a registered trademark of [Ergon](https://www.ergon.ch). Ergon is a Swiss leader in leveraging digitalisation to create unique and effective client benefits, from conception to market, the result of which is the international distribution of globally revered products.
@@ -27,6 +29,7 @@ The current chart version is: 0.4.7
   * [Advanced DSL configuration](#advanced-dsl-configuration)
   * [Expert DSL configuration](#expert-dsl-configuration)
 * [Environment variables](#environment-variables)
+* [Extra Volumes](#extra-volumes)
 * [Probes](#probes)
   * [Readiness Probe](#readiness-probe)
   * [Liveness Probe](#liveness-probe)
@@ -107,7 +110,7 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | config.global.expert_settings.apache | string | "" | Global Apache Expert Settings (multiline string). |
 | config.global.expert_settings.security_gate | string | "" | Global SecurityGate Expert Settings (multiline string). |
 | config.global.logLevel | string | `"info"` | Log level (`info`, `trace`).<br> :exclamation: Never use `trace` in production. |
-| config.global.redisService | list | - `redis-master`<br> If `redis.enabled=true`<br><br> - `""`<br> If `redis.enabled=false` | List of Redis services. |
+| config.global.redisService | list | `[]` if `redis.enabled=false` or <br> `[ redis-master ]` if `redis.enabled=true` | List of Redis services. |
 | config.global.virtualHost.tls.cipherSuite | string | `""` | Overwrite the default TLS ciphers for frontend connections. |
 | config.global.virtualHost.tls.protocol | string | `""` | Overwrite the default TLS protocol for frontend connections. |
 | config.simple | object | See `config.simple.*`: | [Simple DSL configuration](#simple-dsl-configuration) |
@@ -123,6 +126,8 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | config.simple.mapping.sessionHandling | string | - `enforce_session`<br> If `redis.enabled=true` <br> or `config.global.redisService`<br><br> - `ignore_session`<br> If `redis.enabled=false` | Session handling (`enforce_session`, `ignore_session`, `optional_session`, `optional_session_no_refresh`). |
 | echo-server | object | See `echo-server.*`: | Pre-configured [Echo-Server](#echo-server). |
 | echo-server.enabled | bool | `false` | Deploy pre-configured [Echo-Server](#echo-server). |
+| extraVolumeMounts | list | `[]` | Add additional volume mounts. |
+| extraVolumes | list | `[]` | Add additional volumes. [Volumes](https://kubernetes.io/docs/concepts/storage/volumes/) |
 | fullnameOverride | string | `""` | Provide a name to substitute for the full names of resources. |
 | hpa | object | See `hpa.*`: | [Horizontal Pod Autoscaler](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) to scale <br> Microgateway based on Memory and CPU consumption.<br><br> :exclamation: Check [API versioning](https://kubernetes.io/docs/concepts/overview/kubernetes-api/#api-versioning) when using this Beta feature. |
 | hpa.enabled | bool | `false` | Deploy a horizontal pod autoscaler. |
@@ -132,7 +137,7 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | hpa.resource.memory | string | `"2Gi"` | Average Microgateway Memory consumption to scale up/down.<br><br> :exclamation: Update this setting accordingly to `resources.limits.memory`. |
 | image.pullPolicy | string | `"Always"` | Pull policy (`Always`, `IfNotPresent`, `Never`) |
 | image.repository | string | `"docker.ergon.ch/airlock/microgateway"` | Image repository |
-| image.tag | string | `"7.4.sprint11_Build009"` | Image tag |
+| image.tag | string | `"7.4.sprint12_Build010"` | Image tag |
 | imagePullSecrets | list | `[]` | Reference to one or more secrets to use when pulling images. |
 | ingress | object | See `ingress.*`: | [Kubernetes Ingress](#kubernetes-ingress) |
 | ingress.annotations | object | `{"nginx.ingress.kubernetes.io/rewrite-target":"/"}` | Annotations to set on the ingress. |
@@ -293,7 +298,7 @@ By default, the Airlock Microgateway is configured with the [Simple DSL configur
     simple:
       mapping:
         entryPath: /
-          operationalMode: integration
+        operationalMode: integration
         denyRules:
           level: strict
           exceptions:
@@ -472,6 +477,28 @@ Finally, apply the Helm chart configuration file with `-f` parameter.
   ```console
   helm upgrade -i microgateway airlock/microgateway -f custom-values.yaml -f env-variables.yaml
   ```
+
+## Extra Volumes
+The Helm chart allows you to define extra volumes which can be used in the Microgateway. 
+The configuration of such additional volumes could look like this: 
+
+```
+extraVolumes:
+  - name: mapping
+    configMap:
+      name: mapping-configmap
+extraVolumeMounts:
+  - name: mapping
+    mountPath: /config/template/mapping.xml
+    subPath: mapping.xml
+
+config:
+  advanced:
+    apps:
+      - mappings:
+        - name: virtinc
+          mapping_template_path: /config/template/mapping.xml   
+```
 
 ## Probes
 Probes are used in Kubernetes and Openshift to determine if a Pod is ready and in good health to process requests.

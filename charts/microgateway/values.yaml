@@ -5,7 +5,7 @@ image:
   # image.repository -- Image repository
   repository: docker.ergon.ch/airlock/microgateway
   # image.tag -- Image tag
-  tag: 1.0.sprint13_Build011
+  tag: 7.4.sprint12_Build010
   # image.pullPolicy -- Pull policy (`Always`, `IfNotPresent`, `Never`)
   pullPolicy: Always
 
@@ -60,7 +60,7 @@ config:
     # :exclamation: Never use `trace` in production.
     logLevel: info
     # config.global.redisService -- List of Redis services.
-    # @default -- - `redis-master`<br> If `redis.enabled=true`<br><br> - `""`<br> If `redis.enabled=false`
+    # @default -- `[]` if `redis.enabled=false` or <br> `[ redis-master ]` if `redis.enabled=true`
     redisService: []
     IPHeader:
       # config.global.IPHeader.header -- HTTP header to extract the client IP address.
@@ -301,6 +301,16 @@ affinity:
   #         matchLabels:
   #           {{- include "microgateway.selectorLabels" . | nindent 10 }}
   #       topologyKey: kubernetes.io/hostname
+
+# extraVolumes -- Add additional volumes. [Volumes](https://kubernetes.io/docs/concepts/storage/volumes/)
+extraVolumes: []
+    # - name: volumename
+    #   configMap:
+    #     name: config-map-name
+# extraVolumeMounts -- Add additional volume mounts.
+extraVolumeMounts: []
+    # - name: mountname
+    #   mountPath: /path/file.yaml
 
 # redis -- Pre-configured [Redis](#redis) service.
 # @default -- See `redis.*`:
