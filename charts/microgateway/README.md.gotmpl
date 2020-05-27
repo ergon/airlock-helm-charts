@@ -633,9 +633,9 @@ The Microgateway can be configured to use a specific certificate for frontend an
 and passed to the Helm chart to use it.
 
 Used for frontend connection:
-* Certificate: `tls.crt`
-* Private key: `tls.key`
-* CA:          `ca.crt`
+* Certificate: `frontend-server.crt`
+* Private key: `frontend-server.key`
+* CA:          `frontend-server-ca.crt`
 
 :exclamation: In case that [Route Re-encrypt configuration](#route-re-encrypt-configuration) is used, ensure that `route.tls.destinationCACertificate` is updated accordingly.
 
@@ -648,9 +648,9 @@ Used for backend connection:
   The example below shows how to create a secret containing certificates for frontend and backend connections.
   ```
   kubectl create secret generic microgateway-tls \
-                                --from-file=tls.crt=<frontend_cert_file> \
-                                --from-file=tls.key=<frontend_key_file> \
-                                --from-file=ca.crt=<frontend_ca_file> \
+                                --from-file=frontend-server.crt=<frontend_cert_file> \
+                                --from-file=frontend-server.key=<frontend_key_file> \
+                                --from-file=frontend-server-ca.crt=<frontend_ca_file> \
                                 --from-file=backend-client.crt=<backend_cert_file> \
                                 --from-file=backend-client.key=<backend_key_file> \
                                 --from-file=backend-ca.crt=<backend_ca_file>

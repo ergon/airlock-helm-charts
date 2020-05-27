@@ -101,9 +101,9 @@ data:
     {{- if $generic.tlsSecretName }}
       virtual_host:
         certificate:
-          certificate_file: /secret/tls/tls.crt
-          privatekey_file: /secret/tls/tls.key
-          ca_chain_file: /secret/tls/ca.crt
+          certificate_file: /secret/tls/frontend-server.crt
+          privatekey_file: /secret/tls/frontend-server.key
+          ca_chain_file: /secret/tls/frontend-server-ca.crt
     {{- end }}
   {{- end }}
 {{- else }}

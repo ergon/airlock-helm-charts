@@ -5,7 +5,7 @@ image:
   # image.repository -- Image repository
   repository: docker.ergon.ch/airlock/microgateway
   # image.tag -- Image tag
-  tag: 7.4.sprint12_Build010
+  tag: 1.0.sprint13_Build011
   # image.pullPolicy -- Pull policy (`Always`, `IfNotPresent`, `Never`)
   pullPolicy: Always
 
@@ -106,9 +106,9 @@ config:
     #    value: Example_Value
     # config.generic.tlsSecretName -- (string) Name of an existing secret containing:<br><br>
     # _Virtual Host:_<br>
-    # Certificate: `tls.crt`<br>
-    # Private key: `tls.key`<br>
-    # CA: `ca.crt` <br>
+    # Certificate: `frontend-server.crt`<br>
+    # Private key: `frontend-server.key`<br>
+    # CA: `frontend-server-ca.crt` <br>
     # :exclamation: Update `route.tls.destinationCACertificate` accordingly.<br><br>
     # _Backend:_<br>
     # Certificate: `backend-client.crt`<br>
