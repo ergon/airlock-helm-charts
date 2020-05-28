@@ -17,7 +17,7 @@ data:
     {{- if or .Values.redis.enabled $global.redis_hosts }}
       {{- if $global.redis_hosts }}
       redis_hosts:
-        {{- range $global.redis_hosts }} 
+        {{- range $global.redis_hosts }}
         - {{ . }}
         {{- end }}
       {{- else }}
@@ -31,7 +31,7 @@ data:
     {{- if (include "microgateway.apacheExpertSettings" .) }}
       apache: |
       {{- if $global.ip_header.trusted_proxies }}
-        Remoteip_header {{ $global.ip_header.header }}
+        RemoteIPHeader {{ $global.ip_header.header }}
         {{- range $global.ip_header.trusted_proxies }}
         RemoteIPInternalProxy {{ . }}
         {{- end }}
@@ -40,7 +40,7 @@ data:
         SSLProtocol {{ $global.virtual_host.tls.protocol }}
       {{- end }}
       {{- if $global.virtual_host.tls.cipher_suite }}
-        SSLcipher_suite {{ $global.virtual_host.tls.cipher_suite }}
+        SSLCipherSuite {{ $global.virtual_host.tls.cipher_suite }}
       {{- end }}
       {{- with $global.expert_settings.apache }}
         {{- . | nindent 8 }}
@@ -49,23 +49,23 @@ data:
     {{- if (include "microgateway.securityGateExpertSettings" .) }}
       security_gate: |
       {{- if $global.backend.tls.server_ca }}
-        BackendSSLserver_ca /secret/tls/backend-server-validation-ca.crt
+        BackendSSLServerCA /secret/tls/backend-server-validation-ca.crt
       {{- end }}
       {{- if $global.backend.tls.client_cert }}
-        BackendSSLclient_cert /secret/tls/backend-client.crt
-        BackendSSLclient_certKey /secret/tls/backend-client.key
+        BackendSSLClientCert /secret/tls/backend-client.crt
+        BackendSSLClientCertKey /secret/tls/backend-client.key
       {{- end }}
       {{- if $global.backend.tls.verify_host }}
-        BackendSSLverify_host "true"
+        BackendSSLVerifyHost "true"
       {{- end }}
       {{- if $global.backend.tls.version }}
         BackendSSLVersion {{ $global.backend.tls.version }}
       {{- end }}
       {{- if $global.backend.tls.cipher_suite }}
-        BackendSSLcipher_suite {{ $global.backend.tls.cipher_suite }}
+        BackendSSLCipherSuite {{ $global.backend.tls.cipher_suite }}
       {{- end }}
       {{- if $global.backend.tls.cipher_suite_v13 }}
-        BackendSSLcipher_suiteTls13 {{ $global.backend.tls.cipher_suite_v13 }}
+        BackendSSLCipherSuiteTls13 {{ $global.backend.tls.cipher_suite_v13 }}
       {{- end }}
       {{- with $global.expert_settings.security_gate }}
         {{- . | nindent 8 }}
