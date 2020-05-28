@@ -16,8 +16,8 @@ config:
   # @default -- See `config.simple.*`:
   simple:
     mapping:
-      # config.simple.mapping.entryPath -- The `entry_path` of the app.
-      entryPath: /
+      # config.simple.mapping.entry_path -- The `entry_path` of the app.
+      entry_path: /
       # config.simple.mapping.operational_mode -- Operational mode (`production`, `integration`).
       operational_mode: production
       # config.simple.mapping.session_handling -- Session handling (`enforce_session`, `ignore_session`, `optional_session`, `optional_session_no_refresh`).

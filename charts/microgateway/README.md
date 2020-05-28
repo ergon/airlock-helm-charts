@@ -122,7 +122,7 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | config.simple.mapping.deny_rules.exceptions | list | `[]` | Deny rule exceptions. |
 | config.simple.mapping.deny_rules.level | string | `"standard"` | Security Level for all Deny rules (`basic`, `standard`, `strict`). |
 | config.simple.mapping.deny_rules.log_only | bool | `false` | Enable log only for all Deny rules. |
-| config.simple.mapping.entryPath | string | `"/"` | The `entry_path` of the app. |
+| config.simple.mapping.entry_path | string | `"/"` | The `entry_path` of the app. |
 | config.simple.mapping.operational_mode | string | `"production"` | Operational mode (`production`, `integration`). |
 | config.simple.mapping.session_handling | string | - `enforce_session`<br> If `redis.enabled=true` <br> or `config.global.redis_hosts`<br><br> - `ignore_session`<br> If `redis.enabled=false` | Session handling (`enforce_session`, `ignore_session`, `optional_session`, `optional_session_no_refresh`). |
 | echo-server | object | See `echo-server.*`: | Pre-configured [Echo-Server](#echo-server). |
@@ -321,7 +321,7 @@ Depending on the environment and use case, one of the options might suit better 
 The simple DSL configuration suites best for the following use case:
 | Virtual Host | Mapping | Backend Service |
 |--|--|--|
-| VH1 (hostname: virtinc.com) | M1 (entryPath: /) | BE1 |
+| VH1 (hostname: virtinc.com) | M1 (entry_path: /) | BE1 |
 
 Restrictions for Simple DSL configuration:
 * Only one Virtual Host is configured.
@@ -341,7 +341,7 @@ By default, the Airlock Microgateway is configured with the [Simple DSL configur
           - 10.0.0.0/28
     simple:
       mapping:
-        entryPath: /
+        entry_path: /
         operational_mode: integration
         deny_rules:
           level: strict
@@ -373,19 +373,19 @@ In case that the [Simple DSL configuration](#simple-dsl-configuration) does not 
 **_Use Case 1)_**
 | Virtual Host | Mapping | Backend Service |
 |--|--|--|
-| VH1 (hostname: virtinc.com) | M1 (entryPath: /) | BE1 |
-| VH2 (hostname: example.com) | M2 (entryPath: /) | BE1 |
+| VH1 (hostname: virtinc.com) | M1 (entry_path: /) | BE1 |
+| VH2 (hostname: example.com) | M2 (entry_path: /) | BE1 |
 
 **_Use Case 2)_**
 | Virtual Host | Mapping | Backend Service |
 |--|--|--|
-| VH1 (hostname: virtinc.com) | M1 (entryPath: /)<br>M2 (entryPath: /auth/) | BE1 |
+| VH1 (hostname: virtinc.com) | M1 (entry_path: /)<br>M2 (entry_path: /auth/) | BE1 |
 
 **_Use Case 3)_**
 | Virtual Host | Mapping | Backend Service |
 |--|--|--|
-| VH1 (hostname: virtinc.com) | M1 (entryPath: /) | BE1 |
-| VH2 (hostname: example.com) | M2 (entryPath: /) | BE2 |
+| VH1 (hostname: virtinc.com) | M1 (entry_path: /) | BE1 |
+| VH2 (hostname: example.com) | M2 (entry_path: /) | BE2 |
 
 The use cases outlined above can also occur slightly differently. But all of them have in common that more than one Virtual Hosts, Mappings or Backend Services are used. Whenever this is the case, the [Advanced DSL configuration](#advanced-dsl-configuration) should be preferred over the [Simple DSL configuration](#simple-dsl-configuration).
 

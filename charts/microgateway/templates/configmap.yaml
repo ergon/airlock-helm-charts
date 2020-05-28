@@ -78,7 +78,7 @@ data:
   {{- else }}
     apps:
     - mappings:
-      - entry_path: {{ $simple.mapping.entryPath }}
+      - entry_path: {{ $simple.mapping.entry_path }}
         operational_mode: {{ $simple.mapping.operational_mode }}
         {{- if $simple.mapping.session_handling }}
         session_handling: {{ $simple.mapping.session_handling }}
