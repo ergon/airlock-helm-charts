@@ -100,20 +100,20 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | config.generic.passphrase | string | - `passphrase`<br> If `passphrase` in `config.generic.existingSecret` <br><br> - `<generated passphrase>`<br> If no passphrase available. | Passphrase used for encryption. |
 | config.generic.tlsSecretName | string | "" | Name of an existing secret containing:<br><br> _Virtual Host:_<br> Certificate: `frontend-server.crt`<br> Private key: `frontend-server.key`<br> CA: `frontend-server-ca.crt` <br> :exclamation: Update `route.tls.destinationCACertificate` accordingly.<br><br> _Backend:_<br> Certificate: `backend-client.crt`<br> Private key: `backend-client.key`<br> CA: `backend-server-validation-ca.crt` |
 | config.global | object | See `config.global.*`: | Available for:<br> - [Simple DSL configuration](#simple-dsl-configuration)<br> - [Advanced DSL configuration](#advanced-dsl-configuration) |
-| config.global.IPHeader.header | string | `"X-Forwarded-For"` | HTTP header to extract the client IP address. |
-| config.global.IPHeader.trustedProxies | list | `[]` | Trusted IP addresses to extract the client IP from HTTP header.<br><br> :exclamation: IP addresses are only extracted if `trustedProxies` are configured. |
-| config.global.backend.tls.cipherSuite | string | `""` | Overwrite the default TLS ciphers (<=TLS 1.2) for backend connections. |
-| config.global.backend.tls.cipherSuitev13 | string | `""` | Overwrite the default TLS ciphers (TLS 1.3) for backend connections. |
-| config.global.backend.tls.clientCert | bool | `false` | Use TLS client certificate for backend connections. <br> :exclamation: Must be configured in `config.generic.tlsSecretName`. |
-| config.global.backend.tls.serverCa | bool | `false` | Validates the backend server certificate against the configured CA. <br> :exclamation: Must be configured in `config.generic.tlsSecretName`. |
-| config.global.backend.tls.verifyHost | bool | `false` | Verify the backend TLS certificate.<br> :exclamation: `config.global.backend.tls.serverCa` must be configured in order to work. |
+| config.global.backend.tls.cipher_suite | string | `""` | Overwrite the default TLS ciphers (<=TLS 1.2) for backend connections. |
+| config.global.backend.tls.cipher_suite_v13 | string | `""` | Overwrite the default TLS ciphers (TLS 1.3) for backend connections. |
+| config.global.backend.tls.client_cert | bool | `false` | Use TLS client certificate for backend connections. <br> :exclamation: Must be configured in `config.generic.tlsSecretName`. |
+| config.global.backend.tls.server_ca | bool | `false` | Validates the backend server certificate against the configured CA. <br> :exclamation: Must be configured in `config.generic.tlsSecretName`. |
+| config.global.backend.tls.verify_host | bool | `false` | Verify the backend TLS certificate.<br> :exclamation: `config.global.backend.tls.server_ca` must be configured in order to work. |
 | config.global.backend.tls.version | string | `""` | Overwrite the default TLS version for backend connections.<br> |
 | config.global.expert_settings.apache | string | "" | Global Apache Expert Settings (multiline string). |
 | config.global.expert_settings.security_gate | string | "" | Global SecurityGate Expert Settings (multiline string). |
+| config.global.ip_header.header | string | `"X-Forwarded-For"` | HTTP header to extract the client IP address. |
+| config.global.ip_header.trusted_proxies | list | `[]` | Trusted IP addresses to extract the client IP from HTTP header.<br><br> :exclamation: IP addresses are only extracted if `trusted_proxies` are configured. |
 | config.global.log_level | string | `"info"` | Log level (`info`, `trace`).<br> :exclamation: Never use `trace` in production. |
 | config.global.redis_hosts | list | `[]` if `redis.enabled=false` or <br> `[ redis-master ]` if `redis.enabled=true` | List of Redis hosts. |
-| config.global.virtualHost.tls.cipherSuite | string | `""` | Overwrite the default TLS ciphers for frontend connections. |
-| config.global.virtualHost.tls.protocol | string | `""` | Overwrite the default TLS protocol for frontend connections. |
+| config.global.virtual_host.tls.cipher_suite | string | `""` | Overwrite the default TLS ciphers for frontend connections. |
+| config.global.virtual_host.tls.protocol | string | `""` | Overwrite the default TLS protocol for frontend connections. |
 | config.simple | object | See `config.simple.*`: | [Simple DSL configuration](#simple-dsl-configuration) |
 | config.simple.backend.hostname | string | `"backend-service"` | Backend hostname |
 | config.simple.backend.port | int | `8080` | Backend port |
@@ -336,8 +336,8 @@ By default, the Airlock Microgateway is configured with the [Simple DSL configur
   ```
   config:
     global:
-      IPHeader:
-        trustedProxies:
+      ip_header:
+        trusted_proxies:
           - 10.0.0.0/28
     simple:
       mapping:
@@ -395,8 +395,8 @@ The use cases outlined above can also occur slightly differently. But all of the
   ```
   config:
     global:
-      IPHeader:
-        trustedProxies:
+      ip_header:
+        trusted_proxies:
           - 10.0.0.0/28
     advanced:
       apps:
@@ -461,7 +461,7 @@ In case that the [Advanced DSL configuration](#advanced-dsl-configuration) does 
           level: info
         expert_settings:
           apache: |
-            RemoteIPHeader X-Forwarded-For
+            Remoteip_header X-Forwarded-For
             RemoteIPInternalProxy 10.0.0.0/28
 
         apps:

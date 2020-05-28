@@ -62,37 +62,37 @@ config:
     # config.global.redis_hosts -- List of Redis hosts.
     # @default -- `[]` if `redis.enabled=false` or <br> `[ redis-master ]` if `redis.enabled=true`
     redis_hosts: []
-    IPHeader:
-      # config.global.IPHeader.header -- HTTP header to extract the client IP address.
+    ip_header:
+      # config.global.ip_header.header -- HTTP header to extract the client IP address.
       header: X-Forwarded-For
-      # config.global.IPHeader.trustedProxies -- Trusted IP addresses to extract the client IP from HTTP header.<br><br>
-      # :exclamation: IP addresses are only extracted if `trustedProxies` are configured.
-      trustedProxies: []
+      # config.global.ip_header.trusted_proxies -- Trusted IP addresses to extract the client IP from HTTP header.<br><br>
+      # :exclamation: IP addresses are only extracted if `trusted_proxies` are configured.
+      trusted_proxies: []
 
     backend:
       tls:
-        # config.global.backend.tls.serverCa -- Validates the backend server certificate against the configured CA. <br>
+        # config.global.backend.tls.server_ca -- Validates the backend server certificate against the configured CA. <br>
         # :exclamation: Must be configured in `config.generic.tlsSecretName`.
-        serverCa: false
-        # config.global.backend.tls.clientCert -- Use TLS client certificate for backend connections. <br>
+        server_ca: false
+        # config.global.backend.tls.client_cert -- Use TLS client certificate for backend connections. <br>
         # :exclamation: Must be configured in `config.generic.tlsSecretName`.
-        clientCert: false
-        # config.global.backend.tls.verifyHost -- Verify the backend TLS certificate.<br>
-        # :exclamation: `config.global.backend.tls.serverCa` must be configured in order to work.
-        verifyHost: false
+        client_cert: false
+        # config.global.backend.tls.verify_host -- Verify the backend TLS certificate.<br>
+        # :exclamation: `config.global.backend.tls.server_ca` must be configured in order to work.
+        verify_host: false
         # config.global.backend.tls.version -- Overwrite the default TLS version for backend connections.<br>
         version: ""
-        # config.global.backend.tls.cipherSuite -- Overwrite the default TLS ciphers (<=TLS 1.2) for backend connections.
-        cipherSuite: ""
-        # config.global.backend.tls.cipherSuitev13 -- Overwrite the default TLS ciphers (TLS 1.3) for backend connections.
-        cipherSuitev13: ""
+        # config.global.backend.tls.cipher_suite -- Overwrite the default TLS ciphers (<=TLS 1.2) for backend connections.
+        cipher_suite: ""
+        # config.global.backend.tls.cipher_suite_v13 -- Overwrite the default TLS ciphers (TLS 1.3) for backend connections.
+        cipher_suite_v13: ""
 
-    virtualHost:
+    virtual_host:
       tls:
-        # config.global.virtualHost.tls.protocol -- Overwrite the default TLS protocol for frontend connections.
+        # config.global.virtual_host.tls.protocol -- Overwrite the default TLS protocol for frontend connections.
         protocol: ""
-        # config.global.virtualHost.tls.cipherSuite -- Overwrite the default TLS ciphers for frontend connections.
-        cipherSuite: ""
+        # config.global.virtual_host.tls.cipher_suite -- Overwrite the default TLS ciphers for frontend connections.
+        cipher_suite: ""
 
   # config.generic -- Available for:<br>
   # - [Simple DSL configuration](#simple-dsl-configuration)<br>

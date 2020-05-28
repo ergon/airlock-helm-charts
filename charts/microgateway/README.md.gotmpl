@@ -240,8 +240,8 @@ By default, the Airlock Microgateway is configured with the [Simple DSL configur
   ```
   config:
     global:
-      IPHeader:
-        trustedProxies:
+      ip_header:
+        trusted_proxies:
           - 10.0.0.0/28
     simple:
       mapping:
@@ -299,8 +299,8 @@ The use cases outlined above can also occur slightly differently. But all of the
   ```
   config:
     global:
-      IPHeader:
-        trustedProxies:
+      ip_header:
+        trusted_proxies:
           - 10.0.0.0/28
     advanced:
       apps:
@@ -365,7 +365,7 @@ In case that the [Advanced DSL configuration](#advanced-dsl-configuration) does 
           level: info
         expert_settings:
           apache: |
-            RemoteIPHeader X-Forwarded-For
+            Remoteip_header X-Forwarded-For
             RemoteIPInternalProxy 10.0.0.0/28
 
         apps:
