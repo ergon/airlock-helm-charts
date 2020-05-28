@@ -6,7 +6,7 @@ It is the lightweight, container-based deployment form of the *Airlock Gateway*,
 
 The Airlock helm charts are used internally for testing the *Airlock Microgateway*. We make them available publicly under the [MIT license](https://github.com/ergon/airlock-helm-charts/blob/master/LICENSE).
 
-The current chart version is: 0.4.8
+The current chart version is: 0.4.9
 
 ## About Ergon
 *Airlock* is a registered trademark of [Ergon](https://www.ergon.ch). Ergon is a Swiss leader in leveraging digitalisation to create unique and effective client benefits, from conception to market, the result of which is the international distribution of globally revered products.
@@ -20,6 +20,7 @@ The current chart version is: 0.4.8
   * [Uninstalling the chart](#uninstalling-the-chart)
 * [Configuration](#configuration)
 * [Getting started](#getting-started)
+  * [Configure a valid license](#configure-a-valid-license)
   * [Override default values](#override-default-values)
 * [Dependencies](#dependencies)
   * [Redis](#redis)
@@ -74,7 +75,7 @@ To install the chart with the release name `microgateway`:
   helm upgrade -i microgateway airlock/microgateway -f license.yaml
   ```
 
-:exclamation: Airlock Microgateway will not work without a valid license. To order one, please contact sales@airlock.com.
+:exclamation: Airlock Microgateway will not work without a valid license. For further information see chapter [Configure a valid license](#configure-a-valid-license)
 
 ### Uninstalling the chart
 To uninstall the chart with the release name `microgateway`:
@@ -97,33 +98,33 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | config.generic.existingSecret | string | "" | Name of an existing secret containing:<br><br> license: `license`<br> passphrase: `passphrase` |
 | config.generic.license | string | "" | License (multiline string) |
 | config.generic.passphrase | string | - `passphrase`<br> If `passphrase` in `config.generic.existingSecret` <br><br> - `<generated passphrase>`<br> If no passphrase available. | Passphrase used for encryption. |
-| config.generic.tlsSecretName | string | "" | Name of an existing secret containing:<br><br> _Virtual Host:_<br> Certificate: `tls.crt`<br> Private key: `tls.key`<br> CA: `ca.crt` <br> :exclamation: Update `route.tls.destinationCACertificate` accordingly.<br><br> _Backend:_<br> Certificate: `backend-client.crt`<br> Private key: `backend-client.key`<br> CA: `backend-server-validation-ca.crt` |
+| config.generic.tlsSecretName | string | "" | Name of an existing secret containing:<br><br> _Virtual Host:_<br> Certificate: `frontend-server.crt`<br> Private key: `frontend-server.key`<br> CA: `frontend-server-ca.crt` <br> :exclamation: Update `route.tls.destinationCACertificate` accordingly.<br><br> _Backend:_<br> Certificate: `backend-client.crt`<br> Private key: `backend-client.key`<br> CA: `backend-server-validation-ca.crt` |
 | config.global | object | See `config.global.*`: | Available for:<br> - [Simple DSL configuration](#simple-dsl-configuration)<br> - [Advanced DSL configuration](#advanced-dsl-configuration) |
-| config.global.IPHeader.header | string | `"X-Forwarded-For"` | HTTP header to extract the client IP address. |
-| config.global.IPHeader.trustedProxies | list | `[]` | Trusted IP addresses to extract the client IP from HTTP header.<br><br> :exclamation: IP addresses are only extracted if `trustedProxies` are configured. |
-| config.global.backend.tls.cipherSuite | string | `""` | Overwrite the default TLS ciphers (<=TLS 1.2) for backend connections. |
-| config.global.backend.tls.cipherSuitev13 | string | `""` | Overwrite the default TLS ciphers (TLS 1.3) for backend connections. |
-| config.global.backend.tls.clientCert | bool | `false` | Use TLS client certificate for backend connections. <br> :exclamation: Must be configured in `config.generic.tlsSecretName`. |
-| config.global.backend.tls.serverCa | bool | `false` | Validates the backend server certificate against the configured CA. <br> :exclamation: Must be configured in `config.generic.tlsSecretName`. |
-| config.global.backend.tls.verifyHost | bool | `false` | Verify the backend TLS certificate.<br> :exclamation: `config.global.backend.tls.serverCa` must be configured in order to work. |
+| config.global.backend.tls.cipher_suite | string | `""` | Overwrite the default TLS ciphers (<=TLS 1.2) for backend connections. |
+| config.global.backend.tls.cipher_suite_v13 | string | `""` | Overwrite the default TLS ciphers (TLS 1.3) for backend connections. |
+| config.global.backend.tls.client_cert | bool | `false` | Use TLS client certificate for backend connections. <br> :exclamation: Must be configured in `config.generic.tlsSecretName`. |
+| config.global.backend.tls.server_ca | bool | `false` | Validates the backend server certificate against the configured CA. <br> :exclamation: Must be configured in `config.generic.tlsSecretName`. |
+| config.global.backend.tls.verify_host | bool | `false` | Verify the backend TLS certificate.<br> :exclamation: `config.global.backend.tls.server_ca` must be configured in order to work. |
 | config.global.backend.tls.version | string | `""` | Overwrite the default TLS version for backend connections.<br> |
 | config.global.expert_settings.apache | string | "" | Global Apache Expert Settings (multiline string). |
 | config.global.expert_settings.security_gate | string | "" | Global SecurityGate Expert Settings (multiline string). |
-| config.global.logLevel | string | `"info"` | Log level (`info`, `trace`).<br> :exclamation: Never use `trace` in production. |
-| config.global.redisService | list | `[]` if `redis.enabled=false` or <br> `[ redis-master ]` if `redis.enabled=true` | List of Redis services. |
-| config.global.virtualHost.tls.cipherSuite | string | `""` | Overwrite the default TLS ciphers for frontend connections. |
-| config.global.virtualHost.tls.protocol | string | `""` | Overwrite the default TLS protocol for frontend connections. |
+| config.global.ip_header.header | string | `"X-Forwarded-For"` | HTTP header to extract the client IP address. |
+| config.global.ip_header.trusted_proxies | list | `[]` | Trusted IP addresses to extract the client IP from HTTP header.<br><br> :exclamation: IP addresses are only extracted if `trusted_proxies` are configured. |
+| config.global.log_level | string | `"info"` | Log level (`info`, `trace`).<br> :exclamation: Never use `trace` in production. |
+| config.global.redis_hosts | list | `[]` if `redis.enabled=false` or <br> `[ redis-master ]` if `redis.enabled=true` | List of Redis hosts. |
+| config.global.virtual_host.tls.cipher_suite | string | `""` | Overwrite the default TLS ciphers for frontend connections. |
+| config.global.virtual_host.tls.protocol | string | `""` | Overwrite the default TLS protocol for frontend connections. |
 | config.simple | object | See `config.simple.*`: | [Simple DSL configuration](#simple-dsl-configuration) |
 | config.simple.backend.hostname | string | `"backend-service"` | Backend hostname |
 | config.simple.backend.port | int | `8080` | Backend port |
 | config.simple.backend.protocol | string | `"http"` | Backend protocol |
-| config.simple.mapping.denyRules.enabled | bool | `true` | Enable all Deny rules. |
-| config.simple.mapping.denyRules.exceptions | list | `[]` | Deny rule exceptions. |
-| config.simple.mapping.denyRules.level | string | `"standard"` | Security Level for all Deny rules (`basic`, `standard`, `strict`). |
-| config.simple.mapping.denyRules.logOnly | bool | `false` | Enable log only for all Deny rules. |
-| config.simple.mapping.entryPath | string | `"/"` | The `entry_path` of the app. |
-| config.simple.mapping.operationalMode | string | `"production"` | Operational mode (`production`, `integration`). |
-| config.simple.mapping.sessionHandling | string | - `enforce_session`<br> If `redis.enabled=true` <br> or `config.global.redisService`<br><br> - `ignore_session`<br> If `redis.enabled=false` | Session handling (`enforce_session`, `ignore_session`, `optional_session`, `optional_session_no_refresh`). |
+| config.simple.mapping.deny_rules.enabled | bool | `true` | Enable all Deny rules. |
+| config.simple.mapping.deny_rules.exceptions | list | `[]` | Deny rule exceptions. |
+| config.simple.mapping.deny_rules.level | string | `"standard"` | Security Level for all Deny rules (`basic`, `standard`, `strict`). |
+| config.simple.mapping.deny_rules.log_only | bool | `false` | Enable log only for all Deny rules. |
+| config.simple.mapping.entry_path | string | `"/"` | The `entry_path` of the app. |
+| config.simple.mapping.operational_mode | string | `"production"` | Operational mode (`production`, `integration`). |
+| config.simple.mapping.session_handling | string | - `enforce_session`<br> If `redis.enabled=true` <br> or `config.global.redis_hosts`<br><br> - `ignore_session`<br> If `redis.enabled=false` | Session handling (`enforce_session`, `ignore_session`, `optional_session`, `optional_session_no_refresh`). |
 | echo-server | object | See `echo-server.*`: | Pre-configured [Echo-Server](#echo-server). |
 | echo-server.enabled | bool | `false` | Deploy pre-configured [Echo-Server](#echo-server). |
 | extraVolumeMounts | list | `[]` | Add additional volume mounts. |
@@ -137,7 +138,7 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | hpa.resource.memory | string | `"2Gi"` | Average Microgateway Memory consumption to scale up/down.<br><br> :exclamation: Update this setting accordingly to `resources.limits.memory`. |
 | image.pullPolicy | string | `"Always"` | Pull policy (`Always`, `IfNotPresent`, `Never`) |
 | image.repository | string | `"docker.ergon.ch/airlock/microgateway"` | Image repository |
-| image.tag | string | `"7.4.sprint12_Build010"` | Image tag |
+| image.tag | string | `"1.0.sprint13_Build011"` | Image tag |
 | imagePullSecrets | list | `[]` | Reference to one or more secrets to use when pulling images. |
 | ingress | object | See `ingress.*`: | [Kubernetes Ingress](#kubernetes-ingress) |
 | ingress.annotations | object | `{"nginx.ingress.kubernetes.io/rewrite-target":"/"}` | Annotations to set on the ingress. |
@@ -181,6 +182,49 @@ The following table lists configuration parameters of the Airlock Microgateway c
 
 ## Getting started
 This chapter provides information how to get started with the Helm chart.
+
+### Configure a valid license
+This section describes how to configure a license for the Microgateway. By following the steps below, the Helm chart creates a secret with the license which is used by the Microgateway.
+
+1. Create a license.yaml file, which has the following content:
+```
+---
+config:
+  generic:
+    license: |
+      -----BEGIN LICENSE-----
+      eJxFkEnTokgURf+LWzsCEBCpiFowKoMg8KUIZS8YUoZUEkgmqaj/XnYvqpbv
+      [...]
+      bHy/N5tf//76DY17EVk=
+      -----END LICENSE-----
+      -- Airlock WAF --
+      Owner                        virtinc.com
+      Environment                  Productive
+      Trial                        on
+      Deployment Form              microgateway
+      Platform Restriction         no
+      Number of Back-end Hosts     99
+      Number of CPUs               12
+      Number of Sessions           100
+      Policy Enforcement           on
+      ICAP                         on
+      Kerberos                     on
+      API Gateway                  on
+      SSL VPN                      on
+      Reporting                    on
+      Expiry                       2020-12-31
+      ---------------------
+```
+
+2. Deploy the Microgateway with the license.yaml file:
+  ```console
+  helm upgrade -i microgateway airlock/microgateway -f license.yaml
+  ```
+
+:exclamation: Airlock Microgateway will not work without a valid license. To order one, please contact sales@airlock.com.
+
+:information_source: **Note**:<br>
+In productive environments, licenses might be deployed and handled in a different lifecycles. In such cases, an existing license want to be used. Further information for such setups are provided in chapter [Secure handling of license and passphrase](#secure-handling-of-license-and-passphrase).
 
 ### Override default values
 The Airlock Microgateway Helm chart has many parameters and most of them are already equipped with default values (see [Configuration](#configuration)). Depending on the environment, the defaults must be adapted. To override default values, do the following:
@@ -235,7 +279,7 @@ In case that session handling is enabled on Airlock Microgateway, a Redis servic
   ```
   config:
     global:
-      redisService: [ <REDIS-SERVICE>:<PORT> ]
+      redis_hosts: [ <REDIS-SERVICE>:<PORT> ]
   redis:
     enabled: false
   ```
@@ -277,7 +321,7 @@ Depending on the environment and use case, one of the options might suit better 
 The simple DSL configuration suites best for the following use case:
 | Virtual Host | Mapping | Backend Service |
 |--|--|--|
-| VH1 (hostname: virtinc.com) | M1 (entryPath: /) | BE1 |
+| VH1 (hostname: virtinc.com) | M1 (entry_path: /) | BE1 |
 
 Restrictions for Simple DSL configuration:
 * Only one Virtual Host is configured.
@@ -292,14 +336,14 @@ By default, the Airlock Microgateway is configured with the [Simple DSL configur
   ```
   config:
     global:
-      IPHeader:
-        trustedProxies:
+      ip_header:
+        trusted_proxies:
           - 10.0.0.0/28
     simple:
       mapping:
-        entryPath: /
-        operationalMode: integration
-        denyRules:
+        entry_path: /
+        operational_mode: integration
+        deny_rules:
           level: strict
           exceptions:
             - parameter_name:
@@ -313,7 +357,7 @@ By default, the Airlock Microgateway is configured with the [Simple DSL configur
         protocol: https
         hostname: custom-backend-service
         port: 8443
-  
+
   redis:
     enabled: true
   ```
@@ -329,19 +373,19 @@ In case that the [Simple DSL configuration](#simple-dsl-configuration) does not 
 **_Use Case 1)_**
 | Virtual Host | Mapping | Backend Service |
 |--|--|--|
-| VH1 (hostname: virtinc.com) | M1 (entryPath: /) | BE1 |
-| VH2 (hostname: example.com) | M2 (entryPath: /) | BE1 |
+| VH1 (hostname: virtinc.com) | M1 (entry_path: /) | BE1 |
+| VH2 (hostname: example.com) | M2 (entry_path: /) | BE1 |
 
 **_Use Case 2)_**
 | Virtual Host | Mapping | Backend Service |
 |--|--|--|
-| VH1 (hostname: virtinc.com) | M1 (entryPath: /)<br>M2 (entryPath: /auth/) | BE1 |
+| VH1 (hostname: virtinc.com) | M1 (entry_path: /)<br>M2 (entry_path: /auth/) | BE1 |
 
 **_Use Case 3)_**
 | Virtual Host | Mapping | Backend Service |
 |--|--|--|
-| VH1 (hostname: virtinc.com) | M1 (entryPath: /) | BE1 |
-| VH2 (hostname: example.com) | M2 (entryPath: /) | BE2 |
+| VH1 (hostname: virtinc.com) | M1 (entry_path: /) | BE1 |
+| VH2 (hostname: example.com) | M2 (entry_path: /) | BE2 |
 
 The use cases outlined above can also occur slightly differently. But all of them have in common that more than one Virtual Hosts, Mappings or Backend Services are used. Whenever this is the case, the [Advanced DSL configuration](#advanced-dsl-configuration) should be preferred over the [Simple DSL configuration](#simple-dsl-configuration).
 
@@ -351,8 +395,8 @@ The use cases outlined above can also occur slightly differently. But all of the
   ```
   config:
     global:
-      IPHeader:
-        trustedProxies:
+      ip_header:
+        trusted_proxies:
           - 10.0.0.0/28
     advanced:
       apps:
@@ -363,7 +407,7 @@ The use cases outlined above can also occur slightly differently. But all of the
               entry_path: /
               operational_mode: integration
               session_handling: enforce_session
-              denyRules:
+              deny_rules:
                 level: standard
                 exceptions:
                   - parameter_name:
@@ -376,7 +420,7 @@ The use cases outlined above can also occur slightly differently. But all of the
             - name: api
               entry_path: /api/
               session_handling: ignore_session
-              denyRules:
+              deny_rules:
                 level: strict
               openapi:
                 spec_file: /config/virtinc_api_openapi.json
@@ -384,7 +428,7 @@ The use cases outlined above can also occur slightly differently. But all of the
             protocol: https
             hostname: custom-backend-service
             port: 8443
-  
+
   redis:
     enabled: true
   ```
@@ -419,7 +463,7 @@ In case that the [Advanced DSL configuration](#advanced-dsl-configuration) does 
           apache: |
             RemoteIPHeader X-Forwarded-For
             RemoteIPInternalProxy 10.0.0.0/28
-          
+
         apps:
           - virtual_host:
               hostname: virtinc.com
@@ -437,10 +481,10 @@ In case that the [Advanced DSL configuration](#advanced-dsl-configuration) does 
               protocol: https
               hostname: custom-backend-service
               port: 8443
-  
+
   redis:
     enabled: true
-  
+
   ```
 
 **`config.*` Parameters which can be used**:
@@ -456,9 +500,9 @@ This works for all three DSL of the above configuration setups (simple, advanced
   config:
     generic:
       env:
-        - name: WAF_CFG_OPERATIONALMODE
+        - name: WAF_CFG_OPERATIONAL_MODE
           value: production
-        - name: WAF_CFG_LOGONLY
+        - name: WAF_CFG_LOG_ONLY
           value: false
   ```
 
@@ -467,9 +511,9 @@ This works for all three DSL of the above configuration setups (simple, advanced
   config:
     simple:
       mapping:
-        operationalMode: "@@WAF_CFG_OPERATIONALMODE@@"
-        denyRules:
-          logOnly: "@@WAF_CFG_LOGONLY@@"
+        operational_mode: "@@WAF_CFG_OPERATIONAL_MODE@@"
+        deny_rules:
+          log_only: "@@WAF_CFG_LOG_ONLY@@"
   ```
 
 Finally, apply the Helm chart configuration file with `-f` parameter.
@@ -479,8 +523,8 @@ Finally, apply the Helm chart configuration file with `-f` parameter.
   ```
 
 ## Extra Volumes
-The Helm chart allows you to define extra volumes which can be used in the Microgateway. 
-The configuration of such additional volumes could look like this: 
+The Helm chart allows you to define extra volumes which can be used in the Microgateway.
+The configuration of such additional volumes could look like this:
 
 ```
 extraVolumes:
@@ -497,7 +541,7 @@ config:
     apps:
       - mappings:
         - name: virtinc
-          mapping_template_path: /config/template/mapping.xml   
+          mapping_template_path: /config/template/mapping.xml
 ```
 
 ## Probes
@@ -529,7 +573,7 @@ If desired, the liveness probe can be disabled with `livenessProbe.enabled=false
 
 ## External connectivity
 The Helm chart can be configured to create a Kubernetes Ingress or Openshift Route to pass external traffic to the Microgateway Pod.
-In case that those objects were created with this Helm chart, just follow along with the description and configuration examples. 
+In case that those objects were created with this Helm chart, just follow along with the description and configuration examples.
 If there is already an existing Ingress or Route object and the traffic should only be passed to the Microgateway service, the information in the subchapters should provide useful information about how to integrate into the existing environment.
 
 :information_source: **Kubernetes vs. Openshift**:<br>
@@ -655,7 +699,7 @@ In other words, the entire path of the connection is encrypted and verified, als
         [...]
         pGKu7aodwB4cD5YnfXTvUcTv5tNU0llRLG1J0bg1n9cCo0nTC9sUZw==
         -----END RSA PRIVATE KEY-----
-      destinationCACertificate: | 
+      destinationCACertificate: |
         -----BEGIN CERTIFICATE-----
         MIIDrIXdz54xcilsKUoepQkn9e0bmIUVuiXWcQrr8iqjYC+hINNmiq+4YX4lWq2M
         [...]
@@ -720,18 +764,18 @@ In order to download this image, the credentials must be configured in a secret 
   Afterwards use this secret in the Helm chart configuration file.
   custom-values.yaml
   ```
-  imagePullSecrets: 
+  imagePullSecrets:
       - name: "docker-secret"
   ```
 
 #### Certificates for Microgateway
-The Microgateway can be configured to use a specific certificate for frontend and/or backend connections. The certificate must be stored in a secret 
+The Microgateway can be configured to use a specific certificate for frontend and/or backend connections. The certificate must be stored in a secret
 and passed to the Helm chart to use it.
 
 Used for frontend connection:
-* Certificate: `tls.crt`
-* Private key: `tls.key`
-* CA:          `ca.crt`
+* Certificate: `frontend-server.crt`
+* Private key: `frontend-server.key`
+* CA:          `frontend-server-ca.crt`
 
 :exclamation: In case that [Route Re-encrypt configuration](#route-re-encrypt-configuration) is used, ensure that `route.tls.destinationCACertificate` is updated accordingly.
 
@@ -744,9 +788,9 @@ Used for backend connection:
   The example below shows how to create a secret containing certificates for frontend and backend connections.
   ```
   kubectl create secret generic microgateway-tls \
-                                --from-file=tls.crt=<frontend_cert_file> \
-                                --from-file=tls.key=<frontend_key_file> \
-                                --from-file=ca.crt=<frontend_ca_file> \
+                                --from-file=frontend-server.crt=<frontend_cert_file> \
+                                --from-file=frontend-server.key=<frontend_key_file> \
+                                --from-file=frontend-server-ca.crt=<frontend_ca_file> \
                                 --from-file=backend-client.crt=<backend_cert_file> \
                                 --from-file=backend-client.key=<backend_key_file> \
                                 --from-file=backend-ca.crt=<backend_ca_file>
