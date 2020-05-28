@@ -18,8 +18,8 @@ The current chart version is: {{ template "chart.version" . }}
   * [Uninstalling the chart](#uninstalling-the-chart)
 * [Configuration](#configuration)
 * [Getting started](#getting-started)
+  * [Configure a valid license](#configure-a-valid-license)
   * [Override default values](#override-default-values)
-  * [Quick start license](#quick-start-license)
 * [Dependencies](#dependencies)
   * [Redis](#redis)
   * [Echo-Server](#echo-server)
@@ -70,10 +70,10 @@ To add the chart repository:
 To install the chart with the release name `microgateway`:
 
   ```console
-  helm upgrade -i microgateway airlock/microgateway
+  helm upgrade -i microgateway airlock/microgateway -f license.yaml
   ```
 
-:exclamation: Airlock Microgateway will not work without a valid license. To order one, please contact sales@airlock.com.
+:exclamation: Airlock Microgateway will not work without a valid license. For further information see chapter [Configure a valid license](#configure-a-valid-license)
 
 ### Uninstalling the chart
 To uninstall the chart with the release name `microgateway`:
@@ -89,6 +89,49 @@ The following table lists configuration parameters of the Airlock Microgateway c
 
 ## Getting started
 This chapter provides information how to get started with the Helm chart.
+
+### Configure a valid license
+This section describes how to configure a license for the Microgateway. By following the steps below, the Helm chart creates a secret with the license which is used by the Microgateway.
+
+1. Create a license.yaml file, which has the following content:
+```
+---
+config:
+  generic:
+    license: |
+      -----BEGIN LICENSE-----
+      eJxFkEnTokgURf+LWzsCEBCpiFowKoMg8KUIZS8YUoZUEkgmqaj/XnYvqpbv
+      [...]
+      bHy/N5tf//76DY17EVk=
+      -----END LICENSE-----
+      -- Airlock WAF --
+      Owner                        virtinc.com
+      Environment                  Productive
+      Trial                        on
+      Deployment Form              microgateway
+      Platform Restriction         no
+      Number of Back-end Hosts     99
+      Number of CPUs               12
+      Number of Sessions           100
+      Policy Enforcement           on
+      ICAP                         on
+      Kerberos                     on
+      API Gateway                  on
+      SSL VPN                      on
+      Reporting                    on
+      Expiry                       2020-12-31
+      ---------------------
+```
+
+2. Deploy the Microgateway with the license.yaml file:
+  ```console
+  helm upgrade -i microgateway airlock/microgateway -f license.yaml
+  ```
+
+:exclamation: Airlock Microgateway will not work without a valid license. To order one, please contact sales@airlock.com.
+
+:information_source: **Note**:<br>
+In productive environments, licenses might be deployed and handled in a different lifecycles. In such cases, an existing license want to be used. Further information for such setups are provided in chapter [Secure handling of license and passphrase](#secure-handling-of-license-and-passphrase).
 
 ### Override default values
 The Airlock Microgateway Helm chart has many parameters and most of them are already equipped with default values (see [Configuration](#configuration)). Depending on the environment, the defaults must be adapted. To override default values, do the following:
@@ -121,45 +164,6 @@ The Airlock Microgateway Helm chart has many parameters and most of them are alr
 
 :point_up: **YAML indentation**:<br>
 YAML is very strict with indentation. To ensure that the YAML file itself is correct, check it's content with a YAML validator (e.g. [YAML Lint](http://www.yamllint.com/)).
-
-### Quick start license
-The Airlock Microgateway cannot be used without a valid licence.  
-This section describes how to quickly configure a license for the Microgateway using a ConfigMap.
-:information_source: **Note**:<br>
-It is recommended to configure the license using a secret in a production environment. See: [Secure handling of license and passphrase](#secure-handling-of-license-and-passphrase)
-
-The Microgateway can be installed with a license as follows:
-License.yaml
-```
----
-config:
-  generic:
-    license: |
-      -----BEGIN LICENSE-----
-      -----END LICENSE-----
-      -- Airlock WAF --
-      Owner                        virtinc.com
-      Environment                  Productive
-      Trial                        on
-      Deployment Form              microgateway
-      Platform Restriction         no
-      Number of Back-end Hosts     99
-      Number of CPUs               12
-      Number of Sessions           100
-      Policy Enforcement           on
-      ICAP                         on
-      Kerberos                     on
-      API Gateway                  on
-      SSL VPN                      on
-      Reporting                    on
-      Expiry                       2020-12-31
-      ---------------------
-```
-
-Installation:
-  ```console
-  helm upgrade -i microgateway airlock/microgateway -f license.yaml
-  ```
 
 ## Dependencies
 The Airlock Microgateway Helm chart has the following optional dependencies, which can be enabled for a smooth start.
@@ -257,7 +261,7 @@ By default, the Airlock Microgateway is configured with the [Simple DSL configur
         protocol: https
         hostname: custom-backend-service
         port: 8443
-  
+
   redis:
     enabled: true
   ```
@@ -328,7 +332,7 @@ The use cases outlined above can also occur slightly differently. But all of the
             protocol: https
             hostname: custom-backend-service
             port: 8443
-  
+
   redis:
     enabled: true
   ```
@@ -363,7 +367,7 @@ In case that the [Advanced DSL configuration](#advanced-dsl-configuration) does 
           apache: |
             RemoteIPHeader X-Forwarded-For
             RemoteIPInternalProxy 10.0.0.0/28
-          
+
         apps:
           - virtual_host:
               hostname: virtinc.com
@@ -381,10 +385,10 @@ In case that the [Advanced DSL configuration](#advanced-dsl-configuration) does 
               protocol: https
               hostname: custom-backend-service
               port: 8443
-  
+
   redis:
     enabled: true
-  
+
   ```
 
 **`config.*` Parameters which can be used**:
@@ -400,9 +404,9 @@ This works for all three DSL of the above configuration setups (simple, advanced
   config:
     generic:
       env:
-        - name: WAF_CFG_operational_mode
+        - name: WAF_CFG_OPERATIONAL_MODE
           value: production
-        - name: WAF_CFG_log_only
+        - name: WAF_CFG_LOG_ONLY
           value: false
   ```
 
@@ -411,9 +415,9 @@ This works for all three DSL of the above configuration setups (simple, advanced
   config:
     simple:
       mapping:
-        operational_mode: "@@WAF_CFG_operational_mode@@"
+        operational_mode: "@@WAF_CFG_OPERATIONAL_MODE@@"
         deny_rules:
-          log_only: "@@WAF_CFG_log_only@@"
+          log_only: "@@WAF_CFG_LOG_ONLY@@"
   ```
 
 Finally, apply the Helm chart configuration file with `-f` parameter.
@@ -423,8 +427,8 @@ Finally, apply the Helm chart configuration file with `-f` parameter.
   ```
 
 ## Extra Volumes
-The Helm chart allows you to define extra volumes which can be used in the Microgateway. 
-The configuration of such additional volumes could look like this: 
+The Helm chart allows you to define extra volumes which can be used in the Microgateway.
+The configuration of such additional volumes could look like this:
 
 ```
 extraVolumes:
@@ -441,7 +445,7 @@ config:
     apps:
       - mappings:
         - name: virtinc
-          mapping_template_path: /config/template/mapping.xml   
+          mapping_template_path: /config/template/mapping.xml
 ```
 
 ## Probes
@@ -473,7 +477,7 @@ If desired, the liveness probe can be disabled with `livenessProbe.enabled=false
 
 ## External connectivity
 The Helm chart can be configured to create a Kubernetes Ingress or Openshift Route to pass external traffic to the Microgateway Pod.
-In case that those objects were created with this Helm chart, just follow along with the description and configuration examples. 
+In case that those objects were created with this Helm chart, just follow along with the description and configuration examples.
 If there is already an existing Ingress or Route object and the traffic should only be passed to the Microgateway service, the information in the subchapters should provide useful information about how to integrate into the existing environment.
 
 :information_source: **Kubernetes vs. Openshift**:<br>
@@ -599,7 +603,7 @@ In other words, the entire path of the connection is encrypted and verified, als
         [...]
         pGKu7aodwB4cD5YnfXTvUcTv5tNU0llRLG1J0bg1n9cCo0nTC9sUZw==
         -----END RSA PRIVATE KEY-----
-      destinationCACertificate: | 
+      destinationCACertificate: |
         -----BEGIN CERTIFICATE-----
         MIIDrIXdz54xcilsKUoepQkn9e0bmIUVuiXWcQrr8iqjYC+hINNmiq+4YX4lWq2M
         [...]
@@ -664,12 +668,12 @@ In order to download this image, the credentials must be configured in a secret 
   Afterwards use this secret in the Helm chart configuration file.
   custom-values.yaml
   ```
-  imagePullSecrets: 
+  imagePullSecrets:
       - name: "docker-secret"
   ```
 
 #### Certificates for Microgateway
-The Microgateway can be configured to use a specific certificate for frontend and/or backend connections. The certificate must be stored in a secret 
+The Microgateway can be configured to use a specific certificate for frontend and/or backend connections. The certificate must be stored in a secret
 and passed to the Helm chart to use it.
 
 Used for frontend connection:
