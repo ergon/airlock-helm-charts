@@ -5,7 +5,7 @@ image:
   # image.repository -- Image repository
   repository: docker.ergon.ch/airlock/microgateway
   # image.tag -- Image tag
-  tag: 7.4.sprint12_Build010
+  tag: 1.0.sprint13_Build011
   # image.pullPolicy -- Pull policy (`Always`, `IfNotPresent`, `Never`)
   pullPolicy: Always
 
@@ -16,21 +16,21 @@ config:
   # @default -- See `config.simple.*`:
   simple:
     mapping:
-      # config.simple.mapping.entryPath -- The `entry_path` of the app.
-      entryPath: /
-      # config.simple.mapping.operationalMode -- Operational mode (`production`, `integration`).
-      operationalMode: production
-      # config.simple.mapping.sessionHandling -- Session handling (`enforce_session`, `ignore_session`, `optional_session`, `optional_session_no_refresh`).
-      # @default -- - `enforce_session`<br> If `redis.enabled=true` <br> or `config.global.redisService`<br><br> - `ignore_session`<br> If `redis.enabled=false`
-      sessionHandling: ""
-      denyRules:
-        # config.simple.mapping.denyRules.enabled -- Enable all Deny rules.
+      # config.simple.mapping.entry_path -- The `entry_path` of the app.
+      entry_path: /
+      # config.simple.mapping.operational_mode -- Operational mode (`production`, `integration`).
+      operational_mode: production
+      # config.simple.mapping.session_handling -- Session handling (`enforce_session`, `ignore_session`, `optional_session`, `optional_session_no_refresh`).
+      # @default -- - `enforce_session`<br> If `redis.enabled=true` <br> or `config.global.redis_hosts`<br><br> - `ignore_session`<br> If `redis.enabled=false`
+      session_handling: ""
+      deny_rules:
+        # config.simple.mapping.deny_rules.enabled -- Enable all Deny rules.
         enabled: true
-        # config.simple.mapping.denyRules.level -- Security Level for all Deny rules (`basic`, `standard`, `strict`).
+        # config.simple.mapping.deny_rules.level -- Security Level for all Deny rules (`basic`, `standard`, `strict`).
         level: standard
-        # config.simple.mapping.denyRules.logOnly -- Enable log only for all Deny rules.
-        logOnly: false
-        # config.simple.mapping.denyRules.exceptions -- Deny rule exceptions.
+        # config.simple.mapping.deny_rules.log_only -- Enable log only for all Deny rules.
+        log_only: false
+        # config.simple.mapping.deny_rules.exceptions -- Deny rule exceptions.
         exceptions: []
         # - parameter_name:
         #     pattern: (PCRE Pattern-String)
@@ -56,43 +56,43 @@ config:
       # config.global.expert_settings.security_gate -- Global SecurityGate Expert Settings (multiline string).
       # @default -- ""
       security_gate:
-    # config.global.logLevel -- Log level (`info`, `trace`).<br>
+    # config.global.log_level -- Log level (`info`, `trace`).<br>
     # :exclamation: Never use `trace` in production.
-    logLevel: info
-    # config.global.redisService -- List of Redis services.
+    log_level: info
+    # config.global.redis_hosts -- List of Redis hosts.
     # @default -- `[]` if `redis.enabled=false` or <br> `[ redis-master ]` if `redis.enabled=true`
-    redisService: []
-    IPHeader:
-      # config.global.IPHeader.header -- HTTP header to extract the client IP address.
+    redis_hosts: []
+    ip_header:
+      # config.global.ip_header.header -- HTTP header to extract the client IP address.
       header: X-Forwarded-For
-      # config.global.IPHeader.trustedProxies -- Trusted IP addresses to extract the client IP from HTTP header.<br><br>
-      # :exclamation: IP addresses are only extracted if `trustedProxies` are configured.
-      trustedProxies: []
+      # config.global.ip_header.trusted_proxies -- Trusted IP addresses to extract the client IP from HTTP header.<br><br>
+      # :exclamation: IP addresses are only extracted if `trusted_proxies` are configured.
+      trusted_proxies: []
 
     backend:
       tls:
-        # config.global.backend.tls.serverCa -- Validates the backend server certificate against the configured CA. <br>
+        # config.global.backend.tls.server_ca -- Validates the backend server certificate against the configured CA. <br>
         # :exclamation: Must be configured in `config.generic.tlsSecretName`.
-        serverCa: false
-        # config.global.backend.tls.clientCert -- Use TLS client certificate for backend connections. <br>
+        server_ca: false
+        # config.global.backend.tls.client_cert -- Use TLS client certificate for backend connections. <br>
         # :exclamation: Must be configured in `config.generic.tlsSecretName`.
-        clientCert: false
-        # config.global.backend.tls.verifyHost -- Verify the backend TLS certificate.<br>
-        # :exclamation: `config.global.backend.tls.serverCa` must be configured in order to work.
-        verifyHost: false
+        client_cert: false
+        # config.global.backend.tls.verify_host -- Verify the backend TLS certificate.<br>
+        # :exclamation: `config.global.backend.tls.server_ca` must be configured in order to work.
+        verify_host: false
         # config.global.backend.tls.version -- Overwrite the default TLS version for backend connections.<br>
         version: ""
-        # config.global.backend.tls.cipherSuite -- Overwrite the default TLS ciphers (<=TLS 1.2) for backend connections.
-        cipherSuite: ""
-        # config.global.backend.tls.cipherSuitev13 -- Overwrite the default TLS ciphers (TLS 1.3) for backend connections.
-        cipherSuitev13: ""
+        # config.global.backend.tls.cipher_suite -- Overwrite the default TLS ciphers (<=TLS 1.2) for backend connections.
+        cipher_suite: ""
+        # config.global.backend.tls.cipher_suite_v13 -- Overwrite the default TLS ciphers (TLS 1.3) for backend connections.
+        cipher_suite_v13: ""
 
-    virtualHost:
+    virtual_host:
       tls:
-        # config.global.virtualHost.tls.protocol -- Overwrite the default TLS protocol for frontend connections.
+        # config.global.virtual_host.tls.protocol -- Overwrite the default TLS protocol for frontend connections.
         protocol: ""
-        # config.global.virtualHost.tls.cipherSuite -- Overwrite the default TLS ciphers for frontend connections.
-        cipherSuite: ""
+        # config.global.virtual_host.tls.cipher_suite -- Overwrite the default TLS ciphers for frontend connections.
+        cipher_suite: ""
 
   # config.generic -- Available for:<br>
   # - [Simple DSL configuration](#simple-dsl-configuration)<br>
@@ -106,9 +106,9 @@ config:
     #    value: Example_Value
     # config.generic.tlsSecretName -- (string) Name of an existing secret containing:<br><br>
     # _Virtual Host:_<br>
-    # Certificate: `tls.crt`<br>
-    # Private key: `tls.key`<br>
-    # CA: `ca.crt` <br>
+    # Certificate: `frontend-server.crt`<br>
+    # Private key: `frontend-server.key`<br>
+    # CA: `frontend-server-ca.crt` <br>
     # :exclamation: Update `route.tls.destinationCACertificate` accordingly.<br><br>
     # _Backend:_<br>
     # Certificate: `backend-client.crt`<br>
