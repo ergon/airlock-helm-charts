@@ -461,7 +461,7 @@ In case that the [Advanced DSL configuration](#advanced-dsl-configuration) does 
           level: info
         expert_settings:
           apache: |
-            Remoteip_header X-Forwarded-For
+            RemoteIPHeader X-Forwarded-For
             RemoteIPInternalProxy 10.0.0.0/28
 
         apps:
