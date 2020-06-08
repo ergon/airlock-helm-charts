@@ -88,7 +88,7 @@ data:
         session_handling: {{ "ignore_session" }}
         {{- end }}
         deny_rules:
-        - enable: {{ $simple.mapping.deny_rules.enabled }}
+        - enabled: {{ $simple.mapping.deny_rules.enabled }}
           log_only: {{ $simple.mapping.deny_rules.log_only }}
           level: {{ $simple.mapping.deny_rules.level }}
           {{- with $simple.mapping.deny_rules.exceptions }}
