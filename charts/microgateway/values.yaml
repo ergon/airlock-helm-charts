@@ -35,7 +35,7 @@ config:
         # - parameter_name:
         #     pattern: (PCRE Pattern-String)
         #     ignore_case: (default: TRUE)
-        #     invert: (default: FALSE)
+        #     inverted: (default: FALSE)
     backend:
       # config.simple.backend.hostname -- Backend hostname
       hostname: backend-service
