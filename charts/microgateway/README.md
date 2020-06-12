@@ -500,9 +500,9 @@ This works for all three DSL of the above configuration setups (simple, advanced
   config:
     generic:
       env:
-        - name: WAF_CFG_OPERATIONAL_MODE
+        - name: ALG_CFG_OPERATIONAL_MODE
           value: production
-        - name: WAF_CFG_LOG_ONLY
+        - name: ALG_CFG_LOG_ONLY
           value: false
   ```
 
@@ -511,9 +511,9 @@ This works for all three DSL of the above configuration setups (simple, advanced
   config:
     simple:
       mapping:
-        operational_mode: "@@WAF_CFG_OPERATIONAL_MODE@@"
+        operational_mode: "@@ALG_CFG_OPERATIONAL_MODE@@"
         deny_rules:
-          log_only: "@@WAF_CFG_LOG_ONLY@@"
+          log_only: "@@ALG_CFG_LOG_ONLY@@"
   ```
 
 Finally, apply the Helm chart configuration file with `-f` parameter.
