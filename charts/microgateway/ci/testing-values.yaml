@@ -1,5 +1,5 @@
 image:
-  repository: julianbe/microgateway
+  repository: orltom/microgateway
 config:
   generic:
     existingSecret: "microgatewaysecrets"
