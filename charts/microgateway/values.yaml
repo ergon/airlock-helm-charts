@@ -102,7 +102,7 @@ config:
   generic:
     # config.generic.env -- [Environment variables](#environment-variables)
     env: []
-    #  - name: WAF_CFG_EXAMPLE
+    #  - name: ALG_CFG_EXAMPLE
     #    value: Example_Value
     # config.generic.tlsSecretName -- (string) Name of an existing secret containing:<br><br>
     # _Virtual Host:_<br>
