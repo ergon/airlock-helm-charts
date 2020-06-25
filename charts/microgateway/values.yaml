@@ -5,7 +5,7 @@ image:
   # image.repository -- Image repository
   repository: docker.ergon.ch/airlock/microgateway
   # image.tag -- Image tag
-  tag: 1.0.sprint13_Build011
+  tag: 1.0.sprint14_Build012
   # image.pullPolicy -- Pull policy (`Always`, `IfNotPresent`, `Never`)
   pullPolicy: Always
 
@@ -35,7 +35,7 @@ config:
         # - parameter_name:
         #     pattern: (PCRE Pattern-String)
         #     ignore_case: (default: TRUE)
-        #     invert: (default: FALSE)
+        #     inverted: (default: FALSE)
     backend:
       # config.simple.backend.hostname -- Backend hostname
       hostname: backend-service
@@ -102,7 +102,7 @@ config:
   generic:
     # config.generic.env -- [Environment variables](#environment-variables)
     env: []
-    #  - name: WAF_CFG_EXAMPLE
+    #  - name: ALG_CFG_EXAMPLE
     #    value: Example_Value
     # config.generic.tlsSecretName -- (string) Name of an existing secret containing:<br><br>
     # _Virtual Host:_<br>

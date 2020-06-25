@@ -6,7 +6,7 @@ It is the lightweight, container-based deployment form of the *Airlock Gateway*,
 
 The Airlock helm charts are used internally for testing the *Airlock Microgateway*. We make them available publicly under the [MIT license](https://github.com/ergon/airlock-helm-charts/blob/master/LICENSE).
 
-The current chart version is: 0.4.9
+The current chart version is: 0.5.0
 
 ## About Ergon
 *Airlock* is a registered trademark of [Ergon](https://www.ergon.ch). Ergon is a Swiss leader in leveraging digitalisation to create unique and effective client benefits, from conception to market, the result of which is the international distribution of globally revered products.
@@ -138,7 +138,7 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | hpa.resource.memory | string | `"2Gi"` | Average Microgateway Memory consumption to scale up/down.<br><br> :exclamation: Update this setting accordingly to `resources.limits.memory`. |
 | image.pullPolicy | string | `"Always"` | Pull policy (`Always`, `IfNotPresent`, `Never`) |
 | image.repository | string | `"docker.ergon.ch/airlock/microgateway"` | Image repository |
-| image.tag | string | `"1.0.sprint13_Build011"` | Image tag |
+| image.tag | string | `"1.0.sprint14_Build012"` | Image tag |
 | imagePullSecrets | list | `[]` | Reference to one or more secrets to use when pulling images. |
 | ingress | object | See `ingress.*`: | [Kubernetes Ingress](#kubernetes-ingress) |
 | ingress.annotations | object | `{"nginx.ingress.kubernetes.io/rewrite-target":"/"}` | Annotations to set on the ingress. |
@@ -500,9 +500,9 @@ This works for all three DSL of the above configuration setups (simple, advanced
   config:
     generic:
       env:
-        - name: WAF_CFG_OPERATIONAL_MODE
+        - name: ALG_CFG_OPERATIONAL_MODE
           value: production
-        - name: WAF_CFG_LOG_ONLY
+        - name: ALG_CFG_LOG_ONLY
           value: false
   ```
 
@@ -511,9 +511,9 @@ This works for all three DSL of the above configuration setups (simple, advanced
   config:
     simple:
       mapping:
-        operational_mode: "@@WAF_CFG_OPERATIONAL_MODE@@"
+        operational_mode: "@@ALG_CFG_OPERATIONAL_MODE@@"
         deny_rules:
-          log_only: "@@WAF_CFG_LOG_ONLY@@"
+          log_only: "@@ALG_CFG_LOG_ONLY@@"
   ```
 
 Finally, apply the Helm chart configuration file with `-f` parameter.
