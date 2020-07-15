@@ -138,7 +138,7 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | hpa.resource.memory | string | `"2Gi"` | Average Microgateway Memory consumption to scale up/down.<br><br> :exclamation: Update this setting accordingly to `resources.limits.memory`. |
 | image.pullPolicy | string | `"Always"` | Pull policy (`Always`, `IfNotPresent`, `Never`) |
 | image.repository | string | `"ergon/airlock-microgateway"` | Image repository |
-| image.tag | float | `1` | Image tag |
+| image.tag | string | `"1.0"` | Image tag |
 | imagePullSecrets | list | `[]` | Reference to one or more secrets to use when pulling images. |
 | ingress | object | See `ingress.*`: | [Kubernetes Ingress](#kubernetes-ingress) |
 | ingress.annotations | object | `{"nginx.ingress.kubernetes.io/rewrite-target":"/"}` | Annotations to set on the ingress. |
