@@ -3,9 +3,9 @@ replicaCount: 1
 
 image:
   # image.repository -- Image repository
-  repository: docker.ergon.ch/airlock/microgateway
+  repository: ergon/airlock-microgateway
   # image.tag -- Image tag
-  tag: 1.0.sprint14_Build012
+  tag: 1.0
   # image.pullPolicy -- Pull policy (`Always`, `IfNotPresent`, `Never`)
   pullPolicy: Always
 
