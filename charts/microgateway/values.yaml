@@ -282,12 +282,19 @@ livenessProbe:
   enabled: true
   # livenessProbe.initialDelaySeconds -- Initial delay in seconds.
   initialDelaySeconds: 90
+  # livenessProbe.failureThreshold -- After how many subsequent failures the pod gets restarted.
+  failureThreshold: 9
+  # livenessProbe.timeoutSeconds -- Timeout of liveness probes, should roughly reflect allowed timeouts from clients.
+  timeoutSeconds: 5
 
 readinessProbe:
   # readinessProbe.enabled -- Enable readiness probes.
   enabled: true
   # readinessProbe.initialDelaySeconds -- Initial delay in seconds.
-  initialDelaySeconds: 30
+  initialDelaySeconds: 10
+  # readinessProbe.failureThreshold -- After how many tries the pod stops receiving traffic.
+  failureThreshold: 3
+
 # nodeSelector -- Define which nodes the pods are scheduled on.
 nodeSelector: {}
 # tolerations -- Tolerations for use with node [taints](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/).
