@@ -268,11 +268,10 @@ route:
 # resources -- [Resource limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container)
 resources:
   requests:
-    memory: "512Mi"
-    cpu: "500m"
+    memory: 256Mi
+    cpu: 30m
   limits:
-    memory: "4048Mi"
-    cpu: "4"
+    memory: 4048Mi
 
 ## Liveness and readiness probe values
 ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes

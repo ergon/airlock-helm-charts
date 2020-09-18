@@ -6,7 +6,7 @@ It is the lightweight, container-based deployment form of the *Airlock Gateway*,
 
 The Airlock helm charts are used internally for testing the *Airlock Microgateway*. We make them available publicly under the [MIT license](https://github.com/ergon/airlock-helm-charts/blob/master/LICENSE).
 
-The current chart version is: 0.6.0
+The current chart version is: 0.6.1
 
 ## About Ergon
 *Airlock* is a registered trademark of [Ergon](https://www.ergon.ch). Ergon is a Swiss leader in leveraging digitalisation to create unique and effective client benefits, from conception to market, the result of which is the international distribution of globally revered products.
@@ -158,7 +158,7 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | redis | object | See `redis.*`: | Pre-configured [Redis](#redis) service. |
 | redis.enabled | bool | `false` | Deploy pre-configured [Redis](#redis). |
 | replicaCount | int | `1` | Desired number of Microgateway pods. |
-| resources | object | `{"limits":{"cpu":"4","memory":"4048Mi"},"requests":{"cpu":"500m","memory":"512Mi"}}` | [Resource limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) |
+| resources | object | `{"limits":{"memory":"4048Mi"},"requests":{"cpu":"30m","memory":"256Mi"}}` | [Resource limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) |
 | route | object | See `route.*`: | [Openshift Route](#openshift-route) |
 | route.annotations | object | `{}` | Annotations to set on the route. |
 | route.enabled | bool | `false` | Create a route object. |
