@@ -248,15 +248,15 @@ By default, the Airlock Microgateway is configured with the [Simple DSL configur
         entry_path: /
         operational_mode: integration
         deny_rules:
-          level: strict
-          exceptions:
-            - parameter_name:
-                pattern: ^content$
-                ignore_case: true
-              path:
-                pattern: ^/mail/
-              method:
-                pattern: ^POST$
+          - level: strict
+            exceptions:
+              - parameter_name:
+                  pattern: ^content$
+                  ignore_case: true
+                path:
+                  pattern: ^/mail/
+                method:
+                  pattern: ^POST$
       backend:
         protocol: https
         hostname: custom-backend-service
@@ -312,20 +312,20 @@ The use cases outlined above can also occur slightly differently. But all of the
               operational_mode: integration
               session_handling: enforce_session
               deny_rules:
-                level: standard
-                exceptions:
-                  - parameter_name:
-                      pattern: ^content$
-                      ignore_case: true
-                    path:
-                      pattern: ^/mail/
-                    method:
-                      pattern: ^POST$
+                - level: standard
+                  exceptions:
+                    - parameter_name:
+                        pattern: ^content$
+                        ignore_case: true
+                      path:
+                        pattern: ^/mail/
+                      method:
+                        pattern: ^POST$
             - name: api
               entry_path: /api/
               session_handling: ignore_session
               deny_rules:
-                level: strict
+                - level: strict
               openapi:
                 spec_file: /config/virtinc_api_openapi.json
           backend:
@@ -417,7 +417,7 @@ This works for all three DSL of the above configuration setups (simple, advanced
       mapping:
         operational_mode: "@@ALG_CFG_OPERATIONAL_MODE@@"
         deny_rules:
-          log_only: "@@ALG_CFG_LOG_ONLY@@"
+          - log_only: "@@ALG_CFG_LOG_ONLY@@"
   ```
 
 Finally, apply the Helm chart configuration file with `-f` parameter.

@@ -6,7 +6,7 @@ It is the lightweight, container-based deployment form of the *Airlock Gateway*,
 
 The Airlock helm charts are used internally for testing the *Airlock Microgateway*. We make them available publicly under the [MIT license](https://github.com/ergon/airlock-helm-charts/blob/master/LICENSE).
 
-The current chart version is: 0.5.0
+The current chart version is: 0.6.0
 
 ## About Ergon
 *Airlock* is a registered trademark of [Ergon](https://www.ergon.ch). Ergon is a Swiss leader in leveraging digitalisation to create unique and effective client benefits, from conception to market, the result of which is the international distribution of globally revered products.
@@ -137,8 +137,8 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | hpa.resource.cpu | int | `50` | Average Microgateway CPU consumption in percentage to scale up/down. |
 | hpa.resource.memory | string | `"2Gi"` | Average Microgateway Memory consumption to scale up/down.<br><br> :exclamation: Update this setting accordingly to `resources.limits.memory`. |
 | image.pullPolicy | string | `"Always"` | Pull policy (`Always`, `IfNotPresent`, `Never`) |
-| image.repository | string | `"docker.ergon.ch/airlock/microgateway"` | Image repository |
-| image.tag | string | `"1.0.sprint14_Build012"` | Image tag |
+| image.repository | string | `"ergon/airlock-microgateway"` | Image repository |
+| image.tag | string | `"1.0"` | Image tag |
 | imagePullSecrets | list | `[]` | Reference to one or more secrets to use when pulling images. |
 | ingress | object | See `ingress.*`: | [Kubernetes Ingress](#kubernetes-ingress) |
 | ingress.annotations | object | `{"nginx.ingress.kubernetes.io/rewrite-target":"/"}` | Annotations to set on the ingress. |
@@ -344,15 +344,15 @@ By default, the Airlock Microgateway is configured with the [Simple DSL configur
         entry_path: /
         operational_mode: integration
         deny_rules:
-          level: strict
-          exceptions:
-            - parameter_name:
-                pattern: ^content$
-                ignore_case: true
-              path:
-                pattern: ^/mail/
-              method:
-                pattern: ^POST$
+          - level: strict
+            exceptions:
+              - parameter_name:
+                  pattern: ^content$
+                  ignore_case: true
+                path:
+                  pattern: ^/mail/
+                method:
+                  pattern: ^POST$
       backend:
         protocol: https
         hostname: custom-backend-service
@@ -408,20 +408,20 @@ The use cases outlined above can also occur slightly differently. But all of the
               operational_mode: integration
               session_handling: enforce_session
               deny_rules:
-                level: standard
-                exceptions:
-                  - parameter_name:
-                      pattern: ^content$
-                      ignore_case: true
-                    path:
-                      pattern: ^/mail/
-                    method:
-                      pattern: ^POST$
+                - level: standard
+                  exceptions:
+                    - parameter_name:
+                        pattern: ^content$
+                        ignore_case: true
+                      path:
+                        pattern: ^/mail/
+                      method:
+                        pattern: ^POST$
             - name: api
               entry_path: /api/
               session_handling: ignore_session
               deny_rules:
-                level: strict
+                - level: strict
               openapi:
                 spec_file: /config/virtinc_api_openapi.json
           backend:
@@ -513,7 +513,7 @@ This works for all three DSL of the above configuration setups (simple, advanced
       mapping:
         operational_mode: "@@ALG_CFG_OPERATIONAL_MODE@@"
         deny_rules:
-          log_only: "@@ALG_CFG_LOG_ONLY@@"
+          - log_only: "@@ALG_CFG_LOG_ONLY@@"
   ```
 
 Finally, apply the Helm chart configuration file with `-f` parameter.
