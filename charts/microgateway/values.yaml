@@ -7,7 +7,7 @@ image:
   # image.tag -- Image tag
   tag: "1.0"
   # image.pullPolicy -- Pull policy (`Always`, `IfNotPresent`, `Never`)
-  pullPolicy: Always
+  pullPolicy: IfNotPresent
 
 ## Microgateway Config
 ##
