@@ -3,6 +3,37 @@ entries:
   microgateway:
   - apiVersion: v1
     appVersion: "1"
+    created: "2021-01-20T14:10:58.849726171Z"
+    dependencies:
+    - condition: redis.enabled
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: 10.6.12
+    - condition: echo-server.enabled
+      name: echo-server
+      repository: https://ealenn.github.io/charts
+      version: 0.3.0
+    description: |
+      The *Airlock Microgateway* is a component of the [Airlock Secure Access Hub](https://www.airlock.com/).
+      It is the lightweight, container-based deployment form of the *Airlock Gateway*, a software appliance with reverse-proxy, Web Application Firewall (WAF) and API security functionality.
+    digest: 7dee0b03ce5386e26e47de69b98dad504f598f569b7e1386bb268cfecd4f17f6
+    home: https://www.airlock.com
+    keywords:
+    - WAF
+    - Web Application Firewall
+    - Airlock
+    - MicroGateway
+    - Security
+    - Filtering
+    maintainers:
+    - email: support@airlock.com
+      name: Airlock
+    name: microgateway
+    urls:
+    - https://github.com/ergon/airlock-helm-charts/releases/download/microgateway-0.6.1/microgateway-0.6.1.tgz
+    version: 0.6.1
+  - apiVersion: v1
+    appVersion: "1"
     created: "2020-07-20T06:57:12.362748635Z"
     dependencies:
     - condition: redis.enabled
@@ -137,8 +168,7 @@ entries:
       name: echo-server
       repository: https://ealenn.github.io/charts
       version: 0.3.0
-    description: Airlock Microgateway, an Airlock Gateway container solution to protect
-      other services.
+    description: Airlock Microgateway, an Airlock Gateway container solution to protect other services.
     digest: 1508f4a4a221d6decb28f1984c7d140ee178392d4e5d8cfc7d4497228ceda4fb
     home: https://www.airlock.com
     keywords:
@@ -167,8 +197,7 @@ entries:
       name: echo-server
       repository: https://ealenn.github.io/charts
       version: 0.3.0
-    description: Airlock Microgateway, an Airlock Gateway container solution to protect
-      other services.
+    description: Airlock Microgateway, an Airlock Gateway container solution to protect other services.
     digest: 37f4133bde1d2c4c7cc9245a8dccbcbf73437adcebe71e8b07e6efc92826926c
     home: https://www.airlock.com
     keywords:
@@ -197,8 +226,7 @@ entries:
       name: echo-server
       repository: https://ealenn.github.io/charts
       version: 0.3.0
-    description: Airlock Microgateway, an Airlock Gateway container solution to protect
-      other services.
+    description: Airlock Microgateway, an Airlock Gateway container solution to protect other services.
     digest: decd3a92687528d32e0782fa4c220f297d66401429effc93322b52640284e136
     home: https://www.airlock.com
     keywords:
