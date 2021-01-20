@@ -6,7 +6,7 @@ It is the lightweight, container-based deployment form of the *Airlock Gateway*,
 
 The Airlock helm charts are used internally for testing the *Airlock Microgateway*. We make them available publicly under the [MIT license](https://github.com/ergon/airlock-helm-charts/blob/master/LICENSE).
 
-The current chart version is: 0.6.0
+The current chart version is: 0.6.1
 
 ## About Ergon
 *Airlock* is a registered trademark of [Ergon](https://www.ergon.ch). Ergon is a Swiss leader in leveraging digitalisation to create unique and effective client benefits, from conception to market, the result of which is the international distribution of globally revered products.
@@ -136,7 +136,7 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | hpa.minReplicas | int | `1` | Minimum number of Microgateway replicas. |
 | hpa.resource.cpu | int | `50` | Average Microgateway CPU consumption in percentage to scale up/down. |
 | hpa.resource.memory | string | `"2Gi"` | Average Microgateway Memory consumption to scale up/down.<br><br> :exclamation: Update this setting accordingly to `resources.limits.memory`. |
-| image.pullPolicy | string | `"Always"` | Pull policy (`Always`, `IfNotPresent`, `Never`) |
+| image.pullPolicy | string | `"IfNotPresent"` | Pull policy (`Always`, `IfNotPresent`, `Never`) |
 | image.repository | string | `"ergon/airlock-microgateway"` | Image repository |
 | image.tag | string | `"1.0"` | Image tag |
 | imagePullSecrets | list | `[]` | Reference to one or more secrets to use when pulling images. |
@@ -149,16 +149,19 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | ingress.targetPort | string | `"http"` | Target port of the service (`http`, `https` or `<number>`). |
 | ingress.tls | list | `[]` | [Ingress TLS](https://kubernetes.io/docs/concepts/services-networking/ingress/#tls) configuration. |
 | livenessProbe.enabled | bool | `true` | Enable liveness probes. |
+| livenessProbe.failureThreshold | int | `9` | After how many subsequent failures the pod gets restarted. |
 | livenessProbe.initialDelaySeconds | int | `90` | Initial delay in seconds. |
+| livenessProbe.timeoutSeconds | int | `5` | Timeout of liveness probes, should roughly reflect allowed timeouts from clients. |
 | nameOverride | string | `""` | Provide a name in place of `microgateway`. |
 | nodeSelector | object | `{}` | Define which nodes the pods are scheduled on. |
 | podSecurityContext | object | `{}` | [Security context for the pods](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod). |
 | readinessProbe.enabled | bool | `true` | Enable readiness probes. |
-| readinessProbe.initialDelaySeconds | int | `30` | Initial delay in seconds. |
+| readinessProbe.failureThreshold | int | `3` | After how many tries the pod stops receiving traffic. |
+| readinessProbe.initialDelaySeconds | int | `10` | Initial delay in seconds. |
 | redis | object | See `redis.*`: | Pre-configured [Redis](#redis) service. |
 | redis.enabled | bool | `false` | Deploy pre-configured [Redis](#redis). |
 | replicaCount | int | `1` | Desired number of Microgateway pods. |
-| resources | object | `{"limits":{"cpu":"4","memory":"4048Mi"},"requests":{"cpu":"500m","memory":"512Mi"}}` | [Resource limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) |
+| resources | object | `{"limits":{"memory":"4048Mi"},"requests":{"cpu":"30m","memory":"256Mi"}}` | [Resource limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) |
 | route | object | See `route.*`: | [Openshift Route](#openshift-route) |
 | route.annotations | object | `{}` | Annotations to set on the route. |
 | route.enabled | bool | `false` | Create a route object. |
