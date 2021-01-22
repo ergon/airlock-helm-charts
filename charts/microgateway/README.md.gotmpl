@@ -520,6 +520,7 @@ In case that multiple hosts are configured, TLS-SNI is used to distinguish what 
     annotations:
       nginx.ingress.kubernetes.io/rewrite-target: /
       kubernetes.io/ingress.class: nginx
+      nginx.ingress.kubernetes.io/backend-protocol: https
     targetPort: https
     tls:
       - secretName: virtinc-tls-secret
