@@ -6,7 +6,7 @@ It is the lightweight, container-based deployment form of the *Airlock Gateway*,
 
 The Airlock helm charts are used internally for testing the *Airlock Microgateway*. We make them available publicly under the [MIT license](https://github.com/ergon/airlock-helm-charts/blob/master/LICENSE).
 
-The current chart version is: 0.6.1
+The current chart version is: 0.6.2
 
 ## About Ergon
 *Airlock* is a registered trademark of [Ergon](https://www.ergon.ch). Ergon is a Swiss leader in leveraging digitalisation to create unique and effective client benefits, from conception to market, the result of which is the international distribution of globally revered products.
@@ -445,7 +445,7 @@ The use cases outlined above can also occur slightly differently. But all of the
 ### Expert DSL configuration
 In case that the [Advanced DSL configuration](#advanced-dsl-configuration) does not suite, the expert configuration options must be used. There are a few reasons listed below:
 
-* The Microgateway DSL configuration options are not available as Helm chart parameters (e.g. base_template_file, session.store_mode, ...)
+* The Microgateway DSL configuration options are not available as Helm chart parameters (e.g. session.store_mode, ...)
 * The Microgateway DSL configuration file has already been used/tested thorougly. To reduce the risk of a broken or unsecure configuration, do not modify the pre-configured configuration file.
 
 
@@ -456,7 +456,6 @@ In case that the [Advanced DSL configuration](#advanced-dsl-configuration) does 
   config:
     expert:
       dsl:
-        base_template_file: /config/custom-base.xml
         license_file: /secret/config/license
         session:
           encryption_passphrase_file: /secret/config/passphrase
