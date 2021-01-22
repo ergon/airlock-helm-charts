@@ -445,7 +445,7 @@ The use cases outlined above can also occur slightly differently. But all of the
 ### Expert DSL configuration
 In case that the [Advanced DSL configuration](#advanced-dsl-configuration) does not suite, the expert configuration options must be used. There are a few reasons listed below:
 
-* The Microgateway DSL configuration options are not available as Helm chart parameters (e.g. base_template_file, session.store_mode, ...)
+* The Microgateway DSL configuration options are not available as Helm chart parameters (e.g. session.store_mode, ...)
 * The Microgateway DSL configuration file has already been used/tested thorougly. To reduce the risk of a broken or unsecure configuration, do not modify the pre-configured configuration file.
 
 
@@ -456,7 +456,6 @@ In case that the [Advanced DSL configuration](#advanced-dsl-configuration) does 
   config:
     expert:
       dsl:
-        base_template_file: /config/custom-base.xml
         license_file: /secret/config/license
         session:
           encryption_passphrase_file: /secret/config/passphrase
