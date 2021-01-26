@@ -115,9 +115,6 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | config.global.virtual_host.tls.cipher_suite | string | `""` | Overwrite the default TLS ciphers for frontend connections. |
 | config.global.virtual_host.tls.protocol | string | `""` | Overwrite the default TLS protocol for frontend connections. |
 | config.simple | object | See `config.simple.*`: | [Simple DSL configuration](#simple-dsl-configuration) |
-| config.simple.backend.hostname | string | `"backend-service"` | Backend hostname |
-| config.simple.backend.port | int | `8080` | Backend port |
-| config.simple.backend.protocol | string | `"http"` | Backend protocol |
 | config.simple.mapping.deny_rules.enabled | bool | `true` | Enable all Deny rules. |
 | config.simple.mapping.deny_rules.exceptions | list | `[]` | Deny rule exceptions. |
 | config.simple.mapping.deny_rules.level | string | `"standard"` | Security Level for all Deny rules (`basic`, `standard`, `strict`). |
@@ -243,8 +240,9 @@ The Airlock Microgateway Helm chart has many parameters and most of them are alr
   ```
   config:
     simple:
-      backend:
-        hostname: custom-backend-service
+      mapping:
+        backend:
+          hostname: custom-backend-service
     generic:
       existingSecret: "microgateway-secrets"
   imagePullSecrets:
@@ -358,10 +356,10 @@ By default, the Airlock Microgateway is configured with the [Simple DSL configur
                 pattern: ^/mail/
               method:
                 pattern: ^POST$
-      backend:
-        protocol: https
-        hostname: custom-backend-service
-        port: 8443
+        backend:
+          protocol: https
+          hostname: custom-backend-service
+          port: 8443
 
   redis:
     enabled: true
