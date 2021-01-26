@@ -96,9 +96,9 @@ data:
           {{- end }}
         backend:
           hosts:
-          - protocol: {{ $simple.mapping.backend.protocol }}
-            name: {{ $simple.mapping.backend.hostname }}
-            port: {{ $simple.mapping.backend.port }}
+          - protocol: {{ $simple.backend.protocol }}
+            name: {{ $simple.backend.hostname }}
+            port: {{ $simple.backend.port }}
     {{- if $generic.tlsSecretName }}
       virtual_host:
         certificate:
