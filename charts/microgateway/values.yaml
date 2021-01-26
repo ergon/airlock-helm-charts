@@ -38,13 +38,13 @@ config:
         #     pattern: (PCRE Pattern-String)
         #     ignore_case: (default: TRUE)
         #     inverted: (default: FALSE)
-    backend:
-      # config.simple.backend.hostname -- Backend hostname
-      hostname: backend-service
-      # config.simple.backend.port -- Backend port
-      port: 8080
-      # config.simple.backend.protocol -- Backend protocol
-      protocol: http
+      backend:
+        # config.simple.backend.hostname -- Backend hostname
+        hostname: backend-service
+        # config.simple.backend.port -- Backend port
+        port: 8080
+        # config.simple.backend.protocol -- Backend protocol
+        protocol: http
 
   # config.global -- Available for:<br>
   # - [Simple DSL configuration](#simple-dsl-configuration)<br>

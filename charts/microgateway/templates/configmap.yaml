@@ -95,9 +95,10 @@ data:
           exceptions: {{ toYaml . | nindent 12 }}
           {{- end }}
         backend:
-          protocol: {{ $simple.backend.protocol }}
-          hostname: {{ $simple.backend.hostname }}
-          port: {{ $simple.backend.port }}
+          hosts:
+          - protocol: {{ $simple.mapping.backend.protocol }}
+            name: {{ $simple.mapping.backend.hostname }}
+            port: {{ $simple.mapping.backend.port }}
     {{- if $generic.tlsSecretName }}
       virtual_host:
         certificate:

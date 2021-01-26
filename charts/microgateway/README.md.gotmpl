@@ -146,8 +146,9 @@ The Airlock Microgateway Helm chart has many parameters and most of them are alr
   ```
   config:
     simple:
-      backend:
-        hostname: custom-backend-service
+      mapping:
+        backend:
+          hostname: custom-backend-service
     generic:
       existingSecret: "microgateway-secrets"
   imagePullSecrets:
@@ -258,10 +259,10 @@ By default, the Airlock Microgateway is configured with the [Simple DSL configur
                 pattern: ^/mail/
               method:
                 pattern: ^POST$
-      backend:
-        protocol: https
-        hostname: custom-backend-service
-        port: 8443
+        backend:
+          protocol: https
+          hostname: custom-backend-service
+          port: 8443
 
   redis:
     enabled: true
