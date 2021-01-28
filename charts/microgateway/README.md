@@ -436,9 +436,9 @@ The use cases outlined above can also occur slightly differently. But all of the
                 spec_file: /config/virtinc_api_openapi.json
               backend:
                 hosts:
-                  protocol: https
-                  name: custom-backend-service
-                  port: 8443
+                  - protocol: https
+                    name: custom-backend-service
+                    port: 8443
 
   redis:
     enabled: true
