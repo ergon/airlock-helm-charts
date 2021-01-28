@@ -424,9 +424,9 @@ The use cases outlined above can also occur slightly differently. But all of the
                       pattern: ^POST$
               backend:
                 hosts:
-                  protocol: https
-                  name: custom-backend-service
-                  port: 8443
+                  - protocol: https
+                    name: custom-backend-service
+                    port: 8443
             - name: api
               entry_path: /api/
               session_handling: ignore_session
@@ -489,9 +489,9 @@ In case that the [Advanced DSL configuration](#advanced-dsl-configuration) does 
                   spec_file: /config/virtinc_api_openapi.json
                 backend:
                   hosts:
-                    protocol: https
-                    name: custom-backend-service
-                    port: 8443
+                    - protocol: https
+                      name: custom-backend-service
+                      port: 8443
 
   redis:
     enabled: true
