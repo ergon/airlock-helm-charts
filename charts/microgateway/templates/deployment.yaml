@@ -25,18 +25,10 @@ spec:
     {{- end }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
-      containers:
-      - name: {{ .Chart.Name }}
-        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+      initContainers:
+      - name: {{ .Chart.Name }}-configbuilder
+        image: "{{ .Values.image.repository_configbuilder }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
-        ports:
-        - name: http
-          containerPort: 8080
-        - name: https
-          containerPort: 8443
-        {{- with .Values.config.generic.env }}
-        env: {{ toYaml . | nindent 10 }}
-        {{- end }}
         volumeMounts:
         - name: config
           mountPath: /config/config.yaml
@@ -53,6 +45,24 @@ spec:
         {{- with .Values.extraVolumeMounts }}
           {{- toYaml . | nindent 8 }}
         {{- end }}
+        - name: config-files
+          mountPath: /resources-gen
+
+      containers:
+      - name: {{ .Chart.Name }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        ports:
+        - name: http
+          containerPort: 8080
+        - name: https
+          containerPort: 8443
+        {{- with .Values.config.generic.env }}
+        env: {{ toYaml . | nindent 10 }}
+        {{- end }}
+        volumeMounts:
+        - name: config-files
+          mountPath: /config/
         {{- if .Values.livenessProbe.enabled }}
         livenessProbe:
           failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
@@ -92,6 +102,8 @@ spec:
         secret:
           secretName: {{ . }}
       {{- end }}
+      - name: config-files
+        emptyDir: {}
       {{- with .Values.extraVolumes }}
         {{- toYaml . | nindent 6 }}
       {{- end }}

@@ -87,17 +87,18 @@ data:
         {{- else }}
         session_handling: {{ "ignore_session" }}
         {{- end }}
-        deny_rules:
+        deny_rule_groups:
         - enabled: {{ $simple.mapping.deny_rules.enabled }}
           log_only: {{ $simple.mapping.deny_rules.log_only }}
           level: {{ $simple.mapping.deny_rules.level }}
           {{- with $simple.mapping.deny_rules.exceptions }}
           exceptions: {{ toYaml . | nindent 12 }}
           {{- end }}
-      backend:
-        protocol: {{ $simple.backend.protocol }}
-        hostname: {{ $simple.backend.hostname }}
-        port: {{ $simple.backend.port }}
+        backend:
+          hosts:
+          - protocol: {{ $simple.backend.protocol }}
+            name: {{ $simple.backend.hostname }}
+            port: {{ $simple.backend.port }}
     {{- if $generic.tlsSecretName }}
       virtual_host:
         certificate:
