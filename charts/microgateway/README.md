@@ -323,17 +323,19 @@ The Helm chart provides three different possibilities to configure the Microgate
 Depending on the environment and use case, one of the options might suit better and be easier to implement.
 
 ### Simple DSL configuration
-The simple DSL configuration suites best for the following use case:
+The simple DSL configuration mode is designed for a quick start with the microgateway. It does not support many of its advanced features.
+The simple DSL configuration supports the following use case:
 | Virtual Host | Mapping | Backend Service |
 |--|--|--|
 | VH1 (hostname: virtinc.com) | M1 (entry_path: /) | BE1 |
 
-Restrictions for Simple DSL configuration:
+Restrictions of the Simple DSL configuration mode:
 * Only one Virtual Host is configured.
 * Only one Mapping is configured.
 * Only one backend service is configured.
+* Deny rules can only be configured on a global level, fine-grained control is not possible.
 
-By default, the Airlock Microgateway is configured with the [Simple DSL configuration](#simple-dsl-configuration). The example below shows how to adjust the default values:
+The example below shows how to adjust the default values that are preconfigured in the simple DSL configuration mode:
 
 **Example:**
 
@@ -412,16 +414,16 @@ The use cases outlined above can also occur slightly differently. But all of the
               entry_path: /
               operational_mode: integration
               session_handling: enforce_session
-              deny_rules:
-                level: standard
-                exceptions:
-                  - parameter_name:
-                      pattern: ^content$
-                      ignore_case: true
-                    path:
-                      pattern: ^/mail/
-                    method:
-                      pattern: ^POST$
+              deny_rule_groups:
+                - level: standard
+                  exceptions:
+                    - parameter_name:
+                        pattern: ^content$
+                        ignore_case: true
+                      path:
+                        pattern: ^/mail/
+                      method:
+                        pattern: ^POST$
               backend:
                 hosts:
                   - protocol: https
@@ -430,7 +432,7 @@ The use cases outlined above can also occur slightly differently. But all of the
             - name: api
               entry_path: /api/
               session_handling: ignore_session
-              deny_rules:
+              deny_rule_groups:
                 - level: strict
               openapi:
                 spec_file: /config/virtinc_api_openapi.json
@@ -524,7 +526,7 @@ This works for all three DSL of the above configuration setups (simple, advanced
       mapping:
         operational_mode: "@@ALG_CFG_OPERATIONAL_MODE@@"
         deny_rules:
-          - log_only: "@@ALG_CFG_LOG_ONLY@@"
+          log_only: "@@ALG_CFG_LOG_ONLY@@"
   ```
 
 Finally, apply the Helm chart configuration file with `-f` parameter.
