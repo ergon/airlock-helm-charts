@@ -404,7 +404,8 @@ In case that the [Advanced DSL configuration](#advanced-dsl-configuration) does 
 * `config.expert.dsl - **must** be used.
 * `config.generic.*`
 
-## Environment variables
+## Environment Variables
+### Using Environment Variables in the DSL Configuration
 Environment variables can be configured with the Helm chart and used within the [DSL Configuration](#dsl-configuration).
 This works for all three DSL of the above configuration setups (simple, advanced and expert). The example below illustrates how to configure environment variables in combination with the [Simple DSL configuration](#simple-dsl-configuration).
 
@@ -412,7 +413,7 @@ This works for all three DSL of the above configuration setups (simple, advanced
   ```
   config:
     generic:
-      env:
+      configEnv:
         - name: ALG_CFG_OPERATIONAL_MODE
           value: production
         - name: ALG_CFG_LOG_ONLY
@@ -434,6 +435,19 @@ Finally, apply the Helm chart configuration file with `-f` parameter.
   ```console
   helm upgrade -i microgateway airlock/microgateway -f custom-values.yaml -f env-variables.yaml
   ```
+
+### Setting Environment Variables for the Runtime Container
+The Helm chart also allows to specify environment variables for the runtime container.
+The following example shows how to set the timezone of the microgateway:
+
+env-variables.yaml
+```
+config:
+  generic:
+    runtimeEnv:
+      - name: TZ
+        value: Europe/Zurich
+```
 
 ## Extra Volumes
 The Helm chart allows you to define extra volumes which can be used in the Microgateway.

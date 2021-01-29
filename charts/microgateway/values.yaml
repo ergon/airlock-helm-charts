@@ -102,10 +102,12 @@ config:
   # - [Expert DSL configuration](#expert-dsl-configuration)
   # @default -- See `config.generic.*`:
   generic:
-    # config.generic.env -- [Environment variables](#environment-variables)
-    env: []
+    # config.generic.configEnv -- [Environment variables used in variable substitution in the microgateway config](#environment-variables)
     #  - name: ALG_CFG_EXAMPLE
     #    value: Example_Value
+    configEnv: []
+    # config.generic.runtimeEnv -- [Environment variables injected into the microgateway runtime container](#environment-variables)
+    runtimeEnv: []
     # config.generic.tlsSecretName -- (string) Name of an existing secret containing:<br><br>
     # _Virtual Host:_<br>
     # Certificate: `frontend-server.crt`<br>
