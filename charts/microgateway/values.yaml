@@ -46,9 +46,7 @@ config:
       # config.simple.backend.protocol -- Backend protocol
       protocol: http
 
-  # config.global -- Available for:<br>
-  # - [Simple DSL configuration](#simple-dsl-configuration)<br>
-  # - [Advanced DSL configuration](#advanced-dsl-configuration)
+  # config.global -- Available for [Simple DSL configuration](#simple-dsl-configuration)<br>
   # @default -- See `config.global.*`:
   global:
     expert_settings:
@@ -98,7 +96,6 @@ config:
 
   # config.generic -- Available for:<br>
   # - [Simple DSL configuration](#simple-dsl-configuration)<br>
-  # - [Advanced DSL configuration](#advanced-dsl-configuration)<br>
   # - [Expert DSL configuration](#expert-dsl-configuration)
   # @default -- See `config.generic.*`:
   generic:
@@ -129,10 +126,6 @@ config:
     # passphrase: `passphrase`
     # @default -- ""
     existingSecret:
-
-  # config.advanced.apps -- [Advanced DSL configuration](#advanced-dsl-configuration)
-  advanced:
-    apps: []
 
   # config.expert.dsl -- [Expert DSL configuration](#expert-dsl-configuration)
   expert:

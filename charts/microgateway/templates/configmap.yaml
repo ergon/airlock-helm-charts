@@ -9,7 +9,9 @@ metadata:
   labels:
     {{- include "microgateway.labels" . | nindent 4 }}
 data:
-{{- if not $config.expert.dsl }}
+{{- if $config.expert.dsl }}
+  config.yaml: |{{ toYaml $config.expert.dsl | nindent 4 }}
+{{- else }}
   config.yaml: |
     license_file: /secret/config/license
     session:
@@ -72,10 +74,6 @@ data:
       {{- end }}
     {{- end }}
   {{- end }}
-
-  {{- with $config.advanced.apps }}
-    apps: {{ toYaml . | nindent 4 }}
-  {{- else }}
     apps:
     - mappings:
       - entry_path: {{ $simple.mapping.entry_path }}
@@ -106,7 +104,4 @@ data:
           privatekey_file: /secret/tls/frontend-server.key
           ca_chain_file: /secret/tls/frontend-server-ca.crt
     {{- end }}
-  {{- end }}
-{{- else }}
-  config.yaml: |{{ toYaml $config.expert.dsl | nindent 4 }}
 {{- end }}
