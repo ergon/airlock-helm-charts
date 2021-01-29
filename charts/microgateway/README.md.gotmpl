@@ -27,7 +27,9 @@ The current chart version is: {{ template "chart.version" . }}
   * [Simple DSL configuration](#simple-dsl-configuration)
   * [Advanced DSL configuration](#advanced-dsl-configuration)
   * [Expert DSL configuration](#expert-dsl-configuration)
-* [Environment variables](#environment-variables)
+* [Environment Variables](#environment-variables)
+  * [DSL Environment Variables](#dsl-environment-variables)
+  * [Runtime Environment Variables](#runtime-environment-variables)
 * [Extra Volumes](#extra-volumes)
 * [Probes](#probes)
   * [Readiness Probe](#readiness-probe)
@@ -405,7 +407,7 @@ In case that the [Advanced DSL configuration](#advanced-dsl-configuration) does 
 * `config.generic.*`
 
 ## Environment Variables
-### Using Environment Variables in the DSL Configuration
+### DSL Environment Variables
 Environment variables can be configured with the Helm chart and used within the [DSL Configuration](#dsl-configuration).
 This works for all three DSL of the above configuration setups (simple, advanced and expert). The example below illustrates how to configure environment variables in combination with the [Simple DSL configuration](#simple-dsl-configuration).
 
@@ -436,7 +438,7 @@ Finally, apply the Helm chart configuration file with `-f` parameter.
   helm upgrade -i microgateway airlock/microgateway -f custom-values.yaml -f env-variables.yaml
   ```
 
-### Setting Environment Variables for the Runtime Container
+### Runtime Environment Variables
 The Helm chart also allows to specify environment variables for the runtime container.
 The following example shows how to set the timezone of the microgateway:
 
