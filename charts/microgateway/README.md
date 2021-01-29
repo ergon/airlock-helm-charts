@@ -29,7 +29,9 @@ The current chart version is: 0.7.0
   * [Simple DSL configuration](#simple-dsl-configuration)
   * [Advanced DSL configuration](#advanced-dsl-configuration)
   * [Expert DSL configuration](#expert-dsl-configuration)
-* [Environment variables](#environment-variables)
+* [Environment Variables](#environment-variables)
+  * [DSL Environment Variables](#dsl-environment-variables)
+  * [Runtime Environment Variables](#runtime-environment-variables)
 * [Extra Volumes](#extra-volumes)
 * [Probes](#probes)
   * [Readiness Probe](#readiness-probe)
@@ -94,11 +96,11 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | config.advanced.apps | list | `[]` | [Advanced DSL configuration](#advanced-dsl-configuration) |
 | config.expert.dsl | object | `{}` | [Expert DSL configuration](#expert-dsl-configuration) |
 | config.generic | object | See `config.generic.*`: | Available for:<br> - [Simple DSL configuration](#simple-dsl-configuration)<br> - [Advanced DSL configuration](#advanced-dsl-configuration)<br> - [Expert DSL configuration](#expert-dsl-configuration) |
-| config.generic.configEnv | list | `[]` | [Environment variables used in variable substitution in the microgateway config](#environment-variables)  - name: ALG_CFG_EXAMPLE    value: Example_Value |
+| config.generic.configEnv | list | `[]` | [DSL Environment Variables](#dsl-environment-variables) |
 | config.generic.existingSecret | string | "" | Name of an existing secret containing:<br><br> license: `license`<br> passphrase: `passphrase` |
 | config.generic.license | string | "" | License (multiline string) |
 | config.generic.passphrase | string | - `passphrase`<br> If `passphrase` in `config.generic.existingSecret` <br><br> - `<generated passphrase>`<br> If no passphrase available. | Passphrase used for encryption. |
-| config.generic.runtimeEnv | list | `[]` | [Environment variables injected into the microgateway runtime container](#environment-variables) |
+| config.generic.runtimeEnv | list | `[]` | [Runtime Environment Variables](#runtime-environment-variables) |
 | config.generic.tlsSecretName | string | "" | Name of an existing secret containing:<br><br> _Virtual Host:_<br> Certificate: `frontend-server.crt`<br> Private key: `frontend-server.key`<br> CA: `frontend-server-ca.crt` <br> :exclamation: Update `route.tls.destinationCACertificate` accordingly.<br><br> _Backend:_<br> Certificate: `backend-client.crt`<br> Private key: `backend-client.key`<br> CA: `backend-server-validation-ca.crt` |
 | config.global | object | See `config.global.*`: | Available for:<br> - [Simple DSL configuration](#simple-dsl-configuration)<br> - [Advanced DSL configuration](#advanced-dsl-configuration) |
 | config.global.backend.tls.cipher_suite | string | `""` | Overwrite the default TLS ciphers (<=TLS 1.2) for backend connections. |
@@ -506,7 +508,7 @@ In case that the [Advanced DSL configuration](#advanced-dsl-configuration) does 
 * `config.generic.*`
 
 ## Environment Variables
-### Using Environment Variables in the DSL Configuration
+### DSL Environment Variables
 Environment variables can be configured with the Helm chart and used within the [DSL Configuration](#dsl-configuration).
 This works for all three DSL of the above configuration setups (simple, advanced and expert). The example below illustrates how to configure environment variables in combination with the [Simple DSL configuration](#simple-dsl-configuration).
 
@@ -537,7 +539,7 @@ Finally, apply the Helm chart configuration file with `-f` parameter.
   helm upgrade -i microgateway airlock/microgateway -f custom-values.yaml -f env-variables.yaml
   ```
 
-### Setting Environment Variables for the Runtime Container
+### Runtime Environment Variables
 The Helm chart also allows to specify environment variables for the runtime container.
 The following example shows how to set the timezone of the microgateway:
 
