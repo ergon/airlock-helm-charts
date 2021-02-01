@@ -3,7 +3,6 @@
 The *Airlock Microgateway* is a component of the [Airlock Secure Access Hub](https://www.airlock.com/).
 It is the lightweight, container-based deployment form of the *Airlock Gateway*, a software appliance with reverse-proxy, Web Application Firewall (WAF) and API security functionality.
 
-
 The Airlock helm charts are used internally for testing the *Airlock Microgateway*. We make them available publicly under the [MIT license](https://github.com/ergon/airlock-helm-charts/blob/master/LICENSE).
 
 The current chart version is: 0.7.0
@@ -25,10 +24,9 @@ The current chart version is: 0.7.0
 * [Dependencies](#dependencies)
   * [Redis](#redis)
   * [Echo-Server](#echo-server)
-* [DSL configuration](#dsl-configuration)
-  * [Simple DSL configuration](#simple-dsl-configuration)
-  * [Advanced DSL configuration](#advanced-dsl-configuration)
-  * [Expert DSL configuration](#expert-dsl-configuration)
+* [DSL Configuration](#dsl-configuration)
+  * [Simple DSL Configuration](#simple-dsl-configuration)
+  * [Expert DSL Configuration](#expert-dsl-configuration)
 * [Environment variables](#environment-variables)
 * [Extra Volumes](#extra-volumes)
 * [Probes](#probes)
@@ -91,15 +89,14 @@ The following table lists configuration parameters of the Airlock Microgateway c
 |-----|------|---------|-------------|
 | affinity | string | `nil` | Assign custom [affinity rules](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/) (multiline string). |
 | commonLabels | object | `{}` | Labels to add to all resources. |
-| config.advanced.apps | list | `[]` | [Advanced DSL configuration](#advanced-dsl-configuration) |
 | config.expert.dsl | object | `{}` | [Expert DSL configuration](#expert-dsl-configuration) |
-| config.generic | object | See `config.generic.*`: | Available for:<br> - [Simple DSL configuration](#simple-dsl-configuration)<br> - [Advanced DSL configuration](#advanced-dsl-configuration)<br> - [Expert DSL configuration](#expert-dsl-configuration) |
+| config.generic | object | See `config.generic.*`: | Available for:<br> - [Simple DSL configuration](#simple-dsl-configuration)<br> - [Expert DSL configuration](#expert-dsl-configuration) |
 | config.generic.env | list | `[]` | [Environment variables](#environment-variables) |
 | config.generic.existingSecret | string | "" | Name of an existing secret containing:<br><br> license: `license`<br> passphrase: `passphrase` |
 | config.generic.license | string | "" | License (multiline string) |
 | config.generic.passphrase | string | - `passphrase`<br> If `passphrase` in `config.generic.existingSecret` <br><br> - `<generated passphrase>`<br> If no passphrase available. | Passphrase used for encryption. |
 | config.generic.tlsSecretName | string | "" | Name of an existing secret containing:<br><br> _Virtual Host:_<br> Certificate: `frontend-server.crt`<br> Private key: `frontend-server.key`<br> CA: `frontend-server-ca.crt` <br> :exclamation: Update `route.tls.destinationCACertificate` accordingly.<br><br> _Backend:_<br> Certificate: `backend-client.crt`<br> Private key: `backend-client.key`<br> CA: `backend-server-validation-ca.crt` |
-| config.global | object | See `config.global.*`: | Available for:<br> - [Simple DSL configuration](#simple-dsl-configuration)<br> - [Advanced DSL configuration](#advanced-dsl-configuration) |
+| config.global | object | See `config.global.*`: | Available for [Simple DSL configuration](#simple-dsl-configuration)<br> |
 | config.global.backend.tls.cipher_suite | string | `""` | Overwrite the default TLS ciphers (<=TLS 1.2) for backend connections. |
 | config.global.backend.tls.cipher_suite_v13 | string | `""` | Overwrite the default TLS ciphers (TLS 1.3) for backend connections. |
 | config.global.backend.tls.client_cert | bool | `false` | Use TLS client certificate for backend connections. <br> :exclamation: Must be configured in `config.generic.tlsSecretName`. |
@@ -166,7 +163,7 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | route | object | See `route.*`: | [Openshift Route](#openshift-route) |
 | route.annotations | object | `{}` | Annotations to set on the route. |
 | route.enabled | bool | `false` | Create a route object. |
-| route.hosts | list | `["virtinc.com"]` |  List of host names. |
+| route.hosts | list | `["virtinc.com"]` | List of host names. |
 | route.labels | object | `{}` | Additional labels add on the Microgateway route. |
 | route.path | string | `"/"` | Path for the route. |
 | route.targetPort | string | `"https"` | Target port of the service (`http`, `https` or `<number>`). |
@@ -318,12 +315,14 @@ Finally, apply the Helm chart configuration file with `-f` parameter.
 :information_source: **Possible settings**:<br>
 Please refer to the [Echo-Server Helm chart](https://ealenn.github.io/Echo-Server/pages/helm.html) to see all possible parameters of the Echo-Server Helm chart.
 
-## DSL configuration
-The Helm chart provides three different possibilities to configure the Microgateway.
-Depending on the environment and use case, one of the options might suit better and be easier to implement.
+## DSL Configuration
+The Helm chart provides two different configuration modes for the Microgateway.
+Depending on your environment and use case, one of these options may better suit your needs.
+* The **simple configuration mode** is designed to get you started quickly. It supports one virtual host and one Backend System. Some of the more advanced Microgateway functions are not supported.
+* The **expert configuration mode** supports multiple virtual hosts and backend systems, and all of the advanced Microgatway features.
 
-### Simple DSL configuration
-The simple DSL configuration mode is designed for a quick start with the microgateway. It does not support many of its advanced features.
+### Simple DSL Configuration
+The simple DSL configuration mode is designed for a quick start with the microgateway. It does not support some of its advanced features.
 The simple DSL configuration supports the following use case:
 | Virtual Host | Mapping | Backend Service |
 |--|--|--|
@@ -333,7 +332,8 @@ Restrictions of the Simple DSL configuration mode:
 * Only one Virtual Host is configured.
 * Only one Mapping is configured.
 * Only one backend service is configured.
-* Deny rules can only be configured on a global level, fine-grained control is not possible.
+* Deny rules can only be configured on a global level, for fine-grained control the expert DSL configuration mode is required.
+* Allow rules can not be configured.
 
 The example below shows how to adjust the default values that are preconfigured in the simple DSL configuration mode:
 
@@ -374,89 +374,11 @@ The example below shows how to adjust the default values that are preconfigured 
 * `config.global.*`
 * `config.generic.*`
 
-### Advanced DSL configuration
-In case that the [Simple DSL configuration](#simple-dsl-configuration) does not suite, the advanced configuration options might help. The following use cases might require this kind of configuration:
-
-**_Use Case 1)_**
-| Virtual Host | Mapping | Backend Service |
-|--|--|--|
-| VH1 (hostname: virtinc.com) | M1 (entry_path: /) | BE1 |
-| VH2 (hostname: example.com) | M2 (entry_path: /) | BE1 |
-
-**_Use Case 2)_**
-| Virtual Host | Mapping | Backend Service |
-|--|--|--|
-| VH1 (hostname: virtinc.com) | M1 (entry_path: /)<br>M2 (entry_path: /auth/) | BE1 |
-
-**_Use Case 3)_**
-| Virtual Host | Mapping | Backend Service |
-|--|--|--|
-| VH1 (hostname: virtinc.com) | M1 (entry_path: /) | BE1 |
-| VH2 (hostname: example.com) | M2 (entry_path: /) | BE2 |
-
-The use cases outlined above can also occur slightly differently. But all of them have in common that more than one Virtual Hosts, Mappings or Backend Services are used. Whenever this is the case, the [Advanced DSL configuration](#advanced-dsl-configuration) should be preferred over the [Simple DSL configuration](#simple-dsl-configuration).
-
-**Example:**
-
-  custom-values.yaml
-  ```
-  config:
-    global:
-      ip_header:
-        trusted_proxies:
-          - 10.0.0.0/28
-    advanced:
-      apps:
-        - virtual_host:
-            hostname: virtinc.com
-          mappings:
-            - name: webapp
-              entry_path: /
-              operational_mode: integration
-              session_handling: enforce_session
-              deny_rule_groups:
-                - level: standard
-                  exceptions:
-                    - parameter_name:
-                        pattern: ^content$
-                        ignore_case: true
-                      path:
-                        pattern: ^/mail/
-                      method:
-                        pattern: ^POST$
-              backend:
-                hosts:
-                  - protocol: https
-                    name: custom-backend-service
-                    port: 8443
-            - name: api
-              entry_path: /api/
-              session_handling: ignore_session
-              deny_rule_groups:
-                - level: strict
-              openapi:
-                spec_file: /config/virtinc_api_openapi.json
-              backend:
-                hosts:
-                  - protocol: https
-                    name: custom-backend-service
-                    port: 8443
-
-  redis:
-    enabled: true
-  ```
-
-**`config.*` Parameters which can be used**:
-* `config.advanced.apps` - **must** be used.
-* `config.global.*`
-* `config.generic.*`
-
 ### Expert DSL configuration
-In case that the [Advanced DSL configuration](#advanced-dsl-configuration) does not suite, the expert configuration options must be used. There are a few reasons listed below:
+The Expert DSL configuration mode offers more flexibility than the [Simple DSL configuration](#simple-dsl-configuration) mode.
+It is possible to use all Microgateway configuration options within the 'dsl' configuration parameter.
 
-* The Microgateway DSL configuration options are not available as Helm chart parameters (e.g. session.store_mode, ...)
-* The Microgateway DSL configuration file has already been used/tested thorougly. To reduce the risk of a broken or unsecure configuration, do not modify the pre-configured configuration file.
-
+For a full list of available Microgateway configuration parameters refer to the [Microgateway Documentation](https://docs.airlock.com/microgateway/2.0/)
 
 **Example:**
 
@@ -506,7 +428,8 @@ In case that the [Advanced DSL configuration](#advanced-dsl-configuration) does 
 
 ## Environment variables
 Environment variables can be configured with the Helm chart and used within the [DSL Configuration](#dsl-configuration).
-This works for all three DSL of the above configuration setups (simple, advanced and expert). The example below illustrates how to configure environment variables in combination with the [Simple DSL configuration](#simple-dsl-configuration).
+This works for both simple and expert DSL configuration mode.
+The example below illustrates how to configure environment variables in combination with the [Simple DSL configuration](#simple-dsl-configuration).
 
   env-variables.yaml
   ```
@@ -522,11 +445,16 @@ This works for all three DSL of the above configuration setups (simple, advanced
   custom-values.yaml
   ```
   config:
-    simple:
-      mapping:
-        operational_mode: "@@ALG_CFG_OPERATIONAL_MODE@@"
-        deny_rules:
-          log_only: "@@ALG_CFG_LOG_ONLY@@"
+    expert:
+      dsl:
+        apps:
+          - virtual_host:
+              hostname: virtinc.com
+            mappings:
+              - name: webapp
+                operational_mode: "@@ALG_CFG_OPERATIONAL_MODE@@"
+                deny_rules:
+                  log_only: "@@ALG_CFG_LOG_ONLY@@"
   ```
 
 Finally, apply the Helm chart configuration file with `-f` parameter.
@@ -550,11 +478,14 @@ extraVolumeMounts:
     subPath: mapping.xml
 
 config:
-  advanced:
-    apps:
-      - mappings:
-        - name: virtinc
-          mapping_template_path: /config/template/mapping.xml
+  expert:
+    dsl:
+      apps:
+      - virtual_host:
+          hostname: virtinc.com
+        mappings:
+          - name: virtinc
+            mapping_template_path: /config/template/mapping.xml
 ```
 
 ## Probes
@@ -796,7 +727,6 @@ Used for backend connection:
 * Certificate: `backend-client.crt`
 * Private key: `backend-client.key`
 * CA:          `backend-server-validation-ca.crt`
-
 
   The example below shows how to create a secret containing certificates for frontend and backend connections.
   ```
