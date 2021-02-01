@@ -99,10 +99,10 @@ config:
   # - [Expert DSL configuration](#expert-dsl-configuration)
   # @default -- See `config.generic.*`:
   generic:
-    # config.generic.env -- [Environment variables](#environment-variables)
-    env: []
-    #  - name: ALG_CFG_EXAMPLE
-    #    value: Example_Value
+    # config.generic.configEnv -- [DSL Environment Variables](#dsl-environment-variables)
+    configEnv: []
+    # config.generic.runtimeEnv -- [Runtime Environment Variables](#runtime-environment-variables)
+    runtimeEnv: []
     # config.generic.tlsSecretName -- (string) Name of an existing secret containing:<br><br>
     # _Virtual Host:_<br>
     # Certificate: `frontend-server.crt`<br>

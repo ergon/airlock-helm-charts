@@ -26,7 +26,9 @@ The current chart version is: {{ template "chart.version" . }}
 * [DSL Configuration](#dsl-configuration)
   * [Simple DSL Configuration](#simple-dsl-configuration)
   * [Expert DSL Configuration](#expert-dsl-configuration)
-* [Environment variables](#environment-variables)
+* [Environment Variables](#environment-variables)
+  * [DSL Environment Variables](#dsl-environment-variables)
+  * [Runtime Environment Variables](#runtime-environment-variables)
 * [Extra Volumes](#extra-volumes)
 * [Probes](#probes)
   * [Readiness Probe](#readiness-probe)
@@ -328,7 +330,8 @@ For a full list of available Microgateway configuration parameters refer to the 
 * `config.expert.dsl - **must** be used.
 * `config.generic.*`
 
-## Environment variables
+## Environment Variables
+### DSL Environment Variables
 Environment variables can be configured with the Helm chart and used within the [DSL Configuration](#dsl-configuration).
 This works for both simple and expert DSL configuration mode.
 The example below illustrates how to configure environment variables in combination with the [Expert DSL configuration](#expert-dsl-configuration).
@@ -337,7 +340,7 @@ The example below illustrates how to configure environment variables in combinat
   ```
   config:
     generic:
-      env:
+      configEnv:
         - name: ALG_CFG_OPERATIONAL_MODE
           value: production
         - name: ALG_CFG_LOG_ONLY
@@ -364,6 +367,19 @@ Finally, apply the Helm chart configuration file with `-f` parameter.
   ```console
   helm upgrade -i microgateway airlock/microgateway -f custom-values.yaml -f env-variables.yaml
   ```
+
+### Runtime Environment Variables
+The Helm chart also allows to specify environment variables for the runtime container.
+The following example shows how to set the timezone of the microgateway:
+
+env-variables.yaml
+```
+config:
+  generic:
+    runtimeEnv:
+      - name: TZ
+        value: Europe/Zurich
+```
 
 ## Extra Volumes
 The Helm chart allows you to define extra volumes which can be used in the Microgateway.
