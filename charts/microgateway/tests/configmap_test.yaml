@@ -1,0 +1,15 @@
+suite: test configmap
+templates:
+  - configmap.yaml
+tests:
+  - it: should work
+    set:
+      image.tag: latest
+    asserts:
+      - isKind:
+          of: ConfigMap
+#      - matchRegex:
+#          pattern: -my-chart$
+#      - equal:
+#          path: spec.template.spec.containers[0].image
+#          value: nginx:latest
