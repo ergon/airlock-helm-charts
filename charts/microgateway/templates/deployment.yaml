@@ -29,6 +29,9 @@ spec:
       - name: {{ .Chart.Name }}-configbuilder
         image: "{{ .Values.image.repository_configbuilder }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
+        {{- with .Values.config.generic.configEnv }}
+        env: {{ toYaml . | nindent 10 }}
+        {{- end }}
         volumeMounts:
         - name: config
           mountPath: /config/config.yaml
@@ -57,7 +60,7 @@ spec:
           containerPort: 8080
         - name: https
           containerPort: 8443
-        {{- with .Values.config.generic.env }}
+        {{- with .Values.config.generic.runtimeEnv }}
         env: {{ toYaml . | nindent 10 }}
         {{- end }}
         volumeMounts:
