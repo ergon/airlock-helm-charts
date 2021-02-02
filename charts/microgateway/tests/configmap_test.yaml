@@ -1,10 +1,12 @@
 suite: test configmap
 templates:
   - configmap.yaml
+release:
+  name: my-microgateway
+chart:
+  version: 1.0.1
 tests:
-  - it: should work
-    set:
-      image.tag: latest
+  - it: should be ConfigMap
     asserts:
       - isKind:
           of: ConfigMap
