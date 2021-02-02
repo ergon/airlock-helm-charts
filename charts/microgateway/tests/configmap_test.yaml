@@ -10,8 +10,3 @@ tests:
     asserts:
       - isKind:
           of: ConfigMap
-#      - matchRegex:
-#          pattern: -my-chart$
-#      - equal:
-#          path: spec.template.spec.containers[0].image
-#          value: nginx:latest
