@@ -43,4 +43,4 @@ tests:
           value: "b"
       - equal:
           path: metadata.labels.[b]
-          value: "d"
+          value: "c"
