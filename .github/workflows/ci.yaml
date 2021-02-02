@@ -36,11 +36,22 @@ jobs:
           BRANCH_NAME: ${{ github.head_ref }}
           TECHNICAL_USER_TOKEN: ${{ secrets.TECHNICAL_USER_TOKEN }}
           TECHNICAL_USER: ${{ secrets.TECHNICAL_USER }}
+  unit-test:
+    runs-on: ubuntu-latest
+    needs:
+      - lint-chart
+      - lint-docs
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: install and run helm unit tests
+        run: .github/unit-test.sh
   kubeval-chart:
     runs-on: ubuntu-latest
     needs:
       - lint-chart
       - lint-docs
+      - unit-test
     strategy:
       matrix:
         k8s:
@@ -54,15 +65,6 @@ jobs:
         env:
           KUBERNETES_VERSION: ${{ matrix.k8s }}
         run: .github/kubeval.sh
-  unit-test:
-    runs-on: ubuntu-latest
-    needs:
-      - lint-chart
-      - lint-docs
-      - kubeval-chart
-    steps:
-      - name: install and run helm unit tests
-        run: .github/unit-test.sh
   install-chart:
     name: install-chart
     runs-on: ubuntu-latest
@@ -71,8 +73,8 @@ jobs:
     needs:
       - lint-chart
       - lint-docs
-      - kubeval-chart
       - unit-test
+      - kubeval-chart
     strategy:
       matrix:
         k8s:
