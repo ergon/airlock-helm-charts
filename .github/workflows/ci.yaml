@@ -61,7 +61,7 @@ jobs:
       - lint-docs
       - kubeval-chart
     steps:
-      - name: install helm unit tests
+      - name: install and run helm unit tests
         run: .github/unit-test.sh
   install-chart:
     name: install-chart
