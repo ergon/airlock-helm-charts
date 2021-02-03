@@ -22,9 +22,3 @@ tests:
     asserts:
       - matchSnapshot:
           path: data.[config.yaml]
-#TODO:
-#- number of apps
-#- number of mappings
-# expert mode
-
-# test for important defaults
