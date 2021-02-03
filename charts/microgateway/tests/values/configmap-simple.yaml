@@ -1,0 +1,6 @@
+config:
+  simple:
+    mapping:
+      entry_path: /simple/
+    backend:
+      hostname: simple-backend

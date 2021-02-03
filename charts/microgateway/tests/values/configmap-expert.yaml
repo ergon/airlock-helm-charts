@@ -1,0 +1,14 @@
+config:
+  expert:
+    dsl:
+      apps:
+        - virtual_host:
+            hostname: echo
+          mappings:
+            - name: echo
+              entry_path: /expert/
+              backend:
+                hosts:
+                  - protocol: http
+                    name: expert-backend
+                    port: 8080

@@ -6,6 +6,7 @@ templates:
   - ingress.yaml
   - route.yaml
   - secret.yaml
+  - deployment.yaml
 release:
   name: my-microgateway
 chart:
