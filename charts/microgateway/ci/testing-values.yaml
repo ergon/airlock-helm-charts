@@ -9,7 +9,3 @@ echo-server:
   enabled: true
 ingress:
   enabled: true
-readinessProbe:
-  enabled: false
-livenessProbe:
-  enabled: false
