@@ -84,11 +84,7 @@ jobs:
           echo "${{ secrets.WAF_PASSPHRASE }}" >> tmppassphrase.txt	
           kubectl create secret generic microgatewaysecrets --from-file=license=tmplicense.txt --from-file=passphrase=tmppassphrase.txt
 
-          # kubectl create secret generic microgatewaysecrets --from-literal=license="${{ secrets.WAF_LICENSE }}" --from-literal=passphrase="${{ secrets.WAF_PASSPHRASE }}"
           kubectl get secrets microgatewaysecrets -o yaml
-          cat tmplicense.txt
-
-
       - name: Run chart-testing (install)
         uses: helm/chart-testing-action@v1.1.0
         with:
