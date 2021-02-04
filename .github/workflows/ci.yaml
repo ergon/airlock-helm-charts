@@ -76,15 +76,12 @@ jobs:
           echo "${{ secrets.WAF_LICENSE }}" | sed 's/$^/& /g' 
 
           echo "TEST2"
-          echo ${{secrets.WAF_LICENSE}} | sed 's/./& /g' 
-
-          echo "TEST3"
           echo "${{ secrets.WAF_LICENSE }}" > tmplicense.txt	
           cp *.txt mgw.lic
           cat mgw.lic
 
-          echo "TEST4"
-          echo ${{secrets.WAF_LICENSE}} | base64
+          echo "TEST3"
+          echo "${{ secrets.WAF_LICENSE }}" | base64
       - name: Checkout
         uses: actions/checkout@v1
       - name: Create kind ${{ matrix.k8s }} cluster
