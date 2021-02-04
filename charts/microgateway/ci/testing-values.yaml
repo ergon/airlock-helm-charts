@@ -10,4 +10,6 @@ echo-server:
 ingress:
   enabled: true
 readinessProbe:
-  initialDelaySeconds: 30
+  enabled: false
+livenessProbe:
+  enabled: false
