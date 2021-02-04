@@ -70,6 +70,11 @@ jobs:
           - v1.19.7
           - v1.20.2
     steps:
+      - name: Verify license
+        run: |
+          echo "${{ secrets.WAF_LICENSE }}" > tmplicense.txt	
+          cp *.txt mgw.lic
+          cat mgw.lic
       - name: Checkout
         uses: actions/checkout@v1
       - name: Create kind ${{ matrix.k8s }} cluster
