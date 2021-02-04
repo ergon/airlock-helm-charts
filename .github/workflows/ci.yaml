@@ -5,6 +5,7 @@ on:
     paths:
       - 'charts/**'
       - '.github/workflows/ci.yaml'
+  workflow_dispatch:
 
 jobs:
   lint-chart:
