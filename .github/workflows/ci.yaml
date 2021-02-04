@@ -70,18 +70,6 @@ jobs:
           - v1.19.7
           - v1.20.2
     steps:
-      - name: Verify license
-        run: |
-          echo "TEST1"
-          echo "${{ secrets.WAF_LICENSE }}" | sed 's/$^/& /g' 
-
-          echo "TEST2"
-          echo "${{ secrets.WAF_LICENSE }}" > tmplicense.txt	
-          cp *.txt mgw.lic
-          cat mgw.lic
-
-          echo "TEST3"
-          echo "${{ secrets.WAF_LICENSE }}" | base64
       - name: Checkout
         uses: actions/checkout@v1
       - name: Create kind ${{ matrix.k8s }} cluster
@@ -92,11 +80,7 @@ jobs:
         run: |
           kubectl cluster-info
           kubectl create secret docker-registry dockersecret --docker-username=${{ secrets.DOCKER_USER }} --docker-password=${{ secrets.DOCKER_USER_TOKEN }}
-          echo "${{ secrets.WAF_LICENSE }}" >> tmplicense.txt	
-          echo "${{ secrets.WAF_PASSPHRASE }}" >> tmppassphrase.txt	
-          kubectl create secret generic microgatewaysecrets --from-file=license=tmplicense.txt --from-file=passphrase=tmppassphrase.txt
-
-          kubectl get secrets microgatewaysecrets -o yaml
+          kubectl create secret generic microgatewaysecrets --from-literal=license="${{ secrets.WAF_LICENSE }}" --from-literal=passphrase="${{ secrets.WAF_PASSPHRASE }}"
       - name: Run chart-testing (install)
         uses: helm/chart-testing-action@v1.1.0
         with:
