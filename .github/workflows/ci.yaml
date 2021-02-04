@@ -80,7 +80,7 @@ jobs:
         run: |
           kubectl cluster-info
           kubectl create secret docker-registry dockersecret --docker-username=${{ secrets.DOCKER_USER }} --docker-password=${{ secrets.DOCKER_USER_TOKEN }}
-          kubectl create secret generic microgatewaysecrets --from-literal=license=${{ secrets.WAF_LICENSE }} --from-literal=passphrase=${{ secrets.WAF_PASSPHRASE }}
+          kubectl create secret generic microgatewaysecrets --from-literal=license="${{ secrets.WAF_LICENSE }}" --from-literal=passphrase="${{ secrets.WAF_PASSPHRASE }}"
       - name: Run chart-testing (install)
         uses: helm/chart-testing-action@v1.1.0
         with:
