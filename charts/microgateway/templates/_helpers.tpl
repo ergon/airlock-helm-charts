@@ -52,7 +52,6 @@ Selector labels
 {{- define "microgateway.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "microgateway.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
-release: {{ .Release.Name }}
 {{- end -}}
 
 {{/*
