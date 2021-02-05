@@ -8,22 +8,11 @@ on:
   workflow_dispatch:
 
 jobs:
-  lint-chart:
+  generate-docs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v1
-      - name: Run chart-testing (lint)
-        uses: helm/chart-testing-action@master
-        with:
-          command: lint
-          config: .github/ct.yaml
-  lint-docs:
-    runs-on: ubuntu-latest
-    needs: lint-chart
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
       - name: Install helm-docs
         run: .github/helm-docs-install.sh
         env:
@@ -41,8 +30,7 @@ jobs:
   kubeval-chart:
     runs-on: ubuntu-latest
     needs:
-      - lint-chart
-      - lint-docs
+      - generate-docs
     strategy:
       matrix:
         k8s:
@@ -51,7 +39,7 @@ jobs:
           - v1.20.2
     steps:
       - name: Checkout
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
       - name: Run kubeval
         env:
           KUBERNETES_VERSION: ${{ matrix.k8s }}
@@ -60,8 +48,6 @@ jobs:
     name: install-chart
     runs-on: ubuntu-latest
     needs:
-      - lint-chart
-      - lint-docs
       - kubeval-chart
     strategy:
       matrix:
@@ -71,9 +57,20 @@ jobs:
           - v1.20.2
     steps:
       - name: Checkout
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
+      - name: Set up Helm
+        uses: azure/setup-helm@v1
+        with:
+          version: v3.4.0
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.7
+      - name: Set up chart-testing
+        uses: helm/chart-testing-action@v2.0.1
+      - name: Run chart-testing (lint)
+        run: ct lint --config .github/ct.yaml
       - name: Create kind ${{ matrix.k8s }} cluster
-        uses: helm/kind-action@master
+        uses: helm/kind-action@v1.0.0
         with:
           node_image: kindest/node:${{ matrix.k8s }}
       - name: Create Secrets
@@ -82,7 +79,4 @@ jobs:
           kubectl create secret docker-registry dockersecret --docker-username=${{ secrets.DOCKER_USER }} --docker-password=${{ secrets.DOCKER_USER_TOKEN }}
           kubectl create secret generic microgatewaysecrets --from-literal=license="${{ secrets.WAF_LICENSE }}" --from-literal=passphrase="${{ secrets.WAF_PASSPHRASE }}"
       - name: Run chart-testing (install)
-        uses: helm/chart-testing-action@v1.1.0
-        with:
-          command: install
-          config: .github/ct.yaml
+        run: ct install --config .github/ct.yaml
