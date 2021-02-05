@@ -5,6 +5,7 @@ on:
     paths:
       - 'charts/**'
       - '.github/workflows/ci.yaml'
+  workflow_dispatch:
 
 jobs:
   lint-chart:
@@ -58,8 +59,6 @@ jobs:
   install-chart:
     name: install-chart
     runs-on: ubuntu-latest
-    env:
-      _v_namespace: validation-namespace
     needs:
       - lint-chart
       - lint-docs
@@ -80,15 +79,8 @@ jobs:
       - name: Create Secrets
         run: |
           kubectl cluster-info
-          kubectl get pods -n kube-system
-          echo "current-context:" $(kubectl config current-context)
-          kubectl create namespace $_v_namespace
-          kubectl create secret docker-registry dockersecret --docker-username=${{ secrets.DOCKER_USER }} --docker-password=${{ secrets.DOCKER_USER_TOKEN }} --namespace $_v_namespace
-          echo "${{ secrets.WAF_LICENSE }}" >> tmplicense.txt
-          echo "${{ secrets.WAF_PASSPHRASE }}" >> tmppassphrase.txt
-          kubectl create secret generic microgatewaysecrets --from-file=license=tmplicense.txt --from-file=passphrase=tmppassphrase.txt --namespace $_v_namespace
-          kubectl describe secret dockersecret --namespace $_v_namespace
-          kubectl describe secret microgatewaysecrets --namespace $_v_namespace
+          kubectl create secret docker-registry dockersecret --docker-username=${{ secrets.DOCKER_USER }} --docker-password=${{ secrets.DOCKER_USER_TOKEN }}
+          kubectl create secret generic microgatewaysecrets --from-literal=license="${{ secrets.WAF_LICENSE }}" --from-literal=passphrase="${{ secrets.WAF_PASSPHRASE }}"
       - name: Run chart-testing (install)
         uses: helm/chart-testing-action@v1.1.0
         with:

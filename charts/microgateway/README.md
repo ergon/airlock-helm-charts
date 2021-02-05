@@ -6,7 +6,7 @@ It is the lightweight, container-based deployment form of the *Airlock Gateway*,
 
 The Airlock helm charts are used internally for testing the *Airlock Microgateway*. We make them available publicly under the [MIT license](https://github.com/ergon/airlock-helm-charts/blob/master/LICENSE).
 
-The current chart version is: 0.6.2
+The current chart version is: 0.6.3
 
 ## About Ergon
 *Airlock* is a registered trademark of [Ergon](https://www.ergon.ch). Ergon is a Swiss leader in leveraging digitalisation to create unique and effective client benefits, from conception to market, the result of which is the international distribution of globally revered products.
@@ -177,7 +177,9 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | route.tls.termination | string | `"reencrypt"` | Termination of the route (`edge`, `reencrypt`, `passthrough`). |
 | securityContext | object | `{}` | [Security context for a container](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container). |
 | service.annotations | object | `{}` | Annotations to set on the service. |
+| service.externalTrafficPolicy | string | `Local` if `service.type=LoadBalancer` | [externalTrafficPolicy](https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip) |
 | service.labels | object | `{}` | Additional labels to add on the service. |
+| service.loadBalancerIP | string | "" if `service.type=LoadBalancer` | [loadBalancerIP](https://kubernetes.io/docs/concepts/services-networking/service/#loadbalancer) |
 | service.port | int | `80` | Service port |
 | service.tlsPort | int | `443` | Service TLS port |
 | service.type | string | `"ClusterIP"` | [Service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) |
