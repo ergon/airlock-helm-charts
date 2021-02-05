@@ -1,0 +1,47 @@
+suite: test configmap
+templates:
+  - configmap.yaml
+  - service.yaml
+  - hpa.yaml
+  - ingress.yaml
+  - route.yaml
+  - secret.yaml
+  - deployment.yaml
+release:
+  name: my-microgateway
+chart:
+  version: 1.0.1
+tests:
+  - it: standard labels are correct
+    set:
+      hpa.enabled: true
+      ingress.enabled: true
+      route.enabled: true
+    asserts:
+      - equal:
+          path: metadata.labels.[helm.sh/chart]
+          value: microgateway-1.0.1
+      - equal:
+          path: metadata.labels.[app.kubernetes.io/instance]
+          value: my-microgateway
+      - equal:
+          path: metadata.labels.[app.kubernetes.io/name]
+          value: microgateway
+      - equal:
+          path: metadata.labels.[app.kubernetes.io/version]
+          value: "2.0"
+  - it: additional labels are correct
+    set:
+      hpa.enabled: true
+      ingress.enabled: true
+      route.enabled: true
+      commonLabels:
+        a: b
+        b: c
+    asserts:
+      - equal:
+          path: metadata.labels.[a]
+          value: "b"
+      - equal:
+          path: metadata.labels.[b]
+          value: "c"

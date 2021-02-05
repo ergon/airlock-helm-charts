@@ -1,0 +1,24 @@
+suite: test configmap
+templates:
+  - configmap.yaml
+release:
+  name: my-microgateway
+chart:
+  version: 1.0.1
+tests:
+  - it: should be ConfigMap
+    asserts:
+      - isKind:
+          of: ConfigMap
+  - it: simple mode
+    values:
+      - ./values/configmap-simple.yaml
+    asserts:
+      - matchSnapshot:
+          path: data.[config.yaml]
+  - it: expert mode
+    values:
+      - ./values/configmap-expert.yaml
+    asserts:
+      - matchSnapshot:
+          path: data.[config.yaml]
