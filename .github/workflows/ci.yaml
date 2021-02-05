@@ -101,7 +101,7 @@ jobs:
           kubectl describe secret dockersecret --namespace $_v_namespace
           kubectl describe secret microgatewaysecrets --namespace $_v_namespace
       - name: Run chart-testing (install)
-        uses: helm/chart-testing-action@v1.1.0
+        uses: helm/chart-testing-action@master
         with:
           command: install
           config: .github/ct.yaml
