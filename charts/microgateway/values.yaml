@@ -157,6 +157,12 @@ securityContext: {}
 service:
   # service.type -- [Service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types)
   type: ClusterIP
+  # service.externalTrafficPolicy -- [externalTrafficPolicy](https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip)
+  # @default -- `Local` if `service.type=LoadBalancer`
+  externalTrafficPolicy: Local
+  # service.loadBalancerIP -- [loadBalancerIP](https://kubernetes.io/docs/concepts/services-networking/service/#loadbalancer)
+  # @default -- "" if `service.type=LoadBalancer`
+  loadBalancerIP:
   # service.port -- Service port
   port: 80
   # service.tlsPort -- Service TLS port

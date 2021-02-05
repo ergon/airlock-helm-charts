@@ -20,5 +20,11 @@ spec:
   - port: {{ .Values.service.tlsPort }}
     targetPort: https
     name: https
+  {{- if eq .Values.service.type "LoadBalancer" }}
+  externalTrafficPolicy: {{ .Values.service.externalTrafficPolicy }}
+  {{- with .Values.service.loadBalancerIP }}
+  loadBalancerIP: {{ . }}
+  {{- end }}
+  {{- end }}
   selector:
     {{- include "microgateway.selectorLabels" . | nindent 4 }}
