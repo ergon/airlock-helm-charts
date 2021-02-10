@@ -29,26 +29,15 @@ spec:
       {{- end }}
       secretName: {{ .secretName }}
   {{- end }}
-  rules:
-  {{- range $ingress.hosts }}
-    - host: {{ . | quote }}
-      http:
-        paths:
-        - path: {{ $ingress.path }}
-          backend:
-            serviceName: {{ $fullName }}
-            servicePort: {{ $ingress.targetPort }}
-  {{- end }}
-{{- else -}}
-  rules:
-  {{- range $ingress.hosts }}
-    - host: {{ . | quote }}
-      http:
-        paths:
-        - path: {{ $ingress.path }}
-          backend:
-            serviceName: {{ $fullName }}
-            servicePort: {{ $ingress.targetPort }}
-  {{- end }}
 {{- end }}
+  rules:
+  {{- range $ingress.hosts }}
+    - host: {{ . | quote }}
+      http:
+        paths:
+        - path: {{ $ingress.path }}
+          backend:
+            serviceName: {{ $fullName }}
+            servicePort: {{ $ingress.targetPort }}
+  {{- end }}
 {{- end }}
