@@ -4,6 +4,8 @@ on:
   pull_request:
     paths:
       - 'charts/**'
+      - '.github/workflows/ci.yaml'
+  workflow_dispatch:
 
 jobs:
   lint-chart:
