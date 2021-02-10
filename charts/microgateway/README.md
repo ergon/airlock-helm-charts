@@ -6,7 +6,7 @@ It is the lightweight, container-based deployment form of the *Airlock Gateway*,
 
 The Airlock helm charts are used internally for testing the *Airlock Microgateway*. We make them available publicly under the [MIT license](https://github.com/ergon/airlock-helm-charts/blob/master/LICENSE).
 
-The current chart version is: 0.6.0
+The current chart version is: 0.6.3
 
 ## About Ergon
 *Airlock* is a registered trademark of [Ergon](https://www.ergon.ch). Ergon is a Swiss leader in leveraging digitalisation to create unique and effective client benefits, from conception to market, the result of which is the international distribution of globally revered products.
@@ -136,7 +136,7 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | hpa.minReplicas | int | `1` | Minimum number of Microgateway replicas. |
 | hpa.resource.cpu | int | `50` | Average Microgateway CPU consumption in percentage to scale up/down. |
 | hpa.resource.memory | string | `"2Gi"` | Average Microgateway Memory consumption to scale up/down.<br><br> :exclamation: Update this setting accordingly to `resources.limits.memory`. |
-| image.pullPolicy | string | `"Always"` | Pull policy (`Always`, `IfNotPresent`, `Never`) |
+| image.pullPolicy | string | `"IfNotPresent"` | Pull policy (`Always`, `IfNotPresent`, `Never`) |
 | image.repository | string | `"ergon/airlock-microgateway"` | Image repository |
 | image.tag | string | `"1.0"` | Image tag |
 | imagePullSecrets | list | `[]` | Reference to one or more secrets to use when pulling images. |
@@ -149,16 +149,19 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | ingress.targetPort | string | `"http"` | Target port of the service (`http`, `https` or `<number>`). |
 | ingress.tls | list | `[]` | [Ingress TLS](https://kubernetes.io/docs/concepts/services-networking/ingress/#tls) configuration. |
 | livenessProbe.enabled | bool | `true` | Enable liveness probes. |
+| livenessProbe.failureThreshold | int | `9` | After how many subsequent failures the pod gets restarted. |
 | livenessProbe.initialDelaySeconds | int | `90` | Initial delay in seconds. |
+| livenessProbe.timeoutSeconds | int | `5` | Timeout of liveness probes, should roughly reflect allowed timeouts from clients. |
 | nameOverride | string | `""` | Provide a name in place of `microgateway`. |
 | nodeSelector | object | `{}` | Define which nodes the pods are scheduled on. |
 | podSecurityContext | object | `{}` | [Security context for the pods](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod). |
 | readinessProbe.enabled | bool | `true` | Enable readiness probes. |
-| readinessProbe.initialDelaySeconds | int | `30` | Initial delay in seconds. |
+| readinessProbe.failureThreshold | int | `3` | After how many tries the pod stops receiving traffic. |
+| readinessProbe.initialDelaySeconds | int | `10` | Initial delay in seconds. |
 | redis | object | See `redis.*`: | Pre-configured [Redis](#redis) service. |
 | redis.enabled | bool | `false` | Deploy pre-configured [Redis](#redis). |
 | replicaCount | int | `1` | Desired number of Microgateway pods. |
-| resources | object | `{"limits":{"cpu":"4","memory":"4048Mi"},"requests":{"cpu":"500m","memory":"512Mi"}}` | [Resource limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) |
+| resources | object | `{"limits":{"memory":"4048Mi"},"requests":{"cpu":"30m","memory":"256Mi"}}` | [Resource limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) |
 | route | object | See `route.*`: | [Openshift Route](#openshift-route) |
 | route.annotations | object | `{}` | Annotations to set on the route. |
 | route.enabled | bool | `false` | Create a route object. |
@@ -174,7 +177,9 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | route.tls.termination | string | `"reencrypt"` | Termination of the route (`edge`, `reencrypt`, `passthrough`). |
 | securityContext | object | `{}` | [Security context for a container](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container). |
 | service.annotations | object | `{}` | Annotations to set on the service. |
+| service.externalTrafficPolicy | string | `Local` if `service.type=LoadBalancer` | [externalTrafficPolicy](https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip) |
 | service.labels | object | `{}` | Additional labels to add on the service. |
+| service.loadBalancerIP | string | "" if `service.type=LoadBalancer` | [loadBalancerIP](https://kubernetes.io/docs/concepts/services-networking/service/#loadbalancer) |
 | service.port | int | `80` | Service port |
 | service.tlsPort | int | `443` | Service TLS port |
 | service.type | string | `"ClusterIP"` | [Service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) |
@@ -216,7 +221,8 @@ config:
       ---------------------
 ```
 
-2. Deploy the Microgateway with the license.yaml file:
+2. [Create the image pull secret](#credentials-to-pull-image-from-docker-registry) to pull the microgateway image.
+3. Deploy the Microgateway with the license.yaml file:
   ```console
   helm upgrade -i microgateway airlock/microgateway -f license.yaml
   ```
@@ -344,15 +350,15 @@ By default, the Airlock Microgateway is configured with the [Simple DSL configur
         entry_path: /
         operational_mode: integration
         deny_rules:
-          - level: strict
-            exceptions:
-              - parameter_name:
-                  pattern: ^content$
-                  ignore_case: true
-                path:
-                  pattern: ^/mail/
-                method:
-                  pattern: ^POST$
+          level: strict
+          exceptions:
+            - parameter_name:
+                pattern: ^content$
+                ignore_case: true
+              path:
+                pattern: ^/mail/
+              method:
+                pattern: ^POST$
       backend:
         protocol: https
         hostname: custom-backend-service
@@ -408,15 +414,15 @@ The use cases outlined above can also occur slightly differently. But all of the
               operational_mode: integration
               session_handling: enforce_session
               deny_rules:
-                - level: standard
-                  exceptions:
-                    - parameter_name:
-                        pattern: ^content$
-                        ignore_case: true
-                      path:
-                        pattern: ^/mail/
-                      method:
-                        pattern: ^POST$
+                level: standard
+                exceptions:
+                  - parameter_name:
+                      pattern: ^content$
+                      ignore_case: true
+                    path:
+                      pattern: ^/mail/
+                    method:
+                      pattern: ^POST$
             - name: api
               entry_path: /api/
               session_handling: ignore_session
@@ -441,7 +447,7 @@ The use cases outlined above can also occur slightly differently. But all of the
 ### Expert DSL configuration
 In case that the [Advanced DSL configuration](#advanced-dsl-configuration) does not suite, the expert configuration options must be used. There are a few reasons listed below:
 
-* The Microgateway DSL configuration options are not available as Helm chart parameters (e.g. base_template_file, session.store_mode, ...)
+* The Microgateway DSL configuration options are not available as Helm chart parameters (e.g. session.store_mode, ...)
 * The Microgateway DSL configuration file has already been used/tested thorougly. To reduce the risk of a broken or unsecure configuration, do not modify the pre-configured configuration file.
 
 
@@ -452,7 +458,6 @@ In case that the [Advanced DSL configuration](#advanced-dsl-configuration) does 
   config:
     expert:
       dsl:
-        base_template_file: /config/custom-base.xml
         license_file: /secret/config/license
         session:
           encryption_passphrase_file: /secret/config/passphrase
@@ -616,6 +621,7 @@ In case that multiple hosts are configured, TLS-SNI is used to distinguish what 
     annotations:
       nginx.ingress.kubernetes.io/rewrite-target: /
       kubernetes.io/ingress.class: nginx
+      nginx.ingress.kubernetes.io/backend-protocol: https
     targetPort: https
     tls:
       - secretName: virtinc-tls-secret
@@ -624,7 +630,7 @@ In case that multiple hosts are configured, TLS-SNI is used to distinguish what 
   ```
 
 ### Openshift Route
-Since the Route is already available in an Openshift environment, nothing has to be installed additionally.
+Since the Route controller is already available in an Openshift environment, nothing has to be installed additionally.
 
 #### Route terminating HTTP
 

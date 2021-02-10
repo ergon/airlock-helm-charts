@@ -7,7 +7,7 @@ image:
   # image.tag -- Image tag
   tag: "1.0"
   # image.pullPolicy -- Pull policy (`Always`, `IfNotPresent`, `Never`)
-  pullPolicy: Always
+  pullPolicy: IfNotPresent
 
 ## Microgateway Config
 ##
@@ -157,6 +157,12 @@ securityContext: {}
 service:
   # service.type -- [Service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types)
   type: ClusterIP
+  # service.externalTrafficPolicy -- [externalTrafficPolicy](https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip)
+  # @default -- `Local` if `service.type=LoadBalancer`
+  externalTrafficPolicy: Local
+  # service.loadBalancerIP -- [loadBalancerIP](https://kubernetes.io/docs/concepts/services-networking/service/#loadbalancer)
+  # @default -- "" if `service.type=LoadBalancer`
+  loadBalancerIP:
   # service.port -- Service port
   port: 80
   # service.tlsPort -- Service TLS port
@@ -268,11 +274,10 @@ route:
 # resources -- [Resource limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container)
 resources:
   requests:
-    memory: "512Mi"
-    cpu: "500m"
+    memory: 256Mi
+    cpu: 30m
   limits:
-    memory: "4048Mi"
-    cpu: "4"
+    memory: 4048Mi
 
 ## Liveness and readiness probe values
 ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
@@ -282,12 +287,19 @@ livenessProbe:
   enabled: true
   # livenessProbe.initialDelaySeconds -- Initial delay in seconds.
   initialDelaySeconds: 90
+  # livenessProbe.failureThreshold -- After how many subsequent failures the pod gets restarted.
+  failureThreshold: 9
+  # livenessProbe.timeoutSeconds -- Timeout of liveness probes, should roughly reflect allowed timeouts from clients.
+  timeoutSeconds: 5
 
 readinessProbe:
   # readinessProbe.enabled -- Enable readiness probes.
   enabled: true
   # readinessProbe.initialDelaySeconds -- Initial delay in seconds.
-  initialDelaySeconds: 30
+  initialDelaySeconds: 10
+  # readinessProbe.failureThreshold -- After how many tries the pod stops receiving traffic.
+  failureThreshold: 3
+
 # nodeSelector -- Define which nodes the pods are scheduled on.
 nodeSelector: {}
 # tolerations -- Tolerations for use with node [taints](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/).

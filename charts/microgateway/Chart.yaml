@@ -14,5 +14,5 @@ maintainers:
   - email: support@airlock.com
     name: Airlock
 name: microgateway
-version: 0.6.0
-appVersion: 1.0
+version: 0.6.3
+appVersion: "1.0"

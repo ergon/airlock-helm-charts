@@ -41,6 +41,7 @@ spec:
         - name: config
           mountPath: /config/config.yaml
           subPath: config.yaml
+          readOnly: true
         - name: secret
           mountPath: /secret/config/
           readOnly: true
@@ -54,6 +55,8 @@ spec:
         {{- end }}
         {{- if .Values.livenessProbe.enabled }}
         livenessProbe:
+          failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+          timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
           httpGet:
             path: /healthz
             port: http
@@ -61,11 +64,18 @@ spec:
         {{- end }}
         {{- if .Values.readinessProbe.enabled }}
         readinessProbe:
+          failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
           httpGet:
             path: /healthz
             port: http
           initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
         {{- end }}
+        lifecycle:
+          preStop:
+            exec:
+              command:
+              - /usr/bin/sleep
+              - "10"
         resources:
           {{- toYaml .Values.resources | nindent 10 }}
         securityContext:

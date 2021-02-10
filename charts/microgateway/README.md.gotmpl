@@ -123,7 +123,8 @@ config:
       ---------------------
 ```
 
-2. Deploy the Microgateway with the license.yaml file:
+2. [Create the image pull secret](#credentials-to-pull-image-from-docker-registry) to pull the microgateway image.
+3. Deploy the Microgateway with the license.yaml file:
   ```console
   helm upgrade -i microgateway airlock/microgateway -f license.yaml
   ```
@@ -248,15 +249,15 @@ By default, the Airlock Microgateway is configured with the [Simple DSL configur
         entry_path: /
         operational_mode: integration
         deny_rules:
-          - level: strict
-            exceptions:
-              - parameter_name:
-                  pattern: ^content$
-                  ignore_case: true
-                path:
-                  pattern: ^/mail/
-                method:
-                  pattern: ^POST$
+          level: strict
+          exceptions:
+            - parameter_name:
+                pattern: ^content$
+                ignore_case: true
+              path:
+                pattern: ^/mail/
+              method:
+                pattern: ^POST$
       backend:
         protocol: https
         hostname: custom-backend-service
@@ -312,15 +313,15 @@ The use cases outlined above can also occur slightly differently. But all of the
               operational_mode: integration
               session_handling: enforce_session
               deny_rules:
-                - level: standard
-                  exceptions:
-                    - parameter_name:
-                        pattern: ^content$
-                        ignore_case: true
-                      path:
-                        pattern: ^/mail/
-                      method:
-                        pattern: ^POST$
+                level: standard
+                exceptions:
+                  - parameter_name:
+                      pattern: ^content$
+                      ignore_case: true
+                    path:
+                      pattern: ^/mail/
+                    method:
+                      pattern: ^POST$
             - name: api
               entry_path: /api/
               session_handling: ignore_session
@@ -345,7 +346,7 @@ The use cases outlined above can also occur slightly differently. But all of the
 ### Expert DSL configuration
 In case that the [Advanced DSL configuration](#advanced-dsl-configuration) does not suite, the expert configuration options must be used. There are a few reasons listed below:
 
-* The Microgateway DSL configuration options are not available as Helm chart parameters (e.g. base_template_file, session.store_mode, ...)
+* The Microgateway DSL configuration options are not available as Helm chart parameters (e.g. session.store_mode, ...)
 * The Microgateway DSL configuration file has already been used/tested thorougly. To reduce the risk of a broken or unsecure configuration, do not modify the pre-configured configuration file.
 
 
@@ -356,7 +357,6 @@ In case that the [Advanced DSL configuration](#advanced-dsl-configuration) does 
   config:
     expert:
       dsl:
-        base_template_file: /config/custom-base.xml
         license_file: /secret/config/license
         session:
           encryption_passphrase_file: /secret/config/passphrase
@@ -520,6 +520,7 @@ In case that multiple hosts are configured, TLS-SNI is used to distinguish what 
     annotations:
       nginx.ingress.kubernetes.io/rewrite-target: /
       kubernetes.io/ingress.class: nginx
+      nginx.ingress.kubernetes.io/backend-protocol: https
     targetPort: https
     tls:
       - secretName: virtinc-tls-secret
@@ -528,7 +529,7 @@ In case that multiple hosts are configured, TLS-SNI is used to distinguish what 
   ```
 
 ### Openshift Route
-Since the Route is already available in an Openshift environment, nothing has to be installed additionally.
+Since the Route controller is already available in an Openshift environment, nothing has to be installed additionally.
 
 #### Route terminating HTTP
 
