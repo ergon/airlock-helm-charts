@@ -3,6 +3,7 @@
 The *Airlock Microgateway* is a component of the [Airlock Secure Access Hub](https://www.airlock.com/).
 It is the lightweight, container-based deployment form of the *Airlock Gateway*, a software appliance with reverse-proxy, Web Application Firewall (WAF) and API security functionality.
 
+
 The Airlock helm charts are used internally for testing the *Airlock Microgateway*. We make them available publicly under the [MIT license](https://github.com/ergon/airlock-helm-charts/blob/master/LICENSE).
 
 The current chart version is: 0.6.4
@@ -164,7 +165,7 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | route | object | See `route.*`: | [Openshift Route](#openshift-route) |
 | route.annotations | object | `{}` | Annotations to set on the route. |
 | route.enabled | bool | `false` | Create a route object. |
-| route.hosts | list | `["virtinc.com"]` | List of host names. |
+| route.hosts | list | `["virtinc.com"]` |  List of host names. |
 | route.labels | object | `{}` | Additional labels add on the Microgateway route. |
 | route.path | string | `"/"` | Path for the route. |
 | route.targetPort | string | `"https"` | Target port of the service (`http`, `https` or `<number>`). |
@@ -447,6 +448,7 @@ In case that the [Advanced DSL configuration](#advanced-dsl-configuration) does 
 * The Microgateway DSL configuration options are not available as Helm chart parameters (e.g. session.store_mode, ...)
 * The Microgateway DSL configuration file has already been used/tested thorougly. To reduce the risk of a broken or unsecure configuration, do not modify the pre-configured configuration file.
 
+
 **Example:**
 
   custom-values.yaml
@@ -608,8 +610,8 @@ The Microgateway Helm chart itself does not install the nginx-ingress-controller
 #### Ingress terminating secure HTTPS
 The TLS certificate of the Ingress must be in a secret object which is referred to in the Ingress configuration.
 At the time of writing, Ingress supports only the default port 443 for HTTPS and directly assumes it is TLS.
-In case that multiple hosts are configured, TLS-SNI is used to distinguish what host the client requested. 
-For each configured `ingress.tls.host`, an `ingress.hosts` entry must also be created to ensure that the ingress rules are created correctly.
+In case that multiple hosts are configured, TLS-SNI is used to distinguish what host the client requested.  
+For each configured `ingress.tls.host`, an `ingress.hosts` entry must also be created to ensure that the ingress rules are created correctly. 
 
   To receive HTTPS traffic from the outside of the Kubernetes cluster, use the following configuration:
   ```
@@ -624,9 +626,10 @@ For each configured `ingress.tls.host`, an `ingress.hosts` entry must also be cr
       - secretName: virtinc-tls-secret
         hosts:
           - virtinc.com
-    hosts:
+    hosts: 
       - virtinc.com
   ```
+
 
 ### Openshift Route
 Since the Route controller is already available in an Openshift environment, nothing has to be installed additionally.
@@ -788,6 +791,7 @@ Used for backend connection:
 * Certificate: `backend-client.crt`
 * Private key: `backend-client.key`
 * CA:          `backend-server-validation-ca.crt`
+
 
   The example below shows how to create a secret containing certificates for frontend and backend connections.
   ```
