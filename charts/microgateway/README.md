@@ -6,7 +6,7 @@ It is the lightweight, container-based deployment form of the *Airlock Gateway*,
 
 The Airlock helm charts are used internally for testing the *Airlock Microgateway*. We make them available publicly under the [MIT license](https://github.com/ergon/airlock-helm-charts/blob/master/LICENSE).
 
-The current chart version is: 0.6.3
+The current chart version is: 0.6.4
 
 ## About Ergon
 *Airlock* is a registered trademark of [Ergon](https://www.ergon.ch). Ergon is a Swiss leader in leveraging digitalisation to create unique and effective client benefits, from conception to market, the result of which is the international distribution of globally revered products.
@@ -612,7 +612,8 @@ The Microgateway Helm chart itself does not install the nginx-ingress-controller
 #### Ingress terminating secure HTTPS
 The TLS certificate of the Ingress must be in a secret object which is referred to in the Ingress configuration.
 At the time of writing, Ingress supports only the default port 443 for HTTPS and directly assumes it is TLS.
-In case that multiple hosts are configured, TLS-SNI is used to distinguish what host the client requested.
+In case that multiple hosts are configured, TLS-SNI is used to distinguish what host the client requested.  
+For each configured `ingress.tls.host`, an `ingress.hosts` entry must also be created to ensure that the ingress rules are created correctly. 
 
   To receive HTTPS traffic from the outside of the Kubernetes cluster, use the following configuration:
   ```
@@ -627,7 +628,10 @@ In case that multiple hosts are configured, TLS-SNI is used to distinguish what 
       - secretName: virtinc-tls-secret
         hosts:
           - virtinc.com
+    hosts: 
+      - virtinc.com
   ```
+
 
 ### Openshift Route
 Since the Route controller is already available in an Openshift environment, nothing has to be installed additionally.
