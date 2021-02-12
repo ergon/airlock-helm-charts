@@ -139,7 +139,7 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | image.pullPolicy | string | `"IfNotPresent"` | Pull policy (`Always`, `IfNotPresent`, `Never`) |
 | image.repository | string | `"ergon/airlock-microgateway"` | Image repository |
 | image.tag | string | `"1.0"` | Image tag |
-| imageCredentials | object | `{"enabled":false,"password":"","registry":"https://index.docker.io/v1/","username":""}` | Creates a imagePullSecret with the provided values.  |
+| imageCredentials | object | `{"enabled":false,"password":"","registry":"https://index.docker.io/v1/","username":""}` | Creates a imagePullSecret with the provided values. |
 | imageCredentials.enabled | bool | `false` | Enable the imagePullSecret creation. |
 | imageCredentials.password | string | `""` | imagePullSecret password/Token |
 | imageCredentials.registry | string | `"https://index.docker.io/v1/"` | imagePullSecret registry |
