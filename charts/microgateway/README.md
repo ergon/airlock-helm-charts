@@ -322,7 +322,7 @@ Finally, apply the Helm chart configuration file with `-f` parameter.
   ```
 
 :information_source: **Possible settings**:<br>
-Please refer to the [Echo-Server Helm chart](https://ealenn.github.io/Echo-Server/pages/helm.html) to see all possible parameters of the Echo-Server Helm chart.
+Please refer to the [Echo-Server Helm chart](https://artifacthub.io/packages/helm/ealenn/echo-server) to see all possible parameters of the Echo-Server Helm chart.
 
 ## DSL configuration
 The Helm chart provides three different possibilities to configure the Microgateway.
