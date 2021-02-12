@@ -78,7 +78,4 @@ jobs:
           kubectl cluster-info
           kubectl create secret generic microgatewaysecrets --from-literal=license="${{ secrets.WAF_LICENSE }}" --from-literal=passphrase="${{ secrets.WAF_PASSPHRASE }}"
       - name: Run chart-testing (install)
-        run: ct install --config .github/ct.yaml
-        env:
-          DOCKER_USER: ${{ secrets.DOCKER_USER }}
-          DOCKER_TOKEN: ${{ secrets.DOCKER_USER_TOKEN }}
+        run: ct install --config .github/ct.yaml --helm-extra-args "--set imageCredentials.username=${{ secrets.DOCKER_USER }} --set imageCredentials.password=${{ secrets.DOCKER_USER_TOKEN }}"
