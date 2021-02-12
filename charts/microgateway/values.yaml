@@ -141,7 +141,7 @@ commonLabels: {}
 # imagePullSecrets -- Reference to one or more secrets to use when pulling images.
 imagePullSecrets: []
   # - name: "image-pull-secret"
-# imageCredentials -- Creates a imagePullSecret with the provided values. 
+# imageCredentials -- Creates a imagePullSecret with the provided values.
 imageCredentials:
   # imageCredentials.enabled -- Enable the imagePullSecret creation.
   enabled: false
