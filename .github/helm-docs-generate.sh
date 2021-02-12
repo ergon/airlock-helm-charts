@@ -8,6 +8,7 @@ echo -e "\033[0;31m Make sure that the documentation has been updated. \033[0m" 
 git config user.name "$TECHNICAL_USER"
 git config user.email "$TECHNICAL_USER@users.noreply.github.com"
 
+git fetch
 git checkout  ${BRANCH_NAME}
 
 ./helm-docs
