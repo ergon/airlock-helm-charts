@@ -139,6 +139,11 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | image.pullPolicy | string | `"IfNotPresent"` | Pull policy (`Always`, `IfNotPresent`, `Never`) |
 | image.repository | string | `"ergon/airlock-microgateway"` | Image repository |
 | image.tag | string | `"1.0"` | Image tag |
+| imageCredentials | object | `{"enabled":false,"password":"","registry":"https://index.docker.io/v1/","username":""}` | Creates a imagePullSecret with the provided values.  |
+| imageCredentials.enabled | bool | `false` | Enable the imagePullSecret creation. |
+| imageCredentials.password | string | `""` | imagePullSecret password/Token |
+| imageCredentials.registry | string | `"https://index.docker.io/v1/"` | imagePullSecret registry |
+| imageCredentials.username | string | `""` | imagePullSecret username |
 | imagePullSecrets | list | `[]` | Reference to one or more secrets to use when pulling images. |
 | ingress | object | See `ingress.*`: | [Kubernetes Ingress](#kubernetes-ingress) |
 | ingress.annotations | object | `{"nginx.ingress.kubernetes.io/rewrite-target":"/"}` | Annotations to set on the ingress. |
@@ -764,7 +769,8 @@ This is why it is better to create a secret containing license and passphrase us
 
 #### Credentials to pull image from Docker registry
 The Microgateway image is published in a private Docker registry to which only granted accounts have access.
-In order to download this image, the credentials must be configured in a secret and passed to the Helm chart to use when downloading the image.
+In order to download this image, the Helm chart needs the Docker credentials to authenticate against the Docker registry. 
+Either an already existing Docker secret is provided (`imagePullSecrets`) during the installation of the Microgateway, or a Kubernetes secret is created with the provided credentials (`imageCredentials`).    
 
   The example below shows how to create a secret with the credentials to download the image from the Docker registry.
   ```
@@ -777,6 +783,14 @@ In order to download this image, the credentials must be configured in a secret 
   imagePullSecrets:
       - name: "docker-secret"
   ```
+
+  The following example shows how to configure the Helm chart so that a Kubernetes credential is created. 
+```
+imageCredentials:
+  enabled: true
+  username: virtinc
+  password: 1fcd02dc-a95b-4815-9131-50a021bc3f3
+```
 
 #### Certificates for Microgateway
 The Microgateway can be configured to use a specific certificate for frontend and/or backend connections. The certificate must be stored in a secret
