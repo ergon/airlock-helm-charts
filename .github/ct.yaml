@@ -1,4 +1,4 @@
-helm-extra-args: --timeout 300s
+helm-extra-args: --timeout 300s --set imageCredentials.username=${DOCKER_USER} --set imageCredentials.password=${DOCKER_TOKEN}
 check-version-increment: false
 charts: charts/microgateway
 debug: true

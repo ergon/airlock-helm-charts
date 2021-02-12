@@ -76,7 +76,9 @@ jobs:
       - name: Create Secrets
         run: |
           kubectl cluster-info
-          kubectl create secret docker-registry dockersecret --docker-username=${{ secrets.DOCKER_USER }} --docker-password=${{ secrets.DOCKER_USER_TOKEN }}
           kubectl create secret generic microgatewaysecrets --from-literal=license="${{ secrets.WAF_LICENSE }}" --from-literal=passphrase="${{ secrets.WAF_PASSPHRASE }}"
       - name: Run chart-testing (install)
         run: ct install --config .github/ct.yaml
+        env:
+          DOCKER_USER: ${{ secrets.DOCKER_USER }}
+          DOCKER_TOKEN: ${{ secrets.DOCKER_USER_TOKEN }}
