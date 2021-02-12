@@ -84,9 +84,6 @@ Get the secret name
 Create imagePullSecret
 */}}
 {{- define "imagePullSecret" }}
-{{- if and .Values.imageCredentials.enabled .Values.imagePullSecret }}
-  {{- fail "Please either specify an imagePullSecret or imageCredentials not both" }}
-{{- end }}
 {{- if .Values.imageCredentials.enabled }}
   {{- printf "{\"auths\": {\"%s\": {\"username\":\"%s\",\"password\":\"%s\",\"auth\":\"%s\"}}}" .Values.imageCredentials.registry .Values.imageCredentials.username .Values.imageCredentials.password (printf "%s:%s" .Values.imageCredentials.username .Values.imageCredentials.password | b64enc) | b64enc }}
 {{- end -}}
