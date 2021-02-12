@@ -788,8 +788,8 @@ Either an already existing Docker secret is provided (`imagePullSecrets`) during
 ```
 imageCredentials:
   enabled: true
-  username: virtinc
-  password: 1fcd02dc-a95b-4815-9131-50a021bc3f3
+  username: <username>
+  password: <access_token>
 ```
 
 #### Certificates for Microgateway
