@@ -142,7 +142,7 @@ commonLabels: {}
 imagePullSecrets: []
   # - name: "image-pull-secret"
 # imageCredentials -- Creates a imagePullSecret with the provided values. 
-imageCredentials: 
+imageCredentials:
   # imageCredentials.enabled -- Enable the imagePullSecret creation.
   enabled: false
   # imageCredentials.registry -- imagePullSecret registry
