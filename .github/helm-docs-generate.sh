@@ -9,7 +9,7 @@ git config user.name "$TECHNICAL_USER"
 git config user.email "$TECHNICAL_USER@users.noreply.github.com"
 
 git fetch
-git checkout  ${BRANCH_NAME}
+git checkout ${BRANCH_NAME}
 
 ./helm-docs
 
