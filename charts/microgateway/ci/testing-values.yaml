@@ -1,8 +1,8 @@
 config:
   generic:
     existingSecret: "microgatewaysecrets"
-imageCredentials:
-  enabled: true
+imagePullSecrets:
+  - name: "dockersecret"
 redis:
   enabled: true
 echo-server:
