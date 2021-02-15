@@ -216,7 +216,7 @@ Finally, apply the Helm chart configuration file with `-f` parameter.
   ```
 
 :information_source: **Possible settings**:<br>
-Please refer to the [Echo-Server Helm chart](https://ealenn.github.io/Echo-Server/pages/helm.html) to see all possible parameters of the Echo-Server Helm chart.
+Please refer to the [Echo-Server Helm chart](https://artifacthub.io/packages/helm/ealenn/echo-server) to see all possible parameters of the Echo-Server Helm chart.
 
 ## DSL configuration
 The Helm chart provides three different possibilities to configure the Microgateway.
@@ -663,7 +663,8 @@ This is why it is better to create a secret containing license and passphrase us
 
 #### Credentials to pull image from Docker registry
 The Microgateway image is published in a private Docker registry to which only granted accounts have access.
-In order to download this image, the credentials must be configured in a secret and passed to the Helm chart to use when downloading the image.
+In order to download this image, the Helm chart needs the Docker credentials to authenticate against the Docker registry. 
+Either an already existing Docker secret is provided (`imagePullSecrets`) during the installation of the Microgateway, or a Kubernetes secret is created with the provided credentials (`imageCredentials`).    
 
   The example below shows how to create a secret with the credentials to download the image from the Docker registry.
   ```
@@ -676,6 +677,14 @@ In order to download this image, the credentials must be configured in a secret 
   imagePullSecrets:
       - name: "docker-secret"
   ```
+
+  The following example shows how to configure the Helm chart so that a Kubernetes credential is created. 
+```
+imageCredentials:
+  enabled: true
+  username: <username>
+  password: <access_token>
+```
 
 #### Certificates for Microgateway
 The Microgateway can be configured to use a specific certificate for frontend and/or backend connections. The certificate must be stored in a secret

@@ -141,6 +141,16 @@ commonLabels: {}
 # imagePullSecrets -- Reference to one or more secrets to use when pulling images.
 imagePullSecrets: []
   # - name: "image-pull-secret"
+# imageCredentials -- Creates a imagePullSecret with the provided values.
+imageCredentials:
+  # imageCredentials.enabled -- Enable the imagePullSecret creation.
+  enabled: false
+  # imageCredentials.registry -- imagePullSecret registry
+  registry: "https://index.docker.io/v1/"
+  # imageCredentials.username -- imagePullSecret username
+  username: ""
+  # imageCredentials.password -- imagePullSecret password/Token
+  password: ""
 # nameOverride -- Provide a name in place of `microgateway`.
 nameOverride: ""
 # fullnameOverride -- Provide a name to substitute for the full names of resources.
