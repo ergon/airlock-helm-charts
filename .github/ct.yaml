@@ -1,8 +1,10 @@
+
 helm-extra-args: --timeout 300s
 check-version-increment: false
+charts: charts/microgateway
 debug: true
-namespace: validation-namespace
-release-label: release
-chart-repos: 
+namespace: default
+release-label: app.kubernetes.io/instance
+chart-repos:
         - bitnami=https://charts.bitnami.com/bitnami
         - ealenn=https://ealenn.github.io/charts
