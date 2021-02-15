@@ -2,3 +2,5 @@
 
 # IDE
 .idea/
+
+charts/microgateway/test-values.yaml
