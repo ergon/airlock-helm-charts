@@ -378,3 +378,5 @@ hpa:
     memory: 2Gi
     # hpa.resource.cpu -- Average Microgateway CPU consumption in percentage to scale up/down.
     cpu: 50
+# test_request -- Request that will be used as a smoketest when 'helm test' is invoked.
+test_request: /

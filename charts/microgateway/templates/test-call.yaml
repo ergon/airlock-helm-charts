@@ -12,6 +12,6 @@ spec:
       image: busybox
       command: ["/bin/sh", "-c"]
       args:
-        - wget '{{ include "microgateway.fullname" . }}:{{ .Values.service.port }}/' &&
+        - wget '{{ include "microgateway.fullname" . }}:{{ .Values.service.port }}{{ .Values.test_request }}' &&
           cat index.html;
   restartPolicy: Never
