@@ -48,6 +48,7 @@ The current chart version is: 0.6.5
     * [Secure handling of license and passphrase](#secure-handling-of-license-and-passphrase)
     * [Credentials to pull image from Docker registry](#credentials-to-pull-image-from-docker-registry)
     * [Certificates for Microgateway](#certificates-for-microgateway)
+* [Deployment Smoketest](#deployment-smoketest)
 
 ## Introduction
 This Helm chart bootstraps [Airlock Microgateway](https://www.airlock.com) on a [Kubernetes](https://kubernetes.io) or [Openshift](https://www.openshift.com) cluster using the [Helm](https://helm.sh) package manager. It provisions an Airlock Microgateway Pod with a default configuration that can be adjusted to customer needs. For more details about the configuration options, see chapter [Helm Configuration](#dsl-configuration).
@@ -616,7 +617,7 @@ The Microgateway Helm chart itself does not install the nginx-ingress-controller
 #### Ingress terminating secure HTTPS
 The TLS certificate of the Ingress must be in a secret object which is referred to in the Ingress configuration.
 At the time of writing, Ingress supports only the default port 443 for HTTPS and directly assumes it is TLS.
-In case that multiple hosts are configured, TLS-SNI is used to distinguish what host the client requested. 
+In case that multiple hosts are configured, TLS-SNI is used to distinguish what host the client requested.
 For each configured `ingress.tls.host`, an `ingress.hosts` entry must also be created to ensure that the ingress rules are created correctly.
 
   To receive HTTPS traffic from the outside of the Kubernetes cluster, use the following configuration:
@@ -724,7 +725,7 @@ In other words, the entire path of the connection is encrypted and verified, als
 With the TLS termination type "Passthrough", HTTPS traffic is sent directly to the Microgateway, without decrypting it on the route.
 Therefore, no certificates need to be configured on the Route and termination takes place in the Microgateway.
 
-  To setup Passthrough TLS termination, use the following configuraion:
+  To setup Passthrough TLS termination, use the following configuration:
   ```
   route:
     enabled: true
@@ -768,7 +769,7 @@ This is why it is better to create a secret containing license and passphrase us
 #### Credentials to pull image from Docker registry
 The Microgateway image is published in a private Docker registry to which only granted accounts have access.
 In order to download this image, the Helm chart needs the Docker credentials to authenticate against the Docker registry.
-Either an already existing Docker secret is provided (`imagePullSecrets`) during the installation of the Microgateway, or a Kubernetes secret is created with the provided credentials (`imageCredentials`).   
+Either an already existing Docker secret is provided (`imagePullSecrets`) during the installation of the Microgateway, or a Kubernetes secret is created with the provided credentials (`imageCredentials`).
 
   The example below shows how to create a secret with the credentials to download the image from the Docker registry.
   ```
@@ -818,9 +819,17 @@ Used for backend connection:
   ```
 
   Afterwards use this secret in the Helm chart configuration file.
-  custom-values.yaml
   ```
   config:
     generic:
       tlsSecretName: "microgateway-tls"
   ```
+## Deployment Smoketest
+The following example shows how to run a smoke test against a microgateway deployment.
+```
+helm test <deployment_name>
+```
+The default URL for the test is '/'. Overwrite the test URL with the parameter 'test_request'.
+```
+test_request: /myapp/login
+```
