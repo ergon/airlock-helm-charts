@@ -187,6 +187,7 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | service.port | int | `80` | Service port |
 | service.tlsPort | int | `443` | Service TLS port |
 | service.type | string | `"ClusterIP"` | [Service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) |
+| test_request | string | `"/"` | Request that will be used as a smoketest when 'helm test' is invoked. |
 | tolerations | list | `[]` | Tolerations for use with node [taints](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/). |
 
 ## Getting started
