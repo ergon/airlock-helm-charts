@@ -10,6 +10,8 @@ spec:
   containers:
     - name: wget
       image: busybox
-      command: ['wget']
-      args:  ['{{ include "microgateway.fullname" . }}:{{ .Values.service.port }}/']
+      command: ["/bin/sh", "-c"]
+      args:
+        - wget {{ include "microgateway.fullname" . }}:{{ .Values.service.port }}/;
+          cat index.html;
   restartPolicy: Never

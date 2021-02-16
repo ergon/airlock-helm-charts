@@ -1,0 +1,29 @@
+config:
+  generic:
+    existingSecret: "microgatewaysecrets"
+  expert:
+    dsl:
+      license_file: /secret/config/license
+      log:
+        level: info
+      apps:
+        - virtual_host:
+            hostname: echo
+          mappings:
+            - entry_path: /
+              operational_mode: production
+              session_handling: enforce_session
+              deny_rules:
+                - enabled: true
+                  level: strict
+          backend:
+            hostname: backend-service
+
+imagePullSecrets:
+  - name: "dockersecret"
+redis:
+  enabled: true
+echo-server:
+  enabled: true
+ingress:
+  enabled: true
