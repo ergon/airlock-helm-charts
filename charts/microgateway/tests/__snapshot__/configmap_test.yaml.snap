@@ -22,7 +22,8 @@ simple mode:
         level: info
       apps:
       - mappings:
-        - entry_path: /simple/
+        - entry_path:
+            value: /simple/
           operational_mode: production
           session_handling: ignore_session
           deny_rule_groups:
