@@ -241,7 +241,10 @@ route:
     # haproxy.router.openshift.io/balance: roundrobin
   # route.labels -- Additional labels add on the Microgateway route.
   labels: {}
-  # route.hosts --  List of host names.
+  # route.hosts --  List of host names. <br>
+  # A route will be created for every host name listed. No route will be created
+  # if no hosts are specified.
+  # Use an empty string to generate a route without hostname.
   hosts:
     - virtinc.com
   # route.path -- Path for the route.
@@ -392,3 +395,5 @@ hpa:
     memory: 2Gi
     # hpa.resource.cpu -- Average Microgateway CPU consumption in percentage to scale up/down.
     cpu: 50
+# test_request -- Request that will be used as a smoketest when 'helm test' is invoked.
+test_request: /

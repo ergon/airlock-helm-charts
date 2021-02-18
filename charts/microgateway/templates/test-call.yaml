@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: {{ template "microgateway.fullname" . }}-smoketest
+  labels:
+    {{- include "microgateway.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ["/bin/sh", "-c"]
+      args:
+        - wget '{{ include "microgateway.fullname" . }}:{{ .Values.service.port }}{{ .Values.test_request }}' &&
+          cat index.html;
+  restartPolicy: Never

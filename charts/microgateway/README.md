@@ -3,10 +3,9 @@
 The *Airlock Microgateway* is a component of the [Airlock Secure Access Hub](https://www.airlock.com/).
 It is the lightweight, container-based deployment form of the *Airlock Gateway*, a software appliance with reverse-proxy, Web Application Firewall (WAF) and API security functionality.
 
-
 The Airlock helm charts are used internally for testing the *Airlock Microgateway*. We make them available publicly under the [MIT license](https://github.com/ergon/airlock-helm-charts/blob/master/LICENSE).
 
-The current chart version is: 0.6.5
+The current chart version is: 0.6.6
 
 ## About Ergon
 *Airlock* is a registered trademark of [Ergon](https://www.ergon.ch). Ergon is a Swiss leader in leveraging digitalisation to create unique and effective client benefits, from conception to market, the result of which is the international distribution of globally revered products.
@@ -44,11 +43,13 @@ The current chart version is: 0.6.5
       * [Route Edge configuration](#route-edge-configuration)
       * [Route Re-encrypt configuration](#route-re-encrypt-configuration)
       * [Route Passthrough configuration](#route-passthrough-configuration)
+    * [Automated Hostname Assignment](#automated-hostname-assignment)
 * [Security](#security)
   * [Store sensitive information in secrets](#store-sensitive-information-in-secrets)
     * [Secure handling of license and passphrase](#secure-handling-of-license-and-passphrase)
     * [Credentials to pull image from Docker registry](#credentials-to-pull-image-from-docker-registry)
     * [Certificates for Microgateway](#certificates-for-microgateway)
+* [Deployment Smoketest](#deployment-smoketest)
 
 ## Introduction
 This Helm chart bootstraps [Airlock Microgateway](https://www.airlock.com) on a [Kubernetes](https://kubernetes.io) or [Openshift](https://www.openshift.com) cluster using the [Helm](https://helm.sh) package manager. It provisions an Airlock Microgateway Pod with a default configuration that can be adjusted to customer needs. For more details about the configuration options, see chapter [Helm Configuration](#dsl-configuration).
@@ -170,7 +171,7 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | route | object | See `route.*`: | [Openshift Route](#openshift-route) |
 | route.annotations | object | `{}` | Annotations to set on the route. |
 | route.enabled | bool | `false` | Create a route object. |
-| route.hosts | list | `["virtinc.com"]` |  List of host names. |
+| route.hosts | list | `["virtinc.com"]` | List of host names. <br> A route will be created for every host name listed. No route will be created if no hosts are specified. Use an empty string to generate a route without hostname. |
 | route.labels | object | `{}` | Additional labels add on the Microgateway route. |
 | route.path | string | `"/"` | Path for the route. |
 | route.targetPort | string | `"https"` | Target port of the service (`http`, `https` or `<number>`). |
@@ -193,6 +194,7 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | serviceAccount.create | bool | `true` | Specifies whether a ServiceAccount should be created |
 | serviceAccount.labels | object | `{}` | Additional labels added on the service account. |
 | serviceAccount.name | string | `nil` | The name of the ServiceAccount to use. <br><br> |
+| test_request | string | `"/"` | Request that will be used as a smoketest when 'helm test' is invoked. |
 | tolerations | list | `[]` | Tolerations for use with node [taints](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/). |
 
 ## Getting started
@@ -460,7 +462,6 @@ In case that the [Advanced DSL configuration](#advanced-dsl-configuration) does 
 * The Microgateway DSL configuration options are not available as Helm chart parameters (e.g. session.store_mode, ...)
 * The Microgateway DSL configuration file has already been used/tested thorougly. To reduce the risk of a broken or unsecure configuration, do not modify the pre-configured configuration file.
 
-
 **Example:**
 
   custom-values.yaml
@@ -622,8 +623,8 @@ The Microgateway Helm chart itself does not install the nginx-ingress-controller
 #### Ingress terminating secure HTTPS
 The TLS certificate of the Ingress must be in a secret object which is referred to in the Ingress configuration.
 At the time of writing, Ingress supports only the default port 443 for HTTPS and directly assumes it is TLS.
-In case that multiple hosts are configured, TLS-SNI is used to distinguish what host the client requested.  
-For each configured `ingress.tls.host`, an `ingress.hosts` entry must also be created to ensure that the ingress rules are created correctly. 
+In case that multiple hosts are configured, TLS-SNI is used to distinguish what host the client requested.
+For each configured `ingress.tls.host`, an `ingress.hosts` entry must also be created to ensure that the ingress rules are created correctly.
 
   To receive HTTPS traffic from the outside of the Kubernetes cluster, use the following configuration:
   ```
@@ -638,10 +639,9 @@ For each configured `ingress.tls.host`, an `ingress.hosts` entry must also be cr
       - secretName: virtinc-tls-secret
         hosts:
           - virtinc.com
-    hosts: 
+    hosts:
       - virtinc.com
   ```
-
 
 ### Openshift Route
 Since the Route controller is already available in an Openshift environment, nothing has to be installed additionally.
@@ -731,7 +731,7 @@ In other words, the entire path of the connection is encrypted and verified, als
 With the TLS termination type "Passthrough", HTTPS traffic is sent directly to the Microgateway, without decrypting it on the route.
 Therefore, no certificates need to be configured on the Route and termination takes place in the Microgateway.
 
-  To setup Passthrough TLS termination, use the following configuraion:
+  To setup Passthrough TLS termination, use the following configuration:
   ```
   route:
     enabled: true
@@ -743,6 +743,18 @@ Therefore, no certificates need to be configured on the Route and termination ta
       termination: passthrough
       destinationCACertificate: ""
   ```
+
+#### Automated Hostname Assignment
+Openshift assigns an automatically generated hostname to a route if you do not provide one.
+You can achieve this by specifying an empty string as hostname.
+
+```
+route:
+  enabled: true
+  path: ""
+  hosts:
+    - ""
+```
 
 ## Security
 The following subchapters describes how to use and securely deploy the Microgateway.
@@ -774,8 +786,8 @@ This is why it is better to create a secret containing license and passphrase us
 
 #### Credentials to pull image from Docker registry
 The Microgateway image is published in a private Docker registry to which only granted accounts have access.
-In order to download this image, the Helm chart needs the Docker credentials to authenticate against the Docker registry. 
-Either an already existing Docker secret is provided (`imagePullSecrets`) during the installation of the Microgateway, or a Kubernetes secret is created with the provided credentials (`imageCredentials`).    
+In order to download this image, the Helm chart needs the Docker credentials to authenticate against the Docker registry.
+Either an already existing Docker secret is provided (`imagePullSecrets`) during the installation of the Microgateway, or a Kubernetes secret is created with the provided credentials (`imageCredentials`).
 
   The example below shows how to create a secret with the credentials to download the image from the Docker registry.
   ```
@@ -789,7 +801,7 @@ Either an already existing Docker secret is provided (`imagePullSecrets`) during
       - name: "docker-secret"
   ```
 
-  The following example shows how to configure the Helm chart so that a Kubernetes credential is created. 
+  The following example shows how to configure the Helm chart so that a Kubernetes credential is created.
 ```
 imageCredentials:
   enabled: true
@@ -813,7 +825,6 @@ Used for backend connection:
 * Private key: `backend-client.key`
 * CA:          `backend-server-validation-ca.crt`
 
-
   The example below shows how to create a secret containing certificates for frontend and backend connections.
   ```
   kubectl create secret generic microgateway-tls \
@@ -826,9 +837,17 @@ Used for backend connection:
   ```
 
   Afterwards use this secret in the Helm chart configuration file.
-  custom-values.yaml
   ```
   config:
     generic:
       tlsSecretName: "microgateway-tls"
   ```
+## Deployment Smoketest
+The following example shows how to run a smoke test against a microgateway deployment.
+```
+helm test <deployment_name>
+```
+The default URL for the test is '/'. Overwrite the test URL with the parameter 'test_request'.
+```
+test_request: /myapp/login
+```
