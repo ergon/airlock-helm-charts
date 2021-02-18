@@ -19,14 +19,19 @@ spec:
         checksum/secret: {{ include (print .Template.BasePath "/secret.yaml") . | sha256sum }}
         {{- end }}
     spec:
-    {{- with .Values.imagePullSecrets }}
+    {{- if or .Values.imagePullSecrets .Values.imageCredentials.enabled }}
       imagePullSecrets:
+      {{- with .Values.imagePullSecrets -}}
         {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.imageCredentials.enabled }}
+        - name: {{ template "microgateway.fullname" . }}-dockerregcred
+      {{- end }}
     {{- end }}
-      securityContext:
-        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      securityContext: {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      serviceAccountName: {{ template "microgateway.serviceAccountName" . }}
       initContainers:
-      - name: {{ .Chart.Name }}-configbuilder
+      - name: configbuilder
         image: "{{ .Values.image.repository_configbuilder }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         {{- with .Values.config.generic.configEnv }}

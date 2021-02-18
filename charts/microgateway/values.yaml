@@ -136,6 +136,16 @@ commonLabels: {}
 # imagePullSecrets -- Reference to one or more secrets to use when pulling images.
 imagePullSecrets: []
   # - name: "image-pull-secret"
+# imageCredentials -- Creates a imagePullSecret with the provided values.
+imageCredentials:
+  # imageCredentials.enabled -- Enable the imagePullSecret creation.
+  enabled: false
+  # imageCredentials.registry -- imagePullSecret registry
+  registry: "https://index.docker.io/v1/"
+  # imageCredentials.username -- imagePullSecret username
+  username: ""
+  # imageCredentials.password -- imagePullSecret password/Token
+  password: ""
 # nameOverride -- Provide a name in place of `microgateway`.
 nameOverride: ""
 # fullnameOverride -- Provide a name to substitute for the full names of resources.
@@ -149,9 +159,29 @@ securityContext: {}
   #   drop:
   #   - ALL
   # runAsUser: 1000
+
+# serviceAccount -- Specifies the service account under which the microgateway will run.
+# A dedicated service account is created and used by default. <br><br>
+# If `serviceAccount.create=true` and no `serviceAccount.name` is given, a name is generated using the fullname template. <br><br>
+# If `serviceAccount.create=false` and no `serviceAccount.name` is given, the microgateway runs under the default service account.
+serviceAccount:
+  # serviceAccount.create -- Specifies whether a ServiceAccount should be created
+  create: true
+  # serviceAccount.name -- The name of the ServiceAccount to use. <br><br>
+  name:
+  # serviceAccount.annotations -- Annotations to set on the service account.
+  annotations: {}
+  # serviceAccount.labels -- Additional labels added on the service account.
+  labels: {}
 service:
   # service.type -- [Service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types)
   type: ClusterIP
+  # service.externalTrafficPolicy -- [externalTrafficPolicy](https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip)
+  # @default -- `Local` if `service.type=LoadBalancer`
+  externalTrafficPolicy: Local
+  # service.loadBalancerIP -- [loadBalancerIP](https://kubernetes.io/docs/concepts/services-networking/service/#loadbalancer)
+  # @default -- "" if `service.type=LoadBalancer`
+  loadBalancerIP:
   # service.port -- Service port
   port: 80
   # service.tlsPort -- Service TLS port
@@ -206,7 +236,10 @@ route:
     # haproxy.router.openshift.io/balance: roundrobin
   # route.labels -- Additional labels add on the Microgateway route.
   labels: {}
-  # route.hosts --  List of host names.
+  # route.hosts --  List of host names. <br>
+  # A route will be created for every host name listed. No route will be created
+  # if no hosts are specified.
+  # Use an empty string to generate a route without hostname.
   hosts:
     - virtinc.com
   # route.path -- Path for the route.
@@ -357,3 +390,5 @@ hpa:
     memory: 2Gi
     # hpa.resource.cpu -- Average Microgateway CPU consumption in percentage to scale up/down.
     cpu: 50
+# test_request -- Request that will be used as a smoketest when 'helm test' is invoked.
+test_request: /

@@ -4,21 +4,12 @@ on:
   pull_request:
     paths:
       - 'charts/**'
+      - '.github/workflows/ci.yaml'
+  workflow_dispatch:
 
 jobs:
-  lint-chart:
+  generate-docs:
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v1
-      - name: Run chart-testing (lint)
-        uses: helm/chart-testing-action@master
-        with:
-          command: lint
-          config: .github/ct.yaml
-  lint-docs:
-    runs-on: ubuntu-latest
-    needs: lint-chart
     steps:
       - name: Checkout
         uses: actions/checkout@v1
@@ -39,8 +30,7 @@ jobs:
   unit-test:
     runs-on: ubuntu-latest
     needs:
-      - lint-chart
-      - lint-docs
+      - generate-docs
     steps:
       - name: Checkout
         uses: actions/checkout@v1
@@ -49,8 +39,6 @@ jobs:
   kubeval-chart:
     runs-on: ubuntu-latest
     needs:
-      - lint-chart
-      - lint-docs
       - unit-test
     strategy:
       matrix:
@@ -68,12 +56,7 @@ jobs:
   install-chart:
     name: install-chart
     runs-on: ubuntu-latest
-    env:
-      _v_namespace: validation-namespace
     needs:
-      - lint-chart
-      - lint-docs
-      - unit-test
       - kubeval-chart
     strategy:
       matrix:
@@ -83,25 +66,26 @@ jobs:
           - v1.20.2
     steps:
       - name: Checkout
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
+      - name: Set up Helm
+        uses: azure/setup-helm@v1
+        with:
+          version: v3.4.0
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.7
+      - name: Set up chart-testing
+        uses: helm/chart-testing-action@v2.0.1
+      - name: Run chart-testing (lint)
+        run: ct lint --config .github/ct.yaml
       - name: Create kind ${{ matrix.k8s }} cluster
-        uses: helm/kind-action@master
+        uses: helm/kind-action@v1.0.0
         with:
           node_image: kindest/node:${{ matrix.k8s }}
       - name: Create Secrets
         run: |
           kubectl cluster-info
-          kubectl get pods -n kube-system
-          echo "current-context:" $(kubectl config current-context)
-          kubectl create namespace $_v_namespace
-          kubectl create secret docker-registry dockersecret --docker-username=${{ secrets.DOCKER_USER }} --docker-password=${{ secrets.DOCKER_USER_TOKEN }} --namespace $_v_namespace
-          echo "${{ secrets.WAF_LICENSE }}" >> tmplicense.txt
-          echo "${{ secrets.WAF_PASSPHRASE }}" >> tmppassphrase.txt
-          kubectl create secret generic microgatewaysecrets --from-file=license=tmplicense.txt --from-file=passphrase=tmppassphrase.txt --namespace $_v_namespace
-          kubectl describe secret dockersecret --namespace $_v_namespace
-          kubectl describe secret microgatewaysecrets --namespace $_v_namespace
+          kubectl create secret docker-registry dockersecret --docker-username=${{ secrets.DOCKER_USER }} --docker-password=${{ secrets.DOCKER_USER_TOKEN }}
+          kubectl create secret generic microgatewaysecrets --from-literal=license="${{ secrets.WAF_LICENSE }}" --from-literal=passphrase="${{ secrets.WAF_PASSPHRASE }}"
       - name: Run chart-testing (install)
-        uses: helm/chart-testing-action@master
-        with:
-          command: install
-          config: .github/ct.yaml
+        run: ct install --config .github/ct.yaml

@@ -43,11 +43,13 @@ The current chart version is: {{ template "chart.version" . }}
       * [Route Edge configuration](#route-edge-configuration)
       * [Route Re-encrypt configuration](#route-re-encrypt-configuration)
       * [Route Passthrough configuration](#route-passthrough-configuration)
+    * [Automated Hostname Assignment](#automated-hostname-assignment)
 * [Security](#security)
   * [Store sensitive information in secrets](#store-sensitive-information-in-secrets)
     * [Secure handling of license and passphrase](#secure-handling-of-license-and-passphrase)
     * [Credentials to pull image from Docker registry](#credentials-to-pull-image-from-docker-registry)
     * [Certificates for Microgateway](#certificates-for-microgateway)
+* [Deployment Smoketest](#deployment-smoketest)
 
 ## Introduction
 This Helm chart bootstraps [Airlock Microgateway](https://www.airlock.com) on a [Kubernetes](https://kubernetes.io) or [Openshift](https://www.openshift.com) cluster using the [Helm](https://helm.sh) package manager. It provisions an Airlock Microgateway Pod with a default configuration that can be adjusted to customer needs. For more details about the configuration options, see chapter [Helm Configuration](#dsl-configuration).
@@ -217,7 +219,7 @@ Finally, apply the Helm chart configuration file with `-f` parameter.
   ```
 
 :information_source: **Possible settings**:<br>
-Please refer to the [Echo-Server Helm chart](https://ealenn.github.io/Echo-Server/pages/helm.html) to see all possible parameters of the Echo-Server Helm chart.
+Please refer to the [Echo-Server Helm chart](https://artifacthub.io/packages/helm/ealenn/echo-server) to see all possible parameters of the Echo-Server Helm chart.
 
 ## DSL Configuration
 The Helm chart provides two different configuration modes for the Microgateway.
@@ -470,6 +472,7 @@ The Microgateway Helm chart itself does not install the nginx-ingress-controller
 The TLS certificate of the Ingress must be in a secret object which is referred to in the Ingress configuration.
 At the time of writing, Ingress supports only the default port 443 for HTTPS and directly assumes it is TLS.
 In case that multiple hosts are configured, TLS-SNI is used to distinguish what host the client requested.
+For each configured `ingress.tls.host`, an `ingress.hosts` entry must also be created to ensure that the ingress rules are created correctly.
 
   To receive HTTPS traffic from the outside of the Kubernetes cluster, use the following configuration:
   ```
@@ -478,12 +481,16 @@ In case that multiple hosts are configured, TLS-SNI is used to distinguish what 
     annotations:
       nginx.ingress.kubernetes.io/rewrite-target: /
       kubernetes.io/ingress.class: nginx
+      nginx.ingress.kubernetes.io/backend-protocol: https
     targetPort: https
     tls:
       - secretName: virtinc-tls-secret
         hosts:
           - virtinc.com
+    hosts:
+      - virtinc.com
   ```
+
 
 ### Openshift Route
 Since the Route controller is already available in an Openshift environment, nothing has to be installed additionally.
@@ -573,7 +580,7 @@ In other words, the entire path of the connection is encrypted and verified, als
 With the TLS termination type "Passthrough", HTTPS traffic is sent directly to the Microgateway, without decrypting it on the route.
 Therefore, no certificates need to be configured on the Route and termination takes place in the Microgateway.
 
-  To setup Passthrough TLS termination, use the following configuraion:
+  To setup Passthrough TLS termination, use the following configuration:
   ```
   route:
     enabled: true
@@ -585,6 +592,18 @@ Therefore, no certificates need to be configured on the Route and termination ta
       termination: passthrough
       destinationCACertificate: ""
   ```
+
+#### Automated Hostname Assignment
+Openshift assigns an automatically generated hostname to a route if you do not provide one.
+You can achieve this by specifying an empty string as hostname.
+
+```
+route:
+  enabled: true
+  path: ""
+  hosts:
+    - ""
+```
 
 ## Security
 The following subchapters describes how to use and securely deploy the Microgateway.
@@ -616,7 +635,8 @@ This is why it is better to create a secret containing license and passphrase us
 
 #### Credentials to pull image from Docker registry
 The Microgateway image is published in a private Docker registry to which only granted accounts have access.
-In order to download this image, the credentials must be configured in a secret and passed to the Helm chart to use when downloading the image.
+In order to download this image, the Helm chart needs the Docker credentials to authenticate against the Docker registry.
+Either an already existing Docker secret is provided (`imagePullSecrets`) during the installation of the Microgateway, or a Kubernetes secret is created with the provided credentials (`imageCredentials`).
 
   The example below shows how to create a secret with the credentials to download the image from the Docker registry.
   ```
@@ -629,6 +649,14 @@ In order to download this image, the credentials must be configured in a secret 
   imagePullSecrets:
       - name: "docker-secret"
   ```
+
+  The following example shows how to configure the Helm chart so that a Kubernetes credential is created.
+```
+imageCredentials:
+  enabled: true
+  username: <username>
+  password: <access_token>
+```
 
 #### Certificates for Microgateway
 The Microgateway can be configured to use a specific certificate for frontend and/or backend connections. The certificate must be stored in a secret
@@ -659,9 +687,17 @@ Used for backend connection:
   ```
 
   Afterwards use this secret in the Helm chart configuration file.
-  custom-values.yaml
   ```
   config:
     generic:
       tlsSecretName: "microgateway-tls"
   ```
+## Deployment Smoketest
+The following example shows how to run a smoke test against a microgateway deployment.
+```
+helm test <deployment_name>
+```
+The default URL for the test is '/'. Overwrite the test URL with the parameter 'test_request'.
+```
+test_request: /myapp/login
+```

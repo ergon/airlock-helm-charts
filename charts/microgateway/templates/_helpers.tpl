@@ -81,6 +81,26 @@ Get the secret name
 {{- end -}}
 
 {{/*
+Create imagePullSecret
+*/}}
+{{- define "imagePullSecret" }}
+{{- if .Values.imageCredentials.enabled }}
+  {{- printf "{\"auths\": {\"%s\": {\"username\":\"%s\",\"password\":\"%s\",\"auth\":\"%s\"}}}" .Values.imageCredentials.registry .Values.imageCredentials.username .Values.imageCredentials.password (printf "%s:%s" .Values.imageCredentials.username .Values.imageCredentials.password | b64enc) | b64enc }}
+{{- end -}}
+{{- end }}
+
+{{/*
+Create the name of the service account to use
+*/}}
+{{- define "microgateway.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create -}}
+    {{ default (include "microgateway.fullname" .) .Values.serviceAccount.name }}
+{{- else -}}
+    {{ default "default" .Values.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return true if apache expert settings should be created
 */}}
 {{- define "microgateway.apacheExpertSettings" -}}
