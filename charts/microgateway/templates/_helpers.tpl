@@ -90,6 +90,17 @@ Create imagePullSecret
 {{- end }}
 
 {{/*
+Create the name of the service account to use
+*/}}
+{{- define "microgateway.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create -}}
+    {{ default (include "microgateway.fullname" .) .Values.serviceAccount.name }}
+{{- else -}}
+    {{ default "default" .Values.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return true if apache expert settings should be created
 */}}
 {{- define "microgateway.apacheExpertSettings" -}}
