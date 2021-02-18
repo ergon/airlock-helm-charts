@@ -5,7 +5,7 @@ It is the lightweight, container-based deployment form of the *Airlock Gateway*,
 
 The Airlock helm charts are used internally for testing the *Airlock Microgateway*. We make them available publicly under the [MIT license](https://github.com/ergon/airlock-helm-charts/blob/master/LICENSE).
 
-The current chart version is: 0.6.5
+The current chart version is: 0.6.6
 
 ## About Ergon
 *Airlock* is a registered trademark of [Ergon](https://www.ergon.ch). Ergon is a Swiss leader in leveraging digitalisation to create unique and effective client benefits, from conception to market, the result of which is the international distribution of globally revered products.
@@ -43,6 +43,7 @@ The current chart version is: 0.6.5
       * [Route Edge configuration](#route-edge-configuration)
       * [Route Re-encrypt configuration](#route-re-encrypt-configuration)
       * [Route Passthrough configuration](#route-passthrough-configuration)
+    * [Automated Hostname Assignment](#automated-hostname-assignment)
 * [Security](#security)
   * [Store sensitive information in secrets](#store-sensitive-information-in-secrets)
     * [Secure handling of license and passphrase](#secure-handling-of-license-and-passphrase)
@@ -170,7 +171,7 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | route | object | See `route.*`: | [Openshift Route](#openshift-route) |
 | route.annotations | object | `{}` | Annotations to set on the route. |
 | route.enabled | bool | `false` | Create a route object. |
-| route.hosts | list | `["virtinc.com"]` | List of host names. |
+| route.hosts | list | `["virtinc.com"]` | List of host names. <br> A route will be created for every host name listed. No route will be created if no hosts are specified. Use an empty string to generate a route without hostname. |
 | route.labels | object | `{}` | Additional labels add on the Microgateway route. |
 | route.path | string | `"/"` | Path for the route. |
 | route.targetPort | string | `"https"` | Target port of the service (`http`, `https` or `<number>`). |
@@ -737,6 +738,18 @@ Therefore, no certificates need to be configured on the Route and termination ta
       termination: passthrough
       destinationCACertificate: ""
   ```
+
+#### Automated Hostname Assignment
+Openshift assigns an automatically generated hostname to a route if you do not provide one.
+You can achieve this by specifying an empty string as hostname.
+
+```
+route:
+  enabled: true
+  path: ""
+  hosts:
+    - ""
+```
 
 ## Security
 The following subchapters describes how to use and securely deploy the Microgateway.
