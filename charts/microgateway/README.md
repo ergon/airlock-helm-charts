@@ -188,6 +188,11 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | service.port | int | `80` | Service port |
 | service.tlsPort | int | `443` | Service TLS port |
 | service.type | string | `"ClusterIP"` | [Service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) |
+| serviceAccount | object | `{"annotations":{},"create":true,"labels":{},"name":null}` | Specifies the service account under which the microgateway will run. A dedicated service account is created and used by default. <br><br> If `serviceAccount.create=true` and no `serviceAccount.name` is given, a name is generated using the fullname template. <br><br> If `serviceAccount.create=false` and no `serviceAccount.name` is given, the microgateway runs under the default service account. |
+| serviceAccount.annotations | object | `{}` | Annotations to set on the service account. |
+| serviceAccount.create | bool | `true` | Specifies whether a ServiceAccount should be created |
+| serviceAccount.labels | object | `{}` | Additional labels added on the service account. |
+| serviceAccount.name | string | `nil` | The name of the ServiceAccount to use. <br><br> |
 | tolerations | list | `[]` | Tolerations for use with node [taints](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/). |
 
 ## Getting started
