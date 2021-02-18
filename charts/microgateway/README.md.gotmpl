@@ -42,6 +42,7 @@ The current chart version is: {{ template "chart.version" . }}
       * [Route Edge configuration](#route-edge-configuration)
       * [Route Re-encrypt configuration](#route-re-encrypt-configuration)
       * [Route Passthrough configuration](#route-passthrough-configuration)
+    * [Automated Hostname Assignment](#automated-hostname-assignment)
 * [Security](#security)
   * [Store sensitive information in secrets](#store-sensitive-information-in-secrets)
     * [Secure handling of license and passphrase](#secure-handling-of-license-and-passphrase)
@@ -633,7 +634,7 @@ Therefore, no certificates need to be configured on the Route and termination ta
       destinationCACertificate: ""
   ```
 
-#### Automated Assignment of Hostname
+#### Automated Hostname Assignment
 Openshift assigns an automatically generated hostname to a route if you do not provide one.
 You can achieve this by specifying an empty string as hostname.
 
