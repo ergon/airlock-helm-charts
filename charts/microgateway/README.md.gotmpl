@@ -48,6 +48,7 @@ The current chart version is: {{ template "chart.version" . }}
     * [Secure handling of license and passphrase](#secure-handling-of-license-and-passphrase)
     * [Credentials to pull image from Docker registry](#credentials-to-pull-image-from-docker-registry)
     * [Certificates for Microgateway](#certificates-for-microgateway)
+* [Deployment Smoketest](#deployment-smoketest)
 
 ## Introduction
 This Helm chart bootstraps [Airlock Microgateway](https://www.airlock.com) on a [Kubernetes](https://kubernetes.io) or [Openshift](https://www.openshift.com) cluster using the [Helm](https://helm.sh) package manager. It provisions an Airlock Microgateway Pod with a default configuration that can be adjusted to customer needs. For more details about the configuration options, see chapter [Helm Configuration](#dsl-configuration).
@@ -621,7 +622,7 @@ In other words, the entire path of the connection is encrypted and verified, als
 With the TLS termination type "Passthrough", HTTPS traffic is sent directly to the Microgateway, without decrypting it on the route.
 Therefore, no certificates need to be configured on the Route and termination takes place in the Microgateway.
 
-  To setup Passthrough TLS termination, use the following configuraion:
+  To setup Passthrough TLS termination, use the following configuration:
   ```
   route:
     enabled: true
@@ -728,9 +729,17 @@ Used for backend connection:
   ```
 
   Afterwards use this secret in the Helm chart configuration file.
-  custom-values.yaml
   ```
   config:
     generic:
       tlsSecretName: "microgateway-tls"
   ```
+## Deployment Smoketest
+The following example shows how to run a smoke test against a microgateway deployment.
+```
+helm test <deployment_name>
+```
+The default URL for the test is '/'. Overwrite the test URL with the parameter 'test_request'.
+```
+test_request: /myapp/login
+```
