@@ -164,6 +164,20 @@ securityContext: {}
   #   drop:
   #   - ALL
   # runAsUser: 1000
+
+# serviceAccount -- Specifies the service account under which the microgateway will run.
+# A dedicated service account is created and used by default. <br><br>
+# If `serviceAccount.create=true` and no `serviceAccount.name` is given, a name is generated using the fullname template. <br><br>
+# If `serviceAccount.create=false` and no `serviceAccount.name` is given, the microgateway runs under the default service account.
+serviceAccount:
+  # serviceAccount.create -- Specifies whether a ServiceAccount should be created
+  create: true
+  # serviceAccount.name -- The name of the ServiceAccount to use. <br><br>
+  name:
+  # serviceAccount.annotations -- Annotations to set on the service account.
+  annotations: {}
+  # serviceAccount.labels -- Additional labels added on the service account.
+  labels: {}
 service:
   # service.type -- [Service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types)
   type: ClusterIP
