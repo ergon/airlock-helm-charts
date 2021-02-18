@@ -43,6 +43,7 @@ The current chart version is: 0.6.6
       * [Route Edge configuration](#route-edge-configuration)
       * [Route Re-encrypt configuration](#route-re-encrypt-configuration)
       * [Route Passthrough configuration](#route-passthrough-configuration)
+    * [Automated Hostname Assignment](#automated-hostname-assignment)
 * [Security](#security)
   * [Store sensitive information in secrets](#store-sensitive-information-in-secrets)
     * [Secure handling of license and passphrase](#secure-handling-of-license-and-passphrase)
@@ -737,6 +738,18 @@ Therefore, no certificates need to be configured on the Route and termination ta
       termination: passthrough
       destinationCACertificate: ""
   ```
+
+#### Automated Hostname Assignment
+Openshift assigns an automatically generated hostname to a route if you do not provide one.
+You can achieve this by specifying an empty string as hostname.
+
+```
+route:
+  enabled: true
+  path: ""
+  hosts:
+    - ""
+```
 
 ## Security
 The following subchapters describes how to use and securely deploy the Microgateway.
