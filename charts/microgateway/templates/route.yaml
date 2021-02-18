@@ -1,12 +1,12 @@
 {{- $route := .Values.route -}}
 {{- $fullName := include "microgateway.fullname" . -}}
 {{- if $route.enabled -}}
-{{- range $route.hosts }}
+{{- range $index, $host := $route.hosts }}
 ---
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
-  name: {{ . | replace "." "-" | lower }}
+  name: {{ $fullName }}-{{ $index }}
   labels:
     {{- include "microgateway.labels" $ | nindent 4 }}
   {{- with $.Values.route.labels }}
@@ -17,7 +17,7 @@ metadata:
     {{- toYaml . | nindent 4 }}
 {{- end }}
 spec:
-  host: {{ . }}
+  host: {{ $host }}
   path: {{ $route.path }}
   port:
     targetPort: {{ $route.targetPort }}

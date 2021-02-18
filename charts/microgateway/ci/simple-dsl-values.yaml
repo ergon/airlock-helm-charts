@@ -1,6 +1,13 @@
 config:
   generic:
     existingSecret: "microgatewaysecrets"
+  simple:
+    mapping:
+      entryPath: /
+      denyRules:
+        enabled: true
+        level: strict
+        logOnly: false
 imagePullSecrets:
   - name: "dockersecret"
 redis:
