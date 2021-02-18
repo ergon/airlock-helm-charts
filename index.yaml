@@ -3,6 +3,37 @@ entries:
   microgateway:
   - apiVersion: v1
     appVersion: "1.0"
+    created: "2021-02-18T13:09:09.427377955Z"
+    dependencies:
+    - condition: redis.enabled
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: 10.6.12
+    - condition: echo-server.enabled
+      name: echo-server
+      repository: https://ealenn.github.io/charts
+      version: 0.3.0
+    description: |
+      The *Airlock Microgateway* is a component of the [Airlock Secure Access Hub](https://www.airlock.com/).
+      It is the lightweight, container-based deployment form of the *Airlock Gateway*, a software appliance with reverse-proxy, Web Application Firewall (WAF) and API security functionality.
+    digest: 0194d51d148e3e83575292574e13ea708cbfafed050fd1398ebd1d0c1027c3be
+    home: https://www.airlock.com
+    keywords:
+    - WAF
+    - Web Application Firewall
+    - Airlock
+    - MicroGateway
+    - Security
+    - Filtering
+    maintainers:
+    - email: support@airlock.com
+      name: Airlock
+    name: microgateway
+    urls:
+    - https://github.com/ergon/airlock-helm-charts/releases/download/microgateway-0.6.6/microgateway-0.6.6.tgz
+    version: 0.6.6
+  - apiVersion: v1
+    appVersion: "1.0"
     created: "2021-02-15T09:18:47.563027094Z"
     dependencies:
     - condition: redis.enabled
