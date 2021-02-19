@@ -1,0 +1,63 @@
+suite: test route
+release:
+  name: my-microgateway
+chart:
+  version: 1.0.1
+templates:
+  - route.yaml
+tests:
+# test creation of routes with specified host names
+  - it: creates 1 route for 1 hostname
+    set:
+      route.enabled: true
+      route.hosts:
+        - host1
+    asserts:
+      - hasDocuments:
+          count: 1
+      - equal:
+          path: metadata.name
+          value: my-microgateway-0
+      - equal:
+          path: spec.host
+          value: host1
+    template: route.yaml
+  - it: creates 1 route with empty hostname
+    set:
+      route.enabled: true
+      route.hosts:
+        - ""
+    asserts:
+      - hasDocuments:
+          count: 1
+      - equal:
+          path: metadata.name
+          value: my-microgateway-0
+      - isNull:
+          path: spec.host
+    template: route.yaml
+  - it: creates 2 routes for 2 hostnames
+    set:
+      route.enabled: true
+      route.hosts:
+        - host0
+        - host1
+    asserts:
+      - hasDocuments:
+          count: 2
+      - equal:
+          path: metadata.name
+          value: my-microgateway-0
+        documentIndex: 0
+      - equal:
+          path: spec.host
+          value: host0
+        documentIndex: 0
+      - equal:
+          path: metadata.name
+          value: my-microgateway-1
+        documentIndex: 1
+      - equal:
+          path: spec.host
+          value: host1
+        documentIndex: 1

@@ -1,4 +1,4 @@
-suite: test configmap
+suite: test labels
 templates:
   - configmap.yaml
   - service.yaml
@@ -7,6 +7,7 @@ templates:
   - route.yaml
   - secret.yaml
   - deployment.yaml
+  - serviceaccount.yaml
 release:
   name: my-microgateway
 chart:
@@ -17,6 +18,7 @@ tests:
       hpa.enabled: true
       ingress.enabled: true
       route.enabled: true
+      imageCredentials.enabled: true
     asserts:
       - equal:
           path: metadata.labels.[helm.sh/chart]
