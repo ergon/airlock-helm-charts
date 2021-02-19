@@ -49,7 +49,7 @@ The current chart version is: 0.6.7
     * [Secure handling of license and passphrase](#secure-handling-of-license-and-passphrase)
     * [Credentials to pull image from Docker registry](#credentials-to-pull-image-from-docker-registry)
     * [Certificates for Microgateway](#certificates-for-microgateway)
-  * [Service Accounts](service-accounts)
+  * [Service Account](#service-account)
 * [Deployment Smoketest](#deployment-smoketest)
 
 ## Introduction
@@ -844,6 +844,13 @@ Used for backend connection:
       tlsSecretName: "microgateway-tls"
   ```
 ### Service Account
+The microgateway runs under a dedicated service account created with the deployment by default.
+The following example shows how to use an existing service account instead of having one created in the deployment.
+```
+serviceAccount:
+  create: false
+  name: <existing service account>
+```
 
 ## Deployment Smoketest
 The following example shows how to run a smoke test against a microgateway deployment.
