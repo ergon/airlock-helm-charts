@@ -310,11 +310,13 @@ For a full list of available Microgateway configuration parameters refer to the 
               hostname: virtinc.com
             mappings:
               - name: webapp
-                entry_path: /
+                entry_path:
+                  value: /
                 operational_mode: integration
                 session_handling: enforce_session
               - name: api
-                entry_path: /api/
+                entry_path:
+                  value: /api/
                 session_handling: ignore_session
                 openapi:
                   spec_file: /config/virtinc_api_openapi.json
