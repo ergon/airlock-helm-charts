@@ -3,9 +3,9 @@ replicaCount: 1
 
 image:
   # image.repository -- Image repository for the Airlock Microgateway runtime image
-  repository: ergon/airlock-microgateway
+  repository: ergon/airlock-microgateway-nightly
   # image.repository_configbuilder -- Image repository for the Airlock Microgateway configbuilder image
-  repository_configbuilder: ergon/airlock-microgateway-configbuilder
+  repository_configbuilder: ergon/airlock-microgateway-configbuilder-nightly
   # image.tag -- Image tag for microgateway and configbuilder image
   tag: "2.0.sprint9_Build006"
   # image.pullPolicy -- Pull policy (`Always`, `IfNotPresent`, `Never`)
