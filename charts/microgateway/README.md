@@ -52,6 +52,7 @@ The current chart version is: 0.7.0
     * [Certificates for Microgateway](#certificates-for-microgateway)
   * [Service Account](#service-account)
 * [Deployment Smoketest](#deployment-smoketest)
+* [Change Notes](#change-notes)
 
 ## Introduction
 This Helm chart bootstraps [Airlock Microgateway](https://www.airlock.com) on a [Kubernetes](https://kubernetes.io) or [Openshift](https://www.openshift.com) cluster using the [Helm](https://helm.sh) package manager. It provisions an Airlock Microgateway Pod with a default configuration that can be adjusted to customer needs. For more details about the configuration options, see chapter [Helm Configuration](#dsl-configuration).
@@ -821,3 +822,6 @@ The default URL for the test is '/'. Overwrite the test URL with the parameter '
 ```
 test_request: /myapp/login
 ```
+
+## Change Notes
+[CHANGE-NOTES](CHANGE-NOTES.md) contains a list of noteworthy changes in the Microgateway Helm Chart.
