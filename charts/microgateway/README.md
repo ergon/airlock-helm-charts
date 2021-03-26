@@ -822,6 +822,5 @@ The default URL for the test is '/'. Overwrite the test URL with the parameter '
 ```
 test_request: /myapp/login
 ```
-
 ## Change Notes
 [CHANGE-NOTES](CHANGE-NOTES.md) contains a list of noteworthy changes in the Microgateway Helm Chart.
