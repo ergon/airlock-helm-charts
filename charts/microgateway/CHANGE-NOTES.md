@@ -1,16 +1,16 @@
+# Change Log
+## 0.7
 
-# 0.7
-
-## Enhancements
+### Enhancements
 - Update to Microgateway 2.0.0.
 
-## Breaking Changes
-### Helm Chart Configuration
+### Breaking Changes
+###Ç Helm Chart Configuration
 
 - Advanced DSL Configuration is not supported anymore. Configurations using the Advanced DSL Mode will have to migrate to Expert DSL mode.
 - Helm Chart parameter 'config.generic.env' has been renamed to 'config.generic.configEnv'
 
-### Microgateway DSL
+#### Microgateway DSL
 
 The Expert DSL configuration mode makes use of the Micogateway DSL. Expert mode configurations therefore are affected by breaking changes in the microgateway DSL.
 
@@ -21,13 +21,13 @@ For a complete reference of the Microgateway DLS, please refer to https://docs.a
           mappings:
             - name: webapp
               entry_path:
-			    value: /
+                value: /
 ```
 - Backends are no longer defined  as child of an app. Backends are now contained in a mapping and may define multiple backend hosts. The hostname has been renamed to host.
 
 ```
             mappings:  
-			  - backend:
+              - backend:
                   hosts:
                     - protocol: https
                       name: custom-backend-service
