@@ -459,10 +459,10 @@ The example below illustrates how to configure environment variables in combinat
   config:
     generic:
       configEnv:
-        - name: ALG_CFG_OPERATIONAL_MODE
-          value: production
-        - name: ALG_CFG_LOG_ONLY
-          value: false
+        - name: OPERATIONAL_MODE
+          value: integration
+        - name: DR_LOG_ONLY
+          value: true
   ```
 
   custom-values.yaml
@@ -475,9 +475,9 @@ The example below illustrates how to configure environment variables in combinat
               hostname: virtinc.com
             mappings:
               - name: webapp
-                operational_mode: "@@ALG_CFG_OPERATIONAL_MODE@@"
+                operational_mode: ${OPERATIONAL_MODE:-production}
                 deny_rules:
-                  log_only: "@@ALG_CFG_LOG_ONLY@@"
+                  log_only: ${DR_LOG_ONLY:-false}
   ```
 
 Finally, apply the Helm chart configuration file with `-f` parameter.
