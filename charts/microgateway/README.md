@@ -140,7 +140,7 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | hpa.resource.memory | string | `"2Gi"` | Average Microgateway Memory consumption to scale up/down.<br><br> :exclamation: Update this setting accordingly to `resources.limits.memory`. |
 | image.pullPolicy | string | `"IfNotPresent"` | Pull policy (`Always`, `IfNotPresent`, `Never`) |
 | image.repository | string | `"ergon/airlock-microgateway"` | Image repository |
-| image.tag | string | `"1.0"` | Image tag |
+| image.tag | string | `"1.0.1"` | Image tag |
 | imageCredentials | object | `{"enabled":false,"password":"","registry":"https://index.docker.io/v1/","username":""}` | Creates a imagePullSecret with the provided values. |
 | imageCredentials.enabled | bool | `false` | Enable the imagePullSecret creation. |
 | imageCredentials.password | string | `""` | imagePullSecret password/Token |
