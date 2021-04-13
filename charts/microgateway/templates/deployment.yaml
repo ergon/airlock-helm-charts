@@ -55,7 +55,8 @@ spec:
         {{- end }}
         - name: config-files
           mountPath: /resources-gen
-
+        resources:
+          {{- toYaml .Values.initResources | nindent 10 }}
       containers:
       - name: {{ .Chart.Name }}
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
