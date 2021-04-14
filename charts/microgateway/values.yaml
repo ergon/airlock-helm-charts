@@ -293,13 +293,21 @@ route:
       Q4ph1jI/QLl5lsYtDm4SLt1ALvgRQj8QerJdZ/SrmfFmUkOx3lGpBChM0lT+wkrI
       aw/GIcvwLSquzFBrlU3Jhg+wu8p/514lgiShy39fmzMOa3Q0/5jF3qM74+lGUsA=
       -----END CERTIFICATE-----
-# resources -- [Resource limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container)
+# resources -- Resource requests for the runtime container. [Resource limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container)
 resources:
   requests:
     memory: 256Mi
     cpu: 30m
   limits:
     memory: 4048Mi
+# initResources -- Resource requests for the init container. [Resource limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container)
+initResources:
+  requests:
+    memory: 256Mi
+    cpu: 30m
+  limits:
+    memory: 512Mi
+    cpu: 250m
 
 ## Liveness and readiness probe values
 ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
