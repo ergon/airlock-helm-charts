@@ -304,10 +304,10 @@ resources:
 initResources:
   requests:
     memory: 256Mi
-    cpu: 250m
+    cpu: 30m
   limits:
-    memory: 1024Mi
-    cpu: 1000m
+    memory: 512Mi
+    cpu: 250m
 
 ## Liveness and readiness probe values
 ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
