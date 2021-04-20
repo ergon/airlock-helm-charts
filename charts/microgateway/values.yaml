@@ -294,7 +294,7 @@ redis:
 echo-server:
   # echo-server.enabled -- Deploy pre-configured [Echo-Server](#echo-server).
   enabled: false
-  fullnameOverride: backend-service
+  fullnameOverride: backend
   service:
     port: 8080
 

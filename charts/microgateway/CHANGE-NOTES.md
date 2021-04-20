@@ -9,6 +9,7 @@
 
 - Advanced and Simple DSL Configuration are not supported anymore. Configurations using Advanced or Simple DSL Mode will have to migrate to the standard Microgateway DSL configuration. Please refer to the [Microgateway Documentation](https://docs.airlock.com/microgateway/2.0) for further information.
 - Helm Chart parameter 'config.generic.env' has been renamed to 'config.generic.configEnv'
+- The service name for the echo service has been changed from 'backend-service' to 'backend' to match the microgateway default value. The echo service name can be configured using 'echo-server.fullnameOverride'.
 
 #### Breaking Changes in the Microgateway DSL
 
