@@ -191,23 +191,6 @@ config:
       [...]
       bHy/N5tf//76DY17EVk=
       -----END LICENSE-----
-      -- Airlock WAF --
-      Owner                        virtinc.com
-      Environment                  Productive
-      Trial                        on
-      Deployment Form              microgateway
-      Platform Restriction         no
-      Number of Back-end Hosts     99
-      Number of CPUs               12
-      Number of Sessions           100
-      Policy Enforcement           on
-      ICAP                         on
-      Kerberos                     on
-      API Gateway                  on
-      SSL VPN                      on
-      Reporting                    on
-      Expiry                       2020-12-31
-      ---------------------
 ```
 
 2. [Create the image pull secret](#credentials-to-pull-image-from-docker-registry) to pull the microgateway image.
