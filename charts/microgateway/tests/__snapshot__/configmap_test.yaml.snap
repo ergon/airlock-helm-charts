@@ -1,37 +1,14 @@
-expert mode:
+dsl example:
   1: |
     |
       apps:
       - mappings:
         - backend:
             hosts:
-            - name: expert-backend
+            - name: dsl-backend
               port: 8080
               protocol: http
-          entry_path: /expert/
+          entry_path: /dsl/
           name: echo
         virtual_host:
           hostname: echo
-simple mode:
-  1: |
-    |
-      license_file: /secret/config/license
-      session:
-        encryption_passphrase_file: /secret/config/passphrase
-      log:
-        level: info
-      apps:
-      - mappings:
-        - entry_path:
-            value: /simple/
-          operational_mode: production
-          session_handling: ignore_session
-          deny_rule_groups:
-          - enabled: true
-            log_only: false
-            level: standard
-          backend:
-            hosts:
-            - protocol: http
-              name: simple-backend
-              port: 8080

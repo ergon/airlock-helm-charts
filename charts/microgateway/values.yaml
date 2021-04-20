@@ -14,89 +14,7 @@ image:
 ## Microgateway Config
 ##
 config:
-  # config.simple -- [Simple DSL configuration](#simple-dsl-configuration)
-  # @default -- See `config.simple.*`:
-  simple:
-    mapping:
-      # config.simple.mapping.entry_path -- The `entry_path` of the app.
-      entry_path: /
-      # config.simple.mapping.operational_mode -- Operational mode (`production`, `integration`).
-      operational_mode: production
-      # config.simple.mapping.session_handling -- Session handling (`enforce_session`, `ignore_session`, `optional_session`, `optional_session_no_refresh`).
-      # @default -- - `enforce_session`<br> If `redis.enabled=true` <br> or `config.global.redis_hosts`<br><br> - `ignore_session`<br> If `redis.enabled=false`
-      session_handling: ""
-      deny_rules:
-        # config.simple.mapping.deny_rules.enabled -- Enable all Deny rules.
-        enabled: true
-        # config.simple.mapping.deny_rules.level -- Security Level for all Deny rules (`basic`, `standard`, `strict`).
-        level: standard
-        # config.simple.mapping.deny_rules.log_only -- Enable log only for all Deny rules.
-        log_only: false
-        # config.simple.mapping.deny_rules.exceptions -- Deny rule exceptions.
-        exceptions: []
-        # - parameter_name:
-        #     pattern: (PCRE Pattern-String)
-        #     ignore_case: (default: TRUE)
-        #     inverted: (default: FALSE)
-    backend:
-      # config.simple.backend.hostname -- Backend hostname
-      hostname: backend-service
-      # config.simple.backend.port -- Backend port
-      port: 8080
-      # config.simple.backend.protocol -- Backend protocol
-      protocol: http
-
-  # config.global -- Available for [Simple DSL configuration](#simple-dsl-configuration)<br>
-  # @default -- See `config.global.*`:
-  global:
-    expert_settings:
-      # config.global.expert_settings.apache -- Global Apache Expert Settings (multiline string).
-      # @default -- ""
-      apache:
-      # config.global.expert_settings.security_gate -- Global SecurityGate Expert Settings (multiline string).
-      # @default -- ""
-      security_gate:
-    # config.global.log_level -- Log level (`info`, `trace`).<br>
-    # :exclamation: Never use `trace` in production.
-    log_level: info
-    # config.global.redis_hosts -- List of Redis hosts.
-    # @default -- `[]` if `redis.enabled=false` or <br> `[ redis-master ]` if `redis.enabled=true`
-    redis_hosts: []
-    ip_header:
-      # config.global.ip_header.header -- HTTP header to extract the client IP address.
-      header: X-Forwarded-For
-      # config.global.ip_header.trusted_proxies -- Trusted IP addresses to extract the client IP from HTTP header.<br><br>
-      # :exclamation: IP addresses are only extracted if `trusted_proxies` are configured.
-      trusted_proxies: []
-
-    backend:
-      tls:
-        # config.global.backend.tls.server_ca -- Validates the backend server certificate against the configured CA. <br>
-        # :exclamation: Must be configured in `config.generic.tlsSecretName`.
-        server_ca: false
-        # config.global.backend.tls.client_cert -- Use TLS client certificate for backend connections. <br>
-        # :exclamation: Must be configured in `config.generic.tlsSecretName`.
-        client_cert: false
-        # config.global.backend.tls.verify_host -- Verify the backend TLS certificate.<br>
-        # :exclamation: `config.global.backend.tls.server_ca` must be configured in order to work.
-        verify_host: false
-        # config.global.backend.tls.version -- Overwrite the default TLS version for backend connections.<br>
-        version: ""
-        # config.global.backend.tls.cipher_suite -- Overwrite the default TLS ciphers (<=TLS 1.2) for backend connections.
-        cipher_suite: ""
-        # config.global.backend.tls.cipher_suite_v13 -- Overwrite the default TLS ciphers (TLS 1.3) for backend connections.
-        cipher_suite_v13: ""
-
-    virtual_host:
-      tls:
-        # config.global.virtual_host.tls.protocol -- Overwrite the default TLS protocol for frontend connections.
-        protocol: ""
-        # config.global.virtual_host.tls.cipher_suite -- Overwrite the default TLS ciphers for frontend connections.
-        cipher_suite: ""
-
-  # config.generic -- Available for:<br>
-  # - [Simple DSL configuration](#simple-dsl-configuration)<br>
-  # - [Expert DSL configuration](#expert-dsl-configuration)
+  # config.generic --
   # @default -- See `config.generic.*`:
   generic:
     # config.generic.configEnv -- [DSL Environment Variables](#dsl-environment-variables)
@@ -127,9 +45,8 @@ config:
     # @default -- ""
     existingSecret:
 
-  # config.expert.dsl -- [Expert DSL configuration](#expert-dsl-configuration)
-  expert:
-    dsl: {}
+  # config.dsl -- [DSL configuration](#dsl-configuration)
+  dsl: {}
 
 # commonLabels -- Labels to add to all resources.
 commonLabels: {}
