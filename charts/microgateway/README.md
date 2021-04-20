@@ -238,7 +238,7 @@ The Airlock Microgateway Helm chart has many parameters and most of them are alr
       license_file: /secret/config/license
       session:
         encryption_passphrase_file: /secret/config/passphrase
-        redis_hosts: [ redis-master ]
+        redis_hosts: [redis-master]
       expert_settings:
         apache: |
           RemoteIPHeader X-Forwarded-For
@@ -290,7 +290,7 @@ In case that session handling is enabled on Airlock Microgateway, a Redis servic
   config:
     dsl:
       session:
-        redis_hosts: [ redis-master ]
+        redis_hosts: [redis-master]
   ```
 * To use an existing Redis service, adapt the Helm chart configuration as shown below:
   custom-values.yaml
