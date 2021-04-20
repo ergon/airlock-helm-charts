@@ -5,7 +5,7 @@ config:
     license_file: /secret/config/license
     session:
       encryption_passphrase_file: /secret/config/passphrase
-      redis_hosts: [ redis-master ]
+      redis_hosts: [redis-master]
     apps:
       - mappings:
           - session_handling: enforce_session
