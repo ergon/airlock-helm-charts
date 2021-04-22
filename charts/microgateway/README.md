@@ -434,8 +434,7 @@ config:
     - virtual_host:
         hostname: virtinc.com
       mappings:
-        - name: virtinc
-          mapping_template_path: /config/template/mapping.xml
+        - mapping_template_path: /config/template/mapping.xml
 ```
 
 ## Probes
@@ -721,7 +720,7 @@ Used for backend connection:
       tlsSecretName: "microgateway-tls"
   ```
 ### Service Account
-The microgateway runs under a dedicated service account created with the deployment by default.
+The Microgateway runs under a dedicated service account created with the deployment by default.
 The following example shows how to use an existing service account instead of having one created in the deployment.
 ```
 serviceAccount:
