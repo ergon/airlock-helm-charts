@@ -158,7 +158,7 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | ingress.path | string | `"/"` | Path for the ingress. |
 | ingress.targetPort | string | `"http"` | Target port of the service (`http`, `https` or `<number>`). |
 | ingress.tls | list | `[]` | [Ingress TLS](https://kubernetes.io/docs/concepts/services-networking/ingress/#tls) configuration. |
-| initResources | object | `{"limits":{"cpu":"250m","memory":"512Mi"},"requests":{"cpu":"30m","memory":"256Mi"}}` | Resource requests for the init container. [Resource limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) |
+| initResources | object | `{"limits":{"cpu":"1000m","memory":"512Mi"},"requests":{"cpu":"30m","memory":"256Mi"}}` | Resource requests for the init container. [Resource limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) |
 | livenessProbe.enabled | bool | `true` | Enable liveness probes. |
 | livenessProbe.failureThreshold | int | `9` | After how many subsequent failures the pod gets restarted. |
 | livenessProbe.initialDelaySeconds | int | `90` | Initial delay in seconds. |
