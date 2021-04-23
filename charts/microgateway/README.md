@@ -720,7 +720,7 @@ Used for backend connection:
   Afterwards use this secret in the Helm chart configuration file.
   ```
   config:
-	  extraVolumes:
+    extraVolumes:
 	    - name: tls
 	      secret:
 	        secretName: microgateway-tls
