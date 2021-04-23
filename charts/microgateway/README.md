@@ -132,11 +132,11 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | ingress.path | string | `"/"` | Path for the ingress. |
 | ingress.targetPort | string | `"http"` | Target port of the service (`http`, `https` or `<number>`). |
 | ingress.tls | list | `[]` | [Ingress TLS](https://kubernetes.io/docs/concepts/services-networking/ingress/#tls) configuration. |
-| initResources | object | "" | Resource requests/limits for the init container. <br> [Init container resource limits](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/#resources) |
-| initResources.limits | object | "" | Resource limits for the init container. |
+| initResources | object | See `initResources.*` | Resource requests/limits for the init container. <br> [Init container resource limits](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/#resources) |
+| initResources.limits | object | See `initResources.limits.*` | Resource limits for the init container. |
 | initResources.limits.cpu | string | `"1000m"` | CPU limit for the init container. |
 | initResources.limits.memory | string | `"512Mi"` | Memory limit for the init container. |
-| initResources.requests | object | "" | Resource requests for the init container. |
+| initResources.requests | object | See `initResources.requests.*` | Resource requests for the init container. |
 | initResources.requests.cpu | string | `"30m"` | CPU request for the init container. |
 | initResources.requests.memory | string | `"256Mi"` | Memory request for the init container. |
 | livenessProbe.enabled | bool | `true` | Enable liveness probes. |
@@ -152,10 +152,10 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | redis | object | See `redis.*`: | Pre-configured [Redis](#redis) service. |
 | redis.enabled | bool | `false` | Deploy pre-configured [Redis](#redis). |
 | replicaCount | int | `1` | Desired number of Microgateway pods. |
-| resources | object | "" | Resource requests/limits for the runtime container. <br> [Resource limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) <br> [Configure Quality of Service for Pods](https://kubernetes.io/docs/tasks/configure-pod-container/quality-service-pod/) |
-| resources.limits | object | "" | Resource limits for the runtime container. |
+| resources | object | See `resources.*` | Resource requests/limits for the runtime container. <br> [Resource limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) <br> [Configure Quality of Service for Pods](https://kubernetes.io/docs/tasks/configure-pod-container/quality-service-pod/) |
+| resources.limits | object | See `resources.limits.*` | Resource limits for the runtime container. |
 | resources.limits.memory | string | `"4048Mi"` | Memory limit for the runtime container. |
-| resources.requests | object | "" | Resource requests for the runtime container. |
+| resources.requests | object | See `resources.requests.*` | Resource requests for the runtime container. |
 | resources.requests.cpu | string | `"30m"` | CPU request for the runtime container. |
 | resources.requests.memory | string | `"256Mi"` | Memory request for the runtime container. |
 | route | object | See `route.*`: | [Openshift Route](#openshift-route) |

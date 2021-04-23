@@ -214,33 +214,33 @@ route:
 # resources -- Resource requests/limits for the runtime container. <br>
 # [Resource limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) <br>
 # [Configure Quality of Service for Pods](https://kubernetes.io/docs/tasks/configure-pod-container/quality-service-pod/)
-# @default -- ""
+# @default -- See `resources.*`
 resources:
   # resources.requests -- Resource requests for the runtime container.
-  # @default -- ""
+  # @default -- See `resources.requests.*`
   requests:
     # resources.requests.memory -- Memory request for the runtime container.
     memory: 256Mi
     # resources.requests.cpu -- CPU request for the runtime container.
     cpu: 30m
   # resources.limits -- Resource limits for the runtime container.
-  # @default -- ""
+  # @default -- See `resources.limits.*`
   limits:
     # resources.limits.memory -- Memory limit for the runtime container.
     memory: 4048Mi
 # initResources -- Resource requests/limits for the init container. <br>
 # [Init container resource limits](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/#resources)
-# @default -- ""
+# @default -- See `initResources.*`
 initResources:
   # initResources.requests -- Resource requests for the init container.
-  # @default -- ""
+  # @default -- See `initResources.requests.*`
   requests:
     # initResources.requests.memory -- Memory request for the init container.
     memory: 256Mi
     # initResources.requests.cpu -- CPU request for the init container.
     cpu: 30m
   # initResources.limits -- Resource limits for the init container.
-  # @default -- ""
+  # @default -- See `initResources.limits.*`
   limits:
     # initResources.limits.memory -- Memory limit for the init container.
     memory: 512Mi
