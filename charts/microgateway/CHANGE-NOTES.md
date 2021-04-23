@@ -7,11 +7,12 @@
 ### Breaking Changes
 #### Helm Chart Configuration
 
-- Advanced and Simple DSL Configuration are not supported anymore. Configurations using Advanced or Simple DSL Mode will have to migrate to the standard Microgateway DSL configuration. Please refer to the [Microgateway Documentation](https://docs.airlock.com/microgateway/2.0) for further information.
+- Advanced and Simple DSL Configuration are not supported anymore. Configurations using Advanced or Simple DSL Mode will have to migrate to the standard Microgateway DSL configuration. Please refer to the [Microgateway Documentation](https://docs.airlock.com/microgateway/2.0) for further information on the Microgateway DSL.
 - DSL Configuration chart parameter 'config.expert.dsl' has been renamed to 'config.dsl'.
 - Parameters 'config.generic.\*' have been renamed to 'config.\*'. Example: 'config.generic.passphrase' has been renamed to 'config.passphrase'.
 - Helm Chart parameter 'config.generic.env' has been renamed to 'config.configEnv'
 - The service name for the echo service has been changed from 'backend-service' to 'backend' to match the microgateway default value. The echo service name can be configured using 'echo-server.fullnameOverride'.
+- The parameter 'tlsSecretName' is not supported anymore. Certificates for the microgateway can still be configured using 'extraVolumes' and 'extraVolumeMounts'. See [Certificates for Microgateway](README.md#certificates-for-microgateway) for further information.
 
 #### Breaking Changes in the Microgateway DSL
 
