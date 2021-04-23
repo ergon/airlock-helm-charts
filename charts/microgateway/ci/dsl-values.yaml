@@ -2,9 +2,7 @@ config:
   generic:
     existingSecret: "microgatewaysecrets"
   dsl:
-    license_file: /secret/config/license
     session:
-      encryption_passphrase_file: /secret/config/passphrase
       redis_hosts: [redis-master]
     apps:
       - mappings:

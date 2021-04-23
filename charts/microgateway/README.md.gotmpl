@@ -136,9 +136,7 @@ The Airlock Microgateway Helm chart has many parameters and most of them are alr
     generic:
       existingSecret: "microgatewaysecrets"
     dsl:
-      license_file: /secret/config/license
       session:
-        encryption_passphrase_file: /secret/config/passphrase
         redis_hosts: [redis-master]
       expert_settings:
         apache: |
@@ -241,9 +239,7 @@ For a full list of available Microgateway configuration parameters refer to the 
   ```
   config:
     dsl:
-      license_file: /secret/config/license
       session:
-        encryption_passphrase_file: /secret/config/passphrase
         redis_hosts: [ redis-master ]
       log:
         level: info
