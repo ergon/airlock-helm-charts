@@ -1,6 +1,5 @@
 config:
-  generic:
-    existingSecret: "microgatewaysecrets"
+  existingSecret: "microgatewaysecrets"
   dsl:
     license_file: /secret/config/license
     session:

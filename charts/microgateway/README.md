@@ -95,14 +95,13 @@ The following table lists configuration parameters of the Airlock Microgateway c
 |-----|------|---------|-------------|
 | affinity | string | `nil` | Assign custom [affinity rules](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/) (multiline string). |
 | commonLabels | object | `{}` | Labels to add to all resources. |
+| config.configEnv | list | `[]` | [DSL Environment Variables](#dsl-environment-variables) |
 | config.dsl | object | `{}` | [DSL configuration](#dsl-configuration) |
-| config.generic | object | See `config.generic.*`: |  |
-| config.generic.configEnv | list | `[]` | [DSL Environment Variables](#dsl-environment-variables) |
-| config.generic.existingSecret | string | "" | Name of an existing secret containing:<br><br> license: `license`<br> passphrase: `passphrase` |
-| config.generic.license | string | "" | License (multiline string) |
-| config.generic.passphrase | string | - `passphrase`<br> If `passphrase` in `config.generic.existingSecret` <br><br> - `<generated passphrase>`<br> If no passphrase available. | Passphrase used for encryption. |
-| config.generic.runtimeEnv | list | `[]` | [Runtime Environment Variables](#runtime-environment-variables) |
-| config.generic.tlsSecretName | string | "" | Name of an existing secret containing:<br><br> _Virtual Host:_<br> Certificate: `frontend-server.crt`<br> Private key: `frontend-server.key`<br> CA: `frontend-server-ca.crt` <br> :exclamation: Update `route.tls.destinationCACertificate` accordingly.<br><br> _Backend:_<br> Certificate: `backend-client.crt`<br> Private key: `backend-client.key`<br> CA: `backend-server-validation-ca.crt` |
+| config.existingSecret | string | "" | Name of an existing secret containing:<br><br> license: `license`<br> passphrase: `passphrase` |
+| config.license | string | "" | License (multiline string) |
+| config.passphrase | string | - `passphrase`<br> If `passphrase` in `config.existingSecret` <br><br> - `<generated passphrase>`<br> If no passphrase available. | Passphrase used for encryption. |
+| config.runtimeEnv | list | `[]` | [Runtime Environment Variables](#runtime-environment-variables) |
+| config.tlsSecretName | string | "" | Name of an existing secret containing:<br><br> _Virtual Host:_<br> Certificate: `frontend-server.crt`<br> Private key: `frontend-server.key`<br> CA: `frontend-server-ca.crt` <br> :exclamation: Update `route.tls.destinationCACertificate` accordingly.<br><br> _Backend:_<br> Certificate: `backend-client.crt`<br> Private key: `backend-client.key`<br> CA: `backend-server-validation-ca.crt` |
 | echo-server | object | See `echo-server.*`: | Pre-configured [Echo-Server](#echo-server). |
 | echo-server.enabled | bool | `false` | Deploy pre-configured [Echo-Server](#echo-server). |
 | extraVolumeMounts | list | `[]` | Add additional volume mounts. |
@@ -186,13 +185,12 @@ This section describes how to configure a license for the Microgateway. By follo
 ```
 ---
 config:
-  generic:
-    license: |
-      -----BEGIN LICENSE-----
-      eJxFkEnTokgURf+LWzsCEBCpiFowKoMg8KUIZS8YUoZUEkgmqaj/XnYvqpbv
-      [...]
-      bHy/N5tf//76DY17EVk=
-      -----END LICENSE-----
+  license: |
+    -----BEGIN LICENSE-----
+    eJxFkEnTokgURf+LWzsCEBCpiFowKoMg8KUIZS8YUoZUEkgmqaj/XnYvqpbv
+    [...]
+    bHy/N5tf//76DY17EVk=
+    -----END LICENSE-----
 ```
 
 2. [Create the image pull secret](#credentials-to-pull-image-from-docker-registry) to pull the microgateway image.
@@ -217,8 +215,7 @@ The Airlock Microgateway Helm chart has many parameters and most of them are alr
   custom-values.yaml
   ```
   config:
-    generic:
-      existingSecret: "microgatewaysecrets"
+    existingSecret: "microgatewaysecrets"
     dsl:
       license_file: /secret/config/license
       session:
@@ -373,12 +370,11 @@ The example below illustrates how to configure environment variables in combinat
   env-variables.yaml
   ```
   config:
-    generic:
-      configEnv:
-        - name: OPERATIONAL_MODE
-          value: integration
-        - name: DR_LOG_ONLY
-          value: true
+    configEnv:
+      - name: OPERATIONAL_MODE
+        value: integration
+      - name: DR_LOG_ONLY
+        value: true
   ```
 
   custom-values.yaml
@@ -408,10 +404,9 @@ The following example shows how to set the timezone of the microgateway:
 env-variables.yaml
 ```
 config:
-  generic:
-    runtimeEnv:
-      - name: TZ
-        value: Europe/Zurich
+  runtimeEnv:
+    - name: TZ
+      value: Europe/Zurich
 ```
 
 ## Extra Volumes
@@ -642,8 +637,8 @@ The following subchapters describe which information should be protected and how
 
 #### Secure handling of license and passphrase
 It is possible to use the following parameters of this Helm chart to configure license and passphrase:
-* License: `config.generic.license`
-* Passphrase: `config.generic.passphrase`
+* License: `config.license`
+* Passphrase: `config.passphrase`
 
 The Helm chart itself creates a secret and configures the Microgateway to use it. While this is already secure, because it is stored as a secret, this information might end in a Git repo or somewhere else, where too many people have access to it.
 This is why it is better to create a secret containing license and passphrase using a different process.
@@ -657,8 +652,7 @@ This is why it is better to create a secret containing license and passphrase us
   custom-values.yaml
   ```
   config:
-    generic:
-      existingSecret: "microgateway-secrets"
+    existingSecret: "microgateway-secrets"
   ```
 
 #### Credentials to pull image from Docker registry
@@ -716,8 +710,7 @@ Used for backend connection:
   Afterwards use this secret in the Helm chart configuration file.
   ```
   config:
-    generic:
-      tlsSecretName: "microgateway-tls"
+    tlsSecretName: "microgateway-tls"
   ```
 ### Service Account
 The Microgateway runs under a dedicated service account created with the deployment by default.
