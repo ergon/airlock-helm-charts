@@ -1,0 +1,13 @@
+config:
+  dsl:
+    apps:
+      - virtual_host:
+          hostname: echo
+        mappings:
+          - name: echo
+            entry_path: /dsl/
+            backend:
+              hosts:
+                - protocol: http
+                  name: dsl-backend
+                  port: 8080

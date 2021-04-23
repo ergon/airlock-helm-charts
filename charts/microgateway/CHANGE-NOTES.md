@@ -5,16 +5,16 @@
 - Update to Microgateway 2.0.0.
 
 ### Breaking Changes
-###Ç Helm Chart Configuration
+#### Helm Chart Configuration
 
-- Advanced DSL Configuration is not supported anymore. Configurations using the Advanced DSL Mode will have to migrate to Expert DSL mode.
+- Advanced and Simple DSL Configuration are not supported anymore. Configurations using Advanced or Simple DSL Mode will have to migrate to the standard Microgateway DSL configuration. Please refer to the [Microgateway Documentation](https://docs.airlock.com/microgateway/2.0) for further information.
+- DSL Configuration chart parameter 'config.expert.dsl' has been renamed to 'config.dsl'.
 - Helm Chart parameter 'config.generic.env' has been renamed to 'config.generic.configEnv'
+- The service name for the echo service has been changed from 'backend-service' to 'backend' to match the microgateway default value. The echo service name can be configured using 'echo-server.fullnameOverride'.
 
-#### Microgateway DSL
+#### Breaking Changes in the Microgateway DSL
 
-The Expert DSL configuration mode makes use of the Micogateway DSL. Expert mode configurations therefore are affected by breaking changes in the microgateway DSL.
-
-For a complete reference of the Microgateway DLS, please refer to https://docs.airlock.com/microgateway/2.0.
+For a complete reference of the Microgateway DSL, please refer to https://docs.airlock.com/microgateway/2.0.
 
 - The entry_path for a mapping is now defined in a nested value element
 ```

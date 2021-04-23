@@ -99,21 +99,3 @@ Create the name of the service account to use
     {{ default "default" .Values.serviceAccount.name }}
 {{- end -}}
 {{- end -}}
-
-{{/*
-Return true if apache expert settings should be created
-*/}}
-{{- define "microgateway.apacheExpertSettings" -}}
-{{- if or .Values.config.global.expert_settings.apache .Values.config.global.ip_header.trusted_proxies .Values.config.global.virtual_host.tls.protocol .Values.config.global.virtual_host.tls.cipher_suite -}}
-  {{- true -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Return true if securityGate expert settings should be created
-*/}}
-{{- define "microgateway.securityGateExpertSettings" -}}
-{{- if or .Values.config.global.expert_settings.security_gate .Values.config.global.backend.tls.server_ca .Values.config.global.backend.tls.client_cert .Values.config.global.backend.tls.verify_host .Values.config.global.backend.tls.version .Values.config.global.backend.tls.cipher_suite .Values.config.global.backend.tls.cipher_suite_v13 -}}
-  {{- true -}}
-{{- end -}}
-{{- end -}}

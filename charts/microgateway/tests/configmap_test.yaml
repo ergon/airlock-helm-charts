@@ -10,15 +10,9 @@ tests:
     asserts:
       - isKind:
           of: ConfigMap
-  - it: simple mode
+  - it: dsl example
     values:
-      - ./values/configmap-simple.yaml
-    asserts:
-      - matchSnapshot:
-          path: data.[config.yaml]
-  - it: expert mode
-    values:
-      - ./values/configmap-expert.yaml
+      - ./values/dsl.yaml
     asserts:
       - matchSnapshot:
           path: data.[config.yaml]

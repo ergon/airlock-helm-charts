@@ -1,0 +1,22 @@
+config:
+  generic:
+    existingSecret: "microgatewaysecrets"
+  dsl:
+    license_file: /secret/config/license
+    session:
+      encryption_passphrase_file: /secret/config/passphrase
+      redis_hosts: [redis-master]
+    apps:
+      - mappings:
+          - session_handling: enforce_session
+            deny_rule_groups:
+              - level: strict
+
+imagePullSecrets:
+  - name: "dockersecret"
+redis:
+  enabled: true
+echo-server:
+  enabled: true
+ingress:
+  enabled: true
