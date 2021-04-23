@@ -58,7 +58,7 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 Return true if a secret object should be created
 */}}
 {{- define "microgateway.createSecret" -}}
-{{- if not .Values.config.generic.existingSecret -}}
+{{- if not .Values.config.existingSecret -}}
   {{- true -}}
 {{- end -}}
 {{- end -}}
@@ -67,14 +67,14 @@ Return true if a secret object should be created
 Get the secret name
 */}}
 {{- define "microgateway.secretName" -}}
-{{- if and .Values.config.generic.passphrase .Values.config.generic.existingSecret }}
+{{- if and .Values.config.passphrase .Values.config.existingSecret }}
   {{- fail "Please either specify an existing secret or the passphrase itself" }}
 {{- end }}
-{{- if and .Values.config.generic.license .Values.config.generic.existingSecret }}
+{{- if and .Values.config.license .Values.config.existingSecret }}
   {{- fail "Please either specify an existing secret or the license itself" }}
 {{- end }}
-{{- if .Values.config.generic.existingSecret }}
-  {{- printf "%s" .Values.config.generic.existingSecret -}}
+{{- if .Values.config.existingSecret }}
+  {{- printf "%s" .Values.config.existingSecret -}}
 {{- else -}}
   {{- printf "%s" (include "microgateway.fullname" .) -}}
 {{- end -}}

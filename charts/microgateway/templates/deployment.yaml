@@ -34,7 +34,7 @@ spec:
       - name: configbuilder
         image: "{{ .Values.image.repository_configbuilder }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
-        {{- with .Values.config.generic.configEnv }}
+        {{- with .Values.config.configEnv }}
         env: {{ toYaml . | nindent 10 }}
         {{- end }}
         volumeMounts:
@@ -45,7 +45,7 @@ spec:
         - name: secret
           mountPath: /secret/config/
           readOnly: true
-        {{- with .Values.config.generic.tlsSecretName }}
+        {{- with .Values.config.tlsSecretName }}
         - name: tls
           mountPath: /secret/tls/
           readOnly: true
@@ -68,7 +68,7 @@ spec:
           containerPort: 8443
         - name: probes
           containerPort: 9090
-        {{- with .Values.config.generic.runtimeEnv }}
+        {{- with .Values.config.runtimeEnv }}
         env: {{ toYaml . | nindent 10 }}
         {{- end }}
         volumeMounts:
@@ -108,7 +108,7 @@ spec:
       - name: secret
         secret:
           secretName: {{ template "microgateway.secretName" . }}
-      {{- with .Values.config.generic.tlsSecretName }}
+      {{- with .Values.config.tlsSecretName }}
       - name: tls
         secret:
           secretName: {{ . }}
