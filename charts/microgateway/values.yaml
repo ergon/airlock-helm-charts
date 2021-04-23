@@ -54,6 +54,7 @@ commonLabels: {}
 imagePullSecrets: []
   # - name: "image-pull-secret"
 # imageCredentials -- Creates a imagePullSecret with the provided values.
+# @default -- See `imageCredentials.*`:
 imageCredentials:
   # imageCredentials.enabled -- Enable the imagePullSecret creation.
   enabled: false
@@ -210,20 +211,40 @@ route:
       Q4ph1jI/QLl5lsYtDm4SLt1ALvgRQj8QerJdZ/SrmfFmUkOx3lGpBChM0lT+wkrI
       aw/GIcvwLSquzFBrlU3Jhg+wu8p/514lgiShy39fmzMOa3Q0/5jF3qM74+lGUsA=
       -----END CERTIFICATE-----
-# resources -- Resource requests for the runtime container. [Resource limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container)
+# resources -- Resource requests/limits for the runtime container. <br>
+# [Resource limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) <br>
+# [Configure Quality of Service for Pods](https://kubernetes.io/docs/tasks/configure-pod-container/quality-service-pod/)
+# @default -- See `resources.*`
 resources:
+  # resources.requests -- Resource requests for the runtime container.
+  # @default -- See `resources.requests.*`
   requests:
+    # resources.requests.memory -- Memory request for the runtime container.
     memory: 256Mi
+    # resources.requests.cpu -- CPU request for the runtime container.
     cpu: 30m
+  # resources.limits -- Resource limits for the runtime container.
+  # @default -- See `resources.limits.*`
   limits:
+    # resources.limits.memory -- Memory limit for the runtime container.
     memory: 4048Mi
-# initResources -- Resource requests for the init container. [Resource limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container)
+# initResources -- Resource requests/limits for the init container. <br>
+# [Init container resource limits](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/#resources)
+# @default -- See `initResources.*`
 initResources:
+  # initResources.requests -- Resource requests for the init container.
+  # @default -- See `initResources.requests.*`
   requests:
+    # initResources.requests.memory -- Memory request for the init container.
     memory: 256Mi
+    # initResources.requests.cpu -- CPU request for the init container.
     cpu: 30m
+  # initResources.limits -- Resource limits for the init container.
+  # @default -- See `initResources.limits.*`
   limits:
+    # initResources.limits.memory -- Memory limit for the init container.
     memory: 512Mi
+    # initResources.limits.cpu -- CPU limit for the init container.
     cpu: 1000m
 
 ## Liveness and readiness probe values
