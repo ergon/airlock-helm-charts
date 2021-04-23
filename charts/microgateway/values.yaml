@@ -54,6 +54,7 @@ commonLabels: {}
 imagePullSecrets: []
   # - name: "image-pull-secret"
 # imageCredentials -- Creates a imagePullSecret with the provided values.
+# @default -- See `imageCredentials.*`:
 imageCredentials:
   # imageCredentials.enabled -- Enable the imagePullSecret creation.
   enabled: false
@@ -213,19 +214,37 @@ route:
 # resources -- Resource requests/limits for the runtime container. <br>
 # [Resource limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) <br>
 # [Configure Quality of Service for Pods](https://kubernetes.io/docs/tasks/configure-pod-container/quality-service-pod/)
+# @default -- ""
 resources:
+  # resources.requests -- Resource requests for the runtime container.
+  # @default -- ""
   requests:
+    # resources.requests.memory -- Memory request for the runtime container.
     memory: 256Mi
+    # resources.requests.cpu -- CPU request for the runtime container.
     cpu: 30m
+  # resources.limits -- Resource limits for the runtime container.
+  # @default -- ""
   limits:
+    # resources.limits.memory -- Memory limit for the runtime container.
     memory: 4048Mi
-# initResources -- Resource requests/limits for the init container. [Init container resource limits](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/#resources)
+# initResources -- Resource requests/limits for the init container. <br>
+# [Init container resource limits](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/#resources)
+# @default -- ""
 initResources:
+  # initResources.requests -- Resource requests for the init container.
+  # @default -- ""
   requests:
+    # initResources.requests.memory -- Memory request for the init container.
     memory: 256Mi
+    # initResources.requests.cpu -- CPU request for the init container.
     cpu: 30m
+  # initResources.limits -- Resource limits for the init container.
+  # @default -- ""
   limits:
+    # initResources.limits.memory -- Memory limit for the init container.
     memory: 512Mi
+    # initResources.limits.cpu -- CPU limit for the init container.
     cpu: 1000m
 
 ## Liveness and readiness probe values
