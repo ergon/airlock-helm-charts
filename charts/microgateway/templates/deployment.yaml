@@ -45,11 +45,6 @@ spec:
         - name: secret
           mountPath: /secret/config/
           readOnly: true
-        {{- with .Values.config.tlsSecretName }}
-        - name: tls
-          mountPath: /secret/tls/
-          readOnly: true
-        {{- end }}
         {{- with .Values.extraVolumeMounts }}
           {{- toYaml . | nindent 8 }}
         {{- end }}
@@ -108,11 +103,6 @@ spec:
       - name: secret
         secret:
           secretName: {{ template "microgateway.secretName" . }}
-      {{- with .Values.config.tlsSecretName }}
-      - name: tls
-        secret:
-          secretName: {{ . }}
-      {{- end }}
       - name: config-files
         emptyDir: {}
       {{- with .Values.extraVolumes }}

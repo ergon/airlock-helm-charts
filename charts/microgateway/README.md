@@ -101,7 +101,6 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | config.license | string | "" | License (multiline string) |
 | config.passphrase | string | - `passphrase`<br> If `passphrase` in `config.existingSecret` <br><br> - `<generated passphrase>`<br> If no passphrase available. | Passphrase used for encryption. |
 | config.runtimeEnv | list | `[]` | [Runtime Environment Variables](#runtime-environment-variables) |
-| config.tlsSecretName | string | "" | Name of an existing secret containing:<br><br> _Virtual Host:_<br> Certificate: `frontend-server.crt`<br> Private key: `frontend-server.key`<br> CA: `frontend-server-ca.crt` <br> :exclamation: Update `route.tls.destinationCACertificate` accordingly.<br><br> _Backend:_<br> Certificate: `backend-client.crt`<br> Private key: `backend-client.key`<br> CA: `backend-server-validation-ca.crt` |
 | echo-server | object | See `echo-server.*`: | Pre-configured [Echo-Server](#echo-server). |
 | echo-server.enabled | bool | `false` | Deploy pre-configured [Echo-Server](#echo-server). |
 | extraVolumeMounts | list | `[]` | Add additional volume mounts. |
@@ -693,7 +692,7 @@ imageCredentials:
 
 #### Certificates for Microgateway
 The Microgateway can be configured to use a specific certificate for frontend and/or backend connections. The certificate must be stored in a secret
-and passed to the Helm chart to use it.
+that is configured as a custom mount.
 
 Used for frontend connection:
 * Certificate: `frontend-server.crt`
@@ -721,7 +720,14 @@ Used for backend connection:
   Afterwards use this secret in the Helm chart configuration file.
   ```
   config:
-    tlsSecretName: "microgateway-tls"
+	  extraVolumes:
+	    - name: tls
+	      secret:
+	        secretName: microgateway-tls
+    extraVolumeMounts:
+      - name: tls
+        mountPath: /secret/tls/
+        readOnly: true
   ```
 ### Service Account
 The Microgateway runs under a dedicated service account created with the deployment by default.

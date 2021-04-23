@@ -18,18 +18,6 @@ config:
   configEnv: []
   # config.runtimeEnv -- [Runtime Environment Variables](#runtime-environment-variables)
   runtimeEnv: []
-  # config.tlsSecretName -- (string) Name of an existing secret containing:<br><br>
-  # _Virtual Host:_<br>
-  # Certificate: `frontend-server.crt`<br>
-  # Private key: `frontend-server.key`<br>
-  # CA: `frontend-server-ca.crt` <br>
-  # :exclamation: Update `route.tls.destinationCACertificate` accordingly.<br><br>
-  # _Backend:_<br>
-  # Certificate: `backend-client.crt`<br>
-  # Private key: `backend-client.key`<br>
-  # CA: `backend-server-validation-ca.crt`
-  # @default -- ""
-  tlsSecretName:
   # config.passphrase -- Passphrase used for encryption.
   # @default -- - `passphrase`<br> If `passphrase` in `config.existingSecret` <br><br> - `<generated passphrase>`<br> If no passphrase available.
   passphrase:
