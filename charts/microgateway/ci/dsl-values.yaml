@@ -1,6 +1,5 @@
 config:
-  generic:
-    existingSecret: "microgatewaysecrets"
+  existingSecret: "microgatewaysecrets"
   dsl:
     session:
       redis_hosts: [redis-master]

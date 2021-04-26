@@ -95,14 +95,13 @@ The following table lists configuration parameters of the Airlock Microgateway c
 |-----|------|---------|-------------|
 | affinity | string | `nil` | Assign custom [affinity rules](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/) (multiline string). |
 | commonLabels | object | `{}` | Labels to add to all resources. |
+| config.configEnv | list | `[]` | [DSL Environment Variables](#dsl-environment-variables) |
 | config.dsl | object | `{}` | [DSL configuration](#dsl-configuration) |
-| config.generic | object | See `config.generic.*`: |  |
-| config.generic.configEnv | list | `[]` | [DSL Environment Variables](#dsl-environment-variables) |
-| config.generic.existingSecret | string | "" | Name of an existing secret containing:<br><br> license: `license`<br> passphrase: `passphrase` |
-| config.generic.license | string | "" | License (multiline string) |
-| config.generic.passphrase | string | - `passphrase`<br> If `passphrase` in `config.generic.existingSecret` <br><br> - `<generated passphrase>`<br> If no passphrase available. | Passphrase used for encryption. |
-| config.generic.runtimeEnv | list | `[]` | [Runtime Environment Variables](#runtime-environment-variables) |
-| config.generic.tlsSecretName | string | "" | Name of an existing secret containing:<br><br> _Virtual Host:_<br> Certificate: `frontend-server.crt`<br> Private key: `frontend-server.key`<br> CA: `frontend-server-ca.crt` <br> :exclamation: Update `route.tls.destinationCACertificate` accordingly.<br><br> _Backend:_<br> Certificate: `backend-client.crt`<br> Private key: `backend-client.key`<br> CA: `backend-server-validation-ca.crt` |
+| config.existingSecret | string | "" | Name of an existing secret containing:<br><br> license: `license`<br> passphrase: `passphrase` |
+| config.license | string | "" | License (multiline string) |
+| config.passphrase | string | - `passphrase`<br> If `passphrase` in `config.existingSecret` <br><br> - `<generated passphrase>`<br> If no passphrase available. | Passphrase used for encryption. |
+| config.runtimeEnv | list | `[]` | [Runtime Environment Variables](#runtime-environment-variables) |
+| config.tlsSecretName | string | "" | Name of an existing secret containing:<br><br> _Virtual Host:_<br> Certificate: `frontend-server.crt`<br> Private key: `frontend-server.key`<br> CA: `frontend-server-ca.crt` <br> :exclamation: Update `route.tls.destinationCACertificate` accordingly.<br><br> _Backend:_<br> Certificate: `backend-client.crt`<br> Private key: `backend-client.key`<br> CA: `backend-server-validation-ca.crt` |
 | echo-server | object | See `echo-server.*`: | Pre-configured [Echo-Server](#echo-server). |
 | echo-server.enabled | bool | `false` | Deploy pre-configured [Echo-Server](#echo-server). |
 | extraVolumeMounts | list | `[]` | Add additional volume mounts. |
@@ -118,7 +117,7 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | image.repository | string | `"ergon/airlock-microgateway-nightly"` | Image repository for the Airlock Microgateway runtime image |
 | image.repository_configbuilder | string | `"ergon/airlock-microgateway-configbuilder-nightly"` | Image repository for the Airlock Microgateway configbuilder image |
 | image.tag | string | `"2.0.sprint9_Build006"` | Image tag for microgateway and configbuilder image |
-| imageCredentials | object | `{"enabled":false,"password":"","registry":"https://index.docker.io/v1/","username":""}` | Creates a imagePullSecret with the provided values. |
+| imageCredentials | object | See `imageCredentials.*`: | Creates a imagePullSecret with the provided values. |
 | imageCredentials.enabled | bool | `false` | Enable the imagePullSecret creation. |
 | imageCredentials.password | string | `""` | imagePullSecret password/Token |
 | imageCredentials.registry | string | `"https://index.docker.io/v1/"` | imagePullSecret registry |
@@ -132,7 +131,13 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | ingress.path | string | `"/"` | Path for the ingress. |
 | ingress.targetPort | string | `"http"` | Target port of the service (`http`, `https` or `<number>`). |
 | ingress.tls | list | `[]` | [Ingress TLS](https://kubernetes.io/docs/concepts/services-networking/ingress/#tls) configuration. |
-| initResources | object | `{"limits":{"cpu":"1000m","memory":"512Mi"},"requests":{"cpu":"30m","memory":"256Mi"}}` | Resource requests for the init container. [Resource limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) |
+| initResources | object | See `initResources.*` | Resource requests/limits for the init container. <br> [Init container resource limits](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/#resources) |
+| initResources.limits | object | See `initResources.limits.*` | Resource limits for the init container. |
+| initResources.limits.cpu | string | `"1000m"` | CPU limit for the init container. |
+| initResources.limits.memory | string | `"512Mi"` | Memory limit for the init container. |
+| initResources.requests | object | See `initResources.requests.*` | Resource requests for the init container. |
+| initResources.requests.cpu | string | `"30m"` | CPU request for the init container. |
+| initResources.requests.memory | string | `"256Mi"` | Memory request for the init container. |
 | livenessProbe.enabled | bool | `true` | Enable liveness probes. |
 | livenessProbe.failureThreshold | int | `9` | After how many subsequent failures the pod gets restarted. |
 | livenessProbe.initialDelaySeconds | int | `90` | Initial delay in seconds. |
@@ -146,7 +151,12 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | redis | object | See `redis.*`: | Pre-configured [Redis](#redis) service. |
 | redis.enabled | bool | `false` | Deploy pre-configured [Redis](#redis). |
 | replicaCount | int | `1` | Desired number of Microgateway pods. |
-| resources | object | `{"limits":{"memory":"4048Mi"},"requests":{"cpu":"30m","memory":"256Mi"}}` | Resource requests for the runtime container. [Resource limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) |
+| resources | object | See `resources.*` | Resource requests/limits for the runtime container. <br> [Resource limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) <br> [Configure Quality of Service for Pods](https://kubernetes.io/docs/tasks/configure-pod-container/quality-service-pod/) |
+| resources.limits | object | See `resources.limits.*` | Resource limits for the runtime container. |
+| resources.limits.memory | string | `"4048Mi"` | Memory limit for the runtime container. |
+| resources.requests | object | See `resources.requests.*` | Resource requests for the runtime container. |
+| resources.requests.cpu | string | `"30m"` | CPU request for the runtime container. |
+| resources.requests.memory | string | `"256Mi"` | Memory request for the runtime container. |
 | route | object | See `route.*`: | [Openshift Route](#openshift-route) |
 | route.annotations | object | `{}` | Annotations to set on the route. |
 | route.enabled | bool | `false` | Create a route object. |
@@ -186,13 +196,12 @@ This section describes how to configure a license for the Microgateway. By follo
 ```
 ---
 config:
-  generic:
-    license: |
-      -----BEGIN LICENSE-----
-      eJxFkEnTokgURf+LWzsCEBCpiFowKoMg8KUIZS8YUoZUEkgmqaj/XnYvqpbv
-      [...]
-      bHy/N5tf//76DY17EVk=
-      -----END LICENSE-----
+  license: |
+    -----BEGIN LICENSE-----
+    eJxFkEnTokgURf+LWzsCEBCpiFowKoMg8KUIZS8YUoZUEkgmqaj/XnYvqpbv
+    [...]
+    bHy/N5tf//76DY17EVk=
+    -----END LICENSE-----
 ```
 
 2. [Create the image pull secret](#credentials-to-pull-image-from-docker-registry) to pull the microgateway image.
@@ -217,8 +226,7 @@ The Airlock Microgateway Helm chart has many parameters and most of them are alr
   custom-values.yaml
   ```
   config:
-    generic:
-      existingSecret: "microgatewaysecrets"
+    existingSecret: "microgatewaysecrets"
     dsl:
       license_file: /secret/config/license
       session:
@@ -373,12 +381,11 @@ The example below illustrates how to configure environment variables in combinat
   env-variables.yaml
   ```
   config:
-    generic:
-      configEnv:
-        - name: OPERATIONAL_MODE
-          value: integration
-        - name: DR_LOG_ONLY
-          value: true
+    configEnv:
+      - name: OPERATIONAL_MODE
+        value: integration
+      - name: DR_LOG_ONLY
+        value: true
   ```
 
   custom-values.yaml
@@ -408,10 +415,9 @@ The following example shows how to set the timezone of the microgateway:
 env-variables.yaml
 ```
 config:
-  generic:
-    runtimeEnv:
-      - name: TZ
-        value: Europe/Zurich
+  runtimeEnv:
+    - name: TZ
+      value: Europe/Zurich
 ```
 
 ## Extra Volumes
@@ -642,8 +648,8 @@ The following subchapters describe which information should be protected and how
 
 #### Secure handling of license and passphrase
 It is possible to use the following parameters of this Helm chart to configure license and passphrase:
-* License: `config.generic.license`
-* Passphrase: `config.generic.passphrase`
+* License: `config.license`
+* Passphrase: `config.passphrase`
 
 The Helm chart itself creates a secret and configures the Microgateway to use it. While this is already secure, because it is stored as a secret, this information might end in a Git repo or somewhere else, where too many people have access to it.
 This is why it is better to create a secret containing license and passphrase using a different process.
@@ -657,8 +663,7 @@ This is why it is better to create a secret containing license and passphrase us
   custom-values.yaml
   ```
   config:
-    generic:
-      existingSecret: "microgateway-secrets"
+    existingSecret: "microgateway-secrets"
   ```
 
 #### Credentials to pull image from Docker registry
@@ -716,8 +721,7 @@ Used for backend connection:
   Afterwards use this secret in the Helm chart configuration file.
   ```
   config:
-    generic:
-      tlsSecretName: "microgateway-tls"
+    tlsSecretName: "microgateway-tls"
   ```
 ### Service Account
 The Microgateway runs under a dedicated service account created with the deployment by default.
