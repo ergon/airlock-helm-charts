@@ -1,0 +1,72 @@
+suite: test service
+templates:
+  - service.yaml
+release:
+  name: my-microgateway
+chart:
+  version: 1.0.1
+tests:
+# test creation of service account
+  - it: does add annotations
+    set:
+      service.annotations:
+        a: b
+        b: c
+    asserts:
+      - equal:
+          path: metadata.annotations.[a]
+          value: "b"
+      - equal:
+          path: metadata.annotations.[b]
+          value: "c"
+  - it: uses values
+    set:
+      service.type: my_type
+      service.port: 8080
+      service.tlsPort: 8443
+    asserts:
+      - equal:
+          path: spec.type
+          value: "my_type"
+      - equal:
+          path: spec.ports[0].port
+          value: 8080
+      - equal:
+          path: spec.ports[0].targetPort
+          value: "http"
+      - equal:
+          path: spec.ports[1].port
+          value: 8443
+      - equal:
+          path: spec.ports[1].targetPort
+          value: "https"
+  - it: includes load balancer stuff if type equals LoadBalancer
+    set:
+      service.type: LoadBalancer
+      service.externalTrafficPolicy: policy
+      service.loadBalancerIP: 192.1.1.1
+    asserts:
+      - equal:
+          path:  spec.externalTrafficPolicy
+          value: policy
+      - equal:
+          path:  spec.loadBalancerIP
+          value: 192.1.1.1
+  - it: does not include load balancer stuff if not needed
+    set:
+      service.type: asdf
+      service.externalTrafficPolicy: policy
+      service.loadBalancerIP: 192.1.1.1
+    asserts:
+      - isNull:
+          path:  spec.externalTrafficPolicy
+      - isNull:
+          path:  spec.loadBalancerIP
+  - it: does include selector labels
+    asserts:
+      - equal:
+          path: spec.selector.[app.kubernetes.io/name]
+          value: microgateway
+      - equal:
+          path: spec.selector.[app.kubernetes.io/instance]
+          value: my-microgateway
