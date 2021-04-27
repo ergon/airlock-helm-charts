@@ -43,7 +43,12 @@ spec:
           subPath: config.yaml
           readOnly: true
         - name: secret
-          mountPath: /secret/config/
+          mountPath: /secret/passphrase
+          subPath: passphrase
+          readOnly: true
+        - name: secret
+          mountPath: /secret/license
+          subPath: license
           readOnly: true
         {{- with .Values.config.tlsSecretName }}
         - name: tls

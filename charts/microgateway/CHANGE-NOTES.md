@@ -12,6 +12,7 @@
 - Parameters 'config.generic.\*' have been renamed to 'config.\*'. Example: 'config.generic.passphrase' has been renamed to 'config.passphrase'.
 - Helm Chart parameter 'config.generic.env' has been renamed to 'config.configEnv'
 - The service name for the echo service has been changed from 'backend-service' to 'backend' to match the microgateway default value. The echo service name can be configured using 'echo-server.fullnameOverride'.
+- Secrets for the license and the passphrase are now mounted to the default locations '/secret/license' and '/secret/passphrase' instead of '/secret/config/\*'. Explicit references to the former location of these secrets have to be removed from the DSL.
 
 #### Breaking Changes in the Microgateway DSL
 
