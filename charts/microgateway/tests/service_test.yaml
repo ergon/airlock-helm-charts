@@ -6,7 +6,6 @@ release:
 chart:
   version: 1.0.1
 tests:
-# test creation of service account
   - it: does add annotations
     set:
       service.annotations:
