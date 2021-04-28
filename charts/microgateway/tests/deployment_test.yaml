@@ -1,0 +1,194 @@
+suite: test deployment
+release:
+  name: my-microgateway
+chart:
+  version: 1.0.1
+
+tests:
+  - it: does create correct metadata
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+         of: Deployment
+      - equal:
+          path: metadata.name
+          value: my-microgateway
+    templates:
+      - deployment.yaml
+
+  - it: does create correct selector labels
+    asserts:
+      - equal:
+          path: spec.selector.matchLabels.[app.kubernetes.io/instance]
+          value: my-microgateway
+      - equal:
+          path: spec.selector.matchLabels.[app.kubernetes.io/name]
+          value: microgateway
+      - equal:
+          path: spec.template.metadata.labels.[app.kubernetes.io/instance]
+          value: my-microgateway
+      - equal:
+          path: spec.template.metadata.labels.[app.kubernetes.io/name]
+          value: microgateway
+    templates:
+      - deployment.yaml
+
+  - it: does create checksums
+    asserts:
+      - isNull:
+          path: spec.template.metadata.annotations.checksum/config
+        not: true
+      - isNull:
+          path: spec.template.metadata.annotations.checksum/secret
+        not: true
+    templates:
+      - deployment.yaml
+  - it: does not create secret checksum with existingsecret
+    set:
+      config.existingSecret: mysecret
+    asserts:
+      - isNull:
+          path: spec.template.metadata.annotations.checksum/secret
+    templates:
+      - deployment.yaml
+
+  - it: does create correct replica replicaCount
+    set:
+      replicaCount: 5
+    asserts:
+      - equal:
+          path: spec.replicas
+          value: 5
+    templates:
+      - deployment.yaml
+
+  - it: does create security context
+    set:
+      podSecurityContext.fsGroup: 2000
+    asserts:
+      - equal:
+          path: spec.template.spec.securityContext.fsGroup
+          value: 2000
+    templates:
+      - deployment.yaml
+
+  - it: does create volumes
+    asserts:
+      - equal:
+          path: spec.template.spec.volumes[0].name
+          value: config
+      - equal:
+          path: spec.template.spec.volumes[0].configMap.name
+          value: my-microgateway
+      - equal:
+          path: spec.template.spec.volumes[1].name
+          value: secret
+      - equal:
+          path: spec.template.spec.volumes[1].secret.secretName
+          value: my-microgateway
+      - equal:
+          path: spec.template.spec.volumes[2].name
+          value: config-files
+      - isNull:
+          path: spec.template.spec.volumes[2].emptyDir
+        not: true
+    templates:
+      - deployment.yaml
+
+  - it: does create extra volumes
+    set:
+      extraVolumes:
+       - name: volumename
+         configMap:
+           name: config-map-name
+       - name: volumename2
+         configMap:
+           name: config-map-name2
+    asserts:
+      - equal:
+          path: spec.template.spec.volumes[3].name
+          value: volumename
+      - equal:
+          path: spec.template.spec.volumes[3].configMap.name
+          value: config-map-name
+      - equal:
+          path: spec.template.spec.volumes[4].name
+          value: volumename2
+      - equal:
+          path: spec.template.spec.volumes[4].configMap.name
+          value: config-map-name2
+    templates:
+      - deployment.yaml
+
+  - it: does not create node selectors if not set
+    asserts:
+      - isNull:
+          path: spec.template.spec.nodeSelector
+    templates:
+      - deployment.yaml
+  - it: does create node selectors
+    set:
+      nodeSelector:
+        disktype: ssd
+    asserts:
+      - equal:
+          path: spec.template.spec.nodeSelector.disktype
+          value: ssd
+    templates:
+      - deployment.yaml
+
+  - it: does not create affinity if not set
+    asserts:
+      - isNull:
+          path: spec.template.spec.affinity
+    templates:
+      - deployment.yaml
+  - it: does render affinity template
+    set:
+      config.string: world
+      affinity: |
+        message: hello {{ .Values.config.string }}
+    asserts:
+      - equal:
+          path: spec.template.spec.affinity.message
+          value: hello world
+    templates:
+      - deployment.yaml
+  - it: does render nested affinity
+    set:
+      affinity: |
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - topologyKey: kubernetes.io/hostname
+    asserts:
+      - equal:
+          path: spec.template.spec.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution[0].topologyKey
+          value: kubernetes.io/hostname
+    templates:
+      - deployment.yaml
+
+  - it: does not create tolerations if not set
+    asserts:
+      - isNull:
+          path: spec.template.spec.tolerations
+    templates:
+      - deployment.yaml
+  - it: does render tolerations defined
+    set:
+      tolerations:
+      - key: "example-key"
+        operator: "Exists"
+        effect: "NoSchedule"
+      - key: "example-key2"
+        operator: "Exists"
+        effect: "NoSchedule"
+    asserts:
+      - equal:
+          path: spec.template.spec.tolerations[0].key
+          value: example-key
+      - equal:
+          path: spec.template.spec.tolerations[1].key
+          value: example-key2
+    templates:
+      - deployment.yaml
