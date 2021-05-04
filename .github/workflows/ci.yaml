@@ -4,7 +4,8 @@ on:
   pull_request:
     paths:
       - 'charts/**'
-      - '.github/workflows/ci.yaml'
+      - '!charts/**/README.md'
+      - '.github/workflows/**'
   workflow_dispatch:
 
 jobs:
