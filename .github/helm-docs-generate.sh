@@ -11,7 +11,7 @@ READMES_CHANGED=$(git diff --name-only HEAD -- 'charts/**/README.md')
 change_count=0
 for README_CHANGED in ${READMES_CHANGED}; do
   git add ${README_CHANGED}
-  ((change_count++))
+  ((++change_count))
 done
 
 if [ $change_count -gt 0 ]; then
