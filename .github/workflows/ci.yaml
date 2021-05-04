@@ -18,11 +18,7 @@ jobs:
         run: .github/helm-docs-install.sh
         env:
           HELM_DOCS_VERSION: "1.5.0"
-      - name: Run helm-docs
-        id: validatedocs
-        run: .github/helm-docs-verify.sh
-      - name: Generate helm-docs (on failure)
-        if: failure()
+      - name: Generate helm-docs
         run: .github/helm-docs-generate.sh
         env:
           BRANCH_NAME: ${{ github.head_ref }}
