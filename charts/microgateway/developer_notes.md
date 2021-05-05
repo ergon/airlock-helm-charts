@@ -23,4 +23,13 @@ Updating the snapshots:
 $ helm unittest charts/microgateway -u
 ```
 
-Dont forget to verify the new snapshots manually before checking them in.
+Don't forget to verify the new snapshots manually before checking them in.
+
+## Readme Maintenance
+Changes in the README.md will be overwritten in the github ci workflow. The ci workflow generates this file using [helm-docs](https://github.com/norwoodj/helm-docs) from the README.md.gotmpl and from the documentation in values.yaml.
+
+Readme changes therefore have to be done in the template file 'README.md.gotempl'.
+
+### Testing Readme Generation
+The README.md can be generated using the command `make` in the root directory of this repository.
+It uses a [helm-docs docker image](https://hub.docker.com/r/jnorwood/helm-docs) to create the README.md.
