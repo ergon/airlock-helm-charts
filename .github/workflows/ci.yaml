@@ -3,6 +3,8 @@ name: Lint and Test Charts
 on:
   pull_request:
      paths-ignore:
+      - 'charts/**'
+      - '.github/**'
       - 'charts/microgateway/README.md'
   workflow_dispatch:
 
