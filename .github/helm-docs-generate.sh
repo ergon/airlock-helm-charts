@@ -6,7 +6,8 @@ git config user.email "$TECHNICAL_USER@users.noreply.github.com"
 git fetch
 git checkout ${BRANCH_NAME}
 
-./helm-docs
+make
+#./helm-docs
 
 READMES_CHANGED=$(git diff --name-only HEAD -- 'charts/**/README.md')
 
