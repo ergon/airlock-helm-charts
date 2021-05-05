@@ -2,19 +2,35 @@ name: Lint and Test Charts
 
 on:
   pull_request:
-    paths-ignore:
-      - '**/README.md'
   workflow_dispatch:
 
 jobs:
-  generate-docs:
+  check-changes:
     runs-on: ubuntu-latest
+    outputs:
+      continue: ${{steps.changefile.outputs.continue}}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
         with:
           persist-credentials: false
           fetch-depth: 0
+      - name: file changes
+        id: changefile
+        run: |
+          changed_file=$(git diff-tree --no-commit-id --name-only -r ${{ github.event.before }} ${{github.event.after}})
+          file_count=$(git diff-tree --no-commit-id --name-only -r ${{ github.event.before }} ${{github.event.after}} | wc -l )
+          if [[$changed_file == 'charts/microgateway/README.md' && $file_count == 1]]
+          then
+            echo ::set-output name=continue::false
+          else
+            echo ::set-output name=continue::true
+          fi
+  generate-docs:
+    runs-on: ubuntu-latest
+    needs:
+      - check-changes
+    steps:
       - name: Generate helm-docs
         run: .github/helm-docs-generate.sh
         env:
