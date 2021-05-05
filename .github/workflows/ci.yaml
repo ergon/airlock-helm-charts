@@ -5,22 +5,6 @@ on:
   workflow_dispatch:
 
 jobs:
-  check-changes:
-    runs-on: ubuntu-latest
-    outputs:
-      continue: ${{steps.changefile.outputs.continue}}
-    steps:
-      - name: file changes
-        id: changefile
-        run: |
-          changed_file=$(git diff-tree --no-commit-id --name-only -r ${{ github.event.before }} ${{github.event.after}})
-          file_count=$(git diff-tree --no-commit-id --name-only -r ${{ github.event.before }} ${{github.event.after}} | wc -l )
-          if [[$changed_file == 'charts/microgateway/README.md' && $file_count == 1]]
-          then
-            echo ::set-output name=continue::false
-          else
-            echo ::set-output name=continue::true
-          fi
   generate-docs:
     runs-on: ubuntu-latest
     steps:

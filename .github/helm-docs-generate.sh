@@ -6,11 +6,9 @@ git config user.email "$TECHNICAL_USER@users.noreply.github.com"
 git fetch
 git checkout ${BRANCH_NAME}
 
-asdf
-
 # workaround: do not run build for auto-generated readmes. (github workflow ignore-paths does not work in this case)
 changed_file=$(git diff --name-only HEAD)
-file_count=$(git diff name-only  | wc -l)
+file_count=$(git diff --name-only HEAD | wc -l)
 if [[$changed_file == 'charts/microgateway/README.md' && $file_count == 1]]
 then
   echo ::set-output name=continue::false
