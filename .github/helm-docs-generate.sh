@@ -7,7 +7,6 @@ git fetch
 git checkout ${BRANCH_NAME}
 
 make
-#./helm-docs
 
 READMES_CHANGED=$(git diff --name-only HEAD -- 'charts/**/README.md')
 
