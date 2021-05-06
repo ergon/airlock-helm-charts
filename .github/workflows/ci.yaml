@@ -2,9 +2,10 @@ name: Lint and Test Charts
 
 on:
   pull_request:
-    paths:
+     paths:
       - 'charts/**'
-      - '.github/workflows/ci.yaml'
+      - '.github/**'
+      - '!charts/microgateway/README.md'
   workflow_dispatch:
 
 jobs:
@@ -12,16 +13,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v1
-      - name: Install helm-docs
-        run: .github/helm-docs-install.sh
-        env:
-          HELM_DOCS_VERSION: "1.5.0"
-      - name: Run helm-docs
-        id: validatedocs
-        run: .github/helm-docs-verify.sh
-      - name: Generate helm-docs (on failure)
-        if: failure()
+        uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - name: Generate helm-docs
         run: .github/helm-docs-generate.sh
         env:
           BRANCH_NAME: ${{ github.head_ref }}
