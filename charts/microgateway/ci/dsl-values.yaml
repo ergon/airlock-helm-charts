@@ -11,6 +11,9 @@ config:
 
 imagePullSecrets:
   - name: "dockersecret"
+
+hpa.enabled: true
+
 redis:
   enabled: true
 echo-server:
