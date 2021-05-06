@@ -6,8 +6,10 @@ git config user.email "$TECHNICAL_USER@users.noreply.github.com"
 git fetch
 git checkout ${BRANCH_NAME}
 
+# create readme
 make
 
+# push readme updates
 READMES_CHANGED=$(git diff --name-only HEAD -- 'charts/**/README.md')
 
 change_count=0
