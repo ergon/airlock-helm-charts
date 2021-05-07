@@ -111,7 +111,7 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | hpa.enabled | bool | `false` | Deploy a horizontal pod autoscaler. |
 | hpa.maxReplicas | int | `10` | Maximum number of Microgateway replicas. |
 | hpa.minReplicas | int | `1` | Minimum number of Microgateway replicas. |
-| hpa.resource.cpu | int | `50` | Average Microgateway CPU consumption in percentage to scale up/down.<br><br> :exclamation: Please set the resource request parameter 'resources.cpu' to a value reflecting your actual resource needs if you use autoscaling based on cpu consumption. Otherwise autoscaling will not work correctly. |
+| hpa.resource.cpu | int | `50` | Average Microgateway CPU consumption in percentage to scale up/down.<br><br> :exclamation: Please set the resource request parameter `resources.cpu` to a value reflecting your actual resource needs if you use autoscaling based on cpu consumption. Otherwise autoscaling will not work correctly. |
 | hpa.resource.memory | string | `"3Gi"` | Average Microgateway Memory consumption to scale up/down.<br><br> :exclamation: Update this setting according to `resources.limits.memory`. |
 | image.pullPolicy | string | `"IfNotPresent"` | Pull policy (`Always`, `IfNotPresent`, `Never`) |
 | image.repository | string | `"ergon/airlock-microgateway-nightly"` | Image repository for the Airlock Microgateway runtime image |
