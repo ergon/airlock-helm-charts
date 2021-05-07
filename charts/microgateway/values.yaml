@@ -329,9 +329,11 @@ hpa:
   minReplicas: 1
   resource:
     # hpa.resource.memory -- Average Microgateway Memory consumption to scale up/down.<br><br>
-    # :exclamation: Update this setting accordingly to `resources.limits.memory`.
-    memory: 2Gi
-    # hpa.resource.cpu -- Average Microgateway CPU consumption in percentage to scale up/down.
+    # :exclamation: Update this setting according to `resources.limits.memory`.
+    memory: 3Gi
+    # hpa.resource.cpu -- Average Microgateway CPU consumption in percentage to scale up/down.<br><br>
+    # :exclamation: Please set the resource request parameter 'resources.cpu' to a value reflecting your actual resource needs if
+    # you use autoscaling based on cpu consumption. Otherwise autoscaling will not work correctly.
     cpu: 50
 # test_request -- Request that will be used as a smoketest when 'helm test' is invoked.
 test_request: /
