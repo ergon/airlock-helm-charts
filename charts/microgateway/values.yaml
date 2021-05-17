@@ -126,10 +126,20 @@ ingress:
   # ingress.hosts -- List of ingress hosts.
   hosts:
     - virtinc.com
+  # ingress.pathType -- pathType of the ingress path (used with ingress v1 and higher)
+  pathType: Prefix
   # ingress.path -- Path for the ingress.
   path: /
-  # ingress.targetPort -- Target port of the service (`http`, `https` or `<number>`).
+  # ingress.targetPort -- Target port of the service with ingress API version networking.k8s.io/v1beta1 (Kubernetes version < 1.19)
+  # Possible values are: `http`, `https` or `<number>`.
   targetPort: http
+  # ingress.servicePortName -- Name of the service target port with ingress API version networking.k8s.io/v1 (Kubernetes version >= 1.19)
+  # `ingress.servicePortNumber` takes precedence over `ingress.servicePortName` if both are specified.
+  # Possible Values are: `http`, `https`.
+  servicePortName: http
+  # ingress.servicePortNumber -- Number of the service target port with ingress API version networking.k8s.io/v1 (Kubernetes version >= 1.19)
+  # `ingress.servicePortNumber` takes precedence over `ingress.servicePortName` if both are specified.
+  servicePortNumber:
 
   # ingress.tls -- [Ingress TLS](https://kubernetes.io/docs/concepts/services-networking/ingress/#tls) configuration.
   tls: []

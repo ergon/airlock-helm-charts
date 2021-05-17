@@ -129,7 +129,10 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | ingress.hosts | list | `["virtinc.com"]` | List of ingress hosts. |
 | ingress.labels | object | `{}` | Additional labels to add on the Microgateway ingress. |
 | ingress.path | string | `"/"` | Path for the ingress. |
-| ingress.targetPort | string | `"http"` | Target port of the service (`http`, `https` or `<number>`). |
+| ingress.pathType | string | `"Prefix"` | pathType of the ingress path (used with ingress v1 and higher) |
+| ingress.servicePortName | string | `"http"` | Name of the service target port with ingress API version networking.k8s.io/v1 (Kubernetes version >= 1.19) `ingress.servicePortNumber` takes precedence over `ingress.servicePortName` if both are specified. Possible Values are: `http`, `https`. |
+| ingress.servicePortNumber | string | `nil` | Number of the service target port with ingress API version networking.k8s.io/v1 (Kubernetes version >= 1.19) `ingress.servicePortNumber` takes precedence over `ingress.servicePortName` if both are specified. |
+| ingress.targetPort | string | `"http"` | Target port of the service with ingress API version networking.k8s.io/v1beta1 (Kubernetes version < 1.19) Possible values are: `http`, `https` or `<number>`. |
 | ingress.tls | list | `[]` | [Ingress TLS](https://kubernetes.io/docs/concepts/services-networking/ingress/#tls) configuration. |
 | initResources | object | See `initResources.*` | Resource requests/limits for the init container. <br> [Init container resource limits](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/#resources) |
 | initResources.limits | object | See `initResources.limits.*` | Resource limits for the init container. |
@@ -468,7 +471,7 @@ If desired, the liveness probe can be disabled with `livenessProbe.enabled=false
 
 ## External connectivity
 The Helm chart can be configured to create a Kubernetes Ingress or Openshift Route to pass external traffic to the Microgateway Pod.
-In case that those objects were created with this Helm chart, just follow along with the description and configuration examples.
+In case that those objects have to be created with this Helm chart, just follow along with the description and configuration examples.
 If there is already an existing Ingress or Route object and the traffic should only be passed to the Microgateway service, the information in the subchapters should provide useful information about how to integrate into the existing environment.
 
 :information_source: **Kubernetes vs. Openshift**:<br>

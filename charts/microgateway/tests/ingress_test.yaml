@@ -12,7 +12,16 @@ tests:
     asserts:
       - hasDocuments:
         count: 0
-
+  - it: does use correct api version with 1.19.0
+    capabilities:
+      majorVersion: 1
+      minorVersion: 19
+    set:
+      ingress.enabled: true
+    asserts:
+    - equal:
+        path: apiVersion
+        value: networking.k8s.io/v1
   - it: does use correct api version before 1.14.0
     capabilities:
       majorVersion: 1
@@ -48,7 +57,10 @@ tests:
           path: metadata.annotations.[b]
           value: "c"
 
-  - it: does add rules
+  - it: does add rules beta1
+    capabilities:
+      majorVersion: 1
+      minorVersion: 14
     set:
       ingress.enabled: true
       ingress.path: /asdf/
@@ -81,6 +93,120 @@ tests:
       - equal:
           path: spec.rules[1].http.paths[0].backend.servicePort
           value: 8888
+  - it: does add rules with numeric ports v1
+    capabilities:
+      majorVersion: 1
+      minorVersion: 19
+    set:
+      ingress.enabled: true
+      ingress.path: /asdf/
+      ingress.servicePortNumber: 8888
+      ingress.hosts:
+        - b.com
+        - c.com
+    asserts:
+      - equal:
+          path: spec.rules[0].host
+          value: "b.com"
+      - equal:
+          path: spec.rules[0].http.paths[0].path
+          value: "/asdf/"
+      - equal:
+          path: spec.rules[0].http.paths[0].backend.service.name
+          value: "my-microgateway"
+      - equal:
+          path: spec.rules[0].http.paths[0].backend.service.port.number
+          value: 8888
+      - equal:
+          path: spec.rules[1].host
+          value: "c.com"
+      - equal:
+          path: spec.rules[1].http.paths[0].path
+          value: "/asdf/"
+      - equal:
+          path: spec.rules[1].http.paths[0].backend.service.name
+          value: "my-microgateway"
+      - equal:
+          path: spec.rules[1].http.paths[0].backend.service.port.number
+          value: 8888
+
+  - it: does add rules with port name v1
+    capabilities:
+      majorVersion: 1
+      minorVersion: 19
+    set:
+      ingress.enabled: true
+      ingress.path: /asdf/
+      ingress.servicePortName: myport
+      ingress.hosts:
+        - b.com
+    asserts:
+      - equal:
+          path: spec.rules[0].host
+          value: "b.com"
+      - equal:
+          path: spec.rules[0].http.paths[0].path
+          value: "/asdf/"
+      - equal:
+          path: spec.rules[0].http.paths[0].backend.service.name
+          value: "my-microgateway"
+      - equal:
+          path: spec.rules[0].http.paths[0].backend.service.port.name
+          value: myport
+
+  - it: port number has precedence over port name v1
+    capabilities:
+      majorVersion: 1
+      minorVersion: 19
+    set:
+      ingress.enabled: true
+      ingress.path: /asdf/
+      ingress.servicePortNumber: 8080
+      ingress.servicePortName: myport
+      ingress.hosts:
+        - b.com
+    asserts:
+      - equal:
+          path: spec.rules[0].host
+          value: "b.com"
+      - equal:
+          path: spec.rules[0].http.paths[0].path
+          value: "/asdf/"
+      - equal:
+          path: spec.rules[0].http.paths[0].backend.service.name
+          value: "my-microgateway"
+      - equal:
+          path: spec.rules[0].http.paths[0].backend.service.port.number
+          value: 8080
+      - isNull:
+          path: spec.rules[0].http.paths[0].backend.service.port.name
+
+  - it: port name http is used as default v1
+    capabilities:
+      majorVersion: 1
+      minorVersion: 19
+    set:
+      ingress.enabled: true
+      ingress.path: /asdf/
+      ingress.hosts:
+        - b.com
+    asserts:
+      - equal:
+          path: spec.rules[0].host
+          value: "b.com"
+      - equal:
+          path: spec.rules[0].http.paths[0].path
+          value: "/asdf/"
+      - equal:
+          path: spec.rules[0].http.paths[0].backend.service.name
+          value: "my-microgateway"
+      - equal:
+          path: spec.rules[0].http.paths[0].backend.service.port.name
+          value: http
+      - isNull:
+          path: spec.rules[0].http.paths[0].backend.service.port.number
+
+
   - it: does not add rules if no host is given
     set:
       ingress.enabled: true
