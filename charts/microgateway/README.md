@@ -114,9 +114,9 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | hpa.resource.cpu | int | `50` | Average Microgateway CPU consumption in percentage to scale up/down. |
 | hpa.resource.memory | string | `"2Gi"` | Average Microgateway Memory consumption to scale up/down.<br><br> :exclamation: Update this setting accordingly to `resources.limits.memory`. |
 | image.pullPolicy | string | `"IfNotPresent"` | Pull policy (`Always`, `IfNotPresent`, `Never`) |
-| image.repository | string | `"ergon/airlock-microgateway-nightly"` | Image repository for the Airlock Microgateway runtime image |
-| image.repository_configbuilder | string | `"ergon/airlock-microgateway-configbuilder-nightly"` | Image repository for the Airlock Microgateway configbuilder image |
-| image.tag | string | `"2.0.sprint9_Build006"` | Image tag for microgateway and configbuilder image |
+| image.repository | string | `"docker.io/ergon/airlock-microgateway-nightly"` | Image repository for the Airlock Microgateway runtime image |
+| image.repository_configbuilder | string | `"docker.io/ergon/airlock-microgateway-configbuilder-nightly"` | Image repository for the Airlock Microgateway configbuilder image |
+| image.tag | string | `"2.0.sprint11_Build008"` | Image tag for microgateway and configbuilder image |
 | imageCredentials | object | See `imageCredentials.*`: | Creates a imagePullSecret with the provided values. |
 | imageCredentials.enabled | bool | `false` | Enable the imagePullSecret creation. |
 | imageCredentials.password | string | `""` | imagePullSecret password/Token |
