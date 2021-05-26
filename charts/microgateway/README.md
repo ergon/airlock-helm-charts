@@ -95,7 +95,7 @@ The following table lists configuration parameters of the Airlock Microgateway c
 |-----|------|---------|-------------|
 | affinity | string | `nil` | Assign custom [affinity rules](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/) (multiline string). |
 | commonLabels | object | `{}` | Labels to add to all resources. |
-| config.configEnv | list | `[]` | [DSL Environment Variables](#dsl-environment-variables) |
+| config.configbuilderEnv | list | `[]` | [DSL Environment Variables](#dsl-environment-variables) |
 | config.dsl | object | `{}` | [DSL configuration](#dsl-configuration) |
 | config.existingSecret | string | "" | Name of an existing secret containing:<br><br> license: `license`<br> passphrase: `passphrase` |
 | config.license | string | "" | License (multiline string) |
@@ -113,9 +113,9 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | hpa.minReplicas | int | `1` | Minimum number of Microgateway replicas. |
 | hpa.resource.cpu | int | `50` | Average Microgateway CPU consumption in percentage to scale up/down. |
 | hpa.resource.memory | string | `"2Gi"` | Average Microgateway Memory consumption to scale up/down.<br><br> :exclamation: Update this setting accordingly to `resources.limits.memory`. |
+| image.configbuilderRepository | string | `"docker.io/ergon/airlock-microgateway-configbuilder-nightly"` | Image repository for the Airlock Microgateway configbuilder image |
 | image.pullPolicy | string | `"IfNotPresent"` | Pull policy (`Always`, `IfNotPresent`, `Never`) |
-| image.repository | string | `"docker.io/ergon/airlock-microgateway-nightly"` | Image repository for the Airlock Microgateway runtime image |
-| image.repository_configbuilder | string | `"docker.io/ergon/airlock-microgateway-configbuilder-nightly"` | Image repository for the Airlock Microgateway configbuilder image |
+| image.runtimeRepository | string | `"docker.io/ergon/airlock-microgateway-nightly"` | Image repository for the Airlock Microgateway runtime image |
 | image.tag | string | `"2.0.sprint11_Build008"` | Image tag for microgateway and configbuilder image |
 | imageCredentials | object | See `imageCredentials.*`: | Creates a imagePullSecret with the provided values. |
 | imageCredentials.enabled | bool | `false` | Enable the imagePullSecret creation. |
@@ -380,7 +380,7 @@ The example below illustrates how to configure environment variables in combinat
   env-variables.yaml
   ```
   config:
-    configEnv:
+    configbuilderEnv:
       - name: OPERATIONAL_MODE
         value: integration
       - name: DR_LOG_ONLY

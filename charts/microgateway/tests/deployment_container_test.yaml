@@ -7,7 +7,7 @@ chart:
 tests:
   - it: does create correct image data
     set:
-      image.repository: myrepo/airlock/microgateway
+      image.runtimeRepository: myrepo/airlock/microgateway
       image.tag: test-latest
       image.pullPolicy: Always
     asserts:
