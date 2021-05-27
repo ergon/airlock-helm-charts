@@ -214,7 +214,7 @@ route:
 # @default -- See `resources.*`
 resources:
   # resources.requests -- Resource requests for the Microgateway runtime container. These values most like have to be adjusted depending on specific load and usage profiles. <br>
-  # Please consult [Microgateway resrouce requirements](https://docs.airlock.com/microgateway/{{ template "chart.appVersion" . }}/#data/resourcerequ.html)
+  # Please consult [Microgateway resrouce requirements](https://docs.airlock.com/microgateway/latest/#data/resourcerequ.html)
   # for some ideas about actual Microgateway resource requirements.
   # @default -- See `resources.requests.*`
   requests:
