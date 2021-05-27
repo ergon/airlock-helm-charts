@@ -32,9 +32,9 @@ spec:
       serviceAccountName: {{ template "microgateway.serviceAccountName" . }}
       initContainers:
       - name: configbuilder
-        image: "{{ .Values.image.repository_configbuilder }}:{{ .Values.image.tag }}"
+        image: "{{ .Values.image.repository.configbuilder }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
-        {{- with .Values.config.configEnv }}
+        {{- with .Values.config.env.configbuilder }}
         env: {{ toYaml . | nindent 10 }}
         {{- end }}
         volumeMounts:
@@ -64,7 +64,7 @@ spec:
           {{- toYaml .Values.initResources | nindent 10 }}
       containers:
       - name: {{ .Chart.Name }}
-        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        image: "{{ .Values.image.repository.runtime }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         ports:
         - name: http
@@ -73,7 +73,7 @@ spec:
           containerPort: 8443
         - name: probes
           containerPort: 9090
-        {{- with .Values.config.runtimeEnv }}
+        {{- with .Values.config.env.runtime }}
         env: {{ toYaml . | nindent 10 }}
         {{- end }}
         volumeMounts:

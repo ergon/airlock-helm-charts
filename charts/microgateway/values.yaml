@@ -2,10 +2,12 @@
 replicaCount: 1
 
 image:
-  # image.repository -- Image repository for the Airlock Microgateway runtime image
-  repository: docker.io/ergon/airlock-microgateway-nightly
-  # image.repository_configbuilder -- Image repository for the Airlock Microgateway configbuilder image
-  repository_configbuilder: docker.io/ergon/airlock-microgateway-configbuilder-nightly
+  # image.repository -- Image repositories for the Airlock Microgateway.
+  repository:
+    # image.repository.runtime -- Image repository for the Airlock Microgateway runtime image
+    runtime: docker.io/ergon/airlock-microgateway-nightly
+    # image.repository.configbuilder -- Image repository for the Airlock Microgateway configbuilder image
+    configbuilder: docker.io/ergon/airlock-microgateway-configbuilder-nightly
   # image.tag -- Image tag for microgateway and configbuilder image
   tag: "2.0.sprint11_Build008"
   # image.pullPolicy -- Pull policy (`Always`, `IfNotPresent`, `Never`)
@@ -14,10 +16,12 @@ image:
 ## Microgateway Config
 ##
 config:
-  # config.configEnv -- [DSL Environment Variables](#dsl-environment-variables)
-  configEnv: []
-  # config.runtimeEnv -- [Runtime Environment Variables](#runtime-environment-variables)
-  runtimeEnv: []
+  # config.env -- [DSL Environment Variables](#dsl-environment-variables)
+  env:
+    # config.env.configbuilder -- [DSL Environment Variables](#dsl-environment-variables)
+    configbuilder: []
+    # config.env.runtime -- [Runtime Environment Variables](#runtime-environment-variables)
+    runtime: []
   # config.tlsSecretName -- (string) Name of an existing secret containing:<br><br>
   # _Virtual Host:_<br>
   # Certificate: `frontend-server.crt`<br>

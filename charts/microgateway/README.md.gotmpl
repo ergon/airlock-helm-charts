@@ -280,11 +280,12 @@ The example below illustrates how to configure environment variables in combinat
   env-variables.yaml
   ```
   config:
-    configEnv:
-      - name: OPERATIONAL_MODE
-        value: integration
-      - name: DR_LOG_ONLY
-        value: true
+    env:
+      configbuilder:
+        - name: OPERATIONAL_MODE
+          value: integration
+        - name: DR_LOG_ONLY
+          value: true
   ```
 
   custom-values.yaml

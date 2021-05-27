@@ -7,7 +7,7 @@ chart:
 tests:
   - it: does create correct image data
     set:
-      image.repository_configbuilder: myrepo/airlock.configbuilder
+      image.repository.configbuilder: myrepo/airlock.configbuilder
       image.tag: test-latest
       image.pullPolicy: Always
     asserts:
@@ -25,7 +25,7 @@ tests:
 
   - it: does create environment variables
     set:
-      config.configEnv:
+      config.env.configbuilder:
         - name: A
           value: a
         - name: B
