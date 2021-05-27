@@ -417,9 +417,10 @@ The following example shows how to set the timezone of the microgateway:
 env-variables.yaml
 ```
 config:
-  runtimeEnv:
-    - name: TZ
-      value: Europe/Zurich
+  env:
+    runtime:
+      - name: TZ
+        value: Europe/Zurich
 ```
 
 ## Extra Volumes
