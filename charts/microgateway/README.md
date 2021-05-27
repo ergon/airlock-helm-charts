@@ -111,8 +111,8 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | hpa.enabled | bool | `false` | Deploy a horizontal pod autoscaler. |
 | hpa.maxReplicas | int | `10` | Maximum number of Microgateway replicas. |
 | hpa.minReplicas | int | `1` | Minimum number of Microgateway replicas. |
-| hpa.resource.cpu | int | `50` | Average Microgateway CPU consumption in percentage to scale up/down.<br><br> :exclamation: Please set the resource request parameter `resources.cpu` to a value reflecting your actual resource needs if you use autoscaling based on cpu consumption. Otherwise autoscaling will not work correctly. |
-| hpa.resource.memory | string | `"3Gi"` | Average Microgateway Memory consumption to scale up/down.<br><br> :exclamation: Update this setting according to `resources.limits.memory`. |
+| hpa.resource.cpu | int | `50` | Average Microgateway CPU consumption in percentage to scale up/down.<br><br> :exclamation: Please set the resource request parameter `resources.cpu` to a value reflecting your actual resource needs if you use autoscaling based on cpu consumption. Otherwise autoscaling will not work as expected. |
+| hpa.resource.memory | string | `"3Gi"` | Average Microgateway Memory consumption to scale up/down.<br><br> :exclamation: Update this setting depending on your `resources.limits.memory` setting. |
 | image.pullPolicy | string | `"IfNotPresent"` | Pull policy (`Always`, `IfNotPresent`, `Never`) |
 | image.repository | string | `"ergon/airlock-microgateway-nightly"` | Image repository for the Airlock Microgateway runtime image |
 | image.repository_configbuilder | string | `"ergon/airlock-microgateway-configbuilder-nightly"` | Image repository for the Airlock Microgateway configbuilder image |
@@ -154,7 +154,7 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | resources | object | See `resources.*` | Resource requests/limits for the runtime container. <br> [Resource limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) <br> [Configure Quality of Service for Pods](https://kubernetes.io/docs/tasks/configure-pod-container/quality-service-pod/) |
 | resources.limits | object | See `resources.limits.*` | Resource limits for the runtime container. |
 | resources.limits.memory | string | `"4048Mi"` | Memory limit for the runtime container. |
-| resources.requests | object | See `resources.requests.*` | Resource requests for the runtime container. |
+| resources.requests | object | See `resources.requests.*` | Resource requests for the Microgateway runtime container. These values most like have to be adjusted depending on specific load and usage profiles. <br> Please consult [Microgateway resrouce requirements](https://docs.airlock.com/microgateway/{{ template "chart.appVersion" . }}/#data/resourcerequ.html) for some ideas about actual Microgateway resource requirements. |
 | resources.requests.cpu | string | `"30m"` | CPU request for the runtime container. |
 | resources.requests.memory | string | `"256Mi"` | Memory request for the runtime container. |
 | route | object | See `route.*`: | [Openshift Route](#openshift-route) |
