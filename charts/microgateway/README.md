@@ -95,12 +95,13 @@ The following table lists configuration parameters of the Airlock Microgateway c
 |-----|------|---------|-------------|
 | affinity | string | `nil` | Assign custom [affinity rules](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/) (multiline string). |
 | commonLabels | object | `{}` | Labels to add to all resources. |
-| config.configbuilderEnv | list | `[]` | [DSL Environment Variables](#dsl-environment-variables) |
 | config.dsl | object | `{}` | [DSL configuration](#dsl-configuration) |
+| config.env | object | `{"configbuilder":[],"runtime":[]}` | [DSL Environment Variables](#dsl-environment-variables) |
+| config.env.configbuilder | list | `[]` | [DSL Environment Variables](#dsl-environment-variables) |
+| config.env.runtime | list | `[]` | [Runtime Environment Variables](#runtime-environment-variables) |
 | config.existingSecret | string | "" | Name of an existing secret containing:<br><br> license: `license`<br> passphrase: `passphrase` |
 | config.license | string | "" | License (multiline string) |
 | config.passphrase | string | - `passphrase`<br> If `passphrase` in `config.existingSecret` <br><br> - `<generated passphrase>`<br> If no passphrase available. | Passphrase used for encryption. |
-| config.runtimeEnv | list | `[]` | [Runtime Environment Variables](#runtime-environment-variables) |
 | config.tlsSecretName | string | "" | Name of an existing secret containing:<br><br> _Virtual Host:_<br> Certificate: `frontend-server.crt`<br> Private key: `frontend-server.key`<br> CA: `frontend-server-ca.crt` <br> :exclamation: Update `route.tls.destinationCACertificate` accordingly.<br><br> _Backend:_<br> Certificate: `backend-client.crt`<br> Private key: `backend-client.key`<br> CA: `backend-server-validation-ca.crt` |
 | echo-server | object | See `echo-server.*`: | Pre-configured [Echo-Server](#echo-server). |
 | echo-server.enabled | bool | `false` | Deploy pre-configured [Echo-Server](#echo-server). |
@@ -113,9 +114,10 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | hpa.minReplicas | int | `1` | Minimum number of Microgateway replicas. |
 | hpa.resource.cpu | int | `50` | Average Microgateway CPU consumption in percentage to scale up/down. |
 | hpa.resource.memory | string | `"2Gi"` | Average Microgateway Memory consumption to scale up/down.<br><br> :exclamation: Update this setting accordingly to `resources.limits.memory`. |
-| image.configbuilderRepository | string | `"docker.io/ergon/airlock-microgateway-configbuilder-nightly"` | Image repository for the Airlock Microgateway configbuilder image |
 | image.pullPolicy | string | `"IfNotPresent"` | Pull policy (`Always`, `IfNotPresent`, `Never`) |
-| image.runtimeRepository | string | `"docker.io/ergon/airlock-microgateway-nightly"` | Image repository for the Airlock Microgateway runtime image |
+| image.repository | object | `{"configbuilder":"docker.io/ergon/airlock-microgateway-configbuilder-nightly","runtime":"docker.io/ergon/airlock-microgateway-nightly"}` | Image repositories for the Airlock Microgateway. |
+| image.repository.configbuilder | string | `"docker.io/ergon/airlock-microgateway-configbuilder-nightly"` | Image repository for the Airlock Microgateway configbuilder image |
+| image.repository.runtime | string | `"docker.io/ergon/airlock-microgateway-nightly"` | Image repository for the Airlock Microgateway runtime image |
 | image.tag | string | `"2.0.sprint11_Build008"` | Image tag for microgateway and configbuilder image |
 | imageCredentials | object | See `imageCredentials.*`: | Creates a imagePullSecret with the provided values. |
 | imageCredentials.enabled | bool | `false` | Enable the imagePullSecret creation. |
@@ -380,11 +382,12 @@ The example below illustrates how to configure environment variables in combinat
   env-variables.yaml
   ```
   config:
-    configbuilderEnv:
-      - name: OPERATIONAL_MODE
-        value: integration
-      - name: DR_LOG_ONLY
-        value: true
+    env:
+      configbuilder:
+        - name: OPERATIONAL_MODE
+          value: integration
+        - name: DR_LOG_ONLY
+          value: true
   ```
 
   custom-values.yaml
