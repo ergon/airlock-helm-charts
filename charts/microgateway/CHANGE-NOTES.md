@@ -10,7 +10,7 @@
 - Advanced and Simple DSL Configuration are not supported anymore. Configurations using Advanced or Simple DSL Mode will have to migrate to the standard Microgateway DSL configuration. Please refer to the [Microgateway Documentation](https://docs.airlock.com/microgateway/2.0) for further information.
 - DSL Configuration chart parameter 'config.expert.dsl' has been renamed to 'config.dsl'.
 - Parameters 'config.generic.\*' have been renamed to 'config.\*'. Example: 'config.generic.passphrase' has been renamed to 'config.passphrase'.
-- Helm Chart parameter 'config.generic.env' has been renamed to 'config.runtimeEnv'
+- Helm Chart parameter 'config.generic.env' has been renamed to 'config.env.runtime'. For environment variables used in DSL variable substitution, use 'config.env.configbuilder'.
 - Helm Chart parameter 'image.repository' has been renamed to 'image.repository.runtime'. If you use a custom value for the 
   runtime image, you will probably also need a custom value for the configbuilder repository: 'image.repository.configbuilder'.
 - The service name for the echo service has been changed from 'backend-service' to 'backend' to match the microgateway default value. The echo service name can be configured using 'echo-server.fullnameOverride'.
