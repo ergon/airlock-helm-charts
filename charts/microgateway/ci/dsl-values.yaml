@@ -12,7 +12,8 @@ config:
 imagePullSecrets:
   - name: "dockersecret"
 
-hpa.enabled: true
+hpa:
+  enabled: true
 
 redis:
   enabled: true

@@ -227,7 +227,9 @@ route:
 # [Configure Quality of Service for Pods](https://kubernetes.io/docs/tasks/configure-pod-container/quality-service-pod/)
 # @default -- See `resources.*`
 resources:
-  # resources.requests -- Resource requests for the runtime container.
+  # resources.requests -- Resource requests for the Microgateway runtime container. These values most like have to be adjusted depending on specific load and usage profiles. <br>
+  # Please consult [Microgateway resrouce requirements](https://docs.airlock.com/microgateway/latest/#data/resourcerequ.html)
+  # for some ideas about actual Microgateway resource requirements.
   # @default -- See `resources.requests.*`
   requests:
     # resources.requests.memory -- Memory request for the runtime container.
@@ -343,9 +345,11 @@ hpa:
   minReplicas: 1
   resource:
     # hpa.resource.memory -- Average Microgateway Memory consumption to scale up/down.<br><br>
-    # :exclamation: Update this setting accordingly to `resources.limits.memory`.
-    memory: 2Gi
-    # hpa.resource.cpu -- Average Microgateway CPU consumption in percentage to scale up/down.
+    # :exclamation: Update this setting depending on your `resources.limits.memory` setting.
+    memory: 3Gi
+    # hpa.resource.cpu -- Average Microgateway CPU consumption in percentage to scale up/down.<br><br>
+    # :exclamation: Please set the resource request parameter `resources.cpu` to a value reflecting your actual resource needs if
+    # you use autoscaling based on cpu consumption. Otherwise autoscaling will not work as expected.
     cpu: 50
 # test_request -- Request that will be used as a smoketest when 'helm test' is invoked.
 test_request: /
