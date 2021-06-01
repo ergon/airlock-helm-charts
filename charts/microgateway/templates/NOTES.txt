@@ -48,7 +48,7 @@ The Airlock microgateway has been installed.
 * Microgateway Init Container Logs:
   To see the logs of the init container run the following commands:
   export MICROGATEWAYPOD=$(kubectl get pods --selector app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/name={{ include "microgateway.name" . }} | grep {{ template "microgateway.fullname" . }} | head -1 | cut -d ' ' -f 1)
-  kubectl logs $MICROGATEWAYPOD -c {{ .Chart.Name }}-configbuilder
+  kubectl logs $MICROGATEWAYPOD -c configbuilder
 
 * Microgateway Console:
   To connect to the console of the Microgateway run the follwing commands:
