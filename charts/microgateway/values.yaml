@@ -5,11 +5,11 @@ image:
   # image.repository -- Image repositories for the Airlock Microgateway.
   repository:
     # image.repository.runtime -- Image repository for the Airlock Microgateway runtime image
-    runtime: docker.io/ergon/airlock-microgateway-nightly
+    runtime: docker.io/ergon/airlock-microgateway
     # image.repository.configbuilder -- Image repository for the Airlock Microgateway configbuilder image
-    configbuilder: docker.io/ergon/airlock-microgateway-configbuilder-nightly
+    configbuilder: docker.io/ergon/airlock-microgateway-configbuilder
   # image.tag -- Image tag for microgateway and configbuilder image
-  tag: "2.0.sprint11_Build008"
+  tag: "2.0.0"
   # image.pullPolicy -- Pull policy (`Always`, `IfNotPresent`, `Never`)
   pullPolicy: IfNotPresent
 
