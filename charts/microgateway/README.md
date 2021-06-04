@@ -115,10 +115,10 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | hpa.resource.cpu | int | `50` | Average Microgateway CPU consumption in percentage to scale up/down.<br><br> :exclamation: Please set the resource request parameter `resources.cpu` to a value reflecting your actual resource needs if you use autoscaling based on cpu consumption. Otherwise autoscaling will not work as expected. |
 | hpa.resource.memory | string | `"3Gi"` | Average Microgateway Memory consumption to scale up/down.<br><br> :exclamation: Update this setting depending on your `resources.limits.memory` setting. |
 | image.pullPolicy | string | `"IfNotPresent"` | Pull policy (`Always`, `IfNotPresent`, `Never`) |
-| image.repository | object | `{"configbuilder":"docker.io/ergon/airlock-microgateway-configbuilder-nightly","runtime":"docker.io/ergon/airlock-microgateway-nightly"}` | Image repositories for the Airlock Microgateway. |
-| image.repository.configbuilder | string | `"docker.io/ergon/airlock-microgateway-configbuilder-nightly"` | Image repository for the Airlock Microgateway configbuilder image |
-| image.repository.runtime | string | `"docker.io/ergon/airlock-microgateway-nightly"` | Image repository for the Airlock Microgateway runtime image |
-| image.tag | string | `"2.0.sprint11_Build008"` | Image tag for microgateway and configbuilder image |
+| image.repository | object | `{"configbuilder":"docker.io/ergon/airlock-microgateway-configbuilder","runtime":"docker.io/ergon/airlock-microgateway"}` | Image repositories for the Airlock Microgateway. |
+| image.repository.configbuilder | string | `"docker.io/ergon/airlock-microgateway-configbuilder"` | Image repository for the Airlock Microgateway configbuilder image |
+| image.repository.runtime | string | `"docker.io/ergon/airlock-microgateway"` | Image repository for the Airlock Microgateway runtime image |
+| image.tag | string | `"2.0.0"` | Image tag for microgateway and configbuilder image |
 | imageCredentials | object | See `imageCredentials.*`: | Creates a imagePullSecret with the provided values. |
 | imageCredentials.enabled | bool | `false` | Enable the imagePullSecret creation. |
 | imageCredentials.password | string | `""` | imagePullSecret password/Token |
@@ -331,7 +331,7 @@ Please refer to the [Echo-Server Helm chart](https://artifacthub.io/packages/hel
 ## DSL Configuration
 It is possible to use all Microgateway DSL configuration options within the 'dsl' configuration parameter.
 
-For a full list of available Microgateway configuration parameters refer to the [Microgateway Documentation](https://docs.airlock.com/microgateway/2.0/)
+For a full list of available Microgateway configuration parameters refer to the [Microgateway Documentation](https://docs.airlock.com/microgateway/2.0.0/)
 
 **Example:**
 
