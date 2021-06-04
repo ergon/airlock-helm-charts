@@ -2,9 +2,10 @@ name: Lint and Test Charts
 
 on:
   pull_request:
-    paths:
+     paths:
       - 'charts/**'
-      - '.github/workflows/ci.yaml'
+      - '.github/**'
+      - '!charts/microgateway/README.md'
   workflow_dispatch:
 
 jobs:
@@ -12,31 +13,35 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v1
-      - name: Install helm-docs
-        run: .github/helm-docs-install.sh
-        env:
-          HELM_DOCS_VERSION: "1.5.0"
-      - name: Run helm-docs
-        id: validatedocs
-        run: .github/helm-docs-verify.sh
-      - name: Generate helm-docs (on failure)
-        if: failure()
+        uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - name: Generate helm-docs
         run: .github/helm-docs-generate.sh
         env:
           BRANCH_NAME: ${{ github.head_ref }}
           TECHNICAL_USER_TOKEN: ${{ secrets.TECHNICAL_USER_TOKEN }}
           TECHNICAL_USER: ${{ secrets.TECHNICAL_USER }}
-  kubeval-chart:
+  unit-test:
     runs-on: ubuntu-latest
     needs:
       - generate-docs
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: install and run helm unit tests
+        run: .github/unit-test.sh
+  kubeval-chart:
+    runs-on: ubuntu-latest
+    needs:
+      - unit-test
     strategy:
       matrix:
         k8s:
-          - v1.18.15
-          - v1.19.7
-          - v1.20.2
+          - v1.19.9
+          - v1.20.6
+          - v1.21.0
     steps:
       - name: Checkout
         uses: actions/checkout@v1
@@ -52,7 +57,6 @@ jobs:
     strategy:
       matrix:
         k8s:
-          - v1.18.15
           - v1.19.7
           - v1.20.2
     steps:

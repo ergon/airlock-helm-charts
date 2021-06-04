@@ -5,7 +5,10 @@ It is the lightweight, container-based deployment form of the *Airlock Gateway*,
 
 The Airlock helm charts are used internally for testing the *Airlock Microgateway*. We make them available publicly under the [MIT license](https://github.com/ergon/airlock-helm-charts/blob/master/LICENSE).
 
-The current chart version is: 0.6.9
+The current chart version is: 1.0.0
+
+## Change Notes
+[CHANGE-NOTES](CHANGE-NOTES.md) contains a list of noteworthy changes in the Microgateway Helm Chart.
 
 ## About Ergon
 *Airlock* is a registered trademark of [Ergon](https://www.ergon.ch). Ergon is a Swiss leader in leveraging digitalisation to create unique and effective client benefits, from conception to market, the result of which is the international distribution of globally revered products.
@@ -24,11 +27,10 @@ The current chart version is: 0.6.9
 * [Dependencies](#dependencies)
   * [Redis](#redis)
   * [Echo-Server](#echo-server)
-* [DSL configuration](#dsl-configuration)
-  * [Simple DSL configuration](#simple-dsl-configuration)
-  * [Advanced DSL configuration](#advanced-dsl-configuration)
-  * [Expert DSL configuration](#expert-dsl-configuration)
-* [Environment variables](#environment-variables)
+* [DSL Configuration](#dsl-configuration)
+* [Environment Variables](#environment-variables)
+  * [DSL Environment Variables](#dsl-environment-variables)
+  * [Runtime Environment Variables](#runtime-environment-variables)
 * [Extra Volumes](#extra-volumes)
 * [Probes](#probes)
   * [Readiness Probe](#readiness-probe)
@@ -93,40 +95,14 @@ The following table lists configuration parameters of the Airlock Microgateway c
 |-----|------|---------|-------------|
 | affinity | string | `nil` | Assign custom [affinity rules](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/) (multiline string). |
 | commonLabels | object | `{}` | Labels to add to all resources. |
-| config.advanced.apps | list | `[]` | [Advanced DSL configuration](#advanced-dsl-configuration) |
-| config.expert.dsl | object | `{}` | [Expert DSL configuration](#expert-dsl-configuration) |
-| config.generic | object | See `config.generic.*`: | Available for:<br> - [Simple DSL configuration](#simple-dsl-configuration)<br> - [Advanced DSL configuration](#advanced-dsl-configuration)<br> - [Expert DSL configuration](#expert-dsl-configuration) |
-| config.generic.env | list | `[]` | [Environment variables](#environment-variables) |
-| config.generic.existingSecret | string | "" | Name of an existing secret containing:<br><br> license: `license`<br> passphrase: `passphrase` |
-| config.generic.license | string | "" | License (multiline string) |
-| config.generic.passphrase | string | - `passphrase`<br> If `passphrase` in `config.generic.existingSecret` <br><br> - `<generated passphrase>`<br> If no passphrase available. | Passphrase used for encryption. |
-| config.generic.tlsSecretName | string | "" | Name of an existing secret containing:<br><br> _Virtual Host:_<br> Certificate: `frontend-server.crt`<br> Private key: `frontend-server.key`<br> CA: `frontend-server-ca.crt` <br> :exclamation: Update `route.tls.destinationCACertificate` accordingly.<br><br> _Backend:_<br> Certificate: `backend-client.crt`<br> Private key: `backend-client.key`<br> CA: `backend-server-validation-ca.crt` |
-| config.global | object | See `config.global.*`: | Available for:<br> - [Simple DSL configuration](#simple-dsl-configuration)<br> - [Advanced DSL configuration](#advanced-dsl-configuration) |
-| config.global.backend.tls.cipher_suite | string | `""` | Overwrite the default TLS ciphers (<=TLS 1.2) for backend connections. |
-| config.global.backend.tls.cipher_suite_v13 | string | `""` | Overwrite the default TLS ciphers (TLS 1.3) for backend connections. |
-| config.global.backend.tls.client_cert | bool | `false` | Use TLS client certificate for backend connections. <br> :exclamation: Must be configured in `config.generic.tlsSecretName`. |
-| config.global.backend.tls.server_ca | bool | `false` | Validates the backend server certificate against the configured CA. <br> :exclamation: Must be configured in `config.generic.tlsSecretName`. |
-| config.global.backend.tls.verify_host | bool | `false` | Verify the backend TLS certificate.<br> :exclamation: `config.global.backend.tls.server_ca` must be configured in order to work. |
-| config.global.backend.tls.version | string | `""` | Overwrite the default TLS version for backend connections.<br> |
-| config.global.expert_settings.apache | string | "" | Global Apache Expert Settings (multiline string). |
-| config.global.expert_settings.security_gate | string | "" | Global SecurityGate Expert Settings (multiline string). |
-| config.global.ip_header.header | string | `"X-Forwarded-For"` | HTTP header to extract the client IP address. |
-| config.global.ip_header.trusted_proxies | list | `[]` | Trusted IP addresses to extract the client IP from HTTP header.<br><br> :exclamation: IP addresses are only extracted if `trusted_proxies` are configured. |
-| config.global.log_level | string | `"info"` | Log level (`info`, `trace`).<br> :exclamation: Never use `trace` in production. |
-| config.global.redis_hosts | list | `[]` if `redis.enabled=false` or <br> `[ redis-master ]` if `redis.enabled=true` | List of Redis hosts. |
-| config.global.virtual_host.tls.cipher_suite | string | `""` | Overwrite the default TLS ciphers for frontend connections. |
-| config.global.virtual_host.tls.protocol | string | `""` | Overwrite the default TLS protocol for frontend connections. |
-| config.simple | object | See `config.simple.*`: | [Simple DSL configuration](#simple-dsl-configuration) |
-| config.simple.backend.hostname | string | `"backend-service"` | Backend hostname |
-| config.simple.backend.port | int | `8080` | Backend port |
-| config.simple.backend.protocol | string | `"http"` | Backend protocol |
-| config.simple.mapping.deny_rules.enabled | bool | `true` | Enable all Deny rules. |
-| config.simple.mapping.deny_rules.exceptions | list | `[]` | Deny rule exceptions. |
-| config.simple.mapping.deny_rules.level | string | `"standard"` | Security Level for all Deny rules (`basic`, `standard`, `strict`). |
-| config.simple.mapping.deny_rules.log_only | bool | `false` | Enable log only for all Deny rules. |
-| config.simple.mapping.entry_path | string | `"/"` | The `entry_path` of the app. |
-| config.simple.mapping.operational_mode | string | `"production"` | Operational mode (`production`, `integration`). |
-| config.simple.mapping.session_handling | string | - `enforce_session`<br> If `redis.enabled=true` <br> or `config.global.redis_hosts`<br><br> - `ignore_session`<br> If `redis.enabled=false` | Session handling (`enforce_session`, `ignore_session`, `optional_session`, `optional_session_no_refresh`). |
+| config.dsl | object | `{}` | [DSL configuration](#dsl-configuration) |
+| config.env | object | `{"configbuilder":[],"runtime":[]}` | [DSL Environment Variables](#dsl-environment-variables) |
+| config.env.configbuilder | list | `[]` | [DSL Environment Variables](#dsl-environment-variables) |
+| config.env.runtime | list | `[]` | [Runtime Environment Variables](#runtime-environment-variables) |
+| config.existingSecret | string | "" | Name of an existing secret containing:<br><br> license: `license`<br> passphrase: `passphrase` |
+| config.license | string | "" | License (multiline string) |
+| config.passphrase | string | - `passphrase`<br> If `passphrase` in `config.existingSecret` <br><br> - `<generated passphrase>`<br> If no passphrase available. | Passphrase used for encryption. |
+| config.tlsSecretName | string | "" | Name of an existing secret containing:<br><br> _Virtual Host:_<br> Certificate: `frontend-server.crt`<br> Private key: `frontend-server.key`<br> CA: `frontend-server-ca.crt` <br> :exclamation: Update `route.tls.destinationCACertificate` accordingly.<br><br> _Backend:_<br> Certificate: `backend-client.crt`<br> Private key: `backend-client.key`<br> CA: `backend-server-validation-ca.crt` |
 | echo-server | object | See `echo-server.*`: | Pre-configured [Echo-Server](#echo-server). |
 | echo-server.enabled | bool | `false` | Deploy pre-configured [Echo-Server](#echo-server). |
 | extraVolumeMounts | list | `[]` | Add additional volume mounts. |
@@ -136,12 +112,14 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | hpa.enabled | bool | `false` | Deploy a horizontal pod autoscaler. |
 | hpa.maxReplicas | int | `10` | Maximum number of Microgateway replicas. |
 | hpa.minReplicas | int | `1` | Minimum number of Microgateway replicas. |
-| hpa.resource.cpu | int | `50` | Average Microgateway CPU consumption in percentage to scale up/down. |
-| hpa.resource.memory | string | `"2Gi"` | Average Microgateway Memory consumption to scale up/down.<br><br> :exclamation: Update this setting accordingly to `resources.limits.memory`. |
+| hpa.resource.cpu | int | `50` | Average Microgateway CPU consumption in percentage to scale up/down.<br><br> :exclamation: Please set the resource request parameter `resources.cpu` to a value reflecting your actual resource needs if you use autoscaling based on cpu consumption. Otherwise autoscaling will not work as expected. |
+| hpa.resource.memory | string | `"3Gi"` | Average Microgateway Memory consumption to scale up/down.<br><br> :exclamation: Update this setting depending on your `resources.limits.memory` setting. |
 | image.pullPolicy | string | `"IfNotPresent"` | Pull policy (`Always`, `IfNotPresent`, `Never`) |
-| image.repository | string | `"ergon/airlock-microgateway"` | Image repository |
-| image.tag | string | `"1.0.1"` | Image tag |
-| imageCredentials | object | `{"enabled":false,"password":"","registry":"https://index.docker.io/v1/","username":""}` | Creates a imagePullSecret with the provided values. |
+| image.repository | object | `{"configbuilder":"docker.io/ergon/airlock-microgateway-configbuilder","runtime":"docker.io/ergon/airlock-microgateway"}` | Image repositories for the Airlock Microgateway. |
+| image.repository.configbuilder | string | `"docker.io/ergon/airlock-microgateway-configbuilder"` | Image repository for the Airlock Microgateway configbuilder image |
+| image.repository.runtime | string | `"docker.io/ergon/airlock-microgateway"` | Image repository for the Airlock Microgateway runtime image |
+| image.tag | string | `"2.0.0"` | Image tag for microgateway and configbuilder image |
+| imageCredentials | object | See `imageCredentials.*`: | Creates a imagePullSecret with the provided values. |
 | imageCredentials.enabled | bool | `false` | Enable the imagePullSecret creation. |
 | imageCredentials.password | string | `""` | imagePullSecret password/Token |
 | imageCredentials.registry | string | `"https://index.docker.io/v1/"` | imagePullSecret registry |
@@ -153,8 +131,18 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | ingress.hosts | list | `["virtinc.com"]` | List of ingress hosts. |
 | ingress.labels | object | `{}` | Additional labels to add on the Microgateway ingress. |
 | ingress.path | string | `"/"` | Path for the ingress. |
-| ingress.targetPort | string | `"http"` | Target port of the service (`http`, `https` or `<number>`). |
+| ingress.pathType | string | `"Prefix"` | pathType of the ingress path (used with ingress v1 and higher) |
+| ingress.servicePortName | string | `"http"` | Name of the service target port with ingress API version networking.k8s.io/v1 (Kubernetes version >= 1.19) `ingress.servicePortNumber` takes precedence over `ingress.servicePortName` if both are specified. Possible Values are: `http`, `https`. |
+| ingress.servicePortNumber | string | `nil` | Number of the service target port with ingress API version networking.k8s.io/v1 (Kubernetes version >= 1.19) `ingress.servicePortNumber` takes precedence over `ingress.servicePortName` if both are specified. |
+| ingress.targetPort | string | `"http"` | Target port of the service with ingress API version networking.k8s.io/v1beta1 (Kubernetes version < 1.19) Possible values are: `http`, `https` or `<number>`. |
 | ingress.tls | list | `[]` | [Ingress TLS](https://kubernetes.io/docs/concepts/services-networking/ingress/#tls) configuration. |
+| initResources | object | See `initResources.*` | Resource requests/limits for the init container. <br> [Init container resource limits](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/#resources) |
+| initResources.limits | object | See `initResources.limits.*` | Resource limits for the init container. |
+| initResources.limits.cpu | string | `"1000m"` | CPU limit for the init container. |
+| initResources.limits.memory | string | `"512Mi"` | Memory limit for the init container. |
+| initResources.requests | object | See `initResources.requests.*` | Resource requests for the init container. |
+| initResources.requests.cpu | string | `"30m"` | CPU request for the init container. |
+| initResources.requests.memory | string | `"256Mi"` | Memory request for the init container. |
 | livenessProbe.enabled | bool | `true` | Enable liveness probes. |
 | livenessProbe.failureThreshold | int | `9` | After how many subsequent failures the pod gets restarted. |
 | livenessProbe.initialDelaySeconds | int | `90` | Initial delay in seconds. |
@@ -168,7 +156,12 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | redis | object | See `redis.*`: | Pre-configured [Redis](#redis) service. |
 | redis.enabled | bool | `false` | Deploy pre-configured [Redis](#redis). |
 | replicaCount | int | `1` | Desired number of Microgateway pods. |
-| resources | object | `{"limits":{"memory":"4048Mi"},"requests":{"cpu":"30m","memory":"256Mi"}}` | [Resource limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) |
+| resources | object | See `resources.*` | Resource requests/limits for the runtime container. <br> [Resource limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) <br> [Configure Quality of Service for Pods](https://kubernetes.io/docs/tasks/configure-pod-container/quality-service-pod/) |
+| resources.limits | object | See `resources.limits.*` | Resource limits for the runtime container. |
+| resources.limits.memory | string | `"4048Mi"` | Memory limit for the runtime container. |
+| resources.requests | object | See `resources.requests.*` | Resource requests for the Microgateway runtime container. These values most like have to be adjusted depending on specific load and usage profiles. <br> Please consult [Microgateway resrouce requirements](https://docs.airlock.com/microgateway/latest/#data/resourcerequ.html) for some ideas about actual Microgateway resource requirements. |
+| resources.requests.cpu | string | `"30m"` | CPU request for the runtime container. |
+| resources.requests.memory | string | `"256Mi"` | Memory request for the runtime container. |
 | route | object | See `route.*`: | [Openshift Route](#openshift-route) |
 | route.annotations | object | `{}` | Annotations to set on the route. |
 | route.enabled | bool | `false` | Create a route object. |
@@ -208,30 +201,12 @@ This section describes how to configure a license for the Microgateway. By follo
 ```
 ---
 config:
-  generic:
-    license: |
-      -----BEGIN LICENSE-----
-      eJxFkEnTokgURf+LWzsCEBCpiFowKoMg8KUIZS8YUoZUEkgmqaj/XnYvqpbv
-      [...]
-      bHy/N5tf//76DY17EVk=
-      -----END LICENSE-----
-      -- Airlock WAF --
-      Owner                        virtinc.com
-      Environment                  Productive
-      Trial                        on
-      Deployment Form              microgateway
-      Platform Restriction         no
-      Number of Back-end Hosts     99
-      Number of CPUs               12
-      Number of Sessions           100
-      Policy Enforcement           on
-      ICAP                         on
-      Kerberos                     on
-      API Gateway                  on
-      SSL VPN                      on
-      Reporting                    on
-      Expiry                       2020-12-31
-      ---------------------
+  license: |
+    -----BEGIN LICENSE-----
+    eJxFkEnTokgURf+LWzsCEBCpiFowKoMg8KUIZS8YUoZUEkgmqaj/XnYvqpbv
+    [...]
+    bHy/N5tf//76DY17EVk=
+    -----END LICENSE-----
 ```
 
 2. [Create the image pull secret](#credentials-to-pull-image-from-docker-registry) to pull the microgateway image.
@@ -243,7 +218,7 @@ config:
 :exclamation: Airlock Microgateway will not work without a valid license. To order one, please contact sales@airlock.com.
 
 :information_source: **Note**:<br>
-In productive environments, licenses might be deployed and handled in a different lifecycles. In such cases, an existing license want to be used. Further information for such setups are provided in chapter [Secure handling of license and passphrase](#secure-handling-of-license-and-passphrase).
+In productive environments, licenses might be deployed and handled in a different lifecycles. In such cases, an existing license secret may be referenced. Further information is provided in chapter [Secure handling of license and passphrase](#secure-handling-of-license-and-passphrase).
 
 ### Override default values
 The Airlock Microgateway Helm chart has many parameters and most of them are already equipped with default values (see [Configuration](#configuration)). Depending on the environment, the defaults must be adapted. To override default values, do the following:
@@ -256,17 +231,33 @@ The Airlock Microgateway Helm chart has many parameters and most of them are alr
   custom-values.yaml
   ```
   config:
-    simple:
-      backend:
-        hostname: custom-backend-service
-    generic:
-      existingSecret: "microgateway-secrets"
+    existingSecret: "microgatewaysecrets"
+    dsl:
+      session:
+        redis_hosts: [redis-master]
+      expert_settings:
+        apache: |
+          RemoteIPHeader X-Forwarded-For
+          RemoteIPInternalProxy 10.0.0.0/28
+      apps:
+        - mappings:
+            - session_handling: enforce_session
+              deny_rule_groups:
+                - level: strict
+
   imagePullSecrets:
-    - name: "docker-secret"
+    - name: "dockersecret"
+  redis:
+    enabled: true
+  echo-server:
+    enabled: true
   ingress:
     enabled: true
+    annotations:
+      nginx.ingress.kubernetes.io/rewrite-target: /
+      kubernetes.io/ingress.class: nginx
     hosts:
-      - example.virtinc.com
+        - micro-echo
   ```
 
   Afterwards apply the Helm chart configuration file with the `-f` parameter.
@@ -292,15 +283,20 @@ In case that session handling is enabled on Airlock Microgateway, a Redis servic
   ```
   redis:
     enabled: true
+  config:
+    dsl:
+      session:
+        redis_hosts: [redis-master]
   ```
 * To use an existing Redis service, adapt the Helm chart configuration as shown below:
   custom-values.yaml
   ```
-  config:
-    global:
-      redis_hosts: [ <REDIS-SERVICE>:<PORT> ]
   redis:
     enabled: false
+  config:
+    dsl:
+      session:
+        redis_hosts: [ <REDIS-SERVICE>:<PORT> ]
   ```
 
 Finally, apply the Helm chart configuration file with `-f` parameter.
@@ -332,205 +328,80 @@ Finally, apply the Helm chart configuration file with `-f` parameter.
 :information_source: **Possible settings**:<br>
 Please refer to the [Echo-Server Helm chart](https://artifacthub.io/packages/helm/ealenn/echo-server) to see all possible parameters of the Echo-Server Helm chart.
 
-## DSL configuration
-The Helm chart provides three different possibilities to configure the Microgateway.
-Depending on the environment and use case, one of the options might suit better and be easier to implement.
+## DSL Configuration
+It is possible to use all Microgateway DSL configuration options within the 'dsl' configuration parameter.
 
-### Simple DSL configuration
-The simple DSL configuration suites best for the following use case:
-| Virtual Host | Mapping | Backend Service |
-|--|--|--|
-| VH1 (hostname: virtinc.com) | M1 (entry_path: /) | BE1 |
-
-Restrictions for Simple DSL configuration:
-* Only one Virtual Host is configured.
-* Only one Mapping is configured.
-* Only one backend service is configured.
-
-By default, the Airlock Microgateway is configured with the [Simple DSL configuration](#simple-dsl-configuration). The example below shows how to adjust the default values:
+For a full list of available Microgateway configuration parameters refer to the [Microgateway Documentation](https://docs.airlock.com/microgateway/2.0.0/)
 
 **Example:**
 
   custom-values.yaml
   ```
   config:
-    global:
-      ip_header:
-        trusted_proxies:
-          - 10.0.0.0/28
-    simple:
-      mapping:
-        entry_path: /
-        operational_mode: integration
-        deny_rules:
-          level: strict
-          exceptions:
-            - parameter_name:
-                pattern: ^content$
-                ignore_case: true
-              path:
-                pattern: ^/mail/
-              method:
-                pattern: ^POST$
-      backend:
-        protocol: https
-        hostname: custom-backend-service
-        port: 8443
+    dsl:
+      session:
+        redis_hosts: [ redis-master ]
+      log:
+        level: info
+      expert_settings:
+        apache: |
+          RemoteIPHeader X-Forwarded-For
+          RemoteIPInternalProxy 10.0.0.0/28
 
-  redis:
-    enabled: true
-  ```
-
-**`config.*` Parameters which can be used**:
-* `config.simple.*`
-* `config.global.*`
-* `config.generic.*`
-
-### Advanced DSL configuration
-In case that the [Simple DSL configuration](#simple-dsl-configuration) does not suite, the advanced configuration options might help. The following use cases might require this kind of configuration:
-
-**_Use Case 1)_**
-| Virtual Host | Mapping | Backend Service |
-|--|--|--|
-| VH1 (hostname: virtinc.com) | M1 (entry_path: /) | BE1 |
-| VH2 (hostname: example.com) | M2 (entry_path: /) | BE1 |
-
-**_Use Case 2)_**
-| Virtual Host | Mapping | Backend Service |
-|--|--|--|
-| VH1 (hostname: virtinc.com) | M1 (entry_path: /)<br>M2 (entry_path: /auth/) | BE1 |
-
-**_Use Case 3)_**
-| Virtual Host | Mapping | Backend Service |
-|--|--|--|
-| VH1 (hostname: virtinc.com) | M1 (entry_path: /) | BE1 |
-| VH2 (hostname: example.com) | M2 (entry_path: /) | BE2 |
-
-The use cases outlined above can also occur slightly differently. But all of them have in common that more than one Virtual Hosts, Mappings or Backend Services are used. Whenever this is the case, the [Advanced DSL configuration](#advanced-dsl-configuration) should be preferred over the [Simple DSL configuration](#simple-dsl-configuration).
-
-**Example:**
-
-  custom-values.yaml
-  ```
-  config:
-    global:
-      ip_header:
-        trusted_proxies:
-          - 10.0.0.0/28
-    advanced:
       apps:
         - virtual_host:
             hostname: virtinc.com
           mappings:
             - name: webapp
-              entry_path: /
+              entry_path:
+                value: /
               operational_mode: integration
               session_handling: enforce_session
-              deny_rules:
-                level: standard
-                exceptions:
-                  - parameter_name:
-                      pattern: ^content$
-                      ignore_case: true
-                    path:
-                      pattern: ^/mail/
-                    method:
-                      pattern: ^POST$
             - name: api
-              entry_path: /api/
+              entry_path:
+                value: /api/
               session_handling: ignore_session
-              deny_rules:
-                - level: strict
               openapi:
                 spec_file: /config/virtinc_api_openapi.json
-          backend:
-            protocol: https
-            hostname: custom-backend-service
-            port: 8443
-
-  redis:
-    enabled: true
-  ```
-
-**`config.*` Parameters which can be used**:
-* `config.advanced.apps` - **must** be used.
-* `config.global.*`
-* `config.generic.*`
-
-### Expert DSL configuration
-In case that the [Advanced DSL configuration](#advanced-dsl-configuration) does not suite, the expert configuration options must be used. There are a few reasons listed below:
-
-* The Microgateway DSL configuration options are not available as Helm chart parameters (e.g. session.store_mode, ...)
-* The Microgateway DSL configuration file has already been used/tested thorougly. To reduce the risk of a broken or unsecure configuration, do not modify the pre-configured configuration file.
-
-**Example:**
-
-  custom-values.yaml
-  ```
-  config:
-    expert:
-      dsl:
-        license_file: /secret/config/license
-        session:
-          encryption_passphrase_file: /secret/config/passphrase
-          redis_hosts: [ redis-master ]
-        log:
-          level: info
-        expert_settings:
-          apache: |
-            RemoteIPHeader X-Forwarded-For
-            RemoteIPInternalProxy 10.0.0.0/28
-
-        apps:
-          - virtual_host:
-              hostname: virtinc.com
-            mappings:
-              - name: webapp
-                entry_path: /
-                operational_mode: integration
-                session_handling: enforce_session
-              - name: api
-                entry_path: /api/
-                session_handling: ignore_session
-                openapi:
-                  spec_file: /config/virtinc_api_openapi.json
-            backend:
-              protocol: https
-              hostname: custom-backend-service
-              port: 8443
+              backend:
+                hosts:
+                  - protocol: https
+                    name: custom-backend-service
+                    port: 8443
 
   redis:
     enabled: true
 
   ```
 
-**`config.*` Parameters which can be used**:
-* `config.expert.dsl - **must** be used.
-* `config.generic.*`
-
-## Environment variables
+## Environment Variables
+### DSL Environment Variables
 Environment variables can be configured with the Helm chart and used within the [DSL Configuration](#dsl-configuration).
-This works for all three DSL of the above configuration setups (simple, advanced and expert). The example below illustrates how to configure environment variables in combination with the [Simple DSL configuration](#simple-dsl-configuration).
+The example below illustrates how to configure environment variables in combination with the [DSL configuration](#dsl-configuration).
 
   env-variables.yaml
   ```
   config:
-    generic:
-      env:
-        - name: ALG_CFG_OPERATIONAL_MODE
-          value: production
-        - name: ALG_CFG_LOG_ONLY
-          value: false
+    env:
+      configbuilder:
+        - name: OPERATIONAL_MODE
+          value: integration
+        - name: DR_LOG_ONLY
+          value: true
   ```
 
   custom-values.yaml
   ```
   config:
-    simple:
-      mapping:
-        operational_mode: "@@ALG_CFG_OPERATIONAL_MODE@@"
-        deny_rules:
-          - log_only: "@@ALG_CFG_LOG_ONLY@@"
+    dsl:
+      apps:
+        - virtual_host:
+            hostname: virtinc.com
+          mappings:
+            - name: webapp
+              operational_mode: ${OPERATIONAL_MODE:-production}
+              deny_rules:
+                log_only: ${DR_LOG_ONLY:-false}
   ```
 
 Finally, apply the Helm chart configuration file with `-f` parameter.
@@ -538,6 +409,19 @@ Finally, apply the Helm chart configuration file with `-f` parameter.
   ```console
   helm upgrade -i microgateway airlock/microgateway -f custom-values.yaml -f env-variables.yaml
   ```
+
+### Runtime Environment Variables
+The Helm chart also allows to specify environment variables for the runtime container.
+The following example shows how to set the timezone of the microgateway:
+
+env-variables.yaml
+```
+config:
+  env:
+    runtime:
+      - name: TZ
+        value: Europe/Zurich
+```
 
 ## Extra Volumes
 The Helm chart allows you to define extra volumes which can be used in the Microgateway.
@@ -554,11 +438,12 @@ extraVolumeMounts:
     subPath: mapping.xml
 
 config:
-  advanced:
+  dsl:
     apps:
-      - mappings:
-        - name: virtinc
-          mapping_template_path: /config/template/mapping.xml
+    - virtual_host:
+        hostname: virtinc.com
+      mappings:
+        - mapping_template_path: /config/template/mapping.xml
 ```
 
 ## Probes
@@ -590,7 +475,7 @@ If desired, the liveness probe can be disabled with `livenessProbe.enabled=false
 
 ## External connectivity
 The Helm chart can be configured to create a Kubernetes Ingress or Openshift Route to pass external traffic to the Microgateway Pod.
-In case that those objects were created with this Helm chart, just follow along with the description and configuration examples.
+In case that those objects have to be created with this Helm chart, just follow along with the description and configuration examples.
 If there is already an existing Ingress or Route object and the traffic should only be passed to the Microgateway service, the information in the subchapters should provide useful information about how to integrate into the existing environment.
 
 :information_source: **Kubernetes vs. Openshift**:<br>
@@ -766,8 +651,8 @@ The following subchapters describe which information should be protected and how
 
 #### Secure handling of license and passphrase
 It is possible to use the following parameters of this Helm chart to configure license and passphrase:
-* License: `config.generic.license`
-* Passphrase: `config.generic.passphrase`
+* License: `config.license`
+* Passphrase: `config.passphrase`
 
 The Helm chart itself creates a secret and configures the Microgateway to use it. While this is already secure, because it is stored as a secret, this information might end in a Git repo or somewhere else, where too many people have access to it.
 This is why it is better to create a secret containing license and passphrase using a different process.
@@ -781,8 +666,7 @@ This is why it is better to create a secret containing license and passphrase us
   custom-values.yaml
   ```
   config:
-    generic:
-      existingSecret: "microgateway-secrets"
+    existingSecret: "microgateway-secrets"
   ```
 
 #### Credentials to pull image from Docker registry
@@ -840,11 +724,10 @@ Used for backend connection:
   Afterwards use this secret in the Helm chart configuration file.
   ```
   config:
-    generic:
-      tlsSecretName: "microgateway-tls"
+    tlsSecretName: "microgateway-tls"
   ```
 ### Service Account
-The microgateway runs under a dedicated service account created with the deployment by default.
+The Microgateway runs under a dedicated service account created with the deployment by default.
 The following example shows how to use an existing service account instead of having one created in the deployment.
 ```
 serviceAccount:

@@ -28,19 +28,13 @@ spec:
         - name: {{ template "microgateway.fullname" . }}-dockerregcred
       {{- end }}
     {{- end }}
-      securityContext:
-        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      securityContext: {{- toYaml .Values.podSecurityContext | nindent 8 }}
       serviceAccountName: {{ template "microgateway.serviceAccountName" . }}
-      containers:
-      - name: {{ .Chart.Name }}
-        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+      initContainers:
+      - name: configbuilder
+        image: "{{ .Values.image.repository.configbuilder }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
-        ports:
-        - name: http
-          containerPort: 8080
-        - name: https
-          containerPort: 8443
-        {{- with .Values.config.generic.env }}
+        {{- with .Values.config.env.configbuilder }}
         env: {{ toYaml . | nindent 10 }}
         {{- end }}
         volumeMounts:
@@ -49,9 +43,14 @@ spec:
           subPath: config.yaml
           readOnly: true
         - name: secret
-          mountPath: /secret/config/
+          mountPath: /secret/passphrase
+          subPath: passphrase
           readOnly: true
-        {{- with .Values.config.generic.tlsSecretName }}
+        - name: secret
+          mountPath: /secret/license
+          subPath: license
+          readOnly: true
+        {{- with .Values.config.tlsSecretName }}
         - name: tls
           mountPath: /secret/tls/
           readOnly: true
@@ -59,21 +58,42 @@ spec:
         {{- with .Values.extraVolumeMounts }}
           {{- toYaml . | nindent 8 }}
         {{- end }}
+        - name: config-files
+          mountPath: /resources-gen
+        resources:
+          {{- toYaml .Values.initResources | nindent 10 }}
+      containers:
+      - name: {{ .Chart.Name }}
+        image: "{{ .Values.image.repository.runtime }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        ports:
+        - name: http
+          containerPort: 8080
+        - name: https
+          containerPort: 8443
+        - name: probes
+          containerPort: 9090
+        {{- with .Values.config.env.runtime }}
+        env: {{ toYaml . | nindent 10 }}
+        {{- end }}
+        volumeMounts:
+        - name: config-files
+          mountPath: /config/
         {{- if .Values.livenessProbe.enabled }}
         livenessProbe:
           failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
           timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
           httpGet:
-            path: /healthz
-            port: http
+            path: /healthy
+            port: probes
           initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
         {{- end }}
         {{- if .Values.readinessProbe.enabled }}
         readinessProbe:
           failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
           httpGet:
-            path: /healthz
-            port: http
+            path: /alive
+            port: probes
           initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
         {{- end }}
         lifecycle:
@@ -93,11 +113,13 @@ spec:
       - name: secret
         secret:
           secretName: {{ template "microgateway.secretName" . }}
-      {{- with .Values.config.generic.tlsSecretName }}
+      {{- with .Values.config.tlsSecretName }}
       - name: tls
         secret:
           secretName: {{ . }}
       {{- end }}
+      - name: config-files
+        emptyDir: {}
       {{- with .Values.extraVolumes }}
         {{- toYaml . | nindent 6 }}
       {{- end }}

@@ -1,0 +1,250 @@
+suite: test ingress
+release:
+  name: my-microgateway
+chart:
+  version: 1.0.1
+templates:
+  - ingress.yaml
+tests:
+  - it: does not create ingress if it is not enabled
+    set:
+      ingress.enabled: false
+    asserts:
+      - hasDocuments:
+        count: 0
+  - it: does use correct api version with 1.19.0
+    capabilities:
+      majorVersion: 1
+      minorVersion: 19
+    set:
+      ingress.enabled: true
+    asserts:
+    - equal:
+        path: apiVersion
+        value: networking.k8s.io/v1
+  - it: does use correct api version before 1.14.0
+    capabilities:
+      majorVersion: 1
+      minorVersion: 13
+    set:
+      ingress.enabled: true
+    asserts:
+    - equal:
+        path: apiVersion
+        value: extensions/v1beta1
+  - it: does use correct api version with 1.14.0
+    capabilities:
+      majorVersion: 1
+      minorVersion: 14
+    set:
+      ingress.enabled: true
+    asserts:
+    - equal:
+        path: apiVersion
+        value: networking.k8s.io/v1beta1
+
+  - it: does add annotations
+    set:
+      ingress.enabled: true
+      ingress.annotations:
+        a: b
+        b: c
+    asserts:
+      - equal:
+          path: metadata.annotations.[a]
+          value: "b"
+      - equal:
+          path: metadata.annotations.[b]
+          value: "c"
+
+  - it: does add rules beta1
+    capabilities:
+      majorVersion: 1
+      minorVersion: 14
+    set:
+      ingress.enabled: true
+      ingress.path: /asdf/
+      ingress.targetPort: 8888
+      ingress.hosts:
+        - b.com
+        - c.com
+    asserts:
+      - equal:
+          path: spec.rules[0].host
+          value: "b.com"
+      - equal:
+          path: spec.rules[0].http.paths[0].path
+          value: "/asdf/"
+      - equal:
+          path: spec.rules[0].http.paths[0].backend.serviceName
+          value: "my-microgateway"
+      - equal:
+          path: spec.rules[0].http.paths[0].backend.servicePort
+          value: 8888
+      - equal:
+          path: spec.rules[1].host
+          value: "c.com"
+      - equal:
+          path: spec.rules[1].http.paths[0].path
+          value: "/asdf/"
+      - equal:
+          path: spec.rules[1].http.paths[0].backend.serviceName
+          value: "my-microgateway"
+      - equal:
+          path: spec.rules[1].http.paths[0].backend.servicePort
+          value: 8888
+  - it: does add rules with numeric ports v1
+    capabilities:
+      majorVersion: 1
+      minorVersion: 19
+    set:
+      ingress.enabled: true
+      ingress.path: /asdf/
+      ingress.servicePortNumber: 8888
+      ingress.hosts:
+        - b.com
+        - c.com
+    asserts:
+      - equal:
+          path: spec.rules[0].host
+          value: "b.com"
+      - equal:
+          path: spec.rules[0].http.paths[0].path
+          value: "/asdf/"
+      - equal:
+          path: spec.rules[0].http.paths[0].backend.service.name
+          value: "my-microgateway"
+      - equal:
+          path: spec.rules[0].http.paths[0].backend.service.port.number
+          value: 8888
+      - equal:
+          path: spec.rules[1].host
+          value: "c.com"
+      - equal:
+          path: spec.rules[1].http.paths[0].path
+          value: "/asdf/"
+      - equal:
+          path: spec.rules[1].http.paths[0].backend.service.name
+          value: "my-microgateway"
+      - equal:
+          path: spec.rules[1].http.paths[0].backend.service.port.number
+          value: 8888
+
+  - it: does add rules with port name v1
+    capabilities:
+      majorVersion: 1
+      minorVersion: 19
+    set:
+      ingress.enabled: true
+      ingress.path: /asdf/
+      ingress.servicePortName: myport
+      ingress.hosts:
+        - b.com
+    asserts:
+      - equal:
+          path: spec.rules[0].host
+          value: "b.com"
+      - equal:
+          path: spec.rules[0].http.paths[0].path
+          value: "/asdf/"
+      - equal:
+          path: spec.rules[0].http.paths[0].backend.service.name
+          value: "my-microgateway"
+      - equal:
+          path: spec.rules[0].http.paths[0].backend.service.port.name
+          value: myport
+
+  - it: port number has precedence over port name v1
+    capabilities:
+      majorVersion: 1
+      minorVersion: 19
+    set:
+      ingress.enabled: true
+      ingress.path: /asdf/
+      ingress.servicePortNumber: 8080
+      ingress.servicePortName: myport
+      ingress.hosts:
+        - b.com
+    asserts:
+      - equal:
+          path: spec.rules[0].host
+          value: "b.com"
+      - equal:
+          path: spec.rules[0].http.paths[0].path
+          value: "/asdf/"
+      - equal:
+          path: spec.rules[0].http.paths[0].backend.service.name
+          value: "my-microgateway"
+      - equal:
+          path: spec.rules[0].http.paths[0].backend.service.port.number
+          value: 8080
+      - isNull:
+          path: spec.rules[0].http.paths[0].backend.service.port.name
+
+  - it: port name http is used as default v1
+    capabilities:
+      majorVersion: 1
+      minorVersion: 19
+    set:
+      ingress.enabled: true
+      ingress.path: /asdf/
+      ingress.hosts:
+        - b.com
+    asserts:
+      - equal:
+          path: spec.rules[0].host
+          value: "b.com"
+      - equal:
+          path: spec.rules[0].http.paths[0].path
+          value: "/asdf/"
+      - equal:
+          path: spec.rules[0].http.paths[0].backend.service.name
+          value: "my-microgateway"
+      - equal:
+          path: spec.rules[0].http.paths[0].backend.service.port.name
+          value: http
+      - isNull:
+          path: spec.rules[0].http.paths[0].backend.service.port.number
+
+
+  - it: does not add rules if no host is given
+    set:
+      ingress.enabled: true
+      ingress.path: /asdf/
+      ingress.targetPort: 8888
+      ingress.hosts: []
+    asserts:
+      - isNull:
+          path: spec.rules
+
+  - it: does not add tls if not specified
+    set:
+      ingress.enabled: true
+    asserts:
+      - isNull:
+          path: spec.tls
+  - it: does add tls section if tls hosts are specified
+    set:
+      ingress.enabled: true
+      ingress.tls:
+        - secretName: secrets
+          hosts:
+            - a.com
+            - b.com
+        - secretName: secret2
+
+    asserts:
+      - equal:
+          path: spec.tls[0].secretName
+          value: secrets
+      - equal:
+          path: spec.tls[0].hosts[0]
+          value: a.com
+      - equal:
+          path: spec.tls[0].hosts[1]
+          value: b.com
+      - equal:
+          path: spec.tls[1].secretName
+          value: secret2
+      - isNull:
+          path: spec.tls[1].hosts

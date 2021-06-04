@@ -1,0 +1,124 @@
+suite: test deployment - container settings
+release:
+  name: my-microgateway
+chart:
+  version: 1.0.1
+
+tests:
+  - it: does create correct image data
+    set:
+      image.repository.runtime: myrepo/airlock/microgateway
+      image.tag: test-latest
+      image.pullPolicy: Always
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].name
+          value: microgateway
+      - equal:
+          path: spec.template.spec.containers[0].image
+          value: myrepo/airlock/microgateway:test-latest
+      - equal:
+          path: spec.template.spec.containers[0].imagePullPolicy
+          value: Always
+    templates:
+      - deployment.yaml
+
+  - it: does create environment variables
+    set:
+      config.env.runtime:
+        - name: A
+          value: a
+        - name: B
+          value: b
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].env[0].name
+          value: A
+      - equal:
+          path: spec.template.spec.containers[0].env[0].value
+          value: a
+      - equal:
+          path: spec.template.spec.containers[0].env[1].name
+          value: B
+      - equal:
+          path: spec.template.spec.containers[0].env[1].value
+          value: b
+    templates:
+      - deployment.yaml
+
+  - it: does create volumes
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].volumeMounts[0].name
+          value: config-files
+      - equal:
+          path: spec.template.spec.containers[0].volumeMounts[0].mountPath
+          value: /config/
+    templates:
+      - deployment.yaml
+
+  - it: does create resources
+    set:
+      resources:
+        request:
+          memory: 334Mi
+          cpu: 126m
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].resources.request.memory
+          value: 334Mi
+      - equal:
+          path: spec.template.spec.containers[0].resources.request.cpu
+          value: 126m
+    templates:
+      - deployment.yaml
+
+  - it: does create ports
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].ports[0].name
+          value: http
+      - equal:
+          path: spec.template.spec.containers[0].ports[1].name
+          value: https
+      - equal:
+          path: spec.template.spec.containers[0].ports[2].name
+          value: probes
+    templates:
+      - deployment.yaml
+
+  - it: does create probes
+    set:
+      livenessProbe.failureThreshold: 1
+      livenessProbe.timeoutSeconds: 2
+      livenessProbe.initialDelaySeconds: 3
+      readinessProbe.failureThreshold: 4
+      readinessProbe.initialDelaySeconds: 5
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].livenessProbe.failureThreshold
+          value: 1
+      - equal:
+          path: spec.template.spec.containers[0].livenessProbe.timeoutSeconds
+          value: 2
+      - equal:
+          path: spec.template.spec.containers[0].livenessProbe.initialDelaySeconds
+          value: 3
+      - equal:
+          path: spec.template.spec.containers[0].readinessProbe.failureThreshold
+          value: 4
+      - equal:
+          path: spec.template.spec.containers[0].readinessProbe.initialDelaySeconds
+          value: 5
+    templates:
+      - deployment.yaml
+
+  - it: does create container security context
+    set:
+      securityContext.fsGroup: 2000
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].securityContext.fsGroup
+          value: 2000
+    templates:
+      - deployment.yaml

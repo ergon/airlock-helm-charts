@@ -2,139 +2,52 @@
 replicaCount: 1
 
 image:
-  # image.repository -- Image repository
-  repository: ergon/airlock-microgateway
-  # image.tag -- Image tag
-  tag: "1.0.1"
+  # image.repository -- Image repositories for the Airlock Microgateway.
+  repository:
+    # image.repository.runtime -- Image repository for the Airlock Microgateway runtime image
+    runtime: docker.io/ergon/airlock-microgateway
+    # image.repository.configbuilder -- Image repository for the Airlock Microgateway configbuilder image
+    configbuilder: docker.io/ergon/airlock-microgateway-configbuilder
+  # image.tag -- Image tag for microgateway and configbuilder image
+  tag: "2.0.0"
   # image.pullPolicy -- Pull policy (`Always`, `IfNotPresent`, `Never`)
   pullPolicy: IfNotPresent
 
 ## Microgateway Config
 ##
 config:
-  # config.simple -- [Simple DSL configuration](#simple-dsl-configuration)
-  # @default -- See `config.simple.*`:
-  simple:
-    mapping:
-      # config.simple.mapping.entry_path -- The `entry_path` of the app.
-      entry_path: /
-      # config.simple.mapping.operational_mode -- Operational mode (`production`, `integration`).
-      operational_mode: production
-      # config.simple.mapping.session_handling -- Session handling (`enforce_session`, `ignore_session`, `optional_session`, `optional_session_no_refresh`).
-      # @default -- - `enforce_session`<br> If `redis.enabled=true` <br> or `config.global.redis_hosts`<br><br> - `ignore_session`<br> If `redis.enabled=false`
-      session_handling: ""
-      deny_rules:
-        # config.simple.mapping.deny_rules.enabled -- Enable all Deny rules.
-        enabled: true
-        # config.simple.mapping.deny_rules.level -- Security Level for all Deny rules (`basic`, `standard`, `strict`).
-        level: standard
-        # config.simple.mapping.deny_rules.log_only -- Enable log only for all Deny rules.
-        log_only: false
-        # config.simple.mapping.deny_rules.exceptions -- Deny rule exceptions.
-        exceptions: []
-        # - parameter_name:
-        #     pattern: (PCRE Pattern-String)
-        #     ignore_case: (default: TRUE)
-        #     inverted: (default: FALSE)
-    backend:
-      # config.simple.backend.hostname -- Backend hostname
-      hostname: backend-service
-      # config.simple.backend.port -- Backend port
-      port: 8080
-      # config.simple.backend.protocol -- Backend protocol
-      protocol: http
+  # config.env -- [DSL Environment Variables](#dsl-environment-variables)
+  env:
+    # config.env.configbuilder -- [DSL Environment Variables](#dsl-environment-variables)
+    configbuilder: []
+    # config.env.runtime -- [Runtime Environment Variables](#runtime-environment-variables)
+    runtime: []
+  # config.tlsSecretName -- (string) Name of an existing secret containing:<br><br>
+  # _Virtual Host:_<br>
+  # Certificate: `frontend-server.crt`<br>
+  # Private key: `frontend-server.key`<br>
+  # CA: `frontend-server-ca.crt` <br>
+  # :exclamation: Update `route.tls.destinationCACertificate` accordingly.<br><br>
+  # _Backend:_<br>
+  # Certificate: `backend-client.crt`<br>
+  # Private key: `backend-client.key`<br>
+  # CA: `backend-server-validation-ca.crt`
+  # @default -- ""
+  tlsSecretName:
+  # config.passphrase -- Passphrase used for encryption.
+  # @default -- - `passphrase`<br> If `passphrase` in `config.existingSecret` <br><br> - `<generated passphrase>`<br> If no passphrase available.
+  passphrase:
+  # config.license -- (string) License (multiline string)
+  # @default -- ""
+  license:
+  # config.existingSecret -- (string) Name of an existing secret containing:<br><br>
+  # license: `license`<br>
+  # passphrase: `passphrase`
+  # @default -- ""
+  existingSecret:
 
-  # config.global -- Available for:<br>
-  # - [Simple DSL configuration](#simple-dsl-configuration)<br>
-  # - [Advanced DSL configuration](#advanced-dsl-configuration)
-  # @default -- See `config.global.*`:
-  global:
-    expert_settings:
-      # config.global.expert_settings.apache -- Global Apache Expert Settings (multiline string).
-      # @default -- ""
-      apache:
-      # config.global.expert_settings.security_gate -- Global SecurityGate Expert Settings (multiline string).
-      # @default -- ""
-      security_gate:
-    # config.global.log_level -- Log level (`info`, `trace`).<br>
-    # :exclamation: Never use `trace` in production.
-    log_level: info
-    # config.global.redis_hosts -- List of Redis hosts.
-    # @default -- `[]` if `redis.enabled=false` or <br> `[ redis-master ]` if `redis.enabled=true`
-    redis_hosts: []
-    ip_header:
-      # config.global.ip_header.header -- HTTP header to extract the client IP address.
-      header: X-Forwarded-For
-      # config.global.ip_header.trusted_proxies -- Trusted IP addresses to extract the client IP from HTTP header.<br><br>
-      # :exclamation: IP addresses are only extracted if `trusted_proxies` are configured.
-      trusted_proxies: []
-
-    backend:
-      tls:
-        # config.global.backend.tls.server_ca -- Validates the backend server certificate against the configured CA. <br>
-        # :exclamation: Must be configured in `config.generic.tlsSecretName`.
-        server_ca: false
-        # config.global.backend.tls.client_cert -- Use TLS client certificate for backend connections. <br>
-        # :exclamation: Must be configured in `config.generic.tlsSecretName`.
-        client_cert: false
-        # config.global.backend.tls.verify_host -- Verify the backend TLS certificate.<br>
-        # :exclamation: `config.global.backend.tls.server_ca` must be configured in order to work.
-        verify_host: false
-        # config.global.backend.tls.version -- Overwrite the default TLS version for backend connections.<br>
-        version: ""
-        # config.global.backend.tls.cipher_suite -- Overwrite the default TLS ciphers (<=TLS 1.2) for backend connections.
-        cipher_suite: ""
-        # config.global.backend.tls.cipher_suite_v13 -- Overwrite the default TLS ciphers (TLS 1.3) for backend connections.
-        cipher_suite_v13: ""
-
-    virtual_host:
-      tls:
-        # config.global.virtual_host.tls.protocol -- Overwrite the default TLS protocol for frontend connections.
-        protocol: ""
-        # config.global.virtual_host.tls.cipher_suite -- Overwrite the default TLS ciphers for frontend connections.
-        cipher_suite: ""
-
-  # config.generic -- Available for:<br>
-  # - [Simple DSL configuration](#simple-dsl-configuration)<br>
-  # - [Advanced DSL configuration](#advanced-dsl-configuration)<br>
-  # - [Expert DSL configuration](#expert-dsl-configuration)
-  # @default -- See `config.generic.*`:
-  generic:
-    # config.generic.env -- [Environment variables](#environment-variables)
-    env: []
-    #  - name: ALG_CFG_EXAMPLE
-    #    value: Example_Value
-    # config.generic.tlsSecretName -- (string) Name of an existing secret containing:<br><br>
-    # _Virtual Host:_<br>
-    # Certificate: `frontend-server.crt`<br>
-    # Private key: `frontend-server.key`<br>
-    # CA: `frontend-server-ca.crt` <br>
-    # :exclamation: Update `route.tls.destinationCACertificate` accordingly.<br><br>
-    # _Backend:_<br>
-    # Certificate: `backend-client.crt`<br>
-    # Private key: `backend-client.key`<br>
-    # CA: `backend-server-validation-ca.crt`
-    # @default -- ""
-    tlsSecretName:
-    # config.generic.passphrase -- Passphrase used for encryption.
-    # @default -- - `passphrase`<br> If `passphrase` in `config.generic.existingSecret` <br><br> - `<generated passphrase>`<br> If no passphrase available.
-    passphrase:
-    # config.generic.license -- (string) License (multiline string)
-    # @default -- ""
-    license:
-    # config.generic.existingSecret -- (string) Name of an existing secret containing:<br><br>
-    # license: `license`<br>
-    # passphrase: `passphrase`
-    # @default -- ""
-    existingSecret:
-
-  # config.advanced.apps -- [Advanced DSL configuration](#advanced-dsl-configuration)
-  advanced:
-    apps: []
-
-  # config.expert.dsl -- [Expert DSL configuration](#expert-dsl-configuration)
-  expert:
-    dsl: {}
+  # config.dsl -- [DSL configuration](#dsl-configuration)
+  dsl: {}
 
 # commonLabels -- Labels to add to all resources.
 commonLabels: {}
@@ -142,6 +55,7 @@ commonLabels: {}
 imagePullSecrets: []
   # - name: "image-pull-secret"
 # imageCredentials -- Creates a imagePullSecret with the provided values.
+# @default -- See `imageCredentials.*`:
 imageCredentials:
   # imageCredentials.enabled -- Enable the imagePullSecret creation.
   enabled: false
@@ -216,10 +130,20 @@ ingress:
   # ingress.hosts -- List of ingress hosts.
   hosts:
     - virtinc.com
+  # ingress.pathType -- pathType of the ingress path (used with ingress v1 and higher)
+  pathType: Prefix
   # ingress.path -- Path for the ingress.
   path: /
-  # ingress.targetPort -- Target port of the service (`http`, `https` or `<number>`).
+  # ingress.targetPort -- Target port of the service with ingress API version networking.k8s.io/v1beta1 (Kubernetes version < 1.19)
+  # Possible values are: `http`, `https` or `<number>`.
   targetPort: http
+  # ingress.servicePortName -- Name of the service target port with ingress API version networking.k8s.io/v1 (Kubernetes version >= 1.19)
+  # `ingress.servicePortNumber` takes precedence over `ingress.servicePortName` if both are specified.
+  # Possible Values are: `http`, `https`.
+  servicePortName: http
+  # ingress.servicePortNumber -- Number of the service target port with ingress API version networking.k8s.io/v1 (Kubernetes version >= 1.19)
+  # `ingress.servicePortNumber` takes precedence over `ingress.servicePortName` if both are specified.
+  servicePortNumber:
 
   # ingress.tls -- [Ingress TLS](https://kubernetes.io/docs/concepts/services-networking/ingress/#tls) configuration.
   tls: []
@@ -298,13 +222,43 @@ route:
       Q4ph1jI/QLl5lsYtDm4SLt1ALvgRQj8QerJdZ/SrmfFmUkOx3lGpBChM0lT+wkrI
       aw/GIcvwLSquzFBrlU3Jhg+wu8p/514lgiShy39fmzMOa3Q0/5jF3qM74+lGUsA=
       -----END CERTIFICATE-----
-# resources -- [Resource limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container)
+# resources -- Resource requests/limits for the runtime container. <br>
+# [Resource limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) <br>
+# [Configure Quality of Service for Pods](https://kubernetes.io/docs/tasks/configure-pod-container/quality-service-pod/)
+# @default -- See `resources.*`
 resources:
+  # resources.requests -- Resource requests for the Microgateway runtime container. These values most like have to be adjusted depending on specific load and usage profiles. <br>
+  # Please consult [Microgateway resrouce requirements](https://docs.airlock.com/microgateway/latest/#data/resourcerequ.html)
+  # for some ideas about actual Microgateway resource requirements.
+  # @default -- See `resources.requests.*`
   requests:
+    # resources.requests.memory -- Memory request for the runtime container.
     memory: 256Mi
+    # resources.requests.cpu -- CPU request for the runtime container.
     cpu: 30m
+  # resources.limits -- Resource limits for the runtime container.
+  # @default -- See `resources.limits.*`
   limits:
+    # resources.limits.memory -- Memory limit for the runtime container.
     memory: 4048Mi
+# initResources -- Resource requests/limits for the init container. <br>
+# [Init container resource limits](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/#resources)
+# @default -- See `initResources.*`
+initResources:
+  # initResources.requests -- Resource requests for the init container.
+  # @default -- See `initResources.requests.*`
+  requests:
+    # initResources.requests.memory -- Memory request for the init container.
+    memory: 256Mi
+    # initResources.requests.cpu -- CPU request for the init container.
+    cpu: 30m
+  # initResources.limits -- Resource limits for the init container.
+  # @default -- See `initResources.limits.*`
+  limits:
+    # initResources.limits.memory -- Memory limit for the init container.
+    memory: 512Mi
+    # initResources.limits.cpu -- CPU limit for the init container.
+    cpu: 1000m
 
 ## Liveness and readiness probe values
 ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
@@ -374,7 +328,7 @@ redis:
 echo-server:
   # echo-server.enabled -- Deploy pre-configured [Echo-Server](#echo-server).
   enabled: false
-  fullnameOverride: backend-service
+  fullnameOverride: backend
   service:
     port: 8080
 
@@ -391,9 +345,11 @@ hpa:
   minReplicas: 1
   resource:
     # hpa.resource.memory -- Average Microgateway Memory consumption to scale up/down.<br><br>
-    # :exclamation: Update this setting accordingly to `resources.limits.memory`.
-    memory: 2Gi
-    # hpa.resource.cpu -- Average Microgateway CPU consumption in percentage to scale up/down.
+    # :exclamation: Update this setting depending on your `resources.limits.memory` setting.
+    memory: 3Gi
+    # hpa.resource.cpu -- Average Microgateway CPU consumption in percentage to scale up/down.<br><br>
+    # :exclamation: Please set the resource request parameter `resources.cpu` to a value reflecting your actual resource needs if
+    # you use autoscaling based on cpu consumption. Otherwise autoscaling will not work as expected.
     cpu: 50
 # test_request -- Request that will be used as a smoketest when 'helm test' is invoked.
 test_request: /

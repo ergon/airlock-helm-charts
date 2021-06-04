@@ -20,10 +20,8 @@ Please delete options that are irrelevant.
 - [ ] Documentation
 
 ## How has this been tested?
-Please describe the tests you ran to verify the changes. Provide instructions that we can re-run the tests. Please list any relevant details for tests setup.
+Please describe the tests you ran in addition to the unit tests. Provide instructions to re-run the tests. Please list any relevant details for test setup.
 
-- Test A
-- Test B
 
 **Versions**
 * Microgateway:
@@ -33,6 +31,7 @@ Please describe the tests you ran to verify the changes. Provide instructions th
 
 ## Checklist:
 - [ ] The code has been reviewed (self-review, ...).
+- [ ] Unit tests have been implemented.
 - [ ] The parts of the code which are hard to understand are commented.
 - [ ] The corresponding documentation has been updated.
 - [ ] The changes do not cause warnings.

@@ -1,0 +1,100 @@
+suite: test hpa
+templates:
+  - hpa.yaml
+release:
+  name: my-microgateway
+chart:
+  version: 1.0.1
+tests:
+  - it: does not create hpa if it is not enabled
+    set:
+      hpa.enabled: false
+    asserts:
+      - hasDocuments:
+          count: 0
+  - it: does use correct replica values
+    set:
+      hpa.maxReplicas: 5
+      hpa.minReplicas: 1
+      hpa.enabled: true
+    asserts:
+      - equal:
+          path: spec.maxReplicas
+          value: 5
+      - equal:
+          path: spec.minReplicas
+          value: 1
+  - it: does use correct targetRef
+    set:
+      hpa.enabled: true
+    asserts:
+      - equal:
+          path: spec.scaleTargetRef.kind
+          value: Deployment
+      - equal:
+          path: spec.scaleTargetRef.name
+          value: my-microgateway
+  - it: does use correct resource settings - beta1
+    capabilities:
+      majorVersion: 1
+      minorVersion: 11
+    set:
+      hpa.enabled: true
+      hpa.resource.memory: 1Gi
+      hpa.resource.cpu: 20
+    asserts:
+      - equal:
+          path: apiVersion
+          value: autoscaling/v2beta1
+      - equal:
+          path: spec.metrics[0].resource.name
+          value: cpu
+      - equal:
+          path: spec.metrics[0].resource.targetAverageUtilization
+          value: 20
+      - equal:
+          path: spec.metrics[1].resource.name
+          value: memory
+      - equal:
+          path: spec.metrics[1].resource.targetAverageValue
+          value: 1Gi
+
+  - it: does use correct resource settings - beta2
+    capabilities:
+      majorVersion: 1
+      minorVersion: 12
+    set:
+      hpa.enabled: true
+      hpa.resource.memory: 1Gi
+      hpa.resource.cpu: 20
+    asserts:
+      - equal:
+          path: apiVersion
+          value: autoscaling/v2beta2
+      - equal:
+          path: spec.metrics[0].resource.name
+          value: cpu
+      - equal:
+          path: spec.metrics[0].resource.target.averageUtilization
+          value: 20
+      - equal:
+          path: spec.metrics[1].resource.name
+          value: memory
+      - equal:
+          path: spec.metrics[1].resource.target.averageValue
+          value: 1Gi
+  - it: does use correct resource settings without cpu
+    capabilities:
+      majorVersion: 1
+      minorVersion: 12
+    set:
+      hpa.enabled: true
+      hpa.resource.memory: 1Gi
+      hpa.resource.cpu: null
+    asserts:
+      - equal:
+          path: spec.metrics[0].resource.name
+          value: memory
+      - equal:
+          path: spec.metrics[0].resource.target.averageValue
+          value: 1Gi

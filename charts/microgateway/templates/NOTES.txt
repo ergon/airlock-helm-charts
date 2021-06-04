@@ -32,8 +32,8 @@ The Airlock microgateway has been installed.
     ###############################################################################
 {{- end }}
 
-* ConfigMap: 
-  To see the Microgateway DSL run the follwing command: 
+* ConfigMap:
+  To see the Microgateway DSL run the follwing command:
   kubectl describe configmap {{ template "microgateway.fullname" . }}
 
 * Microgateway Pods:
@@ -44,6 +44,11 @@ The Airlock microgateway has been installed.
   To see the Microgateway Logs of a Pod run the following commands:
   export MICROGATEWAYPOD=$(kubectl get pods --selector app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/name={{ include "microgateway.name" . }} | grep {{ template "microgateway.fullname" . }} | head -1 | cut -d ' ' -f 1)
   kubectl logs $MICROGATEWAYPOD -f
+
+* Microgateway Init Container Logs:
+  To see the logs of the init container run the following commands:
+  export MICROGATEWAYPOD=$(kubectl get pods --selector app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/name={{ include "microgateway.name" . }} | grep {{ template "microgateway.fullname" . }} | head -1 | cut -d ' ' -f 1)
+  kubectl logs $MICROGATEWAYPOD -c configbuilder
 
 * Microgateway Console:
   To connect to the console of the Microgateway run the follwing commands:
