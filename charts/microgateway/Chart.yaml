@@ -15,4 +15,4 @@ maintainers:
     name: Airlock
 name: microgateway
 version: 0.7.0
-appVersion: "2.0"
+appVersion: "2.0.0"
