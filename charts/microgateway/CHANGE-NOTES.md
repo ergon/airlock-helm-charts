@@ -1,5 +1,5 @@
 # Change Log
-## 0.7
+## 1.0.0
 
 ### Enhancements
 - Update to Microgateway 2.0.0.
