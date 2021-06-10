@@ -22,6 +22,8 @@
 *.tmproj
 .vscode/
 
+# CI
+ci
 
 # Unit Tests
 tests
