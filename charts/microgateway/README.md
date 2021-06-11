@@ -331,7 +331,7 @@ Please refer to the [Echo-Server Helm chart](https://artifacthub.io/packages/hel
 ## DSL Configuration
 It is possible to use all Microgateway DSL configuration options within the 'dsl' configuration parameter.
 
-For a full list of available Microgateway configuration parameters refer to the [Microgateway Documentation](https://docs.airlock.com/microgateway/2.0.1/)
+For a full list of available Microgateway configuration parameters refer to the [Microgateway Documentation](https://docs.airlock.com/microgateway/latest/)
 
 **Example:**
 
