@@ -5,7 +5,7 @@ It is the lightweight, container-based deployment form of the *Airlock Gateway*,
 
 The Airlock helm charts are used internally for testing the *Airlock Microgateway*. We make them available publicly under the [MIT license](https://github.com/ergon/airlock-helm-charts/blob/master/LICENSE).
 
-The current chart version is: 1.0.0
+The current chart version is: 1.0.1
 
 ## Change Notes
 [CHANGE-NOTES](CHANGE-NOTES.md) contains a list of noteworthy changes in the Microgateway Helm Chart.
@@ -118,7 +118,7 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | image.repository | object | `{"configbuilder":"docker.io/ergon/airlock-microgateway-configbuilder","runtime":"docker.io/ergon/airlock-microgateway"}` | Image repositories for the Airlock Microgateway. |
 | image.repository.configbuilder | string | `"docker.io/ergon/airlock-microgateway-configbuilder"` | Image repository for the Airlock Microgateway configbuilder image |
 | image.repository.runtime | string | `"docker.io/ergon/airlock-microgateway"` | Image repository for the Airlock Microgateway runtime image |
-| image.tag | string | `"2.0.0"` | Image tag for microgateway and configbuilder image |
+| image.tag | string | `"2.0.1"` | Image tag for microgateway and configbuilder image |
 | imageCredentials | object | See `imageCredentials.*`: | Creates a imagePullSecret with the provided values. |
 | imageCredentials.enabled | bool | `false` | Enable the imagePullSecret creation. |
 | imageCredentials.password | string | `""` | imagePullSecret password/Token |
@@ -331,7 +331,7 @@ Please refer to the [Echo-Server Helm chart](https://artifacthub.io/packages/hel
 ## DSL Configuration
 It is possible to use all Microgateway DSL configuration options within the 'dsl' configuration parameter.
 
-For a full list of available Microgateway configuration parameters refer to the [Microgateway Documentation](https://docs.airlock.com/microgateway/2.0.0/)
+For a full list of available Microgateway configuration parameters refer to the [Microgateway Documentation](https://docs.airlock.com/microgateway/2.0.1/)
 
 **Example:**
 
