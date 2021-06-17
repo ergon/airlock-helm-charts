@@ -235,10 +235,13 @@ The Airlock Microgateway Helm chart has many parameters and most of them are alr
     dsl:
       session:
         redis_hosts: [redis-master]
-      expert_settings:
-        apache: |
-          RemoteIPHeader X-Forwarded-For
-          RemoteIPInternalProxy 10.0.0.0/28
+      log:
+        level: info
+      remote_ip:
+        header: X-Forwarded-For
+        internal_proxies:
+          - 10.0.0.0/28
+
       apps:
         - mappings:
             - session_handling: enforce_session
@@ -296,7 +299,7 @@ In case that session handling is enabled on Airlock Microgateway, a Redis servic
   config:
     dsl:
       session:
-        redis_hosts: [ <REDIS-SERVICE>:<PORT> ]
+        redis_hosts: [<REDIS-SERVICE>:<PORT>]
   ```
 
 Finally, apply the Helm chart configuration file with `-f` parameter.
@@ -340,13 +343,13 @@ For a full list of available Microgateway configuration parameters refer to the 
   config:
     dsl:
       session:
-        redis_hosts: [ redis-master ]
+        redis_hosts: [redis-master]
       log:
         level: info
-      expert_settings:
-        apache: |
-          RemoteIPHeader X-Forwarded-For
-          RemoteIPInternalProxy 10.0.0.0/28
+      remote_ip:
+        header: X-Forwarded-For
+        internal_proxies:
+          - 10.0.0.0/28
 
       apps:
         - virtual_host:
