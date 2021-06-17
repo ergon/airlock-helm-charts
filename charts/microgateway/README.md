@@ -61,7 +61,7 @@ This Helm chart bootstraps [Airlock Microgateway](https://www.airlock.com) on a 
 * The Airlock Microgateway image
 * Airlock Microgateway is available as premium and community edition. <br>
   Without a valid license, Airlock Microgateway works as community edition with limited functionality. <br>
-  For further information refer to [Microgateway Documentation](https://docs.airlock.com/microgateway/latest/)
+  For further information refer to [Microgateway Documentation](https://docs.airlock.com/microgateway/latest/). <br>
   To order a license, please contact sales@airlock.com.
 * Redis service for session handling (see chapter [Dependencies](#dependencies))
 
