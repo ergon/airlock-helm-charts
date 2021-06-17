@@ -59,7 +59,10 @@ This Helm chart bootstraps [Airlock Microgateway](https://www.airlock.com) on a 
 
 ## Prerequisites
 * The Airlock Microgateway image
-* A valid license for Airlock Microgateway
+* Airlock Microgateway is available as premium and community edition. <br>
+  Without a valid license, Airlock Microgateway works as community edition with limited functionality. <br>
+  For further information refer to [Microgateway Documentation](https://docs.airlock.com/microgateway/latest/)
+  To order a license, please contact sales@airlock.com.
 * Redis service for session handling (see chapter [Dependencies](#dependencies))
 
 ## Quick start guide
@@ -79,7 +82,7 @@ To install the chart with the release name `microgateway`:
   helm upgrade -i microgateway airlock/microgateway -f license.yaml
   ```
 
-:exclamation: Airlock Microgateway will not work without a valid license. For further information see chapter [Configure a valid license](#configure-a-valid-license)
+:exclamation: Consult chapter [Configure a valid license](#configure-a-valid-license) for further instructions.
 
 ### Uninstalling the chart
 To uninstall the chart with the release name `microgateway`:
@@ -214,8 +217,6 @@ config:
   ```console
   helm upgrade -i microgateway airlock/microgateway -f license.yaml
   ```
-
-:exclamation: Airlock Microgateway will not work without a valid license. To order one, please contact sales@airlock.com.
 
 :information_source: **Note**:<br>
 In productive environments, licenses might be deployed and handled in a different lifecycles. In such cases, an existing license secret may be referenced. Further information is provided in chapter [Secure handling of license and passphrase](#secure-handling-of-license-and-passphrase).
@@ -670,7 +671,8 @@ This is why it is better to create a secret containing license and passphrase us
   ```
 
 #### Credentials to pull image from Docker registry
-The Microgateway image is published in a private Docker registry to which only granted accounts have access.
+The Microgateway image is published on our Docker Hub repository. The repository itself is public and the image can be pulled without special permissions.
+Nevertheless, Docker has [rate limits](https://www.docker.com/increase-rate-limits) for anonymous users in place. Therefore, it is recommended to use an Docker Hub account to pull the image.
 In order to download this image, the Helm chart needs the Docker credentials to authenticate against the Docker registry.
 Either an already existing Docker secret is provided (`imagePullSecrets`) during the installation of the Microgateway, or a Kubernetes secret is created with the provided credentials (`imageCredentials`).
 
