@@ -22,8 +22,8 @@
 *.tmproj
 .vscode/
 
-# CI
-ci
-
-# Unit Tests
-tests
+# helm chart folders and files
+ci/
+tests/
+README.md.gotmpl
+.helmignore
