@@ -5,7 +5,7 @@ It is the lightweight, container-based deployment form of the *Airlock Gateway*,
 
 The Airlock helm charts are used internally for testing the *Airlock Microgateway*. We make them available publicly under the [MIT license](https://github.com/ergon/airlock-helm-charts/blob/master/LICENSE).
 
-The current chart version is: 1.0.1
+The current chart version is: 2.0.0
 
 ## Change Notes
 [CHANGE-NOTES](CHANGE-NOTES.md) contains a list of noteworthy changes in the Microgateway Helm Chart.
@@ -102,9 +102,14 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | config.env | object | `{"configbuilder":[],"runtime":[]}` | [DSL Environment Variables](#dsl-environment-variables) |
 | config.env.configbuilder | list | `[]` | [DSL Environment Variables](#dsl-environment-variables) |
 | config.env.runtime | list | `[]` | [Runtime Environment Variables](#runtime-environment-variables) |
-| config.existingSecret | string | "" | Name of an existing secret containing:<br><br> license: `license`<br> passphrase: `passphrase` |
-| config.license | string | "" | License (multiline string) |
-| config.passphrase | string | - `passphrase`<br> If `passphrase` in `config.existingSecret` <br><br> - `<generated passphrase>`<br> If no passphrase available. | Passphrase used for encryption. |
+| config.license | object | `{"key":null,"secretName":null,"useExistingSecret":false}` | Creates the Airlock Microgateway license or mounts an existing secret with a license. <br> If no license is provided ('useExistingSecret: false' and no license key is provided), the Airlock Microgateway runs in community mode with restricted functionality. <br> If 'useExistingSecret: false' and the license key is given, a license secret will be created and mounted. <br> If a license is provided in a secret not managed by the helm chart, 'useExistingSecret' has to be set to true, and 'config.license.secretName' has to be provided. |
+| config.license.key | string | "" | License key. A license secret will be created if 'config.license.useExistingSecret=false' and this value is given. |
+| config.license.secretName | string | "" | Name of an existing license secret containing: <br> <br> license: `license`  |
+| config.license.useExistingSecret | bool | `false` | Specifies whether a pre-existing license secret should be mounted. <br> If set to false, a license secret will be created with the key provided. |
+| config.passphrase | object | "" | Passphrase used for encryption. <br> The passphrase can be either configured with an existing secret not managed by the helm chart, or it can be managed by the helm chart |
+| config.passphrase.secretName | string | "" | Name of the secret that will be mounted if 'config.passphrase.useExistingSecret: true'. <br> |
+| config.passphrase.useExistingSecret | bool | `false` | Specifies whether a pre-existing secret should be mounted. If set to false, a secret will be created. |
+| config.passphrase.value | string | "" | The secret value. A random secret will be generated if 'useExistingSecret: false' and no secret value ist provided. |
 | config.tlsSecretName | string | "" | Name of an existing secret containing:<br><br> _Virtual Host:_<br> Certificate: `frontend-server.crt`<br> Private key: `frontend-server.key`<br> CA: `frontend-server-ca.crt` <br> :exclamation: Update `route.tls.destinationCACertificate` accordingly.<br><br> _Backend:_<br> Certificate: `backend-client.crt`<br> Private key: `backend-client.key`<br> CA: `backend-server-validation-ca.crt` |
 | echo-server | object | See `echo-server.*`: | Pre-configured [Echo-Server](#echo-server). |
 | echo-server.enabled | bool | `false` | Deploy pre-configured [Echo-Server](#echo-server). |
