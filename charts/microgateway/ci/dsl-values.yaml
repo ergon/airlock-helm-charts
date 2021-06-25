@@ -1,5 +1,4 @@
 config:
-  existingSecret: "microgatewaysecrets"
   dsl:
     session:
       redis_hosts: [redis-master]
