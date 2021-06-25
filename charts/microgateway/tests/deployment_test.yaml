@@ -35,21 +35,46 @@ tests:
       - deployment.yaml
 
   - it: does create checksums
+    set: 
+      config.license.key: key
     asserts:
       - isNull:
           path: spec.template.metadata.annotations.checksum/config
         not: true
       - isNull:
-          path: spec.template.metadata.annotations.checksum/secret
+          path: spec.template.metadata.annotations.checksum/passphraseSecret
         not: true
+      - isNull:
+          path: spec.template.metadata.annotations.checksum/licenseSecret
+        not: true  
     templates:
       - deployment.yaml
-  - it: does not create secret checksum with existingsecret
+  - it: does not create secret checksum with existing passphrase secret
     set:
-      config.existingSecret: mysecret
+      config.passphrase.useExistingSecret: true
+      config.passphrase.secretName: passphraseSecret
     asserts:
       - isNull:
-          path: spec.template.metadata.annotations.checksum/secret
+          path: spec.template.metadata.annotations.checksum/passphraseSecret
+    templates:
+      - deployment.yaml
+
+  - it: does not create license secret checksum with existing license secret
+    set:
+      config.license.useExistingSecret: true
+      config.license.secretName: licenseSecret
+    asserts:
+      - isNull:
+          path: spec.template.metadata.annotations.checksum/licenseSecret
+    templates:
+      - deployment.yaml
+
+  - it: does not create license secret checksum with community edition
+    set:
+      config.license.useExistingSecret: false
+    asserts:
+      - isNull:
+          path: spec.template.metadata.annotations.checksum/licenseSecret
     templates:
       - deployment.yaml
 
@@ -83,10 +108,10 @@ tests:
           value: my-microgateway
       - equal:
           path: spec.template.spec.volumes[1].name
-          value: secret
+          value: passphraseSecret
       - equal:
           path: spec.template.spec.volumes[1].secret.secretName
-          value: my-microgateway
+          value: my-microgateway-passphrase
       - equal:
           path: spec.template.spec.volumes[2].name
           value: config-files
