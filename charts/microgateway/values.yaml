@@ -51,6 +51,7 @@ config:
   # If no license is provided ('useExistingSecret: false' and no license key is provided), the Airlock Microgateway runs in community mode with restricted functionality. <br>
   # If 'useExistingSecret: false' and the license key is given, a license secret will be created and mounted. <br>
   # If a license is provided in a secret not managed by the helm chart, 'useExistingSecret' has to be set to true, and 'config.license.secretName' has to be provided.
+  # @default -- ""
   license:
     # config.license.useExistingSecret -- Specifies whether a pre-existing license secret should be mounted. <br>
     # If set to false, a license secret will be created with the key provided.
