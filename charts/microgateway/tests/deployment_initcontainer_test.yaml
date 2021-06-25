@@ -56,7 +56,7 @@ tests:
           value: /config/config.yaml
       - equal:
           path: spec.template.spec.initContainers[0].volumeMounts[1].name
-          value: passphraseSecret
+          value: passphrase-secret
       - equal:
           path: spec.template.spec.initContainers[0].volumeMounts[1].mountPath
           value: /secret/passphrase

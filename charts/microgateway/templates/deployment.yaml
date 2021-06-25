@@ -45,12 +45,12 @@ spec:
           mountPath: /config/config.yaml
           subPath: config.yaml
           readOnly: true
-        - name: passphraseSecret
+        - name: passphrase-secret
           mountPath: /secret/passphrase
           subPath: passphrase
           readOnly: true
         {{- if (include "microgateway.mountLicense" .) }}          
-        - name: licenseSecret
+        - name: license-secret
           mountPath: /secret/license
           subPath: license
           readOnly: true
@@ -115,11 +115,11 @@ spec:
       - name: config
         configMap:
           name: {{ template "microgateway.fullname" . }}
-      - name: passphraseSecret
+      - name: passphrase-secret
         secret:
           secretName: {{ template "microgateway.passphraseSecretName" . }}
       {{- if (include "microgateway.mountLicense" .) }}            
-      - name: licenseSecret
+      - name: license-secret
         secret: 
           secretName:  {{ template "microgateway.licenseSecretName" . }}    
       {{- end }}           

@@ -108,7 +108,7 @@ tests:
           value: my-microgateway
       - equal:
           path: spec.template.spec.volumes[1].name
-          value: passphraseSecret
+          value: passphrase-secret
       - equal:
           path: spec.template.spec.volumes[1].secret.secretName
           value: my-microgateway-passphrase
