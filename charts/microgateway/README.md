@@ -104,7 +104,7 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | config.env.runtime | list | `[]` | [Runtime Environment Variables](#runtime-environment-variables) |
 | config.license | object | `{"key":null,"secretName":null,"useExistingSecret":false}` | Creates the Airlock Microgateway license or mounts an existing secret with a license. <br> If no license is provided ('useExistingSecret: false' and no license key is provided), the Airlock Microgateway runs in community mode with restricted functionality. <br> If 'useExistingSecret: false' and the license key is given, a license secret will be created and mounted. <br> If a license is provided in a secret not managed by the helm chart, 'useExistingSecret' has to be set to true, and 'config.license.secretName' has to be provided. |
 | config.license.key | string | "" | License key. A license secret will be created if 'config.license.useExistingSecret=false' and this value is given. |
-| config.license.secretName | string | "" | Name of an existing license secret containing: <br> <br> license: `license`  |
+| config.license.secretName | string | "" | Name of an existing license secret containing: <br> <br> license: `license` |
 | config.license.useExistingSecret | bool | `false` | Specifies whether a pre-existing license secret should be mounted. <br> If set to false, a license secret will be created with the key provided. |
 | config.passphrase | object | "" | Passphrase used for encryption. <br> The passphrase can be either configured with an existing secret not managed by the helm chart, or it can be managed by the helm chart |
 | config.passphrase.secretName | string | "" | Name of the secret that will be mounted if 'config.passphrase.useExistingSecret: true'. <br> |
