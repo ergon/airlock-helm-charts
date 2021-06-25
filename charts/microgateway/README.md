@@ -76,13 +76,12 @@ To add the chart repository:
   ```
 
 ### Installing the chart
-To install the chart with the release name `microgateway`:
+To install the Airlock Microgateway community edition with the release name `microgateway`:
 
   ```console
-  helm upgrade -i microgateway airlock/microgateway -f license.yaml
+  helm upgrade -i microgateway airlock/microgateway
   ```
-
-:exclamation: Consult chapter [Configure a valid license](#configure-a-valid-license) for further instructions.
+:exclamation: Consult chapter [Configure a valid license](#configure-a-valid-license) for further instructionson how to install the Airlock Microgateway premium edition.
 
 ### Uninstalling the chart
 To uninstall the chart with the release name `microgateway`:
@@ -102,7 +101,7 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | config.env | object | `{"configbuilder":[],"runtime":[]}` | [DSL Environment Variables](#dsl-environment-variables) |
 | config.env.configbuilder | list | `[]` | [DSL Environment Variables](#dsl-environment-variables) |
 | config.env.runtime | list | `[]` | [Runtime Environment Variables](#runtime-environment-variables) |
-| config.license | object | `{"key":null,"secretName":null,"useExistingSecret":false}` | Creates the Airlock Microgateway license or mounts an existing secret with a license. <br> If no license is provided ('useExistingSecret: false' and no license key is provided), the Airlock Microgateway runs in community mode with restricted functionality. <br> If 'useExistingSecret: false' and the license key is given, a license secret will be created and mounted. <br> If a license is provided in a secret not managed by the helm chart, 'useExistingSecret' has to be set to true, and 'config.license.secretName' has to be provided. |
+| config.license | object | "" | Creates the Airlock Microgateway license or mounts an existing secret with a license. <br> If no license is provided ('useExistingSecret: false' and no license key is provided), the Airlock Microgateway runs in community mode with restricted functionality. <br> If 'useExistingSecret: false' and the license key is given, a license secret will be created and mounted. <br> If a license is provided in a secret not managed by the helm chart, 'useExistingSecret' has to be set to true, and 'config.license.secretName' has to be provided. |
 | config.license.key | string | "" | License key. A license secret will be created if 'config.license.useExistingSecret=false' and this value is given. |
 | config.license.secretName | string | "" | Name of an existing license secret containing: <br> <br> license: `license` |
 | config.license.useExistingSecret | bool | `false` | Specifies whether a pre-existing license secret should be mounted. <br> If set to false, a license secret will be created with the key provided. |
@@ -209,12 +208,13 @@ This section describes how to configure a license for the Microgateway. By follo
 ```
 ---
 config:
-  license: |
-    -----BEGIN LICENSE-----
-    eJxFkEnTokgURf+LWzsCEBCpiFowKoMg8KUIZS8YUoZUEkgmqaj/XnYvqpbv
-    [...]
-    bHy/N5tf//76DY17EVk=
-    -----END LICENSE-----
+  license:
+    key: |
+      -----BEGIN LICENSE-----
+      eJxFkEnTokgURf+LWzsCEBCpiFowKoMg8KUIZS8YUoZUEkgmqaj/XnYvqpbv
+      [...]
+      bHy/N5tf//76DY17EVk=
+      -----END LICENSE-----
 ```
 
 2. [Create the image pull secret](#credentials-to-pull-image-from-docker-registry) to pull the microgateway image.
@@ -237,7 +237,6 @@ The Airlock Microgateway Helm chart has many parameters and most of them are alr
   custom-values.yaml
   ```
   config:
-    existingSecret: "microgatewaysecrets"
     dsl:
       session:
         redis_hosts: [redis-master]
@@ -663,19 +662,24 @@ It is possible to use the following parameters of this Helm chart to configure l
 * License: `config.license`
 * Passphrase: `config.passphrase`
 
-The Helm chart itself creates a secret and configures the Microgateway to use it. While this is already secure, because it is stored as a secret, this information might end in a Git repo or somewhere else, where too many people have access to it.
-This is why it is better to create a secret containing license and passphrase using a different process.
+The Helm chart itself creates a secret and configures the Microgateway to use it. While this is already secure, because it is stored as a secret, this information may be stored in a Git repo or somewhere else, where too many people have access to it.
+This is why it is better to create a secret containing the license and / or the passphrase using a different process.
 
-  The example below shows how to create a secret containing license and passphrase.
+  The example below shows how to create a secret containing both the license and the passphrase.
   ```
   kubectl create secret generic microgateway-secrets --from-file=license=<license_file> --from-file=passphrase=<passphrase_file>
   ```
 
-  Afterwards use this secret in the Helm chart configuration file.
+  Afterwards reference this secret in the Helm chart configuration file.
   custom-values.yaml
   ```
   config:
-    existingSecret: "microgateway-secrets"
+    passphrase:
+      useExistingSecret: true
+      secretName: "microgateway-secrets"
+    license:
+      useExistingSecret: true
+      secretName: "microgateway-secrets"     
   ```
 
 #### Credentials to pull image from Docker registry
