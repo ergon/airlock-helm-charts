@@ -81,7 +81,7 @@ To install the Airlock Microgateway community edition with the release name `mic
   ```console
   helm upgrade -i microgateway airlock/microgateway
   ```
-:exclamation: Consult chapter [Configure a valid license](#configure-a-valid-license) for further instructionson how to install the Airlock Microgateway premium edition.
+:exclamation: Consult chapter [Configure a valid license](#configure-a-valid-license) for further instructions on how to install the Airlock Microgateway premium edition.
 
 ### Uninstalling the chart
 To uninstall the chart with the release name `microgateway`:
@@ -101,14 +101,14 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | config.env | object | `{"configbuilder":[],"runtime":[]}` | [DSL Environment Variables](#dsl-environment-variables) |
 | config.env.configbuilder | list | `[]` | [DSL Environment Variables](#dsl-environment-variables) |
 | config.env.runtime | list | `[]` | [Runtime Environment Variables](#runtime-environment-variables) |
-| config.license | object | "" | Creates the Airlock Microgateway license or mounts an existing secret with a license. <br> If no license is provided ('useExistingSecret: false' and no license key is provided), the Airlock Microgateway runs in community mode with restricted functionality. <br> If 'useExistingSecret: false' and the license key is given, a license secret will be created and mounted. <br> If a license is provided in a secret not managed by the helm chart, 'useExistingSecret' has to be set to true, and 'config.license.secretName' has to be provided. |
-| config.license.key | string | "" | License key. A license secret will be created if 'config.license.useExistingSecret=false' and this value is given. |
-| config.license.secretName | string | "" | Name of an existing license secret containing: <br> <br> license: `license` |
-| config.license.useExistingSecret | bool | `false` | Specifies whether a pre-existing license secret should be mounted. <br> If set to false, a license secret will be created with the key provided. |
-| config.passphrase | object | "" | Passphrase used for encryption. <br> The passphrase can be either configured with an existing secret not managed by the helm chart, or it can be managed by the helm chart |
-| config.passphrase.secretName | string | "" | Name of the secret that will be mounted if 'config.passphrase.useExistingSecret: true'. <br> |
-| config.passphrase.useExistingSecret | bool | `false` | Specifies whether a pre-existing secret should be mounted. If set to false, a secret will be created. |
-| config.passphrase.value | string | "" | The secret value. A random secret will be generated if 'useExistingSecret: false' and no secret value ist provided. |
+| config.license | object | "" | Creates or mounts a secret with an Airlock Microgateway license. <br> If 'useExistingSecret: false' and no 'license.key' is given, the Airlock Microgateway runs in community mode. <br> If 'useExistingSecret: false' and the 'license.key' is given, a secret with the license will be created and mounted. <br> If 'useExistingSecret: true' and 'license.secretName' has a name, the referenced secret will be mounted. <br> If 'useExistingSecret: true' and 'license.key' is given, the license defined in 'secretName' will be used. |
+| config.license.key | string | "" | The Airlock Microgateway license key which will be stored and used in a secret. |
+| config.license.secretName | string | "" | Name of an existing secret containing: <br> <br> license: `license` |
+| config.license.useExistingSecret | bool | `false` | Specifies whether a pre-existing secret should be mounted. |
+| config.passphrase | object | "" | Passphrase used for encryption. <br> If 'useExistingSecret: false' and no 'passphrase.value' is given, a random value will be created and stored in a secret. <br> If 'useExistingSecret: false' and a 'passphrase.value' is given, a secret with the passphrase will be created and mounted. <br> If 'useExistingSecret: true' and no 'passphrase.secretName' has a name, the referenced secret will be mounted. <br> If 'useExistingSecret: true' and 'passphrase.value' is given, the passphrase defined in 'secretName' will be used. |
+| config.passphrase.secretName | string | "" | Name of an existing secret containing: <br> <br> passphrase: `passphrase` |
+| config.passphrase.useExistingSecret | bool | `false` | Specifies whether a pre-existing secret should be mounted. |
+| config.passphrase.value | string | "" | The passhprase which will be stored and used in a secret. |
 | config.tlsSecretName | string | "" | Name of an existing secret containing:<br><br> _Virtual Host:_<br> Certificate: `frontend-server.crt`<br> Private key: `frontend-server.key`<br> CA: `frontend-server-ca.crt` <br> :exclamation: Update `route.tls.destinationCACertificate` accordingly.<br><br> _Backend:_<br> Certificate: `backend-client.crt`<br> Private key: `backend-client.key`<br> CA: `backend-server-validation-ca.crt` |
 | echo-server | object | See `echo-server.*`: | Pre-configured [Echo-Server](#echo-server). |
 | echo-server.enabled | bool | `false` | Deploy pre-configured [Echo-Server](#echo-server). |
@@ -659,11 +659,11 @@ The following subchapters describe which information should be protected and how
 
 #### Secure handling of license and passphrase
 It is possible to use the following parameters of this Helm chart to configure license and passphrase:
-* License: `config.license`
-* Passphrase: `config.passphrase`
+* License: `config.license.*`
+* Passphrase: `config.passphrase.*`
 
-The Helm chart itself creates a secret and configures the Microgateway to use it. While this is already secure, because it is stored as a secret, this information may be stored in a Git repo or somewhere else, where too many people have access to it.
-This is why it is better to create a secret containing the license and / or the passphrase using a different process.
+Depending on the settings of the previous parameters, the Helm chart itself creates a secret or uses an existing one and configures the Microgateway to use it. Storing these sensitive information in secrets is best practise and also secure. Nevertheless, ensure that these secrets are stored in Git where too many people have access to it.
+The license has an expiry date and might be used for Microgateway's to protect  different web applications. In other words, most likely the license has a different lifecycle than the passphrase which is why they should be stored in different secrets.
 
   The example below shows how to create a secret containing both the license and the passphrase.
   ```
