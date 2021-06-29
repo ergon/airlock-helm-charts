@@ -674,7 +674,7 @@ The license has an expiry date and might be used for a Microgateway protecting s
   ```
 
   Afterwards reference this secret in the Helm chart configuration file.
-  custom-values.yaml
+
   ```
   config:
     passphrase:
