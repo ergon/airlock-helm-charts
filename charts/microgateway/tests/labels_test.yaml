@@ -20,7 +20,7 @@ tests:
       ingress.enabled: true
       route.enabled: true
       imageCredentials.enabled: true
-      config.license.key: asdf
+      config.license.key: my-license
     asserts:
       - equal:
           path: metadata.labels.[helm.sh/chart]
@@ -36,7 +36,7 @@ tests:
       hpa.enabled: true
       ingress.enabled: true
       route.enabled: true
-      config.license.key: asdf
+      config.license.key: my-license
       commonLabels:
         a: b
         b: c
