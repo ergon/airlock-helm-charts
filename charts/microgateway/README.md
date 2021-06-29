@@ -662,8 +662,8 @@ It is possible to use the following parameters of this Helm chart to configure l
 * License: `config.license.*`
 * Passphrase: `config.passphrase.*`
 
-Depending on the settings of the previous parameters, the Helm chart itself creates a secret or uses an existing one and configures the Microgateway to use it. Storing these sensitive information in secrets is best practise and also secure. Nevertheless, ensure that these secrets are stored in Git where too many people have access to it.
-The license has an expiry date and might be used for Microgateway's to protect  different web applications. In other words, most likely the license has a different lifecycle than the passphrase which is why they should be stored in different secrets.
+Depending on the settings of the previous parameters, the Helm chart itself creates a secret or uses an existing one and configures the Microgateway to use it. Storing these sensitive information in secrets is best practise and also secure. Nevertheless, ensure that these secrets are not stored in Git where too many people have access to it.
+The license has an expiry date and might be used for Microgateway's to protect several web applications while every web application might have its own passphrase. In other words, most likely the license has a different lifecycle than the passphrase which is why they should be stored in different secrets.
 
   The example below shows how to create a secret containing both the license and the passphrase.
   ```
