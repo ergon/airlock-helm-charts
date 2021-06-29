@@ -548,20 +548,23 @@ route:
 The following subchapters describes how to use and securely deploy the Microgateway.
 
 ### Store sensitive information in secrets
-Airlock Microgateway uses a few sensitive information that should be protected accordingly. E.g. in Kubernetes or Openshift environments these information should be stored in secrets.
+Airlock Microgateway uses sensitive information that should be protected accordingly. E.g. in Kubernetes or Openshift environments this information should be stored in secrets.
 The following subchapters describe which information should be protected and how this can be achieved.
 
 #### Secure handling of license and passphrase
-It is possible to use the following parameters of this Helm chart to configure license and passphrase:
+It is possible to use the following parameters of this Helm chart to configure a license and an encryption passphrase:
 * License: `config.license.*`
 * Passphrase: `config.passphrase.*`
 
-Depending on the settings of the previous parameters, the Helm chart itself creates a secret or uses an existing one and configures the Microgateway to use it. Storing these sensitive information in secrets is best practise and also secure. Nevertheless, ensure that these secrets are not stored in Git where too many people have access to it.
-The license has an expiry date and might be used for Microgateway's to protect several web applications while every web application might have its own passphrase. In other words, most likely the license has a different lifecycle than the passphrase which is why they should be stored in different secrets.
+Depending on the settings of the previous parameters, the Helm chart itself creates a secret or uses an existing one and configures the Microgateway to use it. Storing sensitive information in secrets is best practise and also secure. Nevertheless, ensure that these secrets are not stored in Git where too many people have access to it.
+The license has an expiry date and might be used for a Microgateway protecting several web applications while every web application might have its own passphrase. In other words, most likely the license has a different lifecycle than the passphrase which is why they should be stored in different secrets.
+
+##### Creating and referencing external secrets
 
   The example below shows how to create a secret containing both the license and the passphrase.
   ```
-  kubectl create secret generic microgateway-secrets --from-file=license=<license_file> --from-file=passphrase=<passphrase_file>
+  kubectl create secret generic microgateway-passphrase --from-file=passphrase=<passphrase_file>
+  kubectl create secret generic microgateway-license --from-file=license=<license_file> 
   ```
 
   Afterwards reference this secret in the Helm chart configuration file.
@@ -570,11 +573,25 @@ The license has an expiry date and might be used for Microgateway's to protect s
   config:
     passphrase:
       useExistingSecret: true
-      secretName: "microgateway-secrets"
+      secretName: "microgateway-passphrase"
     license:
       useExistingSecret: true
-      secretName: "microgateway-secrets"      
+      secretName: "microgateway-license"      
   ```
+
+##### Creating secrets with the Helm Chart
+The example below shows how to create secrets for the passphrase and the license using the Helm Chart.
+
+```
+config:
+  passphrase:
+    value: "my-passphrase"
+  license:
+    key: |
+      -----BEGIN LICENSE-----
+      <my-license>
+      -----END LICENSE-----
+```
 
 #### Credentials to pull image from Docker registry
 The Microgateway image is published on our Docker Hub repository. The repository itself is public and the image can be pulled without special permissions.
