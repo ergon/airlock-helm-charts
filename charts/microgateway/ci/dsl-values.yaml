@@ -1,5 +1,11 @@
+image:
+  repository:
+    runtime: docker.io/ergon/airlock-microgateway-nightly
+    configbuilder: docker.io/ergon/airlock-microgateway-configbuilder-nightly
+  tag: 2.1.0.sprint4_Build004
+  pullPolicy: Always
+
 config:
-  existingSecret: "microgatewaysecrets"
   dsl:
     session:
       redis_hosts: [redis-master]

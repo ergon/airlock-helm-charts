@@ -1,4 +1,26 @@
 # Change Log
+## 2.0.0
+
+### Enhancements
+- Update to Microgateway 2.1.0.
+- Support for Microgateway Community Edition
+
+### Breaking Changes
+#### Helm Chart Configuration
+It is now possible to configure the encryption passphrase and the Microgateway license in different secrets. Secret names have to be specified for both secrets individually. You can still configure the same pre-existing secret as in previous chart versions, but it needs to be referenced for both the password and the license. If you do not configure license information, no license will be mounted and the Microgateway will run as community edition. 
+
+Required changes:
+- To create a license secret with the Helm chart:
+  - config.license -> config.license.key
+- To mount an existing license secret:
+  - config.license.useExistingSecret: true
+  - config.existingSecret -> config.license.secretName
+- To mount an existing passphrase secret:
+  - config.exsistingSecret -> config.passphrase.secretName. 
+  - config.passphrase.useExistingSecret: true.
+- To create a passphrase secret:
+  - config.passphrase -> config.passphrase.value. 
+
 ## 1.0.0
 
 ### Enhancements

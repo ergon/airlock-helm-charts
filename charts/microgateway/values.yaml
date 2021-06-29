@@ -34,18 +34,38 @@ config:
   # CA: `backend-server-validation-ca.crt`
   # @default -- ""
   tlsSecretName:
-  # config.passphrase -- Passphrase used for encryption.
-  # @default -- - `passphrase`<br> If `passphrase` in `config.existingSecret` <br><br> - `<generated passphrase>`<br> If no passphrase available.
+  # config.passphrase -- Passphrase used for encryption. <br>
+  # If 'useExistingSecret: false' and no 'passphrase.value' is given, a random value will be created and stored in a secret. <br>
+  # If 'useExistingSecret: false' and a 'passphrase.value' is given, a secret with the passphrase will be created and mounted. <br>
+  # If 'useExistingSecret: true' and no 'passphrase.secretName' has a name, the referenced secret will be mounted. <br>
+  # If 'useExistingSecret: true' and 'passphrase.value' is given, the passphrase defined in 'secretName' will be used.
+  # @default -- ""
   passphrase:
-  # config.license -- (string) License (multiline string)
+    # config.passphrase.useExistingSecret -- Specifies whether a pre-existing secret should be mounted.
+    useExistingSecret: false
+    # config.passphrase.secretName -- Name of an existing secret containing: <br> <br>
+    # passphrase: `passphrase`
+    # @default -- ""
+    secretName:
+    # config.passphrase.value -- The passhprase which will be stored and used in a secret.
+    # @default -- ""
+    value:
+  # config.license -- Creates or mounts a secret with an Airlock Microgateway license. <br>
+  # If 'useExistingSecret: false' and no 'license.key' is given, the Airlock Microgateway runs in community mode. <br>
+  # If 'useExistingSecret: false' and the 'license.key' is given, a secret with the license will be created and mounted. <br>
+  # If 'useExistingSecret: true' and 'license.secretName' has a name, the referenced secret will be mounted. <br>
+  # If 'useExistingSecret: true' and 'license.key' is given, the license defined in 'secretName' will be used.
   # @default -- ""
   license:
-  # config.existingSecret -- (string) Name of an existing secret containing:<br><br>
-  # license: `license`<br>
-  # passphrase: `passphrase`
-  # @default -- ""
-  existingSecret:
-
+    # config.license.useExistingSecret -- Specifies whether a pre-existing secret should be mounted.
+    useExistingSecret: false
+    # config.license.secretName -- Name of an existing secret containing: <br> <br>
+    # license: `license`
+    # @default -- ""
+    secretName:
+    # config.license.key -- The Airlock Microgateway license key which will be stored and used in a secret.
+    # @default -- ""
+    key:
   # config.dsl -- [DSL configuration](#dsl-configuration)
   dsl: {}
 
