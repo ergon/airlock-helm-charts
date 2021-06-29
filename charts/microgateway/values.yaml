@@ -35,32 +35,35 @@ config:
   # @default -- ""
   tlsSecretName:
   # config.passphrase -- Passphrase used for encryption. <br>
-  # The passphrase can be either configured with an existing secret not managed by the helm chart, or it can be managed by the helm chart
+  # If 'useExistingSecret: false' and no 'passphrase.value' is given, a random value will be created and stored in a secret. <br>
+  # If 'useExistingSecret: false' and a 'passphrase.value' is given, a secret with the passphrase will be created and mounted. <br>
+  # If 'useExistingSecret: true' and no 'passphrase.secretName' has a name, the referenced secret will be mounted. <br>
+  # If 'useExistingSecret: true' and 'passphrase.value' is given, the passphrase defined in 'secretName' will be used.
   # @default -- ""
   passphrase:
     # config.passphrase.useExistingSecret -- Specifies whether a pre-existing secret should be mounted.
-    # If set to false, a secret will be created.
     useExistingSecret: false
-    # config.passphrase.secretName -- Name of the secret that will be mounted if 'config.passphrase.useExistingSecret: true'. <br>
+    # config.passphrase.secretName -- Name of an existing secret containing: <br> <br>
+    # passphrase: `passphrase`
     # @default -- ""
     secretName:
-    # config.passphrase.value -- The secret value. A random secret will be generated if 'useExistingSecret: false' and no secret value ist provided.
+    # config.passphrase.value -- The passhprase which will be stored and used in a secret.
     # @default -- ""
     value:
-  # config.license -- Creates the Airlock Microgateway license or mounts an existing secret with a license. <br>
-  # If no license is provided ('useExistingSecret: false' and no license key is provided), the Airlock Microgateway runs in community mode with restricted functionality. <br>
-  # If 'useExistingSecret: false' and the license key is given, a license secret will be created and mounted. <br>
-  # If a license is provided in a secret not managed by the helm chart, 'useExistingSecret' has to be set to true, and 'config.license.secretName' has to be provided.
+  # config.license -- Creates or mounts a secret with an Airlock Microgateway license. <br>
+  # If 'useExistingSecret: false' and no 'license.key' is given, the Airlock Microgateway runs in community mode. <br>
+  # If 'useExistingSecret: false' and the 'license.key' is given, a secret with the license will be created and mounted. <br>
+  # If 'useExistingSecret: true' and 'license.secretName' has a name, the referenced secret will be mounted. <br>
+  # If 'useExistingSecret: true' and 'license.key' is given, the license defined in 'secretName' will be used.
   # @default -- ""
   license:
-    # config.license.useExistingSecret -- Specifies whether a pre-existing license secret should be mounted. <br>
-    # If set to false, a license secret will be created with the key provided.
+    # config.license.useExistingSecret -- Specifies whether a pre-existing secret should be mounted.
     useExistingSecret: false
-    # config.license.secretName -- Name of an existing license secret containing: <br> <br>
+    # config.license.secretName -- Name of an existing secret containing: <br> <br>
     # license: `license`
     # @default -- ""
     secretName:
-    # config.license.key -- License key. A license secret will be created if 'config.license.useExistingSecret=false' and this value is given.
+    # config.license.key -- The Airlock Microgateway license key which will be stored and used in a secret.
     # @default -- ""
     key:
   # config.dsl -- [DSL configuration](#dsl-configuration)

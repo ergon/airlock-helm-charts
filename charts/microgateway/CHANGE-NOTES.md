@@ -7,7 +7,7 @@
 
 ### Breaking Changes
 #### Helm Chart Configuration
-It is now possible to configure the encryption password and the microgateway license in different secrets. Secret names have to be specified for both secrets individually. You can still configure the same preexisting secret as in previous chart versions, but it needs to be referenced for both the password and the license. If you do not configure license information, no license will be mounted and the microgateway will run as community edition. 
+It is now possible to configure the encryption passphrase and the Microgateway license in different secrets. Secret names have to be specified for both secrets individually. You can still configure the same pre-existing secret as in previous chart versions, but it needs to be referenced for both the password and the license. If you do not configure license information, no license will be mounted and the Microgateway will run as community edition. 
 
 Required changes:
 - To create a license secret with the Helm chart:

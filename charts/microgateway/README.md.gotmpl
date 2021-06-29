@@ -80,7 +80,7 @@ To install the Airlock Microgateway community edition with the release name `mic
   ```console
   helm upgrade -i microgateway airlock/microgateway
   ```
-:exclamation: Consult chapter [Configure a valid license](#configure-a-valid-license) for further instructionson how to install the Airlock Microgateway premium edition.
+:exclamation: Consult chapter [Configure a valid license](#configure-a-valid-license) for further instructions on how to install the Airlock Microgateway premium edition.
 
 ### Uninstalling the chart
 To uninstall the chart with the release name `microgateway`:
@@ -553,11 +553,11 @@ The following subchapters describe which information should be protected and how
 
 #### Secure handling of license and passphrase
 It is possible to use the following parameters of this Helm chart to configure license and passphrase:
-* License: `config.license`
-* Passphrase: `config.passphrase`
+* License: `config.license.*`
+* Passphrase: `config.passphrase.*`
 
-The Helm chart itself creates a secret and configures the Microgateway to use it. While this is already secure, because it is stored as a secret, this information may be stored in a Git repo or somewhere else, where too many people have access to it.
-This is why it is better to create a secret containing the license and / or the passphrase using a different process.
+Depending on the settings of the previous parameters, the Helm chart itself creates a secret or uses an existing one and configures the Microgateway to use it. Storing these sensitive information in secrets is best practise and also secure. Nevertheless, ensure that these secrets are stored in Git where too many people have access to it.
+The license has an expiry date and might be used for Microgateway's to protect  different web applications. In other words, most likely the license has a different lifecycle than the passphrase which is why they should be stored in different secrets.
 
   The example below shows how to create a secret containing both the license and the passphrase.
   ```
