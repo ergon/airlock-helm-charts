@@ -15,9 +15,6 @@ config:
             deny_rule_groups:
               - level: strict
 
-imagePullSecrets:
-  - name: "dockersecret"
-
 hpa:
   enabled: true
 
