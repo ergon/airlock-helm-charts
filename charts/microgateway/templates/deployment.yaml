@@ -15,9 +15,12 @@ spec:
         {{- include "microgateway.selectorLabels" . | nindent 8 }}
       annotations:
         checksum/config: {{ include (print .Template.BasePath "/configmap.yaml") . | sha256sum }}
-        {{- if (include "microgateway.createSecret" .) }}
-        checksum/secret: {{ include (print .Template.BasePath "/secret.yaml") . | sha256sum }}
+        {{- if not .Values.config.passphrase.useExistingSecret }}
+        checksum/passphraseSecret: {{ include (print .Template.BasePath "/passphrasesecret.yaml") . | sha256sum }}
         {{- end }}
+        {{- if (include "microgateway.createLicenseSecret" .) }}   
+        checksum/licenseSecret: {{ include (print .Template.BasePath "/licensesecret.yaml") . | sha256sum }}
+        {{- end }}        
     spec:
     {{- if or .Values.imagePullSecrets .Values.imageCredentials.enabled }}
       imagePullSecrets:
@@ -42,14 +45,16 @@ spec:
           mountPath: /config/config.yaml
           subPath: config.yaml
           readOnly: true
-        - name: secret
+        - name: passphrase-secret
           mountPath: /secret/passphrase
           subPath: passphrase
           readOnly: true
-        - name: secret
+        {{- if (include "microgateway.mountLicense" .) }}          
+        - name: license-secret
           mountPath: /secret/license
           subPath: license
           readOnly: true
+        {{- end }}          
         {{- with .Values.config.tlsSecretName }}
         - name: tls
           mountPath: /secret/tls/
@@ -110,9 +115,14 @@ spec:
       - name: config
         configMap:
           name: {{ template "microgateway.fullname" . }}
-      - name: secret
+      - name: passphrase-secret
         secret:
-          secretName: {{ template "microgateway.secretName" . }}
+          secretName: {{ template "microgateway.passphraseSecretName" . }}
+      {{- if (include "microgateway.mountLicense" .) }}            
+      - name: license-secret
+        secret: 
+          secretName:  {{ template "microgateway.licenseSecretName" . }}    
+      {{- end }}           
       {{- with .Values.config.tlsSecretName }}
       - name: tls
         secret:

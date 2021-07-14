@@ -54,29 +54,56 @@ app.kubernetes.io/name: {{ include "microgateway.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end -}}
 
+
 {{/*
-Return true if a secret object should be created
+Get the passphrase secret name
 */}}
-{{- define "microgateway.createSecret" -}}
-{{- if not .Values.config.existingSecret -}}
+{{- define "microgateway.passphraseSecretName" -}}
+
+{{- if .Values.config.passphrase.useExistingSecret }}
+  {{- if not .Values.config.passphrase.secretName }}
+    {{- fail "Value 'config.passphrase.secretName' is required to mount external passphrase secret." }}
+  {{- end -}}
+  {{- printf "%s" .Values.config.passphrase.secretName -}}
+{{- else -}}
+  {{- printf "%s" (include "microgateway.fullname" .) -}}-passphrase
+{{- end -}}
+{{- end -}}
+
+{{/*
+Get the license secret name
+*/}}
+{{- define "microgateway.licenseSecretName" -}}
+
+{{- if .Values.config.license.useExistingSecret }}
+  {{- if not .Values.config.license.secretName }}
+    {{- fail "Value 'config.license.secretName' is required to mount external license secret." }}
+  {{- end -}}
+  {{- printf "%s" .Values.config.license.secretName -}}
+{{- else -}}
+  {{- printf "%s" (include "microgateway.fullname" .) -}}-license
+{{- end -}}
+{{- end -}}
+
+{{/*
+Returns true if a licence secret should be created
+*/}}
+{{- define "microgateway.createLicenseSecret" -}}
+
+{{- if and (not .Values.config.license.useExistingSecret) .Values.config.license.key }}
   {{- true -}}
 {{- end -}}
 {{- end -}}
 
 {{/*
-Get the secret name
+return true if license secret should be mounted
 */}}
-{{- define "microgateway.secretName" -}}
-{{- if and .Values.config.passphrase .Values.config.existingSecret }}
-  {{- fail "Please either specify an existing secret or the passphrase itself" }}
-{{- end }}
-{{- if and .Values.config.license .Values.config.existingSecret }}
-  {{- fail "Please either specify an existing secret or the license itself" }}
-{{- end }}
-{{- if .Values.config.existingSecret }}
-  {{- printf "%s" .Values.config.existingSecret -}}
-{{- else -}}
-  {{- printf "%s" (include "microgateway.fullname" .) -}}
+{{- define "microgateway.mountLicense" -}}
+
+{{- if .Values.config.license.useExistingSecret }}
+  {{- true -}}
+{{- else if .Values.config.license.key -}}  
+  {{- true -}}
 {{- end -}}
 {{- end -}}
 

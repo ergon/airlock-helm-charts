@@ -5,7 +5,7 @@ It is the lightweight, container-based deployment form of the *Airlock Gateway*,
 
 The Airlock helm charts are used internally for testing the *Airlock Microgateway*. We make them available publicly under the [MIT license](https://github.com/ergon/airlock-helm-charts/blob/master/LICENSE).
 
-The current chart version is: 1.0.1
+The current chart version is: 2.0.0
 
 ## Change Notes
 [CHANGE-NOTES](CHANGE-NOTES.md) contains a list of noteworthy changes in the Microgateway Helm Chart.
@@ -59,7 +59,10 @@ This Helm chart bootstraps [Airlock Microgateway](https://www.airlock.com) on a 
 
 ## Prerequisites
 * The Airlock Microgateway image
-* A valid license for Airlock Microgateway
+* Airlock Microgateway is available as premium and community edition. <br>
+  Without a valid license, Airlock Microgateway works as community edition with limited functionality. <br>
+  For further information refer to [Microgateway Documentation](https://docs.airlock.com/microgateway/latest/). <br>
+  To order a license, please contact sales@airlock.com.
 * Redis service for session handling (see chapter [Dependencies](#dependencies))
 
 ## Quick start guide
@@ -73,13 +76,12 @@ To add the chart repository:
   ```
 
 ### Installing the chart
-To install the chart with the release name `microgateway`:
+To install the Airlock Microgateway community edition with the release name `microgateway`:
 
   ```console
-  helm upgrade -i microgateway airlock/microgateway -f license.yaml
+  helm upgrade -i microgateway airlock/microgateway
   ```
-
-:exclamation: Airlock Microgateway will not work without a valid license. For further information see chapter [Configure a valid license](#configure-a-valid-license)
+:exclamation: Consult chapter [Configure a valid license](#configure-a-valid-license) for further instructions on how to install the Airlock Microgateway premium edition.
 
 ### Uninstalling the chart
 To uninstall the chart with the release name `microgateway`:
@@ -99,9 +101,14 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | config.env | object | `{"configbuilder":[],"runtime":[]}` | [DSL Environment Variables](#dsl-environment-variables) |
 | config.env.configbuilder | list | `[]` | [DSL Environment Variables](#dsl-environment-variables) |
 | config.env.runtime | list | `[]` | [Runtime Environment Variables](#runtime-environment-variables) |
-| config.existingSecret | string | "" | Name of an existing secret containing:<br><br> license: `license`<br> passphrase: `passphrase` |
-| config.license | string | "" | License (multiline string) |
-| config.passphrase | string | - `passphrase`<br> If `passphrase` in `config.existingSecret` <br><br> - `<generated passphrase>`<br> If no passphrase available. | Passphrase used for encryption. |
+| config.license | object | "" | Creates or mounts a secret with an Airlock Microgateway license. <br> If 'useExistingSecret: false' and no 'license.key' is given, the Airlock Microgateway runs in community mode. <br> If 'useExistingSecret: false' and the 'license.key' is given, a secret with the license will be created and mounted. <br> If 'useExistingSecret: true' and 'license.secretName' has a name, the referenced secret will be mounted. <br> If 'useExistingSecret: true' and 'license.key' is given, the license defined in 'secretName' will be used. |
+| config.license.key | string | "" | The Airlock Microgateway license key which will be stored and used in a secret. |
+| config.license.secretName | string | "" | Name of an existing secret containing: <br> <br> license: `license` |
+| config.license.useExistingSecret | bool | `false` | Specifies whether a pre-existing secret should be mounted. |
+| config.passphrase | object | "" | Passphrase used for encryption. <br> If 'useExistingSecret: false' and no 'passphrase.value' is given, a random value will be created and stored in a secret. <br> If 'useExistingSecret: false' and a 'passphrase.value' is given, a secret with the passphrase will be created and mounted. <br> If 'useExistingSecret: true' and no 'passphrase.secretName' has a name, the referenced secret will be mounted. <br> If 'useExistingSecret: true' and 'passphrase.value' is given, the passphrase defined in 'secretName' will be used. |
+| config.passphrase.secretName | string | "" | Name of an existing secret containing: <br> <br> passphrase: `passphrase` |
+| config.passphrase.useExistingSecret | bool | `false` | Specifies whether a pre-existing secret should be mounted. |
+| config.passphrase.value | string | "" | The passhprase which will be stored and used in a secret. |
 | config.tlsSecretName | string | "" | Name of an existing secret containing:<br><br> _Virtual Host:_<br> Certificate: `frontend-server.crt`<br> Private key: `frontend-server.key`<br> CA: `frontend-server-ca.crt` <br> :exclamation: Update `route.tls.destinationCACertificate` accordingly.<br><br> _Backend:_<br> Certificate: `backend-client.crt`<br> Private key: `backend-client.key`<br> CA: `backend-server-validation-ca.crt` |
 | echo-server | object | See `echo-server.*`: | Pre-configured [Echo-Server](#echo-server). |
 | echo-server.enabled | bool | `false` | Deploy pre-configured [Echo-Server](#echo-server). |
@@ -118,7 +125,7 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | image.repository | object | `{"configbuilder":"docker.io/ergon/airlock-microgateway-configbuilder","runtime":"docker.io/ergon/airlock-microgateway"}` | Image repositories for the Airlock Microgateway. |
 | image.repository.configbuilder | string | `"docker.io/ergon/airlock-microgateway-configbuilder"` | Image repository for the Airlock Microgateway configbuilder image |
 | image.repository.runtime | string | `"docker.io/ergon/airlock-microgateway"` | Image repository for the Airlock Microgateway runtime image |
-| image.tag | string | `"2.0.1"` | Image tag for microgateway and configbuilder image |
+| image.tag | string | `"2.1.0"` | Image tag for microgateway and configbuilder image |
 | imageCredentials | object | See `imageCredentials.*`: | Creates a imagePullSecret with the provided values. |
 | imageCredentials.enabled | bool | `false` | Enable the imagePullSecret creation. |
 | imageCredentials.password | string | `""` | imagePullSecret password/Token |
@@ -201,12 +208,13 @@ This section describes how to configure a license for the Microgateway. By follo
 ```
 ---
 config:
-  license: |
-    -----BEGIN LICENSE-----
-    eJxFkEnTokgURf+LWzsCEBCpiFowKoMg8KUIZS8YUoZUEkgmqaj/XnYvqpbv
-    [...]
-    bHy/N5tf//76DY17EVk=
-    -----END LICENSE-----
+  license:
+    key: |
+      -----BEGIN LICENSE-----
+      eJxFkEnTokgURf+LWzsCEBCpiFowKoMg8KUIZS8YUoZUEkgmqaj/XnYvqpbv
+      [...]
+      bHy/N5tf//76DY17EVk=
+      -----END LICENSE-----
 ```
 
 2. [Create the image pull secret](#credentials-to-pull-image-from-docker-registry) to pull the microgateway image.
@@ -214,8 +222,6 @@ config:
   ```console
   helm upgrade -i microgateway airlock/microgateway -f license.yaml
   ```
-
-:exclamation: Airlock Microgateway will not work without a valid license. To order one, please contact sales@airlock.com.
 
 :information_source: **Note**:<br>
 In productive environments, licenses might be deployed and handled in a different lifecycles. In such cases, an existing license secret may be referenced. Further information is provided in chapter [Secure handling of license and passphrase](#secure-handling-of-license-and-passphrase).
@@ -231,14 +237,16 @@ The Airlock Microgateway Helm chart has many parameters and most of them are alr
   custom-values.yaml
   ```
   config:
-    existingSecret: "microgatewaysecrets"
     dsl:
       session:
         redis_hosts: [redis-master]
-      expert_settings:
-        apache: |
-          RemoteIPHeader X-Forwarded-For
-          RemoteIPInternalProxy 10.0.0.0/28
+      log:
+        level: info
+      remote_ip:
+        header: X-Forwarded-For
+        internal_proxies:
+          - 10.0.0.0/28
+
       apps:
         - mappings:
             - session_handling: enforce_session
@@ -296,7 +304,7 @@ In case that session handling is enabled on Airlock Microgateway, a Redis servic
   config:
     dsl:
       session:
-        redis_hosts: [ <REDIS-SERVICE>:<PORT> ]
+        redis_hosts: [<REDIS-SERVICE>:<PORT>]
   ```
 
 Finally, apply the Helm chart configuration file with `-f` parameter.
@@ -340,13 +348,13 @@ For a full list of available Microgateway configuration parameters refer to the 
   config:
     dsl:
       session:
-        redis_hosts: [ redis-master ]
+        redis_hosts: [redis-master]
       log:
         level: info
-      expert_settings:
-        apache: |
-          RemoteIPHeader X-Forwarded-For
-          RemoteIPInternalProxy 10.0.0.0/28
+      remote_ip:
+        header: X-Forwarded-For
+        internal_proxies:
+          - 10.0.0.0/28
 
       apps:
         - virtual_host:
@@ -646,31 +654,54 @@ route:
 The following subchapters describes how to use and securely deploy the Microgateway.
 
 ### Store sensitive information in secrets
-Airlock Microgateway uses a few sensitive information that should be protected accordingly. E.g. in Kubernetes or Openshift environments these information should be stored in secrets.
+Airlock Microgateway uses sensitive information that should be protected accordingly. E.g. in Kubernetes or Openshift environments this information should be stored in secrets.
 The following subchapters describe which information should be protected and how this can be achieved.
 
 #### Secure handling of license and passphrase
-It is possible to use the following parameters of this Helm chart to configure license and passphrase:
-* License: `config.license`
-* Passphrase: `config.passphrase`
+It is possible to use the following parameters of this Helm chart to configure a license and an encryption passphrase:
+* License: `config.license.*`
+* Passphrase: `config.passphrase.*`
 
-The Helm chart itself creates a secret and configures the Microgateway to use it. While this is already secure, because it is stored as a secret, this information might end in a Git repo or somewhere else, where too many people have access to it.
-This is why it is better to create a secret containing license and passphrase using a different process.
+Depending on the settings of the previous parameters, the Helm chart itself creates a secret or uses an existing one and configures the Microgateway to use it. Storing sensitive information in secrets is best practise and also secure. Nevertheless, ensure that these secrets are not stored in Git where too many people have access to it.
+The license has an expiry date and might be used for a Microgateway protecting several web applications while every web application might have its own passphrase. In other words, most likely the license has a different lifecycle than the passphrase which is why they should be stored in different secrets.
 
-  The example below shows how to create a secret containing license and passphrase.
+##### Creating and referencing external secrets
+
+  The example below shows how to create a secret containing both the license and the passphrase.
   ```
-  kubectl create secret generic microgateway-secrets --from-file=license=<license_file> --from-file=passphrase=<passphrase_file>
+  kubectl create secret generic microgateway-passphrase --from-file=passphrase=<passphrase_file>
+  kubectl create secret generic microgateway-license --from-file=license=<license_file>
   ```
 
-  Afterwards use this secret in the Helm chart configuration file.
-  custom-values.yaml
+  Afterwards reference this secret in the Helm chart configuration file.
+
   ```
   config:
-    existingSecret: "microgateway-secrets"
+    passphrase:
+      useExistingSecret: true
+      secretName: "microgateway-passphrase"
+    license:
+      useExistingSecret: true
+      secretName: "microgateway-license"     
   ```
 
+##### Creating secrets with the Helm Chart
+The example below shows how to create secrets for the passphrase and the license using the Helm Chart.
+
+```
+config:
+  passphrase:
+    value: "my-passphrase"
+  license:
+    key: |
+      -----BEGIN LICENSE-----
+      <my-license>
+      -----END LICENSE-----
+```
+
 #### Credentials to pull image from Docker registry
-The Microgateway image is published in a private Docker registry to which only granted accounts have access.
+The Microgateway image is published on our Docker Hub repository. The repository itself is public and the image can be pulled without special permissions.
+Nevertheless, Docker has [rate limits](https://www.docker.com/increase-rate-limits) for anonymous users in place. Therefore, it is recommended to use an Docker Hub account to pull the image.
 In order to download this image, the Helm chart needs the Docker credentials to authenticate against the Docker registry.
 Either an already existing Docker secret is provided (`imagePullSecrets`) during the installation of the Microgateway, or a Kubernetes secret is created with the provided credentials (`imageCredentials`).
 
