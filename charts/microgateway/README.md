@@ -490,12 +490,14 @@ If there is already an existing Ingress or Route object and the traffic should o
 This Helm chart can be used for Kubernetes and Openshift. While Kubernetes has "Ingress" and Openshift has "Route", simply enable the feature which fits to the environment (e.g. in Kubernetes `ingress.enabled=true` and in Openshift `route.enabled=true`).
 
 ### Kubernetes Ingress
-Kubernetes allows using different kinds of Ingress controllers. Our examples are based on the [nginx-ingress](https://github.com/helm/charts/tree/master/stable/nginx-ingress) controller.
+Kubernetes allows using different kinds of Ingress controllers. Our examples are based on the [nginx-ingress](https://kubernetes.github.io/ingress-nginx) controller.
 
   The example below shows how to install the nginx-ingress-controller with Helm:
   ```
-  helm repo add stable https://kubernetes-charts.storage.googleapis.com
-  helm install nginx stable/nginx-ingress
+  helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+  helm repo update
+
+  helm install nginx ingress-nginx/ingress-nginx
   ```
 
 :information_source: **Note**:<br>
