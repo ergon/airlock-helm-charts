@@ -387,8 +387,10 @@ Kubernetes allows using different kinds of Ingress controllers. Our examples are
 
   The example below shows how to install the nginx-ingress-controller with Helm:
   ```
-  helm repo add stable https://kubernetes-charts.storage.googleapis.com
-  helm install nginx stable/nginx-ingress
+  helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+  helm repo update
+
+  helm install nginx ingress-nginx/ingress-nginx
   ```
 
 :information_source: **Note**:<br>
