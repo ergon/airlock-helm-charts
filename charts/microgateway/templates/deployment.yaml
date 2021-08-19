@@ -60,6 +60,11 @@ spec:
           mountPath: /secret/tls/
           readOnly: true
         {{- end }}
+        {{- with .Values.config.jwks.localJWKSSecretName }}
+        - name: local-jwks
+          mountPath: /secret/jwks/
+          readOnly: true
+        {{- end }}
         {{- with .Values.extraVolumeMounts }}
           {{- toYaml . | nindent 8 }}
         {{- end }}
@@ -125,6 +130,11 @@ spec:
       {{- end }}           
       {{- with .Values.config.tlsSecretName }}
       - name: tls
+        secret:
+          secretName: {{ . }}
+      {{- end }}
+      {{- with .Values.config.jwks.localJWKSSecretName }}
+      - name: local-jwks
         secret:
           secretName: {{ . }}
       {{- end }}

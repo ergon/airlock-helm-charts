@@ -5,7 +5,7 @@ It is the lightweight, container-based deployment form of the *Airlock Gateway*,
 
 The Airlock helm charts are used internally for testing the *Airlock Microgateway*. We make them available publicly under the [MIT license](https://github.com/ergon/airlock-helm-charts/blob/master/LICENSE).
 
-The current chart version is: 2.0.0
+The current chart version is: 3.0.0
 
 ## Change Notes
 [CHANGE-NOTES](CHANGE-NOTES.md) contains a list of noteworthy changes in the Microgateway Helm Chart.
@@ -51,6 +51,7 @@ The current chart version is: 2.0.0
     * [Secure handling of license and passphrase](#secure-handling-of-license-and-passphrase)
     * [Credentials to pull image from Docker registry](#credentials-to-pull-image-from-docker-registry)
     * [Certificates for Microgateway](#certificates-for-microgateway)
+    * [JWKS Service Secrets](#jwks-service-secrets)
   * [Service Account](#service-account)
 * [Deployment Smoketest](#deployment-smoketest)
 
@@ -101,6 +102,8 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | config.env | object | `{"configbuilder":[],"runtime":[]}` | [DSL Environment Variables](#dsl-environment-variables) |
 | config.env.configbuilder | list | `[]` | [DSL Environment Variables](#dsl-environment-variables) |
 | config.env.runtime | list | `[]` | [Runtime Environment Variables](#runtime-environment-variables) |
+| config.jwks | object | "" | Settings for JWKS services |
+| config.jwks.localJWKSSecretName | string | "" | Name of an existing secret with a jwks json file. The secret must contain:<br><br> JWKS File: `jwks.json`<br><br> The JWKS file will be available in '/secret/jwks/jwks.json' for reference in local JWKS service configurations in the DSL. |
 | config.license | object | "" | Creates or mounts a secret with an Airlock Microgateway license. <br> If 'useExistingSecret: false' and no 'license.key' is given, the Airlock Microgateway runs in community mode. <br> If 'useExistingSecret: false' and the 'license.key' is given, a secret with the license will be created and mounted. <br> If 'useExistingSecret: true' and 'license.secretName' has a name, the referenced secret will be mounted. <br> If 'useExistingSecret: true' and 'license.key' is given, the license defined in 'secretName' will be used. |
 | config.license.key | string | "" | The Airlock Microgateway license key which will be stored and used in a secret. |
 | config.license.secretName | string | "" | Name of an existing secret containing: <br> <br> license: `license` |
@@ -125,7 +128,7 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | image.repository | object | `{"configbuilder":"docker.io/ergon/airlock-microgateway-configbuilder","runtime":"docker.io/ergon/airlock-microgateway"}` | Image repositories for the Airlock Microgateway. |
 | image.repository.configbuilder | string | `"docker.io/ergon/airlock-microgateway-configbuilder"` | Image repository for the Airlock Microgateway configbuilder image |
 | image.repository.runtime | string | `"docker.io/ergon/airlock-microgateway"` | Image repository for the Airlock Microgateway runtime image |
-| image.tag | string | `"2.1.0"` | Image tag for microgateway and configbuilder image |
+| image.tag | string | `"3.0.0"` | Image tag for microgateway and configbuilder image |
 | imageCredentials | object | See `imageCredentials.*`: | Creates a imagePullSecret with the provided values. |
 | imageCredentials.enabled | bool | `false` | Enable the imagePullSecret creation. |
 | imageCredentials.password | string | `""` | imagePullSecret password/Token |
@@ -759,6 +762,41 @@ Used for backend connection:
   config:
     tlsSecretName: "microgateway-tls"
   ```
+
+#### JWKS Service Secrets
+JWKS Services can be configured to provide keys for decryption and signature verification of access tokens.
+There are two types of JWKS services:
+- Local JWKS Services use a static JWKS that is either provided inline in the DSL or through a secret that is mounted into the Microgateway.
+- Remote JWKS Services retrieve JWKS files from a remote service.
+
+##### Configure a local JWKS Service with a secret
+Create a secret containing your JWKS file if it does not exist yet:
+`kubectl create secret generic local-jwks --from-file=jwks.json=<jwks_file>`
+
+:exclamation: A restart of the Microgateway is required in case of changes in the mounted JWKS secret.
+
+Use the secret in the DSL to create a local JWKS service like this:
+```
+config:
+  jwks:
+    localJWKSSecretName: local-jwks
+  dsl:
+    apps:
+        - mappings:
+            access_token:
+              ... your access token configuration ...
+              jwks_providers:
+                - jwks-local               
+    jwks_providers:
+      local:
+        - name: jwks-local
+          jwks_file:  /secret/jwks/jwks.json
+```
+##### Configure local JWKS services using extra volume mounts
+Parametrization of the Helm Chart only allows to configure one local JWKS Service. For configuring more than one service,
+the parameters `extraVolumes` and `extraVolumeMounts` may be used.
+With extra volume mounts, JWKS files also can be mounted to a path other than `/secret/jwks/jwks.json`.
+
 ### Service Account
 The Microgateway runs under a dedicated service account created with the deployment by default.
 The following example shows how to use an existing service account instead of having one created in the deployment.

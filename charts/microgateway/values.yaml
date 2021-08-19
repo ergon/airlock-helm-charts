@@ -9,7 +9,7 @@ image:
     # image.repository.configbuilder -- Image repository for the Airlock Microgateway configbuilder image
     configbuilder: docker.io/ergon/airlock-microgateway-configbuilder
   # image.tag -- Image tag for microgateway and configbuilder image
-  tag: "2.1.0"
+  tag: "3.0.0"
   # image.pullPolicy -- Pull policy (`Always`, `IfNotPresent`, `Never`)
   pullPolicy: IfNotPresent
 
@@ -66,6 +66,15 @@ config:
     # config.license.key -- The Airlock Microgateway license key which will be stored and used in a secret.
     # @default -- ""
     key:
+  
+  # config.jwks -- Settings for JWKS services
+  # @default -- ""
+  jwks:
+  # config.jwks.localJWKSSecretName -- (string) Name of an existing secret with a jwks json file. The secret must contain:<br><br>
+  # JWKS File: `jwks.json`<br><br>
+  # The JWKS file will be available in '/secret/jwks/jwks.json' for reference in local JWKS service configurations in the DSL.
+  # @default -- ""
+    localJWKSSecretName:
   # config.dsl -- [DSL configuration](#dsl-configuration)
   dsl: {}
 
