@@ -99,7 +99,7 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | affinity | string | `nil` | Assign custom [affinity rules](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/) (multiline string). |
 | commonLabels | object | `{}` | Labels to add to all resources. |
 | config.dsl | object | `{}` | [DSL configuration](#dsl-configuration) |
-| config.env | object | `{"configbuilder":[],"runtime":[]}` | [DSL Environment Variables](#dsl-environment-variables) |
+| config.env | object | "See `config.env.*`" | [DSL Environment Variables](#dsl-environment-variables) |
 | config.env.configbuilder | list | `[]` | [DSL Environment Variables](#dsl-environment-variables) |
 | config.env.runtime | list | `[]` | [Runtime Environment Variables](#runtime-environment-variables) |
 | config.jwks | object | "" | Settings for JWKS services |

@@ -18,6 +18,7 @@ image:
 ##
 config:
   # config.env -- [DSL Environment Variables](#dsl-environment-variables)
+  # @default -- "See `config.env.*`"
   env:
     # config.env.configbuilder -- [DSL Environment Variables](#dsl-environment-variables)
     configbuilder: []
