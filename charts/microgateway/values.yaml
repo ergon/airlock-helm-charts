@@ -113,6 +113,7 @@ securityContext: {}
 # A dedicated service account is created and used by default. <br><br>
 # If `serviceAccount.create=true` and no `serviceAccount.name` is given, a name is generated using the fullname template. <br><br>
 # If `serviceAccount.create=false` and no `serviceAccount.name` is given, the microgateway runs under the default service account.
+# @default -- "See `serviceAccount.*`"
 serviceAccount:
   # serviceAccount.create -- Specifies whether a ServiceAccount should be created
   create: true
