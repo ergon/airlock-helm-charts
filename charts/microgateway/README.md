@@ -125,7 +125,7 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | hpa.resource.cpu | int | `50` | Average Microgateway CPU consumption in percentage to scale up/down.<br><br> :exclamation: Please set the resource request parameter `resources.cpu` to a value reflecting your actual resource needs if you use autoscaling based on cpu consumption. Otherwise autoscaling will not work as expected. |
 | hpa.resource.memory | string | `"3Gi"` | Average Microgateway Memory consumption to scale up/down.<br><br> :exclamation: Update this setting depending on your `resources.limits.memory` setting. |
 | image.pullPolicy | string | `"IfNotPresent"` | Pull policy (`Always`, `IfNotPresent`, `Never`) |
-| image.repository | object | "" | Image repositories for the Airlock Microgateway. |
+| image.repository | object | "See `image.repository.*`" | Image repositories for the Airlock Microgateway. |
 | image.repository.configbuilder | string | `"docker.io/ergon/airlock-microgateway-configbuilder"` | Image repository for the Airlock Microgateway configbuilder image |
 | image.repository.runtime | string | `"docker.io/ergon/airlock-microgateway"` | Image repository for the Airlock Microgateway runtime image |
 | image.tag | string | `"3.0.0"` | Image tag for microgateway and configbuilder image |
