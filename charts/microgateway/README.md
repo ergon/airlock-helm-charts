@@ -795,7 +795,9 @@ config:
 ##### Configure local JWKS services using extra volume mounts
 Parametrization of the Helm Chart only allows to configure one local JWKS Service. For configuring more than one service,
 the parameters `extraVolumes` and `extraVolumeMounts` may be used.
-With extra volume mounts, JWKS files also can be mounted to a path other than `/secret/jwks/jwks.json`.
+With extra volume mounts, JWKS files can be mounted to a path other than `/secret/jwks/jwks.json`.
+
+See [Extra Volumes](#extra-volumes) for additional information and an example.
 
 ### Service Account
 The Microgateway runs under a dedicated service account created with the deployment by default.
