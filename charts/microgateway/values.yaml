@@ -69,14 +69,26 @@ config:
     # @default -- ""
     key:
   
-  # config.jwks -- Settings for JWKS services
-  # @default -- ""
+  # config.jwks -- [Secrets for JWKS services](#jwks-service-secrets)
+  # @default -- "see `config.jwks.*`"
   jwks:
-  # config.jwks.localJWKSSecretName -- (string) Name of an existing secret with a jwks json file. The secret must contain:<br><br>
-  # JWKS File: `jwks.json`<br><br>
-  # The JWKS file will be available in '/secret/jwks/jwks.json' for reference in local JWKS service configurations in the DSL.
-  # @default -- ""
+    # config.jwks.localJWKSSecretName -- (string) Name of an existing secret with a jwks json file. The secret must contain:<br><br>
+    # JWKS File: `jwks.json`<br><br>
+    # The JWKS file will be available in '/secret/jwks/jwks.json' for reference in local JWKS service configurations in the DSL.
+    # @default -- ""
     localJWKSSecretName:
+    # config.jwks.clientCertificateSecretName -- (string) Name of an existing secret containing:<br><br>
+    # Certificate: `client.crt`<br>
+    # Private key: `client.key`<br>
+    # CA Certificate: `client-ca.crt` <br>
+    # The files will be available in '/secret/auth/jwks/tls/client/'.
+    # @default -- ""
+    clientCertificateSecretName:
+    # config.jwks.serverCASecretName -- (string) Name of an existing secret containing:<br><br>
+    # Server CA Certificate: `server-validation.crt`<br>
+    # The files will be available in '/secret/auth/jwks/tls/server/'.    
+    # @default -- ""   
+    serverCASecretName:     
   # config.dsl -- [DSL configuration](#dsl-configuration)
   dsl: {}
 

@@ -65,6 +65,16 @@ spec:
           mountPath: /secret/jwks/
           readOnly: true
         {{- end }}
+        {{- with .Values.config.jwks.clientCertificateSecretName }}   
+        - name: jwks-clientcert
+          mountPath: /secret/auth/jwks/tls/client/
+          readOnly: true  
+        {{- end }}           
+        {{- with .Values.config.jwks.serverCASecretName }}   
+        - name: jwks-serverca
+          mountPath: /secret/auth/jwks/tls/server/
+          readOnly: true  
+        {{- end }}         
         {{- with .Values.extraVolumeMounts }}
           {{- toYaml . | nindent 8 }}
         {{- end }}
@@ -135,6 +145,16 @@ spec:
       {{- end }}
       {{- with .Values.config.jwks.localJWKSSecretName }}
       - name: local-jwks
+        secret:
+          secretName: {{ . }}
+      {{- end }}
+      {{- with .Values.config.jwks.clientCertificateSecretName }}
+      - name: jwks-clientcert
+        secret:
+          secretName: {{ . }}
+      {{- end }}
+      {{- with .Values.config.jwks.serverCASecretName }}
+      - name: jwks-serverca
         secret:
           secretName: {{ . }}
       {{- end }}
