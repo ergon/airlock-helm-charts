@@ -18,7 +18,7 @@ image:
 annotations: {}
 
 # podAnnotations -- Additional annotations for the Microgateway Pod <br><br>
-# Examples: <br> 
+# Examples: <br>
 # - prometheus.io/scrape: "true" <br>
 # - prometheus.io/port: "9102"
 podAnnotations: {}

@@ -157,7 +157,7 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | livenessProbe.timeoutSeconds | int | `5` | Timeout of liveness probes, should roughly reflect allowed timeouts from clients. |
 | nameOverride | string | `""` | Provide a name in place of `microgateway`. |
 | nodeSelector | object | `{}` | Define which nodes the pods are scheduled on. |
-| podAnnotations | object | `{}` | Additional annotations for the Microgateway Pod <br><br> Examples: <br>  - prometheus.io/scrape: "true" <br> - prometheus.io/port: "9102" |
+| podAnnotations | object | `{}` | Additional annotations for the Microgateway Pod <br><br> Examples: <br> - prometheus.io/scrape: "true" <br> - prometheus.io/port: "9102" |
 | podSecurityContext | object | `{}` | [Security context for the pods](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod). |
 | readinessProbe.enabled | bool | `true` | Enable readiness probes. |
 | readinessProbe.failureThreshold | int | `3` | After how many tries the pod stops receiving traffic. |
