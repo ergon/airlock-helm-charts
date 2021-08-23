@@ -13,6 +13,14 @@ image:
   # image.pullPolicy -- Pull policy (`Always`, `IfNotPresent`, `Never`)
   pullPolicy: IfNotPresent
 
+# annotations -- Additional annotations configured to the Deployment
+annotations: {}
+
+# annotations -- Additional annotations configured to the Pod
+podAnnotations: {}
+  # prometheus.io/scrape: "true"
+  # prometheus.io/port: "9102"
+
 ## Microgateway Config
 ##
 config:
@@ -128,6 +136,8 @@ service:
   # service.annotations -- Annotations to set on the service.
   annotations: {}
     # service.alpha.openshift.io/serving-cert-secret-name: microgateway
+    # prometheus.io/scrape: "true"
+    # prometheus.io/port: "9102"
   # service.labels -- Additional labels to add on the service.
   labels: {}
 

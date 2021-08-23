@@ -4,6 +4,10 @@ metadata:
   name: {{ template "microgateway.fullname" . }}
   labels:
     {{- include "microgateway.labels" . | nindent 4 }}
+  {{- with .Values.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
@@ -20,7 +24,10 @@ spec:
         {{- end }}
         {{- if (include "microgateway.createLicenseSecret" .) }}   
         checksum/licenseSecret: {{ include (print .Template.BasePath "/licensesecret.yaml") . | sha256sum }}
-        {{- end }}        
+        {{- end }}
+        {{- with .Values.podAnnotations }}
+          {{- toYaml . | nindent 8 }}
+        {{- end }}
     spec:
     {{- if or .Values.imagePullSecrets .Values.imageCredentials.enabled }}
       imagePullSecrets:
@@ -78,6 +85,8 @@ spec:
           containerPort: 8443
         - name: probes
           containerPort: 9090
+        - name: metrics
+          containerPort: 9102
         {{- with .Values.config.env.runtime }}
         env: {{ toYaml . | nindent 10 }}
         {{- end }}
