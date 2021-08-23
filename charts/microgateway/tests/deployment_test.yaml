@@ -40,7 +40,7 @@ tests:
         project: "test"
     asserts:
       - equal:
-          path: metadata.annotations.[project]
+          path: metadata.annotations.project
           value: test
     templates:
       - deployment.yaml
@@ -48,7 +48,7 @@ tests:
   - it: does create correct podAnnotations
     set:
       podAnnotations:
-        prometheus.io/scrape: "true"
+        prometheus.io/scrape: true
         prometheus.io/port: "9102"
     asserts:
       - equal:
