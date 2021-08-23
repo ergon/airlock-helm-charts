@@ -3,6 +3,7 @@ replicaCount: 1
 
 image:
   # image.repository -- Image repositories for the Airlock Microgateway.
+  # @default -- "see `image.repository.*`"
   repository:
     # image.repository.runtime -- Image repository for the Airlock Microgateway runtime image
     runtime: docker.io/ergon/airlock-microgateway
@@ -12,6 +13,16 @@ image:
   tag: "2.1.0"
   # image.pullPolicy -- Pull policy (`Always`, `IfNotPresent`, `Never`)
   pullPolicy: IfNotPresent
+
+# annotations -- Additional annotations for the Microgateway Deployment
+annotations: {}
+
+# podAnnotations -- Additional annotations for the Microgateway Pod <br><br>
+# Examples: <br>
+# - prometheus.io/scrape: "true" <br>
+# - prometheus.io/port: "9102"
+podAnnotations: {}
+
 
 ## Microgateway Config
 ##
@@ -128,6 +139,8 @@ service:
   # service.annotations -- Annotations to set on the service.
   annotations: {}
     # service.alpha.openshift.io/serving-cert-secret-name: microgateway
+    # prometheus.io/scrape: "true"
+    # prometheus.io/port: "9102"
   # service.labels -- Additional labels to add on the service.
   labels: {}
 

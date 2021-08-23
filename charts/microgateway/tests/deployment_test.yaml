@@ -10,7 +10,7 @@ tests:
       - hasDocuments:
           count: 1
       - isKind:
-         of: Deployment
+          of: Deployment
       - equal:
           path: metadata.name
           value: my-microgateway
@@ -34,8 +34,34 @@ tests:
     templates:
       - deployment.yaml
 
+  - it: does create correct annotations
+    set:
+      annotations:
+        project: "test"
+    asserts:
+      - equal:
+          path: metadata.annotations.project
+          value: test
+    templates:
+      - deployment.yaml
+
+  - it: does create correct podAnnotations
+    set:
+      podAnnotations:
+        prometheus.io/scrape: true
+        prometheus.io/port: "9102"
+    asserts:
+      - equal:
+          path: spec.template.metadata.annotations.[prometheus.io/scrape]
+          value: true
+      - equal:
+          path: spec.template.metadata.annotations.[prometheus.io/port]
+          value: "9102"
+    templates:
+      - deployment.yaml
+
   - it: does create checksums
-    set: 
+    set:
       config.license.key: key
     asserts:
       - isNull:
@@ -46,7 +72,7 @@ tests:
         not: true
       - isNull:
           path: spec.template.metadata.annotations.checksum/licenseSecret
-        not: true  
+        not: true
     templates:
       - deployment.yaml
   - it: does not create secret checksum with existing passphrase secret
@@ -124,12 +150,12 @@ tests:
   - it: does create extra volumes
     set:
       extraVolumes:
-       - name: volumename
-         configMap:
-           name: config-map-name
-       - name: volumename2
-         configMap:
-           name: config-map-name2
+        - name: volumename
+          configMap:
+            name: config-map-name
+        - name: volumename2
+          configMap:
+            name: config-map-name2
     asserts:
       - equal:
           path: spec.template.spec.volumes[3].name
@@ -202,12 +228,12 @@ tests:
   - it: does render tolerations defined
     set:
       tolerations:
-      - key: "example-key"
-        operator: "Exists"
-        effect: "NoSchedule"
-      - key: "example-key2"
-        operator: "Exists"
-        effect: "NoSchedule"
+        - key: "example-key"
+          operator: "Exists"
+          effect: "NoSchedule"
+        - key: "example-key2"
+          operator: "Exists"
+          effect: "NoSchedule"
     asserts:
       - equal:
           path: spec.template.spec.tolerations[0].key
