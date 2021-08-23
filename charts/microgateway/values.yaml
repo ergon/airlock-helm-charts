@@ -13,13 +13,15 @@ image:
   # image.pullPolicy -- Pull policy (`Always`, `IfNotPresent`, `Never`)
   pullPolicy: IfNotPresent
 
-# annotations -- Additional annotations configured to the Deployment
+# annotations -- Additional annotations for the Microgateway Deployment
 annotations: {}
 
-# annotations -- Additional annotations configured to the Pod
+# podAnnotations -- Additional annotations for the Microgateway Pod <br><br>
+# Examples: <br> 
+# - prometheus.io/scrape: "true" <br>
+# - prometheus.io/port: "9102"
 podAnnotations: {}
-  # prometheus.io/scrape: "true"
-  # prometheus.io/port: "9102"
+
 
 ## Microgateway Config
 ##

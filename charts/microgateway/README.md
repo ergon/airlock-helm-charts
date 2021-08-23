@@ -5,7 +5,7 @@ It is the lightweight, container-based deployment form of the *Airlock Gateway*,
 
 The Airlock helm charts are used internally for testing the *Airlock Microgateway*. We make them available publicly under the [MIT license](https://github.com/ergon/airlock-helm-charts/blob/master/LICENSE).
 
-The current chart version is: 2.0.0
+The current chart version is: 2.1.0
 
 ## Change Notes
 [CHANGE-NOTES](CHANGE-NOTES.md) contains a list of noteworthy changes in the Microgateway Helm Chart.
@@ -96,6 +96,7 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | affinity | string | `nil` | Assign custom [affinity rules](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/) (multiline string). |
+| annotations | object | `{}` | Additional annotations for the Microgateway Deployment |
 | commonLabels | object | `{}` | Labels to add to all resources. |
 | config.dsl | object | `{}` | [DSL configuration](#dsl-configuration) |
 | config.env | object | `{"configbuilder":[],"runtime":[]}` | [DSL Environment Variables](#dsl-environment-variables) |
@@ -156,6 +157,7 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | livenessProbe.timeoutSeconds | int | `5` | Timeout of liveness probes, should roughly reflect allowed timeouts from clients. |
 | nameOverride | string | `""` | Provide a name in place of `microgateway`. |
 | nodeSelector | object | `{}` | Define which nodes the pods are scheduled on. |
+| podAnnotations | object | `{}` | Additional annotations for the Microgateway Pod <br><br> Examples: <br>  - prometheus.io/scrape: "true" <br> - prometheus.io/port: "9102" |
 | podSecurityContext | object | `{}` | [Security context for the pods](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod). |
 | readinessProbe.enabled | bool | `true` | Enable readiness probes. |
 | readinessProbe.failureThreshold | int | `3` | After how many tries the pod stops receiving traffic. |
