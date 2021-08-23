@@ -3,6 +3,7 @@ replicaCount: 1
 
 image:
   # image.repository -- Image repositories for the Airlock Microgateway.
+  # @default -- "see `image.repository.*`"
   repository:
     # image.repository.runtime -- Image repository for the Airlock Microgateway runtime image
     runtime: docker.io/ergon/airlock-microgateway
