@@ -2,7 +2,7 @@ image:
   repository:
     runtime: docker.io/ergon/airlock-microgateway
     configbuilder: docker.io/ergon/airlock-microgateway-configbuilder
-  tag: 2.1.0
+  tag: 3.0.0.sprint3_Build002
   pullPolicy: Always
 
 config:
