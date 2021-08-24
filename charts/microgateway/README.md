@@ -806,9 +806,11 @@ See [Extra Volumes](#extra-volumes) for additional information and an example.
 ##### Configure TLS for Remote JWKS Service with secrets
 A client certificate and a server CA certificate may be provided for remote JWKS services.
 
-Create secrets containing the TLS secrets:
-Client Certificate: `kubectl create secret generic jwks-clientsecret --from-file=client.key=<your private key> --from-file=client.crt=<your public key>`
-Server CA Certificate: `kubectl create secret generic jwks-serversecret --from-file=server-validation.crt=<your server ca certificate>`
+Client Certificate:
+`kubectl create secret generic jwks-clientsecret --from-file=client.key=<your private key> --from-file=client.crt=<your public key>`
+
+Server CA Certificate:
+`kubectl create secret generic jwks-serversecret --from-file=server-validation.crt=<your server ca certificate>`
 
 Use these secrets in the DSL to configure Remote JWKS Services:
 ```
