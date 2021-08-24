@@ -102,8 +102,10 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | config.env | object | "See `config.env.*`" | [DSL Environment Variables](#dsl-environment-variables) |
 | config.env.configbuilder | list | `[]` | [DSL Environment Variables](#dsl-environment-variables) |
 | config.env.runtime | list | `[]` | [Runtime Environment Variables](#runtime-environment-variables) |
-| config.jwks | object | "" | Settings for JWKS services |
+| config.jwks | object | "see `config.jwks.*`" | [Secrets for JWKS services](#jwks-service-secrets) |
+| config.jwks.clientCertificateSecretName | string | "" | Name of an existing secret containing:<br><br> Certificate: `client.crt`<br> Private key: `client.key`<br> CA Certificate: `client-ca.crt` <br> The files will be available in '/secret/auth/jwks/tls/client/'. |
 | config.jwks.localJWKSSecretName | string | "" | Name of an existing secret with a jwks json file. The secret must contain:<br><br> JWKS File: `jwks.json`<br><br> The JWKS file will be available in '/secret/jwks/jwks.json' for reference in local JWKS service configurations in the DSL. |
+| config.jwks.serverCASecretName | string | ""    | Name of an existing secret containing:<br><br> Server CA Certificate: `server-validation.crt`<br> The files will be available in '/secret/auth/jwks/tls/server/'.     |
 | config.license | object | "" | Creates or mounts a secret with an Airlock Microgateway license. <br> If 'useExistingSecret: false' and no 'license.key' is given, the Airlock Microgateway runs in community mode. <br> If 'useExistingSecret: false' and the 'license.key' is given, a secret with the license will be created and mounted. <br> If 'useExistingSecret: true' and 'license.secretName' has a name, the referenced secret will be mounted. <br> If 'useExistingSecret: true' and 'license.key' is given, the license defined in 'secretName' will be used. |
 | config.license.key | string | "" | The Airlock Microgateway license key which will be stored and used in a secret. |
 | config.license.secretName | string | "" | Name of an existing secret containing: <br> <br> license: `license` |
@@ -792,10 +794,44 @@ config:
         - name: jwks-local
           jwks_file:  /secret/jwks/jwks.json
 ```
+Note that the JWKS file has to referenced in JWKS service configuration.
+
 ##### Configure local JWKS services using extra volume mounts
 Parametrization of the Helm Chart only allows to configure one local JWKS Service. For configuring more than one service,
 the parameters `extraVolumes` and `extraVolumeMounts` may be used.
 With extra volume mounts, JWKS files can be mounted to a path other than `/secret/jwks/jwks.json`.
+
+See [Extra Volumes](#extra-volumes) for additional information and an example.
+
+##### Configure TLS for Remote JWKS Service with secrets
+A client certificate and a server CA certificate may be provided for remote JWKS services.
+
+Create secrets containing the TLS secrets:
+Client Certificate: `kubectl create secret generic jwks-clientsecret --from-file=client.key=<your private key> --from-file=client.crt=<your public key>`
+Server CA Certificate: `kubectl create secret generic jwks-serversecret --from-file=server-validation.crt=<your server ca certificate>`
+
+Use these secrets in the DSL to configure Remote JWKS Services:
+```
+config:
+  jwks:
+    clientCertificateSecretName: jwks-clientsecret
+    serverCASecretName: jwks-serversecret
+  dsl:
+    apps:
+        - mappings:
+            access_token:
+              ... your access token configuration ...
+              jwks_providers:
+                - jwks-remote               
+    jwks_providers:
+      local:
+        - name: jwks-remote
+          service_url: <jwks service url>
+```
+
+##### Configure TLS for Remote JWKS Service using extra volume mounts
+Parametrization of the Helm Chart only allows to configure one set of secrets for remote JWKS Services. For configuring more than one service,
+the parameters `extraVolumes` and `extraVolumeMounts` may be used.
 
 See [Extra Volumes](#extra-volumes) for additional information and an example.
 
