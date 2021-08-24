@@ -86,9 +86,9 @@ config:
     clientCertificateSecretName:
     # config.jwks.serverCASecretName -- (string) Name of an existing secret containing:<br><br>
     # Server CA Certificate: `server-validation.crt`<br>
-    # The files will be available in '/secret/auth/jwks/tls/server/'.    
-    # @default -- ""   
-    serverCASecretName:     
+    # The files will be available in '/secret/auth/jwks/tls/server/'.   
+    # @default -- ""
+    serverCASecretName:
   # config.dsl -- [DSL configuration](#dsl-configuration)
   dsl: {}
 
