@@ -68,7 +68,7 @@ config:
     # config.license.key -- The Airlock Microgateway license key which will be stored and used in a secret.
     # @default -- ""
     key:
-  
+
   # config.jwks -- [Secrets for JWKS services](#jwks-service-secrets)
   # @default -- "see `config.jwks.*`"
   jwks:
@@ -86,7 +86,7 @@ config:
     clientCertificateSecretName:
     # config.jwks.serverCASecretName -- (string) Name of an existing secret containing:<br><br>
     # Server CA Certificate: `server-validation.crt`<br>
-    # The files will be available in '/secret/auth/jwks/tls/server/'.   
+    # The files will be available in '/secret/auth/jwks/tls/server/'.
     # @default -- ""
     serverCASecretName:
   # config.dsl -- [DSL configuration](#dsl-configuration)
