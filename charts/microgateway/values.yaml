@@ -80,11 +80,11 @@ config:
 
   # config.dslConfigMap -- Name of a config map containing the Microgateway DSL configuration file. <br>
   # The DSL is expected in a data entry called `config.yaml`. <br> <br>
-  # Template rendering fails if both `config.dslConfigMap`and `config.dsl` are specified. 
+  # Template rendering fails if both `config.dslConfigMap`and `config.dsl` are specified.
   # @default -- ""
   dslConfigMap:
   # config.dsl -- [DSL configuration](#dsl-configuration)
-  # Template rendering fails if both `config.dslConfigMap`and `config.dsl` are specified. 
+  # Template rendering fails if both `config.dslConfigMap`and `config.dsl` are specified.
   dsl: {}
 
 # commonLabels -- Labels to add to all resources.
