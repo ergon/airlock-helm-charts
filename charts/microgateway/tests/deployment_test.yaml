@@ -147,6 +147,18 @@ tests:
     templates:
       - deployment.yaml
 
+  - it: uses existing config map volume
+    set: 
+      config:
+        dslConfigMap: existingMap
+      asserts:
+      - equal:
+          path: spec.template.spec.volumes[0].name
+          value: config
+      - equal:
+          path: spec.template.spec.volumes[0].configMap.name
+          value: existingMap
+
   - it: does create extra volumes
     set:
       extraVolumes:

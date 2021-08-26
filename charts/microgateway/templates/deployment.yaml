@@ -123,7 +123,11 @@ spec:
       volumes:
       - name: config
         configMap:
-          name: {{ template "microgateway.fullname" . }}
+      {{- if eq (include "microgateway.createConfigMap" .) "true" }} 
+          name: {{ template "microgateway.fullname" . }}  
+      {{- else }}    
+          name: {{ .Values.config.dslConfigMap }}
+      {{- end }}        
       - name: passphrase-secret
         secret:
           secretName: {{ template "microgateway.passphraseSecretName" . }}
