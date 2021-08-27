@@ -98,8 +98,8 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | affinity | string | `nil` | Assign custom [affinity rules](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/) (multiline string). |
 | annotations | object | `{}` | Additional annotations for the Microgateway Deployment |
 | commonLabels | object | `{}` | Labels to add to all resources. |
-| config.dsl | object | `{}` | [DSL configuration](#dsl-configuration) Template rendering fails if both `config.dslConfigMap`and `config.dsl` are specified. |
-| config.dslConfigMap | string | "" | Name of a config map containing the Microgateway DSL configuration file. <br> The DSL is expected in a data entry called `config.yaml`. <br> <br> Template rendering fails if both `config.dslConfigMap`and `config.dsl` are specified. |
+| config.dsl | object | `{}` | [DSL configuration](#dsl-configuration) Template rendering fails if `config.dslConfigMap` and `config.dsl` are specified. |
+| config.dslConfigMap | string | "" | Name of the ConfigMap containing the Microgateway DSL configuration file. <br> The DSL is expected in a data entry called `config.yaml`. <br> <br> Template rendering fails if `config.dslConfigMap` and `config.dsl` are specified. |
 | config.env | object | `{"configbuilder":[],"runtime":[]}` | [DSL Environment Variables](#dsl-environment-variables) |
 | config.env.configbuilder | list | `[]` | [DSL Environment Variables](#dsl-environment-variables) |
 | config.env.runtime | list | `[]` | [Runtime Environment Variables](#runtime-environment-variables) |
@@ -392,11 +392,28 @@ For a full list of available Microgateway configuration parameters refer to the 
   custom-values.yaml
   ```
   config:
-    dslConfigMap: custom-map
+    dslConfigMap: microgateway-config
 
   redis:
     enabled: true
 
+  ```
+
+  microgateway-config.yaml
+  ```
+  apiVersion: v1
+  kind: ConfigMap
+  metadata:
+    name: microgateway-config
+  data:
+    config.yaml: |
+      session:
+        redis_hosts: [redis-master]
+      log:
+        level: info
+
+      ...
+      ...
   ```
 
 ## Environment Variables
