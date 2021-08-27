@@ -147,7 +147,7 @@ tests:
     templates:
       - deployment.yaml
 
-  - it: uses existing config map volume
+  - it: uses existing ConfigMap volume
     set: 
       config:
         dslConfigMap: existingMap

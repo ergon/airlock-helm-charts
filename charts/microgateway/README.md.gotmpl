@@ -282,11 +282,28 @@ For a full list of available Microgateway configuration parameters refer to the 
   custom-values.yaml
   ```
   config:
-    dslConfigMap: custom-map
- 
+    dslConfigMap: microgateway-config
+
   redis:
     enabled: true
 
+  ```
+
+  microgateway-config.yaml
+  ```
+  apiVersion: v1
+  kind: ConfigMap
+  metadata:
+    name: microgateway-config
+  data:
+    config.yaml: |
+      session:
+        redis_hosts: [redis-master]
+      log:
+        level: info
+
+      ...
+      ...
   ```
 
 ## Environment Variables
