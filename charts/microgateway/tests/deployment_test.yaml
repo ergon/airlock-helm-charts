@@ -75,6 +75,16 @@ tests:
         not: true
     templates:
       - deployment.yaml
+
+  - it: does not create config checksum if config is provided in a volume
+    set:
+      config.dslConfigMap: custom-map
+    asserts:
+      - isNull:
+          path: spec.template.metadata.annotations.checksum/config
+    templates:
+      - deployment.yaml
+
   - it: does not create secret checksum with existing passphrase secret
     set:
       config.passphrase.useExistingSecret: true

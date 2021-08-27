@@ -18,7 +18,9 @@ spec:
       labels:
         {{- include "microgateway.selectorLabels" . | nindent 8 }}
       annotations:
+        {{- if eq (include "microgateway.createConfigMap" .) "true" }} 
         checksum/config: {{ include (print .Template.BasePath "/configmap.yaml") . | sha256sum }}
+        {{- end }}
         {{- if not .Values.config.passphrase.useExistingSecret }}
         checksum/passphraseSecret: {{ include (print .Template.BasePath "/passphrasesecret.yaml") . | sha256sum }}
         {{- end }}
