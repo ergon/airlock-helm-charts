@@ -18,7 +18,9 @@ spec:
       labels:
         {{- include "microgateway.selectorLabels" . | nindent 8 }}
       annotations:
+        {{- if eq (include "microgateway.createConfigMap" .) "true" }} 
         checksum/config: {{ include (print .Template.BasePath "/configmap.yaml") . | sha256sum }}
+        {{- end }}
         {{- if not .Values.config.passphrase.useExistingSecret }}
         checksum/passphraseSecret: {{ include (print .Template.BasePath "/passphrasesecret.yaml") . | sha256sum }}
         {{- end }}
@@ -123,7 +125,11 @@ spec:
       volumes:
       - name: config
         configMap:
-          name: {{ template "microgateway.fullname" . }}
+      {{- if eq (include "microgateway.createConfigMap" .) "true" }} 
+          name: {{ template "microgateway.fullname" . }}  
+      {{- else }}    
+          name: {{ .Values.config.dslConfigMap }}
+      {{- end }}        
       - name: passphrase-secret
         secret:
           secretName: {{ template "microgateway.passphraseSecretName" . }}

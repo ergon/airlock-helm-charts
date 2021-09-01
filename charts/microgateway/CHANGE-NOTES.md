@@ -1,4 +1,15 @@
 # Change Log
+## 2.2.0
+
+### Enhancements
+- An existing ConfigMap containing the DSL file can be mounted into the Microgateway pod using the parameter `config.dslConfigMap`. 
+
+## 2.1.0
+
+### Enhancements
+- Expose metrics port in the Microgateway Pod
+- Parameters for configuration of Deployment and Pod annotations
+
 ## 2.0.0
 
 ### Enhancements

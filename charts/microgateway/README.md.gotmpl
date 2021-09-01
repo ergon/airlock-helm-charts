@@ -230,11 +230,17 @@ Finally, apply the Helm chart configuration file with `-f` parameter.
 Please refer to the [Echo-Server Helm chart](https://artifacthub.io/packages/helm/ealenn/echo-server) to see all possible parameters of the Echo-Server Helm chart.
 
 ## DSL Configuration
-It is possible to use all Microgateway DSL configuration options within the 'dsl' configuration parameter.
+The Microgateway DSL configuration can be provided in 2 different ways: 
+- within the Helm Chart 'dsl' configuration parameter
+- in an existing ConfigMap mounted into the Microgatway pod
+
+:warning: **Changing the DSL configuration in a running system**:<br>
+The microgateway does not detect DSL changes at runtime. If the DSL configuration is managed by the Helm Chart, the Microgateway pod is restarted automatically after a DSL change. 
+If the DSL is mounted from a volume not managed by the Helm Chart, a manual restart is required.
 
 For a full list of available Microgateway configuration parameters refer to the [Microgateway Documentation](https://docs.airlock.com/microgateway/latest/)
 
-**Example:**
+**Example DSL Parameter:**
 
   custom-values.yaml
   ```
@@ -273,6 +279,35 @@ For a full list of available Microgateway configuration parameters refer to the 
   redis:
     enabled: true
 
+  ```
+
+**Example existing ConfigMap:**
+
+  custom-values.yaml
+  ```
+  config:
+    dslConfigMap: microgateway-config
+
+  redis:
+    enabled: true
+
+  ```
+
+  microgateway-config.yaml
+  ```
+  apiVersion: v1
+  kind: ConfigMap
+  metadata:
+    name: microgateway-config
+  data:
+    config.yaml: |
+      session:
+        redis_hosts: [redis-master]
+      log:
+        level: info
+
+      ...
+      ...
   ```
 
 ## Environment Variables

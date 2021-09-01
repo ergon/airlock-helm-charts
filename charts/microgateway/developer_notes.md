@@ -14,7 +14,7 @@ Invoke from toplevel directory of this repository:
 $ helm unittest charts/microgateway
 ```
 ### Working with snapshots
-The configmap tests use snapshots to verify correct rendering of the configmap. These snapshots are checked into the repository as reference.
+The ConfigMap tests use snapshots to verify correct rendering of the ConfigMap. These snapshots are checked into the repository as reference.
 
 The snapshots are found in: 'charts/microgateway/tests/\__snapshot\__/'.
 

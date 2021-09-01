@@ -5,7 +5,7 @@ It is the lightweight, container-based deployment form of the *Airlock Gateway*,
 
 The Airlock helm charts are used internally for testing the *Airlock Microgateway*. We make them available publicly under the [MIT license](https://github.com/ergon/airlock-helm-charts/blob/master/LICENSE).
 
-The current chart version is: 2.1.0
+The current chart version is: 2.2.0
 
 ## Change Notes
 [CHANGE-NOTES](CHANGE-NOTES.md) contains a list of noteworthy changes in the Microgateway Helm Chart.
@@ -98,7 +98,8 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | affinity | string | `nil` | Assign custom [affinity rules](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/) (multiline string). |
 | annotations | object | `{}` | Additional annotations for the Microgateway Deployment |
 | commonLabels | object | `{}` | Labels to add to all resources. |
-| config.dsl | object | `{}` | [DSL configuration](#dsl-configuration) |
+| config.dsl | object | `{}` | [DSL configuration](#dsl-configuration) Template rendering fails if `config.dslConfigMap` and `config.dsl` are specified. |
+| config.dslConfigMap | string | "" | Name of the ConfigMap containing the Microgateway DSL configuration file. <br> The DSL is expected in a data entry called `config.yaml`. <br> <br> Template rendering fails if `config.dslConfigMap` and `config.dsl` are specified. |
 | config.env | object | `{"configbuilder":[],"runtime":[]}` | [DSL Environment Variables](#dsl-environment-variables) |
 | config.env.configbuilder | list | `[]` | [DSL Environment Variables](#dsl-environment-variables) |
 | config.env.runtime | list | `[]` | [Runtime Environment Variables](#runtime-environment-variables) |
@@ -339,11 +340,17 @@ Finally, apply the Helm chart configuration file with `-f` parameter.
 Please refer to the [Echo-Server Helm chart](https://artifacthub.io/packages/helm/ealenn/echo-server) to see all possible parameters of the Echo-Server Helm chart.
 
 ## DSL Configuration
-It is possible to use all Microgateway DSL configuration options within the 'dsl' configuration parameter.
+The Microgateway DSL configuration can be provided in 2 different ways:
+- within the Helm Chart 'dsl' configuration parameter
+- in an existing ConfigMap mounted into the Microgatway pod
+
+:warning: **Changing the DSL configuration in a running system**:<br>
+The microgateway does not detect DSL changes at runtime. If the DSL configuration is managed by the Helm Chart, the Microgateway pod is restarted automatically after a DSL change.
+If the DSL is mounted from a volume not managed by the Helm Chart, a manual restart is required.
 
 For a full list of available Microgateway configuration parameters refer to the [Microgateway Documentation](https://docs.airlock.com/microgateway/latest/)
 
-**Example:**
+**Example DSL Parameter:**
 
   custom-values.yaml
   ```
@@ -382,6 +389,35 @@ For a full list of available Microgateway configuration parameters refer to the 
   redis:
     enabled: true
 
+  ```
+
+**Example existing ConfigMap:**
+
+  custom-values.yaml
+  ```
+  config:
+    dslConfigMap: microgateway-config
+
+  redis:
+    enabled: true
+
+  ```
+
+  microgateway-config.yaml
+  ```
+  apiVersion: v1
+  kind: ConfigMap
+  metadata:
+    name: microgateway-config
+  data:
+    config.yaml: |
+      session:
+        redis_hosts: [redis-master]
+      log:
+        level: info
+
+      ...
+      ...
   ```
 
 ## Environment Variables
