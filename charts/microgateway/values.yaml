@@ -99,7 +99,7 @@ config:
     # The files will be available in '/secret/auth/jwks/tls/server/'.
     # @default -- ""
     serverCASecretName:
-  
+
   # config.dslConfigMap -- Name of the ConfigMap containing the Microgateway DSL configuration file. <br>
   # The DSL is expected in a data entry called `config.yaml`. <br> <br>
   # Template rendering fails if `config.dslConfigMap` and `config.dsl` are specified.
