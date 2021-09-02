@@ -1,4 +1,5 @@
 # Change Log
+
 ## 3.0.0
 
 ### Enhancements
@@ -11,6 +12,17 @@ Keys for decryption and signature verification of access tokens are now configur
 - Create a JWKS json file containing the keys in your current access_token configuration.
 - Delete the key configuration from the DSL file.
 - Add a local JWKS service to your config.yaml and reference it in the mappings protected by the access token.
+
+## 2.2.0
+
+### Enhancements
+- An existing ConfigMap containing the DSL file can be mounted into the Microgateway pod using the parameter `config.dslConfigMap`. 
+
+## 2.1.0
+
+### Enhancements
+- Expose metrics port in the Microgateway Pod
+- Parameters for configuration of Deployment and Pod annotations
 
 ## 2.0.0
 

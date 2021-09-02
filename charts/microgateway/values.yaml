@@ -14,6 +14,16 @@ image:
   # image.pullPolicy -- Pull policy (`Always`, `IfNotPresent`, `Never`)
   pullPolicy: IfNotPresent
 
+# annotations -- Additional annotations for the Microgateway Deployment
+annotations: {}
+
+# podAnnotations -- Additional annotations for the Microgateway Pod <br><br>
+# Examples: <br>
+# - prometheus.io/scrape: "true" <br>
+# - prometheus.io/port: "9102"
+podAnnotations: {}
+
+
 ## Microgateway Config
 ##
 config:
@@ -89,7 +99,14 @@ config:
     # The files will be available in '/secret/auth/jwks/tls/server/'.
     # @default -- ""
     serverCASecretName:
+  
+  # config.dslConfigMap -- Name of the ConfigMap containing the Microgateway DSL configuration file. <br>
+  # The DSL is expected in a data entry called `config.yaml`. <br> <br>
+  # Template rendering fails if `config.dslConfigMap` and `config.dsl` are specified.
+  # @default -- ""
+  dslConfigMap:
   # config.dsl -- [DSL configuration](#dsl-configuration)
+  # Template rendering fails if `config.dslConfigMap` and `config.dsl` are specified.
   dsl: {}
 
 # commonLabels -- Labels to add to all resources.
@@ -152,6 +169,8 @@ service:
   # service.annotations -- Annotations to set on the service.
   annotations: {}
     # service.alpha.openshift.io/serving-cert-secret-name: microgateway
+    # prometheus.io/scrape: "true"
+    # prometheus.io/port: "9102"
   # service.labels -- Additional labels to add on the service.
   labels: {}
 

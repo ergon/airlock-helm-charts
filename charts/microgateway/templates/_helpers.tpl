@@ -108,6 +108,21 @@ return true if license secret should be mounted
 {{- end -}}
 
 {{/*
+return true if DSL ConfigMap should be created. Fails if both config.dsl and config.dslConfigMap are given.
+*/}}
+{{- define "microgateway.createConfigMap" -}}
+
+{{- if .Values.config.dslConfigMap }}
+  {{- if .Values.config.dsl }}
+    {{- fail "'config.dslConfigMap' and 'config.dsl' are specified." }}
+  {{- end -}}
+  {{- false -}}
+{{- else -}}  
+  {{- true -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Create imagePullSecret
 */}}
 {{- define "imagePullSecret" }}
