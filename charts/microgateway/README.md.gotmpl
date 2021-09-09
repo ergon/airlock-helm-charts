@@ -50,6 +50,7 @@ The current chart version is: {{ template "chart.version" . }}
     * [Secure handling of license and passphrase](#secure-handling-of-license-and-passphrase)
     * [Credentials to pull image from Docker registry](#credentials-to-pull-image-from-docker-registry)
     * [Certificates for Microgateway](#certificates-for-microgateway)
+    * [JWKS Service Secrets](#jwks-service-secrets)
   * [Service Account](#service-account)
 * [Deployment Smoketest](#deployment-smoketest)
 
@@ -230,11 +231,17 @@ Finally, apply the Helm chart configuration file with `-f` parameter.
 Please refer to the [Echo-Server Helm chart](https://artifacthub.io/packages/helm/ealenn/echo-server) to see all possible parameters of the Echo-Server Helm chart.
 
 ## DSL Configuration
-It is possible to use all Microgateway DSL configuration options within the 'dsl' configuration parameter.
+The Microgateway DSL configuration can be provided in 2 different ways: 
+- within the Helm Chart 'dsl' configuration parameter
+- in an existing ConfigMap mounted into the Microgatway pod
+
+:warning: **Changing the DSL configuration in a running system**:<br>
+The microgateway does not detect DSL changes at runtime. If the DSL configuration is managed by the Helm Chart, a deployment rollout is triggered automatically after a DSL change. 
+If the DSL is mounted from a volume not managed by the Helm Chart, a manual restart is required.
 
 For a full list of available Microgateway configuration parameters refer to the [Microgateway Documentation](https://docs.airlock.com/microgateway/latest/)
 
-**Example:**
+**Example DSL Parameter:**
 
   custom-values.yaml
   ```
@@ -273,6 +280,35 @@ For a full list of available Microgateway configuration parameters refer to the 
   redis:
     enabled: true
 
+  ```
+
+**Example existing ConfigMap:**
+
+  custom-values.yaml
+  ```
+  config:
+    dslConfigMap: microgateway-config
+
+  redis:
+    enabled: true
+
+  ```
+
+  microgateway-config.yaml
+  ```
+  apiVersion: v1
+  kind: ConfigMap
+  metadata:
+    name: microgateway-config
+  data:
+    config.yaml: |
+      session:
+        redis_hosts: [redis-master]
+      log:
+        level: info
+
+      ...
+      ...
   ```
 
 ## Environment Variables
@@ -654,6 +690,80 @@ Used for backend connection:
   config:
     tlsSecretName: "microgateway-tls"
   ```
+
+#### JWKS Service Secrets
+JWKS Services can be configured to provide keys for decryption and signature verification of access tokens. 
+There are two types of JWKS services:
+- Local JWKS Services use a static JWKS that is either provided inline in the DSL or through a secret that is mounted into the Microgateway.
+- Remote JWKS Services retrieve JWKS files from a remote service. 
+
+##### Configure a local JWKS Service with a secret
+Create a secret containing your JWKS file if it does not exist yet:
+`kubectl create secret generic local-jwks --from-file=jwks.json=<jwks_file>`
+
+:exclamation: A restart of the Microgateway is required in case of changes in the mounted JWKS secret.
+
+Use the secret in the DSL to create a local JWKS service like this:
+```
+config:
+  jwks:
+    localJWKSSecretName: local-jwks
+  dsl:
+    apps:
+        - mappings:
+            access_token:
+              ... your access token configuration ...
+              jwks_providers: 
+                - jwks-local                
+    jwks_providers:
+      local:
+        - name: jwks-local 
+          jwks_file:  /secret/jwks/jwks.json
+```
+Note that the JWKS file has to referenced in JWKS service configuration. 
+
+##### Configure local JWKS services using extra volume mounts
+Parametrization of the Helm Chart only allows to configure one local JWKS Service. For configuring more than one service, 
+the parameters `extraVolumes` and `extraVolumeMounts` may be used.
+With extra volume mounts, JWKS files can be mounted to a path other than `/secret/jwks/jwks.json`.
+
+See [Extra Volumes](#extra-volumes) for additional information and an example.
+
+##### Configure TLS for Remote JWKS Service with secrets
+A client certificate and a server CA certificate may be provided for remote JWKS services. 
+
+Client Certificate: 
+`kubectl create secret generic jwks-clientsecret --from-file=client.key=<your private key> --from-file=client.crt=<your public key>`
+
+Server CA Certificate: 
+`kubectl create secret generic jwks-serversecret --from-file=server-validation.crt=<your server ca certificate>`
+
+Use these secrets in the DSL to configure Remote JWKS Services:
+```
+config:
+  jwks:
+    clientCertificateSecretName: jwks-clientsecret
+    serverCASecretName: jwks-serversecret
+  dsl:
+    apps:
+        - mappings:
+            access_token:
+              ... your access token configuration ...
+              jwks_providers: 
+                - jwks-remote                
+    jwks_providers:
+      local:
+        - name: jwks-remote 
+          service_url: <jwks service url>
+```
+
+
+##### Configure TLS for Remote JWKS Service using extra volume mounts
+Parametrization of the Helm Chart only allows to configure one set of secrets for remote JWKS Services. For configuring more than one service, 
+the parameters `extraVolumes` and `extraVolumeMounts` may be used.
+
+See [Extra Volumes](#extra-volumes) for additional information and an example.
+
 ### Service Account
 The Microgateway runs under a dedicated service account created with the deployment by default.
 The following example shows how to use an existing service account instead of having one created in the deployment.

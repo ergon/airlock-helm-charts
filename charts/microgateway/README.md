@@ -5,7 +5,7 @@ It is the lightweight, container-based deployment form of the *Airlock Gateway*,
 
 The Airlock helm charts are used internally for testing the *Airlock Microgateway*. We make them available publicly under the [MIT license](https://github.com/ergon/airlock-helm-charts/blob/master/LICENSE).
 
-The current chart version is: 2.0.0
+The current chart version is: 3.0.0
 
 ## Change Notes
 [CHANGE-NOTES](CHANGE-NOTES.md) contains a list of noteworthy changes in the Microgateway Helm Chart.
@@ -51,6 +51,7 @@ The current chart version is: 2.0.0
     * [Secure handling of license and passphrase](#secure-handling-of-license-and-passphrase)
     * [Credentials to pull image from Docker registry](#credentials-to-pull-image-from-docker-registry)
     * [Certificates for Microgateway](#certificates-for-microgateway)
+    * [JWKS Service Secrets](#jwks-service-secrets)
   * [Service Account](#service-account)
 * [Deployment Smoketest](#deployment-smoketest)
 
@@ -96,11 +97,17 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | affinity | string | `nil` | Assign custom [affinity rules](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/) (multiline string). |
+| annotations | object | `{}` | Additional annotations for the Microgateway Deployment |
 | commonLabels | object | `{}` | Labels to add to all resources. |
-| config.dsl | object | `{}` | [DSL configuration](#dsl-configuration) |
-| config.env | object | `{"configbuilder":[],"runtime":[]}` | [DSL Environment Variables](#dsl-environment-variables) |
+| config.dsl | object | `{}` | [DSL configuration](#dsl-configuration) Template rendering fails if `config.dslConfigMap` and `config.dsl` are specified. |
+| config.dslConfigMap | string | "" | Name of the ConfigMap containing the Microgateway DSL configuration file. <br> The DSL is expected in a data entry called `config.yaml`. <br> <br> Template rendering fails if `config.dslConfigMap` and `config.dsl` are specified. |
+| config.env | object | "See `config.env.*`" | [DSL Environment Variables](#dsl-environment-variables) |
 | config.env.configbuilder | list | `[]` | [DSL Environment Variables](#dsl-environment-variables) |
 | config.env.runtime | list | `[]` | [Runtime Environment Variables](#runtime-environment-variables) |
+| config.jwks | object | "see `config.jwks.*`" | [Secrets for JWKS services](#jwks-service-secrets) |
+| config.jwks.clientCertificateSecretName | string | "" | Name of an existing secret containing:<br><br> Certificate: `client.crt`<br> Private key: `client.key`<br> CA Certificate: `client-ca.crt` <br> The files will be available in '/secret/auth/jwks/tls/client/'. |
+| config.jwks.localJWKSSecretName | string | "" | Name of an existing secret with a jwks json file. The secret must contain:<br><br> JWKS File: `jwks.json`<br><br> The JWKS file will be available in '/secret/jwks/jwks.json' for reference in local JWKS service configurations in the DSL. |
+| config.jwks.serverCASecretName | string | "" | Name of an existing secret containing:<br><br> Server CA Certificate: `server-validation.crt`<br> The files will be available in '/secret/auth/jwks/tls/server/'. |
 | config.license | object | "" | Creates or mounts a secret with an Airlock Microgateway license. <br> If 'useExistingSecret: false' and no 'license.key' is given, the Airlock Microgateway runs in community mode. <br> If 'useExistingSecret: false' and the 'license.key' is given, a secret with the license will be created and mounted. <br> If 'useExistingSecret: true' and 'license.secretName' has a name, the referenced secret will be mounted. <br> If 'useExistingSecret: true' and 'license.key' is given, the license defined in 'secretName' will be used. |
 | config.license.key | string | "" | The Airlock Microgateway license key which will be stored and used in a secret. |
 | config.license.secretName | string | "" | Name of an existing secret containing: <br> <br> license: `license` |
@@ -122,10 +129,10 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | hpa.resource.cpu | int | `50` | Average Microgateway CPU consumption in percentage to scale up/down.<br><br> :exclamation: Please set the resource request parameter `resources.cpu` to a value reflecting your actual resource needs if you use autoscaling based on cpu consumption. Otherwise autoscaling will not work as expected. |
 | hpa.resource.memory | string | `"3Gi"` | Average Microgateway Memory consumption to scale up/down.<br><br> :exclamation: Update this setting depending on your `resources.limits.memory` setting. |
 | image.pullPolicy | string | `"IfNotPresent"` | Pull policy (`Always`, `IfNotPresent`, `Never`) |
-| image.repository | object | `{"configbuilder":"docker.io/ergon/airlock-microgateway-configbuilder","runtime":"docker.io/ergon/airlock-microgateway"}` | Image repositories for the Airlock Microgateway. |
+| image.repository | object | "See `image.repository.*`" | Image repositories for the Airlock Microgateway. |
 | image.repository.configbuilder | string | `"docker.io/ergon/airlock-microgateway-configbuilder"` | Image repository for the Airlock Microgateway configbuilder image |
 | image.repository.runtime | string | `"docker.io/ergon/airlock-microgateway"` | Image repository for the Airlock Microgateway runtime image |
-| image.tag | string | `"2.1.0"` | Image tag for microgateway and configbuilder image |
+| image.tag | string | `"3.0.0"` | Image tag for microgateway and configbuilder image |
 | imageCredentials | object | See `imageCredentials.*`: | Creates a imagePullSecret with the provided values. |
 | imageCredentials.enabled | bool | `false` | Enable the imagePullSecret creation. |
 | imageCredentials.password | string | `""` | imagePullSecret password/Token |
@@ -156,6 +163,7 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | livenessProbe.timeoutSeconds | int | `5` | Timeout of liveness probes, should roughly reflect allowed timeouts from clients. |
 | nameOverride | string | `""` | Provide a name in place of `microgateway`. |
 | nodeSelector | object | `{}` | Define which nodes the pods are scheduled on. |
+| podAnnotations | object | `{}` | Additional annotations for the Microgateway Pod <br><br> Examples: <br> - prometheus.io/scrape: "true" <br> - prometheus.io/port: "9102" |
 | podSecurityContext | object | `{}` | [Security context for the pods](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod). |
 | readinessProbe.enabled | bool | `true` | Enable readiness probes. |
 | readinessProbe.failureThreshold | int | `3` | After how many tries the pod stops receiving traffic. |
@@ -190,7 +198,7 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | service.port | int | `80` | Service port |
 | service.tlsPort | int | `443` | Service TLS port |
 | service.type | string | `"ClusterIP"` | [Service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) |
-| serviceAccount | object | `{"annotations":{},"create":true,"labels":{},"name":null}` | Specifies the service account under which the microgateway will run. A dedicated service account is created and used by default. <br><br> If `serviceAccount.create=true` and no `serviceAccount.name` is given, a name is generated using the fullname template. <br><br> If `serviceAccount.create=false` and no `serviceAccount.name` is given, the microgateway runs under the default service account. |
+| serviceAccount | object | "See `serviceAccount.*`" | Specifies the service account under which the microgateway will run. A dedicated service account is created and used by default. <br><br> If `serviceAccount.create=true` and no `serviceAccount.name` is given, a name is generated using the fullname template. <br><br> If `serviceAccount.create=false` and no `serviceAccount.name` is given, the microgateway runs under the default service account. |
 | serviceAccount.annotations | object | `{}` | Annotations to set on the service account. |
 | serviceAccount.create | bool | `true` | Specifies whether a ServiceAccount should be created |
 | serviceAccount.labels | object | `{}` | Additional labels added on the service account. |
@@ -337,11 +345,17 @@ Finally, apply the Helm chart configuration file with `-f` parameter.
 Please refer to the [Echo-Server Helm chart](https://artifacthub.io/packages/helm/ealenn/echo-server) to see all possible parameters of the Echo-Server Helm chart.
 
 ## DSL Configuration
-It is possible to use all Microgateway DSL configuration options within the 'dsl' configuration parameter.
+The Microgateway DSL configuration can be provided in 2 different ways:
+- within the Helm Chart 'dsl' configuration parameter
+- in an existing ConfigMap mounted into the Microgatway pod
+
+:warning: **Changing the DSL configuration in a running system**:<br>
+The microgateway does not detect DSL changes at runtime. If the DSL configuration is managed by the Helm Chart, a deployment rollout is triggered automatically after a DSL change.
+If the DSL is mounted from a volume not managed by the Helm Chart, a manual restart is required.
 
 For a full list of available Microgateway configuration parameters refer to the [Microgateway Documentation](https://docs.airlock.com/microgateway/latest/)
 
-**Example:**
+**Example DSL Parameter:**
 
   custom-values.yaml
   ```
@@ -380,6 +394,35 @@ For a full list of available Microgateway configuration parameters refer to the 
   redis:
     enabled: true
 
+  ```
+
+**Example existing ConfigMap:**
+
+  custom-values.yaml
+  ```
+  config:
+    dslConfigMap: microgateway-config
+
+  redis:
+    enabled: true
+
+  ```
+
+  microgateway-config.yaml
+  ```
+  apiVersion: v1
+  kind: ConfigMap
+  metadata:
+    name: microgateway-config
+  data:
+    config.yaml: |
+      session:
+        redis_hosts: [redis-master]
+      log:
+        level: info
+
+      ...
+      ...
   ```
 
 ## Environment Variables
@@ -759,6 +802,79 @@ Used for backend connection:
   config:
     tlsSecretName: "microgateway-tls"
   ```
+
+#### JWKS Service Secrets
+JWKS Services can be configured to provide keys for decryption and signature verification of access tokens.
+There are two types of JWKS services:
+- Local JWKS Services use a static JWKS that is either provided inline in the DSL or through a secret that is mounted into the Microgateway.
+- Remote JWKS Services retrieve JWKS files from a remote service.
+
+##### Configure a local JWKS Service with a secret
+Create a secret containing your JWKS file if it does not exist yet:
+`kubectl create secret generic local-jwks --from-file=jwks.json=<jwks_file>`
+
+:exclamation: A restart of the Microgateway is required in case of changes in the mounted JWKS secret.
+
+Use the secret in the DSL to create a local JWKS service like this:
+```
+config:
+  jwks:
+    localJWKSSecretName: local-jwks
+  dsl:
+    apps:
+        - mappings:
+            access_token:
+              ... your access token configuration ...
+              jwks_providers:
+                - jwks-local               
+    jwks_providers:
+      local:
+        - name: jwks-local
+          jwks_file:  /secret/jwks/jwks.json
+```
+Note that the JWKS file has to referenced in JWKS service configuration.
+
+##### Configure local JWKS services using extra volume mounts
+Parametrization of the Helm Chart only allows to configure one local JWKS Service. For configuring more than one service,
+the parameters `extraVolumes` and `extraVolumeMounts` may be used.
+With extra volume mounts, JWKS files can be mounted to a path other than `/secret/jwks/jwks.json`.
+
+See [Extra Volumes](#extra-volumes) for additional information and an example.
+
+##### Configure TLS for Remote JWKS Service with secrets
+A client certificate and a server CA certificate may be provided for remote JWKS services.
+
+Client Certificate:
+`kubectl create secret generic jwks-clientsecret --from-file=client.key=<your private key> --from-file=client.crt=<your public key>`
+
+Server CA Certificate:
+`kubectl create secret generic jwks-serversecret --from-file=server-validation.crt=<your server ca certificate>`
+
+Use these secrets in the DSL to configure Remote JWKS Services:
+```
+config:
+  jwks:
+    clientCertificateSecretName: jwks-clientsecret
+    serverCASecretName: jwks-serversecret
+  dsl:
+    apps:
+        - mappings:
+            access_token:
+              ... your access token configuration ...
+              jwks_providers:
+                - jwks-remote               
+    jwks_providers:
+      local:
+        - name: jwks-remote
+          service_url: <jwks service url>
+```
+
+##### Configure TLS for Remote JWKS Service using extra volume mounts
+Parametrization of the Helm Chart only allows to configure one set of secrets for remote JWKS Services. For configuring more than one service,
+the parameters `extraVolumes` and `extraVolumeMounts` may be used.
+
+See [Extra Volumes](#extra-volumes) for additional information and an example.
+
 ### Service Account
 The Microgateway runs under a dedicated service account created with the deployment by default.
 The following example shows how to use an existing service account instead of having one created in the deployment.

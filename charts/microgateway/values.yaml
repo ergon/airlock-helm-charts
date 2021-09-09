@@ -3,20 +3,32 @@ replicaCount: 1
 
 image:
   # image.repository -- Image repositories for the Airlock Microgateway.
+  # @default -- "See `image.repository.*`"
   repository:
     # image.repository.runtime -- Image repository for the Airlock Microgateway runtime image
     runtime: docker.io/ergon/airlock-microgateway
     # image.repository.configbuilder -- Image repository for the Airlock Microgateway configbuilder image
     configbuilder: docker.io/ergon/airlock-microgateway-configbuilder
   # image.tag -- Image tag for microgateway and configbuilder image
-  tag: "2.1.0"
+  tag: "3.0.0"
   # image.pullPolicy -- Pull policy (`Always`, `IfNotPresent`, `Never`)
   pullPolicy: IfNotPresent
+
+# annotations -- Additional annotations for the Microgateway Deployment
+annotations: {}
+
+# podAnnotations -- Additional annotations for the Microgateway Pod <br><br>
+# Examples: <br>
+# - prometheus.io/scrape: "true" <br>
+# - prometheus.io/port: "9102"
+podAnnotations: {}
+
 
 ## Microgateway Config
 ##
 config:
   # config.env -- [DSL Environment Variables](#dsl-environment-variables)
+  # @default -- "See `config.env.*`"
   env:
     # config.env.configbuilder -- [DSL Environment Variables](#dsl-environment-variables)
     configbuilder: []
@@ -66,7 +78,35 @@ config:
     # config.license.key -- The Airlock Microgateway license key which will be stored and used in a secret.
     # @default -- ""
     key:
+
+  # config.jwks -- [Secrets for JWKS services](#jwks-service-secrets)
+  # @default -- "see `config.jwks.*`"
+  jwks:
+    # config.jwks.localJWKSSecretName -- (string) Name of an existing secret with a jwks json file. The secret must contain:<br><br>
+    # JWKS File: `jwks.json`<br><br>
+    # The JWKS file will be available in '/secret/jwks/jwks.json' for reference in local JWKS service configurations in the DSL.
+    # @default -- ""
+    localJWKSSecretName:
+    # config.jwks.clientCertificateSecretName -- (string) Name of an existing secret containing:<br><br>
+    # Certificate: `client.crt`<br>
+    # Private key: `client.key`<br>
+    # CA Certificate: `client-ca.crt` <br>
+    # The files will be available in '/secret/auth/jwks/tls/client/'.
+    # @default -- ""
+    clientCertificateSecretName:
+    # config.jwks.serverCASecretName -- (string) Name of an existing secret containing:<br><br>
+    # Server CA Certificate: `server-validation.crt`<br>
+    # The files will be available in '/secret/auth/jwks/tls/server/'.
+    # @default -- ""
+    serverCASecretName:
+
+  # config.dslConfigMap -- Name of the ConfigMap containing the Microgateway DSL configuration file. <br>
+  # The DSL is expected in a data entry called `config.yaml`. <br> <br>
+  # Template rendering fails if `config.dslConfigMap` and `config.dsl` are specified.
+  # @default -- ""
+  dslConfigMap:
   # config.dsl -- [DSL configuration](#dsl-configuration)
+  # Template rendering fails if `config.dslConfigMap` and `config.dsl` are specified.
   dsl: {}
 
 # commonLabels -- Labels to add to all resources.
@@ -103,6 +143,7 @@ securityContext: {}
 # A dedicated service account is created and used by default. <br><br>
 # If `serviceAccount.create=true` and no `serviceAccount.name` is given, a name is generated using the fullname template. <br><br>
 # If `serviceAccount.create=false` and no `serviceAccount.name` is given, the microgateway runs under the default service account.
+# @default -- "See `serviceAccount.*`"
 serviceAccount:
   # serviceAccount.create -- Specifies whether a ServiceAccount should be created
   create: true
@@ -128,6 +169,8 @@ service:
   # service.annotations -- Annotations to set on the service.
   annotations: {}
     # service.alpha.openshift.io/serving-cert-secret-name: microgateway
+    # prometheus.io/scrape: "true"
+    # prometheus.io/port: "9102"
   # service.labels -- Additional labels to add on the service.
   labels: {}
 
