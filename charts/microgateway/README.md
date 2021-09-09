@@ -350,7 +350,7 @@ The Microgateway DSL configuration can be provided in 2 different ways:
 - in an existing ConfigMap mounted into the Microgatway pod
 
 :warning: **Changing the DSL configuration in a running system**:<br>
-The microgateway does not detect DSL changes at runtime. If the DSL configuration is managed by the Helm Chart, the Microgateway pod is restarted automatically after a DSL change.
+The microgateway does not detect DSL changes at runtime. If the DSL configuration is managed by the Helm Chart, a deployment rollout is triggered automatically after a DSL change.
 If the DSL is mounted from a volume not managed by the Helm Chart, a manual restart is required.
 
 For a full list of available Microgateway configuration parameters refer to the [Microgateway Documentation](https://docs.airlock.com/microgateway/latest/)
