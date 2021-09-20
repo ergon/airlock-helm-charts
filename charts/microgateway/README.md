@@ -1,11 +1,10 @@
 # Airlock Microgateway
 
-The *Airlock Microgateway* is a component of the [Airlock Secure Access Hub](https://www.airlock.com/).
-It is the lightweight, container-based deployment form of the *Airlock Gateway*, a software appliance with reverse-proxy, Web Application Firewall (WAF) and API security functionality.
+The *Airlock Microgateway* is the lightweight, container-based deployment form of the *Airlock Gateway*, a software appliance with reverse-proxy, Web Application Firewall (WAF) and API security functionality. Airlock Microgateway is a component of [Airlock Secure Access Hub](https://www.airlock.com/).
 
 The Airlock helm charts are used internally for testing the *Airlock Microgateway*. We make them available publicly under the [MIT license](https://github.com/ergon/airlock-helm-charts/blob/master/LICENSE).
 
-The current chart version is: 2.2.0
+The current chart version is: 2.2.1
 
 ## Change Notes
 [CHANGE-NOTES](CHANGE-NOTES.md) contains a list of noteworthy changes in the Microgateway Helm Chart.
@@ -127,7 +126,7 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | image.repository | object | "see `image.repository.*`" | Image repositories for the Airlock Microgateway. |
 | image.repository.configbuilder | string | `"docker.io/ergon/airlock-microgateway-configbuilder"` | Image repository for the Airlock Microgateway configbuilder image |
 | image.repository.runtime | string | `"docker.io/ergon/airlock-microgateway"` | Image repository for the Airlock Microgateway runtime image |
-| image.tag | string | `"2.1.0"` | Image tag for microgateway and configbuilder image |
+| image.tag | string | `"2.1.2"` | Image tag for microgateway and configbuilder image |
 | imageCredentials | object | See `imageCredentials.*`: | Creates a imagePullSecret with the provided values. |
 | imageCredentials.enabled | bool | `false` | Enable the imagePullSecret creation. |
 | imageCredentials.password | string | `""` | imagePullSecret password/Token |
