@@ -24,6 +24,9 @@ name: microgateway
 version: 2.2.1
 appVersion: "2.1.2"
 annotations:
+  artifacthub.io/changes: |
+    - kind: security
+      description: Upgrade to Microgateway 2.1.2
   artifacthub.io/links: |
     - name: Airlock Microgateway Manual
       url: https://docs.airlock.com/microgateway/latest/
