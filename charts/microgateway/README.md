@@ -1,14 +1,16 @@
 # Airlock Microgateway
 
-The *Airlock Microgateway* is a component of the [Airlock Secure Access Hub](https://www.airlock.com/).
-It is the lightweight, container-based deployment form of the *Airlock Gateway*, a software appliance with reverse-proxy, Web Application Firewall (WAF) and API security functionality.
+The *Airlock Microgateway* is the lightweight, container-based deployment form of the *Airlock Gateway*, a software appliance with reverse-proxy, Web Application Firewall (WAF) and API security functionality. Airlock Microgateway is a component of [Airlock Secure Access Hub](https://www.airlock.com/).
 
 The Airlock helm charts are used internally for testing the *Airlock Microgateway*. We make them available publicly under the [MIT license](https://github.com/ergon/airlock-helm-charts/blob/master/LICENSE).
 
 The current chart version is: 3.0.0
 
-## Change Notes
-[CHANGE-NOTES](CHANGE-NOTES.md) contains a list of noteworthy changes in the Microgateway Helm Chart.
+## Additional Information
+- [Airlock Microgateway](https://www.airlock.com/microgateway)
+- [Airlock Microgateway Manual](https://docs.airlock.com/microgateway/latest/)
+- [Airlock Community Forum](https://forum.airlock.com)
+- [Airlock Minikube Example](https://github.com/ergon/airlock-minikube-example)
 
 ## About Ergon
 *Airlock* is a registered trademark of [Ergon](https://www.ergon.ch). Ergon is a Swiss leader in leveraging digitalisation to create unique and effective client benefits, from conception to market, the result of which is the international distribution of globally revered products.
@@ -54,6 +56,7 @@ The current chart version is: 3.0.0
     * [JWKS Service Secrets](#jwks-service-secrets)
   * [Service Account](#service-account)
 * [Deployment Smoketest](#deployment-smoketest)
+* [Breaking Changes](#breaking-changes)
 
 ## Introduction
 This Helm chart bootstraps [Airlock Microgateway](https://www.airlock.com) on a [Kubernetes](https://kubernetes.io) or [Openshift](https://www.openshift.com) cluster using the [Helm](https://helm.sh) package manager. It provisions an Airlock Microgateway Pod with a default configuration that can be adjusted to customer needs. For more details about the configuration options, see chapter [Helm Configuration](#dsl-configuration).
@@ -893,3 +896,22 @@ The default URL for the test is '/'. Overwrite the test URL with the parameter '
 ```
 test_request: /myapp/login
 ```
+## Breaking Changes
+### 2.0.0
+
+With the Airlock Microgateway Helm Chart 2.0.0, it is possible to configure the encryption passphrase and the Microgateway license in different secrets.
+Secret names have to be specified for both secrets individually.
+You can still configure the same pre-existing secret as in previous chart versions, but it needs to be referenced for both the password and the license.
+If you do not configure license information, no license will be mounted and the Microgateway will run as community edition.
+
+Required changes:
+- To create a license secret with the Helm chart:
+  - config.license -> config.license.key
+- To mount an existing license secret:
+  - config.license.useExistingSecret: true
+  - config.existingSecret -> config.license.secretName
+- To mount an existing passphrase secret:
+  - config.exsistingSecret -> config.passphrase.secretName.
+  - config.passphrase.useExistingSecret: true.
+- To create a passphrase secret:
+  - config.passphrase -> config.passphrase.value.
