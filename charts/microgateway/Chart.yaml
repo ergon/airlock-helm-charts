@@ -29,5 +29,3 @@ annotations:
       url: https://forum.airlock.com  
     - name: Airlock Minikube Example
       url: https://github.com/ergon/airlock-minikube-example
-      
-
