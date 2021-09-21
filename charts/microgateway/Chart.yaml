@@ -26,6 +26,6 @@ annotations:
     - name: Airlock Microgateway Manual
       url: https://docs.airlock.com/microgateway/latest/
     - name: Airlock Community Forum
-      url: https://forum.airlock.com  
+      url: https://forum.airlock.com
     - name: Airlock Minikube Example
       url: https://github.com/ergon/airlock-minikube-example
