@@ -6,8 +6,14 @@ The Airlock helm charts are used internally for testing the *Airlock Microgatewa
 
 The current chart version is: 2.2.1
 
+## Additional Information
+- [Airlock Microgateway](https://www.airlock.com/microgateway)
+- [Airlock Microgateway Manual](https://docs.airlock.com/microgateway/latest/)
+- [Airlock Community Forum](https://forum.airlock.com)
+- [Airlock Minikube Example](https://github.com/ergon/airlock-minikube-example)
+
 ## Change Notes
-[CHANGE-NOTES](CHANGE-NOTES.md) contains a list of noteworthy changes in the Microgateway Helm Chart.
+- [CHANGE-NOTES](CHANGE-NOTES.md) contains a list of noteworthy changes in the Microgateway Helm Chart.
 
 ## About Ergon
 *Airlock* is a registered trademark of [Ergon](https://www.ergon.ch). Ergon is a Swiss leader in leveraging digitalisation to create unique and effective client benefits, from conception to market, the result of which is the international distribution of globally revered products.
