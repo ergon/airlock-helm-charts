@@ -80,7 +80,7 @@ To install the Airlock Microgateway community edition with the release name `mic
   ```console
   helm upgrade -i microgateway airlock/microgateway
   ```
-:exclamation: Consult chapter [Configure a valid license](#configure-a-valid-license) for further instructions on how to install the Airlock Microgateway premium edition.
+Consult chapter [Configure a valid license](#configure-a-valid-license) for further instructions on how to install the Airlock Microgateway premium edition.
 
 ### Uninstalling the chart
 To uninstall the chart with the release name `microgateway`:
@@ -119,7 +119,7 @@ config:
   helm upgrade -i microgateway airlock/microgateway -f license.yaml
   ```
 
-:information_source: **Note**:<br>
+**Note**:<br>
 In productive environments, licenses might be deployed and handled in a different lifecycles. In such cases, an existing license secret may be referenced. Further information is provided in chapter [Secure handling of license and passphrase](#secure-handling-of-license-and-passphrase).
 
 ### Override default values
@@ -169,7 +169,7 @@ The Airlock Microgateway Helm chart has many parameters and most of them are alr
   helm upgrade -i microgateway airlock/microgateway -f custom-values.yaml
   ```
 
-:point_up: **YAML indentation**:<br>
+**YAML indentation**:<br>
 YAML is very strict with indentation. To ensure that the YAML file itself is correct, check it's content with a YAML validator (e.g. [YAML Lint](http://www.yamllint.com/)).
 
 ## Dependencies
@@ -206,10 +206,10 @@ Finally, apply the Helm chart configuration file with `-f` parameter.
   helm upgrade -i microgateway airlock/microgateway -f custom-values.yaml
   ```
 
-:information_source: **Possible settings**:<br>
+**Possible settings**:<br>
 Please refer to the [Redis Helm chart](https://hub.helm.sh/charts/bitnami/redis) to see all possible parameters of the Redis Helm chart.
 
-:warning: **Adjustments of the default settings**:<br>
+**Adjustments of the default settings**:<br>
 The delivered Helm chart comes pre-configured and tested for the dependent Redis service. Adjusting those settings can cause issues.
 
 ### Echo-Server
@@ -226,7 +226,7 @@ Finally, apply the Helm chart configuration file with `-f` parameter.
   helm upgrade -i microgateway airlock/microgateway -f custom-values.yaml
   ```
 
-:information_source: **Possible settings**:<br>
+**Possible settings**:<br>
 Please refer to the [Echo-Server Helm chart](https://artifacthub.io/packages/helm/ealenn/echo-server) to see all possible parameters of the Echo-Server Helm chart.
 
 ## DSL Configuration
@@ -234,7 +234,7 @@ The Microgateway DSL configuration can be provided in 2 different ways:
 - within the Helm Chart 'dsl' configuration parameter
 - in an existing ConfigMap mounted into the Microgatway pod
 
-:warning: **Changing the DSL configuration in a running system**:<br>
+**Changing the DSL configuration in a running system**:<br>
 The microgateway does not detect DSL changes at runtime. If the DSL configuration is managed by the Helm Chart, a deployment rollout is triggered automatically after a DSL change. 
 If the DSL is mounted from a volume not managed by the Helm Chart, a manual restart is required.
 
@@ -414,7 +414,7 @@ The Helm chart can be configured to create a Kubernetes Ingress or Openshift Rou
 In case that those objects have to be created with this Helm chart, just follow along with the description and configuration examples.
 If there is already an existing Ingress or Route object and the traffic should only be passed to the Microgateway service, the information in the subchapters should provide useful information about how to integrate into the existing environment.
 
-:information_source: **Kubernetes vs. Openshift**:<br>
+**Kubernetes vs. Openshift**:<br>
 This Helm chart can be used for Kubernetes and Openshift. While Kubernetes has "Ingress" and Openshift has "Route", simply enable the feature which fits to the environment (e.g. in Kubernetes `ingress.enabled=true` and in Openshift `route.enabled=true`).
 
 ### Kubernetes Ingress
@@ -428,7 +428,7 @@ Kubernetes allows using different kinds of Ingress controllers. Our examples are
   helm install nginx ingress-nginx/ingress-nginx
   ```
 
-:information_source: **Note**:<br>
+**Note**:<br>
 The Microgateway Helm chart itself does not install the nginx-ingress-controller, but allows to create an Ingress object.
 
 #### Ingress terminating HTTP
@@ -665,7 +665,7 @@ Used for frontend connection:
 * Private key: `frontend-server.key`
 * CA:          `frontend-server-ca.crt`
 
-:exclamation: In case that [Route Re-encrypt configuration](#route-re-encrypt-configuration) is used, ensure that `route.tls.destinationCACertificate` is updated accordingly.
+In case that [Route Re-encrypt configuration](#route-re-encrypt-configuration) is used, ensure that `route.tls.destinationCACertificate` is updated accordingly.
 
 Used for backend connection:
 * Certificate: `backend-client.crt`
@@ -700,7 +700,7 @@ There are two types of JWKS services:
 Create a secret containing your JWKS file if it does not exist yet:
 `kubectl create secret generic local-jwks --from-file=jwks.json=<jwks_file>`
 
-:exclamation: A restart of the Microgateway is required in case of changes in the mounted JWKS secret.
+A restart of the Microgateway is required in case of changes in the mounted JWKS secret.
 
 Use the secret in the DSL to create a local JWKS service like this:
 ```
