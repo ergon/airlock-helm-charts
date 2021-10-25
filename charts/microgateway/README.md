@@ -1,19 +1,14 @@
 # Airlock Microgateway
 
-The *Airlock Microgateway* is the lightweight, container-based deployment form of the *Airlock Gateway*, a software appliance with reverse-proxy, Web Application Firewall (WAF) and API security functionality. Airlock Microgateway is a component of [Airlock Secure Access Hub](https://www.airlock.com/).
-
-The Airlock helm charts are used internally for testing the *Airlock Microgateway*. We make them available publicly under the [MIT license](https://github.com/ergon/airlock-helm-charts/blob/master/LICENSE).
+Airlock Microgateway helps you to protect your services and APIs from unauthorized or malicious access with little effort. It is a lightweight Web Application Firewall (WAF) and API security gateway designed specifically for use in container environments.
 
 The current chart version is: 3.0.0
 
 ## Additional Information
-- [Airlock Microgateway](https://www.airlock.com/microgateway)
-- [Airlock Microgateway Manual](https://docs.airlock.com/microgateway/latest/)
-- [Airlock Community Forum](https://forum.airlock.com)
-- [Airlock Minikube Example](https://github.com/ergon/airlock-minikube-example)
-
-## About Ergon
-*Airlock* is a registered trademark of [Ergon](https://www.ergon.ch). Ergon is a Swiss leader in leveraging digitalisation to create unique and effective client benefits, from conception to market, the result of which is the international distribution of globally revered products.
+- Introduction: [Airlock Microgateway](https://www.airlock.com/microgateway)
+- Documentation: [Airlock Microgateway Manual](https://docs.airlock.com/microgateway/latest/)
+- Support: [Airlock Community Forum](https://forum.airlock.com)
+- Integration: [Airlock Minikube Example](https://github.com/ergon/airlock-minikube-example)
 
 ## Table of contents
 * [Introduction](#introduction)
@@ -66,7 +61,7 @@ This Helm chart bootstraps [Airlock Microgateway](https://www.airlock.com) on a 
 * Airlock Microgateway is available as premium and community edition. <br>
   Without a valid license, Airlock Microgateway works as community edition with limited functionality. <br>
   For further information refer to [Microgateway Documentation](https://docs.airlock.com/microgateway/latest/). <br>
-  To order a license, please contact sales@airlock.com.
+  If you want to try the premium features, [request a license key](https://airlock.com/microgateway-premium).
 * Redis service for session handling (see chapter [Dependencies](#dependencies))
 
 ## Quick start guide
@@ -85,7 +80,7 @@ To install the Airlock Microgateway community edition with the release name `mic
   ```console
   helm upgrade -i microgateway airlock/microgateway
   ```
-:exclamation: Consult chapter [Configure a valid license](#configure-a-valid-license) for further instructions on how to install the Airlock Microgateway premium edition.
+Consult chapter [Configure a valid license](#configure-a-valid-license) for further instructions on how to install the Airlock Microgateway premium edition.
 
 ### Uninstalling the chart
 To uninstall the chart with the release name `microgateway`:
@@ -234,7 +229,7 @@ config:
   helm upgrade -i microgateway airlock/microgateway -f license.yaml
   ```
 
-:information_source: **Note**:<br>
+**Note**:<br>
 In productive environments, licenses might be deployed and handled in a different lifecycles. In such cases, an existing license secret may be referenced. Further information is provided in chapter [Secure handling of license and passphrase](#secure-handling-of-license-and-passphrase).
 
 ### Override default values
@@ -284,7 +279,7 @@ The Airlock Microgateway Helm chart has many parameters and most of them are alr
   helm upgrade -i microgateway airlock/microgateway -f custom-values.yaml
   ```
 
-:point_up: **YAML indentation**:<br>
+**YAML indentation**:<br>
 YAML is very strict with indentation. To ensure that the YAML file itself is correct, check it's content with a YAML validator (e.g. [YAML Lint](http://www.yamllint.com/)).
 
 ## Dependencies
@@ -324,10 +319,10 @@ Finally, apply the Helm chart configuration file with `-f` parameter.
   helm upgrade -i microgateway airlock/microgateway -f custom-values.yaml
   ```
 
-:information_source: **Possible settings**:<br>
+**Possible settings**:<br>
 Please refer to the [Redis Helm chart](https://hub.helm.sh/charts/bitnami/redis) to see all possible parameters of the Redis Helm chart.
 
-:warning: **Adjustments of the default settings**:<br>
+**Adjustments of the default settings**:<br>
 The delivered Helm chart comes pre-configured and tested for the dependent Redis service. Adjusting those settings can cause issues.
 
 ### Echo-Server
@@ -344,7 +339,7 @@ Finally, apply the Helm chart configuration file with `-f` parameter.
   helm upgrade -i microgateway airlock/microgateway -f custom-values.yaml
   ```
 
-:information_source: **Possible settings**:<br>
+**Possible settings**:<br>
 Please refer to the [Echo-Server Helm chart](https://artifacthub.io/packages/helm/ealenn/echo-server) to see all possible parameters of the Echo-Server Helm chart.
 
 ## DSL Configuration
@@ -352,7 +347,7 @@ The Microgateway DSL configuration can be provided in 2 different ways:
 - within the Helm Chart 'dsl' configuration parameter
 - in an existing ConfigMap mounted into the Microgatway pod
 
-:warning: **Changing the DSL configuration in a running system**:<br>
+**Changing the DSL configuration in a running system**:<br>
 The microgateway does not detect DSL changes at runtime. If the DSL configuration is managed by the Helm Chart, a deployment rollout is triggered automatically after a DSL change.
 If the DSL is mounted from a volume not managed by the Helm Chart, a manual restart is required.
 
@@ -532,7 +527,7 @@ The Helm chart can be configured to create a Kubernetes Ingress or Openshift Rou
 In case that those objects have to be created with this Helm chart, just follow along with the description and configuration examples.
 If there is already an existing Ingress or Route object and the traffic should only be passed to the Microgateway service, the information in the subchapters should provide useful information about how to integrate into the existing environment.
 
-:information_source: **Kubernetes vs. Openshift**:<br>
+**Kubernetes vs. Openshift**:<br>
 This Helm chart can be used for Kubernetes and Openshift. While Kubernetes has "Ingress" and Openshift has "Route", simply enable the feature which fits to the environment (e.g. in Kubernetes `ingress.enabled=true` and in Openshift `route.enabled=true`).
 
 ### Kubernetes Ingress
@@ -546,7 +541,7 @@ Kubernetes allows using different kinds of Ingress controllers. Our examples are
   helm install nginx ingress-nginx/ingress-nginx
   ```
 
-:information_source: **Note**:<br>
+**Note**:<br>
 The Microgateway Helm chart itself does not install the nginx-ingress-controller, but allows to create an Ingress object.
 
 #### Ingress terminating HTTP
@@ -782,7 +777,7 @@ Used for frontend connection:
 * Private key: `frontend-server.key`
 * CA:          `frontend-server-ca.crt`
 
-:exclamation: In case that [Route Re-encrypt configuration](#route-re-encrypt-configuration) is used, ensure that `route.tls.destinationCACertificate` is updated accordingly.
+In case that [Route Re-encrypt configuration](#route-re-encrypt-configuration) is used, ensure that `route.tls.destinationCACertificate` is updated accordingly.
 
 Used for backend connection:
 * Certificate: `backend-client.crt`
@@ -816,7 +811,7 @@ There are two types of JWKS services:
 Create a secret containing your JWKS file if it does not exist yet:
 `kubectl create secret generic local-jwks --from-file=jwks.json=<jwks_file>`
 
-:exclamation: A restart of the Microgateway is required in case of changes in the mounted JWKS secret.
+A restart of the Microgateway is required in case of changes in the mounted JWKS secret.
 
 Use the secret in the DSL to create a local JWKS service like this:
 ```
@@ -915,3 +910,6 @@ Required changes:
   - config.passphrase.useExistingSecret: true.
 - To create a passphrase secret:
   - config.passphrase -> config.passphrase.value.
+
+## About Ergon
+*Airlock* is a registered trademark of [Ergon](https://www.ergon.ch). Ergon is a Swiss leader in leveraging digitalisation to create unique and effective client benefits, from conception to market, the result of which is the international distribution of globally revered products.
