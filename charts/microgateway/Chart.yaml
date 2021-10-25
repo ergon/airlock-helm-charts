@@ -34,4 +34,3 @@ annotations:
     - name: Airlock Minikube Example
       url: https://github.com/ergon/airlock-minikube-example
   artifacthub.io/license: MIT
-
