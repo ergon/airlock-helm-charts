@@ -229,7 +229,6 @@ The Airlock Microgateway Helm chart has the following optional dependencies, whi
 In case that session handling is enabled on Airlock Microgateway, a Redis service needs to be available.
 
 The following example shows how to deploy a redis service with the Helm chart and reference it in the Microgateway DSL:
-  custom-values.yaml
   ```
   redis:
     enabled: true
@@ -247,7 +246,6 @@ The delivered Helm chart comes pre-configured and tested for the dependent Redis
 
 ### Echo-Server
 For the first deployment, it could be very useful to have a backend service processing requests. For this purpose the dependent Echo-Server can be deployed by doing the following:
-  custom-values.yaml
   ```
   echo-server:
     enabled: true
@@ -269,7 +267,6 @@ For a full list of available Microgateway configuration parameters refer to the 
 
 **Example DSL Parameter:**
 
-  custom-values.yaml
   ```
   config:
     dsl:
@@ -310,7 +307,6 @@ For a full list of available Microgateway configuration parameters refer to the 
 
 **Example existing ConfigMap:**
 
-  custom-values.yaml
   ```
   config:
     dslConfigMap: microgateway-config
@@ -342,7 +338,6 @@ For a full list of available Microgateway configuration parameters refer to the 
 Environment variables can be configured with the Helm chart and used within the [DSL Configuration](#dsl-configuration).
 The example below illustrates how to configure environment variables in combination with the [DSL configuration](#dsl-configuration).
 
-  custom-values.yaml
   ```
   config:
     env:
@@ -366,7 +361,6 @@ The example below illustrates how to configure environment variables in combinat
 The Helm chart also allows to specify environment variables for the runtime container.
 The following example shows how to set the timezone of the microgateway:
 
-custom-values.yaml
 ```
 config:
   env:
@@ -379,7 +373,6 @@ config:
 The Helm chart allows you to define extra volumes which can be used in the Microgateway.
 The configuration of such additional volumes could look like this:
 
-custom-values.yaml
 ```
 extraVolumes:
   - name: mapping
@@ -400,11 +393,10 @@ config:
 ```
 
 ## Readiness and Liveness Probes
-The Helm chart defines default values for readiness and liveness probes. Use the parameters `readinessProbe`and `livenessProbe` to set these parameters according to your requirements.
+The Helm chart defines default values for readiness and liveness probes. Use the parameters `readinessProbe` and `livenessProbe` to disable probes or set probe parameters according to your requirements.
 
 The following example shows how to increase the initial delays for liveness and readyness probes.
 
-custom-values.yaml 
 ```
 readinessProbe:
   initialDelaySeconds: 90
@@ -629,7 +621,6 @@ Either an already existing Docker secret is provided (`imagePullSecrets`) during
   ```
 
   Afterwards use this secret in the Helm chart configuration file.
-  custom-values.yaml
   ```
   imagePullSecrets:
       - name: "docker-secret"
