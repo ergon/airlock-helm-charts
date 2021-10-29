@@ -13,8 +13,8 @@ The current chart version is: {{ template "chart.version" . }}
 ## Table of contents
 * [Introduction](#introduction)
 * [Prerequisites](#prerequisites)
-* [Quick start guide](#quick-start-guide)
-* [Configuration](#configuration)
+* [Installing the Chart](#installing-the-chart)
+* [Parameters](#parameters)
 * [Getting started](#getting-started)
 * [Dependencies](#dependencies)
 * [DSL Configuration](#dsl-configuration)
@@ -27,6 +27,7 @@ The current chart version is: {{ template "chart.version" . }}
 * [Security](#security)
   * [Store sensitive information in secrets](#store-sensitive-information-in-secrets)
   * [Service Account](#service-account)
+* [Configuring a License](#configuring-a-license)
 * [Deployment Smoketest](#deployment-smoketest)
 * [Breaking Changes](#breaking-changes)
 
@@ -41,69 +42,28 @@ This Helm chart bootstraps [Airlock Microgateway](https://www.airlock.com) on a 
   If you want to try the premium features, [request a license key](https://airlock.com/microgateway-premium).
 * Redis service for session handling (see chapter [Dependencies](#dependencies))
 
-## Quick start guide
-The following subchapters describe how to use the Helm chart.
-
-### Adding the chart repository
-To add the chart repository:
+## Installing the Chart
+To configure the chart repository:
 
   ```console
   helm repo add airlock https://ergon.github.io/airlock-helm-charts/
   ```
 
-### Installing the chart
 To install the Airlock Microgateway community edition with the release name `microgateway`:
 
   ```console
   helm upgrade -i microgateway airlock/microgateway
   ```
-Consult chapter [Configure a valid license](#configure-a-valid-license) for further instructions on how to install the Airlock Microgateway premium edition.
+Consult chapter [Configure a valid license](#configuring-a-license) for further instructions on how to install a license for the Airlock Microgateway premium edition.
 
-### Uninstalling the chart
 To uninstall the chart with the release name `microgateway`:
 
   ```console
   helm uninstall microgateway
   ```
 
-## Configuration
-The following table lists configuration parameters of the Airlock Microgateway chart and the default values.
-
-{{ template "chart.valuesTable" . }}
-
 ## Getting started
-This chapter provides information how to get started with the Helm chart.
-
-### Configure a valid license
-This section describes how to configure a license for the Microgateway. By following the steps below, the Helm chart creates a secret with the license which is used by the Microgateway.
-
-1. Create a license.yaml file, which has the following content:
-```
----
-config:
-  license:
-    key: |
-      -----BEGIN LICENSE-----
-      eJxFkEnTokgURf+LWzsCEBCpiFowKoMg8KUIZS8YUoZUEkgmqaj/XnYvqpbv
-      [...]
-      bHy/N5tf//76DY17EVk=
-      -----END LICENSE-----
-```
-
-2. [Create the image pull secret](#credentials-to-pull-image-from-docker-registry) to pull the microgateway image.
-3. Deploy the Microgateway with the license.yaml file:
-  ```console
-  helm upgrade -i microgateway airlock/microgateway -f license.yaml
-  ```
-
-**Note**:<br>
-In productive environments, licenses might be deployed and handled in a different lifecycles. In such cases, an existing license secret may be referenced. Further information is provided in chapter [Secure handling of license and passphrase](#secure-handling-of-license-and-passphrase).
-
-### Override default values
-The Airlock Microgateway Helm chart has many parameters and most of them are already equipped with default values (see [Configuration](#configuration)). Depending on the environment, the defaults must be adapted. To override default values, do the following:
-
-* Create a YAML file that contains the values that differ to the default.
-* Apply this YAML file with the `-f` parameter.
+This chapter provides a simple example to help you get the Airlock Microgateway running in no time. 
 
 **Example:**
 
@@ -126,8 +86,6 @@ The Airlock Microgateway Helm chart has many parameters and most of them are alr
               deny_rule_groups:
                 - level: strict
 
-  imagePullSecrets:
-    - name: "dockersecret"
   redis:
     enabled: true
   echo-server:
@@ -141,13 +99,15 @@ The Airlock Microgateway Helm chart has many parameters and most of them are alr
         - micro-echo
   ```
 
-  Afterwards apply the Helm chart configuration file with the `-f` parameter.
+ Apply the Helm chart configuration file with the `-f` parameter.
   ```console
   helm upgrade -i microgateway airlock/microgateway -f custom-values.yaml
   ```
 
-**YAML indentation**:<br>
-YAML is very strict with indentation. To ensure that the YAML file itself is correct, check it's content with a YAML validator (e.g. [YAML Lint](http://www.yamllint.com/)).
+## Parameters
+The following table lists configuration parameters of the Airlock Microgateway chart and the default values.
+
+{{ template "chart.valuesTable" . }}
 
 ## Dependencies
 The Airlock Microgateway Helm chart has the following optional dependencies, which can be enabled for a smooth start.
@@ -177,12 +137,6 @@ In case that session handling is enabled on Airlock Microgateway, a Redis servic
         redis_hosts: [<REDIS-SERVICE>:<PORT>]
   ```
 
-Finally, apply the Helm chart configuration file with `-f` parameter.
-
-  ```console
-  helm upgrade -i microgateway airlock/microgateway -f custom-values.yaml
-  ```
-
 **Possible settings**:<br>
 Please refer to the [Redis Helm chart](https://hub.helm.sh/charts/bitnami/redis) to see all possible parameters of the Redis Helm chart.
 
@@ -195,12 +149,6 @@ For the first deployment, it could be very useful to have a backend service proc
   ```
   echo-server:
     enabled: true
-  ```
-
-Finally, apply the Helm chart configuration file with `-f` parameter.
-
-  ```console
-  helm upgrade -i microgateway airlock/microgateway -f custom-values.yaml
   ```
 
 **Possible settings**:<br>
@@ -292,7 +240,7 @@ For a full list of available Microgateway configuration parameters refer to the 
 Environment variables can be configured with the Helm chart and used within the [DSL Configuration](#dsl-configuration).
 The example below illustrates how to configure environment variables in combination with the [DSL configuration](#dsl-configuration).
 
-  env-variables.yaml
+  custom-values.yaml
   ```
   config:
     env:
@@ -301,11 +249,6 @@ The example below illustrates how to configure environment variables in combinat
           value: integration
         - name: DR_LOG_ONLY
           value: true
-  ```
-
-  custom-values.yaml
-  ```
-  config:
     dsl:
       apps:
         - virtual_host:
@@ -315,12 +258,6 @@ The example below illustrates how to configure environment variables in combinat
               operational_mode: ${OPERATIONAL_MODE:-production}
               deny_rules:
                 log_only: ${DR_LOG_ONLY:-false}
-  ```
-
-Finally, apply the Helm chart configuration file with `-f` parameter.
-
-  ```console
-  helm upgrade -i microgateway airlock/microgateway -f custom-values.yaml -f env-variables.yaml
   ```
 
 ### Runtime Environment Variables
@@ -565,46 +502,31 @@ The following subchapters describes how to use and securely deploy the Microgate
 Airlock Microgateway uses sensitive information that should be protected accordingly. E.g. in Kubernetes or Openshift environments this information should be stored in secrets.
 The following subchapters describe which information should be protected and how this can be achieved.
 
-#### Secure handling of license and passphrase
-It is possible to use the following parameters of this Helm chart to configure a license and an encryption passphrase:
-* License: `config.license.*`
-* Passphrase: `config.passphrase.*`
+#### Secure handling of the session store passphrase
+The Helm chart either creates a secret for the session store passphrase or uses an existing one and configures the Microgateway to use it. Storing sensitive information in secrets is best practise and also secure. Nevertheless, ensure that these secrets are not stored in Git where too many people have access to it.
 
-Depending on the settings of the previous parameters, the Helm chart itself creates a secret or uses an existing one and configures the Microgateway to use it. Storing sensitive information in secrets is best practise and also secure. Nevertheless, ensure that these secrets are not stored in Git where too many people have access to it.
-The license has an expiry date and might be used for a Microgateway protecting several web applications while every web application might have its own passphrase. In other words, most likely the license has a different lifecycle than the passphrase which is why they should be stored in different secrets.
+##### Using an existing passphrase secret
 
-##### Creating and referencing external secrets
-
-  The example below shows how to create a secret containing both the license and the passphrase.
+The example below shows how to create a secret containing the passphrase.
   ```
   kubectl create secret generic microgateway-passphrase --from-file=passphrase=<passphrase_file>
-  kubectl create secret generic microgateway-license --from-file=license=<license_file> 
   ```
 
-  Afterwards reference this secret in the Helm chart configuration file.
-
+Reference the secret in the Helm chart configuration file.
   ```
   config:
     passphrase:
       useExistingSecret: true
-      secretName: "microgateway-passphrase"
-    license:
-      useExistingSecret: true
-      secretName: "microgateway-license"      
+      secretName: "microgateway-passphrase"     
   ```
 
 ##### Creating secrets with the Helm Chart
-The example below shows how to create secrets for the passphrase and the license using the Helm Chart.
+The example below shows how to create the passphrase secret using the Helm Chart.
 
 ```
 config:
   passphrase:
     value: "my-passphrase"
-  license:
-    key: |
-      -----BEGIN LICENSE-----
-      <my-license>
-      -----END LICENSE-----
 ```
 
 #### Credentials to pull image from Docker registry
@@ -749,6 +671,31 @@ serviceAccount:
   name: <existing service account>
 ```
 
+## Configuring a License
+### Using an existing license secret:
+  ```
+  kubectl create secret generic microgateway-license --from-file=license=<license_file> 
+  ```
+
+ Reference this secret in the Helm chart configuration file:
+  ```
+  config:
+    license:
+      useExistingSecret: true
+      secretName: "microgateway-license"      
+  ```
+
+### Creating a license secret with the Helm Chart
+Create a license secret with the Helm chart:
+```
+config:
+  license:
+    key: |
+      -----BEGIN LICENSE-----
+      <my-license>
+      -----END LICENSE-----
+```
+
 ## Deployment Smoketest
 The following example shows how to run a smoke test against a microgateway deployment.
 ```
@@ -758,6 +705,7 @@ The default URL for the test is '/'. Overwrite the test URL with the parameter '
 ```
 test_request: /myapp/login
 ```
+
 ## Breaking Changes
 ### 2.0.0
 
