@@ -303,7 +303,7 @@ This Helm chart can be used for Kubernetes and Openshift. While Kubernetes has "
 Kubernetes allows using different kinds of Ingress controllers. Our examples are based on the [nginx-ingress](https://kubernetes.github.io/ingress-nginx) controller.
 
   The example below shows how to install the nginx-ingress-controller with Helm:
-  ```
+  ```console
   helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
   helm repo update
 
@@ -476,7 +476,7 @@ The Helm chart either creates a secret for the session store passphrase or uses 
 ##### Using an existing passphrase secret
 
 The example below shows how to create a secret containing the passphrase.
-  ```
+  ```console
   kubectl create secret generic microgateway-passphrase --from-file=passphrase=<passphrase_file>
   ```
 
@@ -504,7 +504,7 @@ In order to download this image, the Helm chart needs the Docker credentials to 
 Either an already existing Docker secret is provided (`imagePullSecrets`) during the installation of the Microgateway, or a Kubernetes secret is created with the provided credentials (`imageCredentials`).
 
   The example below shows how to create a secret with the credentials to download the image from the Docker registry.
-  ```
+  ```console
   kubectl create secret docker-registry docker-secret --docker-username=<username> --docker-password=<access_token>
   ```
 
@@ -540,7 +540,7 @@ Used for backend connection:
 
 
   The example below shows how to create a secret containing certificates for frontend and backend connections.
-  ```
+  ```console
   kubectl create secret generic microgateway-tls \
                                 --from-file=frontend-server.crt=<frontend_cert_file> \
                                 --from-file=frontend-server.key=<frontend_key_file> \
@@ -564,7 +564,9 @@ There are two types of JWKS services:
 
 ##### Configure a local JWKS Service with a secret
 Create a secret containing your JWKS file if it does not exist yet:
-`kubectl create secret generic local-jwks --from-file=jwks.json=<jwks_file>`
+```
+kubectl create secret generic local-jwks --from-file=jwks.json=<jwks_file>
+```
 
 A restart of the Microgateway is required in case of changes in the mounted JWKS secret.
 
@@ -598,10 +600,14 @@ See [Extra Volumes](#extra-volumes) for additional information and an example.
 A client certificate and a server CA certificate may be provided for remote JWKS services. 
 
 Client Certificate: 
-`kubectl create secret generic jwks-clientsecret --from-file=client.key=<your private key> --from-file=client.crt=<your public key>`
+```console
+kubectl create secret generic jwks-clientsecret --from-file=client.key=<your private key> --from-file=client.crt=<your public key>
+```
 
 Server CA Certificate: 
-`kubectl create secret generic jwks-serversecret --from-file=server-validation.crt=<your server ca certificate>`
+```console
+kubectl create secret generic jwks-serversecret --from-file=server-validation.crt=<your server ca certificate>
+```
 
 Use these secrets in the DSL to configure Remote JWKS Services:
 ```
@@ -640,7 +646,7 @@ serviceAccount:
 
 ## Configuring a License
 ### Using an existing license secret:
-  ```
+  ```console
   kubectl create secret generic microgateway-license --from-file=license=<license_file> 
   ```
 
