@@ -25,6 +25,16 @@ $ helm unittest charts/microgateway -u
 
 Don't forget to verify the new snapshots manually before checking them in.
 
+## Deployment Smoketest
+The following example shows how to run a smoke test against a microgateway deployment.
+```
+helm test <deployment_name>
+```
+The default URL for the test is '/'. Overwrite the test URL with the parameter 'test_request'.
+```
+test_request: /myapp/login
+```
+
 ## Readme Maintenance
 Changes in the README.md will be overwritten in the github ci workflow. The ci workflow generates this file using [helm-docs](https://github.com/norwoodj/helm-docs) from the README.md.gotmpl and from the documentation in values.yaml.
 

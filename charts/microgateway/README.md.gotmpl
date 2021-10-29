@@ -14,8 +14,8 @@ The current chart version is: {{ template "chart.version" . }}
 * [Introduction](#introduction)
 * [Prerequisites](#prerequisites)
 * [Installing the Chart](#installing-the-chart)
-* [Parameters](#parameters)
 * [Getting started](#getting-started)
+* [Parameters](#parameters)
 * [Dependencies](#dependencies)
 * [DSL Configuration](#dsl-configuration)
 * [Environment Variables](#environment-variables)
@@ -28,8 +28,6 @@ The current chart version is: {{ template "chart.version" . }}
   * [Store sensitive information in secrets](#store-sensitive-information-in-secrets)
   * [Service Account](#service-account)
 * [Configuring a License](#configuring-a-license)
-* [Deployment Smoketest](#deployment-smoketest)
-* [Breaking Changes](#breaking-changes)
 
 ## Introduction
 This Helm chart bootstraps [Airlock Microgateway](https://www.airlock.com) on a [Kubernetes](https://kubernetes.io) or [Openshift](https://www.openshift.com) cluster using the [Helm](https://helm.sh) package manager. It provisions an Airlock Microgateway Pod with a default configuration that can be adjusted to customer needs. For more details about the configuration options, see chapter [Helm Configuration](#dsl-configuration).
@@ -115,8 +113,9 @@ The Airlock Microgateway Helm chart has the following optional dependencies, whi
 {{ template "chart.requirementsTable" . }}
 
 ### Redis
-In case that session handling is enabled on Airlock Microgateway, a Redis service needs to be available. The Airlock Microgateway Helm chart has two options:
-* To deploy the dependent Redis service, adapt the Helm chart configuration as shown below:
+In case that session handling is enabled on Airlock Microgateway, a Redis service needs to be available. 
+
+The following example shows how to deploy a redis service with the Helm chart and reference it in the Microgateway DSL:
   custom-values.yaml
   ```
   redis:
@@ -125,16 +124,6 @@ In case that session handling is enabled on Airlock Microgateway, a Redis servic
     dsl:
       session:
         redis_hosts: [redis-master]
-  ```
-* To use an existing Redis service, adapt the Helm chart configuration as shown below:
-  custom-values.yaml
-  ```
-  redis:
-    enabled: false
-  config:
-    dsl:
-      session:
-        redis_hosts: [<REDIS-SERVICE>:<PORT>]
   ```
 
 **Possible settings**:<br>
@@ -264,7 +253,7 @@ The example below illustrates how to configure environment variables in combinat
 The Helm chart also allows to specify environment variables for the runtime container.
 The following example shows how to set the timezone of the microgateway:
 
-env-variables.yaml
+custom-values.yaml
 ```
 config:
   env:
@@ -277,6 +266,7 @@ config:
 The Helm chart allows you to define extra volumes which can be used in the Microgateway.
 The configuration of such additional volumes could look like this:
 
+custom-values.yaml
 ```
 extraVolumes:
   - name: mapping
@@ -297,31 +287,17 @@ config:
 ```
 
 ## Readiness and Liveness Probes
-Readiness and Liveness Probes are used in Kubernetes and Openshift to determine if a Pod is ready and in good health to process requests.
+The Helm chart defines default values for readiness and liveness probes. Use the parameters `readinessProbe`and `livenessProbe` to set these parameters according to your requirements. 
 
-### Readiness Probe
-The readiness probe determines whether a Pod is ready to process requests. This means that requests are only forwarded to this Pod once it is in ready state.
+The following example shows how to increase the initial delays for liveness and readyness probes.
 
-The Helm chart is already pre-configured for the readiness probe endpoint of the Microgateway Pod. A huge Microgateway configuration could require to increase the initial delay time. This can be accomplished by configuring the following parameter:
-
-  ```
-  readinessProbe:
-    initialDelaySeconds: 90
-  ```
-
-If desired, the readiness probe can be disabled with `readinessProbe.enabled=false`. This way, the Pod is ready immediately and receives requests.
-
-### Liveness Probe
-The liveness Probe determines whether a Pod is in good health. If the liveness probe fails, the Pod is terminated and new one is started.
-
-The Helm chart is already pre-configured for the liveness probe endpoint of the Microgateway Pod. A huge Microgateway configuration could require to increase the initial delay time. This can be accomplished by configuring the following parameter:
-
-  ```
-  livenessProbe:
-    initialDelaySeconds: 120
-  ```
-
-If desired, the liveness probe can be disabled with `livenessProbe.enabled=false`.
+custom-values.yaml  
+```
+readinessProbe:
+  initialDelaySeconds: 90
+livenessProbe:
+  initialDelaySeconds: 120  
+```
 
 ## External connectivity
 The Helm chart can be configured to create a Kubernetes Ingress or Openshift Route to pass external traffic to the Microgateway Pod.
@@ -695,36 +671,6 @@ config:
       <my-license>
       -----END LICENSE-----
 ```
-
-## Deployment Smoketest
-The following example shows how to run a smoke test against a microgateway deployment.
-```
-helm test <deployment_name>
-```
-The default URL for the test is '/'. Overwrite the test URL with the parameter 'test_request'.
-```
-test_request: /myapp/login
-```
-
-## Breaking Changes
-### 2.0.0
-
-With the Airlock Microgateway Helm Chart 2.0.0, it is possible to configure the encryption passphrase and the Microgateway license in different secrets. 
-Secret names have to be specified for both secrets individually. 
-You can still configure the same pre-existing secret as in previous chart versions, but it needs to be referenced for both the password and the license. 
-If you do not configure license information, no license will be mounted and the Microgateway will run as community edition. 
-
-Required changes:
-- To create a license secret with the Helm chart:
-  - config.license -> config.license.key
-- To mount an existing license secret:
-  - config.license.useExistingSecret: true
-  - config.existingSecret -> config.license.secretName
-- To mount an existing passphrase secret:
-  - config.exsistingSecret -> config.passphrase.secretName. 
-  - config.passphrase.useExistingSecret: true.
-- To create a passphrase secret:
-  - config.passphrase -> config.passphrase.value. 
 
 ## About Ergon
 *Airlock* is a registered trademark of [Ergon](https://www.ergon.ch). Ergon is a Swiss leader in leveraging digitalisation to create unique and effective client benefits, from conception to market, the result of which is the international distribution of globally revered products.
