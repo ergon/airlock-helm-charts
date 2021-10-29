@@ -675,7 +675,7 @@ There are two types of JWKS services:
 
 ##### Configure a local JWKS Service with a secret
 Create a secret containing your JWKS file if it does not exist yet:
-```
+```console
 kubectl create secret generic local-jwks --from-file=jwks.json=<jwks_file>
 ```
 
