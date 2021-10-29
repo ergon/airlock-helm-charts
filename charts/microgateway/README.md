@@ -400,7 +400,7 @@ config:
 ```
 
 ## Readiness and Liveness Probes
-The Helm chart defines default values for readiness and liveness probes. Use the parameters `readinessProbe`and `livenessProbe` to set these parameters according to your requirements.
+The Helm chart defines default values for readiness and liveness probes. Use the parameters `readinessProbe` and `livenessProbe` to disable probes or set probe parameters according to your requirements.
 
 The following example shows how to increase the initial delays for liveness and readyness probes.
 
