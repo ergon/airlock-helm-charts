@@ -4,18 +4,15 @@ Airlock Microgateway helps you to protect your services and APIs from unauthoriz
 
 The current chart version is: 3.0.0
 
-## Additional Information
-- Introduction: [Airlock Microgateway](https://www.airlock.com/microgateway)
-- Documentation: [Airlock Microgateway Manual](https://docs.airlock.com/microgateway/latest/)
-- Community Support: [Airlock Community Forum](https://forum.airlock.com)
-- Integration Example: [Airlock Minikube Example](https://github.com/ergon/airlock-minikube-example)
+## About Ergon
+*Airlock* is a registered trademark of [Ergon](https://www.ergon.ch). Ergon is a Swiss leader in leveraging digitalisation to create unique and effective client benefits, from conception to market, the result of which is the international distribution of globally revered products.
 
 ## Table of contents
 * [Introduction](#introduction)
 * [Prerequisites](#prerequisites)
-* [Quick start guide](#quick-start-guide)
-* [Configuration](#configuration)
+* [Installing the Chart](#installing-the-chart)
 * [Getting started](#getting-started)
+* [Parameters](#parameters)
 * [Dependencies](#dependencies)
 * [DSL Configuration](#dsl-configuration)
 * [Environment Variables](#environment-variables)
@@ -27,8 +24,7 @@ The current chart version is: 3.0.0
 * [Security](#security)
   * [Store sensitive information in secrets](#store-sensitive-information-in-secrets)
   * [Service Account](#service-account)
-* [Deployment Smoketest](#deployment-smoketest)
-* [Breaking Changes](#breaking-changes)
+* [Configuring a License](#configuring-a-license)
 
 ## Introduction
 This Helm chart bootstraps [Airlock Microgateway](https://www.airlock.com) on a [Kubernetes](https://kubernetes.io) or [Openshift](https://www.openshift.com) cluster using the [Helm](https://helm.sh) package manager. It provisions an Airlock Microgateway Pod with a default configuration that can be adjusted to customer needs. For more details about the configuration options, see chapter [Helm Configuration](#dsl-configuration).
@@ -38,35 +34,72 @@ This Helm chart bootstraps [Airlock Microgateway](https://www.airlock.com) on a 
 * Airlock Microgateway is available as premium and community edition. <br>
   Without a valid license, Airlock Microgateway works as community edition with limited functionality. <br>
   For further information refer to [Microgateway Documentation](https://docs.airlock.com/microgateway/latest/). <br>
-  If you want to try the premium features, [request a license key](https://airlock.com/microgateway-premium).
+  If you want to try the premium features, [request a license key](https://airlock.com/microgateway-premium) and [configure it](#configuring-a-license).
 * Redis service for session handling (see chapter [Dependencies](#dependencies))
 
-## Quick start guide
-The following subchapters describe how to use the Helm chart.
-
-### Adding the chart repository
-To add the chart repository:
+## Installing the Chart
+To configure the chart repository:
 
   ```console
   helm repo add airlock https://ergon.github.io/airlock-helm-charts/
   ```
 
-### Installing the chart
 To install the Airlock Microgateway community edition with the release name `microgateway`:
 
   ```console
   helm upgrade -i microgateway airlock/microgateway
   ```
-Consult chapter [Configure a valid license](#configure-a-valid-license) for further instructions on how to install the Airlock Microgateway premium edition.
+Consult chapter [Configure a valid license](#configuring-a-license) for further instructions on how to install a license for the Airlock Microgateway premium edition.
 
-### Uninstalling the chart
 To uninstall the chart with the release name `microgateway`:
 
   ```console
   helm uninstall microgateway
   ```
 
-## Configuration
+## Getting started
+This chapter provides a simple example to help you get the Airlock Microgateway running in no time.
+
+**Example:**
+
+  custom-values.yaml
+  ```
+  config:
+    dsl:
+      session:
+        redis_hosts: [redis-master]
+      log:
+        level: info
+      remote_ip:
+        header: X-Forwarded-For
+        internal_proxies:
+          - 10.0.0.0/28
+
+      apps:
+        - mappings:
+            - session_handling: enforce_session
+              deny_rule_groups:
+                - level: strict
+
+  redis:
+    enabled: true
+  echo-server:
+    enabled: true
+  ingress:
+    enabled: true
+    annotations:
+      nginx.ingress.kubernetes.io/rewrite-target: /
+      kubernetes.io/ingress.class: nginx
+    hosts:
+        - micro-echo
+  ```
+
+ Apply the Helm chart configuration file with the `-f` parameter.
+  ```console
+  helm upgrade -i microgateway airlock/microgateway -f custom-values.yaml
+  ```
+
+## Parameters
 The following table lists configuration parameters of the Airlock Microgateway chart and the default values.
 
 | Key | Type | Default | Description |
@@ -181,84 +214,6 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | test_request | string | `"/"` | Request that will be used as a smoketest when 'helm test' is invoked. |
 | tolerations | list | `[]` | Tolerations for use with node [taints](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/). |
 
-## Getting started
-This chapter provides information how to get started with the Helm chart.
-
-### Configure a valid license
-This section describes how to configure a license for the Microgateway. By following the steps below, the Helm chart creates a secret with the license which is used by the Microgateway.
-
-1. Create a license.yaml file, which has the following content:
-```
----
-config:
-  license:
-    key: |
-      -----BEGIN LICENSE-----
-      eJxFkEnTokgURf+LWzsCEBCpiFowKoMg8KUIZS8YUoZUEkgmqaj/XnYvqpbv
-      [...]
-      bHy/N5tf//76DY17EVk=
-      -----END LICENSE-----
-```
-
-2. [Create the image pull secret](#credentials-to-pull-image-from-docker-registry) to pull the microgateway image.
-3. Deploy the Microgateway with the license.yaml file:
-  ```console
-  helm upgrade -i microgateway airlock/microgateway -f license.yaml
-  ```
-
-**Note**:<br>
-In productive environments, licenses might be deployed and handled in a different lifecycles. In such cases, an existing license secret may be referenced. Further information is provided in chapter [Secure handling of license and passphrase](#secure-handling-of-license-and-passphrase).
-
-### Override default values
-The Airlock Microgateway Helm chart has many parameters and most of them are already equipped with default values (see [Configuration](#configuration)). Depending on the environment, the defaults must be adapted. To override default values, do the following:
-
-* Create a YAML file that contains the values that differ to the default.
-* Apply this YAML file with the `-f` parameter.
-
-**Example:**
-
-  custom-values.yaml
-  ```
-  config:
-    dsl:
-      session:
-        redis_hosts: [redis-master]
-      log:
-        level: info
-      remote_ip:
-        header: X-Forwarded-For
-        internal_proxies:
-          - 10.0.0.0/28
-
-      apps:
-        - mappings:
-            - session_handling: enforce_session
-              deny_rule_groups:
-                - level: strict
-
-  imagePullSecrets:
-    - name: "dockersecret"
-  redis:
-    enabled: true
-  echo-server:
-    enabled: true
-  ingress:
-    enabled: true
-    annotations:
-      nginx.ingress.kubernetes.io/rewrite-target: /
-      kubernetes.io/ingress.class: nginx
-    hosts:
-        - micro-echo
-  ```
-
-  Afterwards apply the Helm chart configuration file with the `-f` parameter.
-  ```console
-  helm upgrade -i microgateway airlock/microgateway -f custom-values.yaml
-  ```
-
-**YAML indentation**:<br>
-YAML is very strict with indentation. To ensure that the YAML file itself is correct, check it's content with a YAML validator (e.g. [YAML Lint](http://www.yamllint.com/)).
-
 ## Dependencies
 The Airlock Microgateway Helm chart has the following optional dependencies, which can be enabled for a smooth start.
 
@@ -268,9 +223,9 @@ The Airlock Microgateway Helm chart has the following optional dependencies, whi
 | https://ealenn.github.io/charts | echo-server | 0.3.0 |
 
 ### Redis
-In case that session handling is enabled on Airlock Microgateway, a Redis service needs to be available. The Airlock Microgateway Helm chart has two options:
-* To deploy the dependent Redis service, adapt the Helm chart configuration as shown below:
-  custom-values.yaml
+In case that session handling is enabled on Airlock Microgateway, a Redis service needs to be available.
+
+The following example shows how to deploy a redis service with the Helm chart and reference it in the Microgateway DSL:
   ```
   redis:
     enabled: true
@@ -278,22 +233,6 @@ In case that session handling is enabled on Airlock Microgateway, a Redis servic
     dsl:
       session:
         redis_hosts: [redis-master]
-  ```
-* To use an existing Redis service, adapt the Helm chart configuration as shown below:
-  custom-values.yaml
-  ```
-  redis:
-    enabled: false
-  config:
-    dsl:
-      session:
-        redis_hosts: [<REDIS-SERVICE>:<PORT>]
-  ```
-
-Finally, apply the Helm chart configuration file with `-f` parameter.
-
-  ```console
-  helm upgrade -i microgateway airlock/microgateway -f custom-values.yaml
   ```
 
 **Possible settings**:<br>
@@ -304,16 +243,9 @@ The delivered Helm chart comes pre-configured and tested for the dependent Redis
 
 ### Echo-Server
 For the first deployment, it could be very useful to have a backend service processing requests. For this purpose the dependent Echo-Server can be deployed by doing the following:
-  custom-values.yaml
   ```
   echo-server:
     enabled: true
-  ```
-
-Finally, apply the Helm chart configuration file with `-f` parameter.
-
-  ```console
-  helm upgrade -i microgateway airlock/microgateway -f custom-values.yaml
   ```
 
 **Possible settings**:<br>
@@ -332,7 +264,6 @@ For a full list of available Microgateway configuration parameters refer to the 
 
 **Example DSL Parameter:**
 
-  custom-values.yaml
   ```
   config:
     dsl:
@@ -373,7 +304,6 @@ For a full list of available Microgateway configuration parameters refer to the 
 
 **Example existing ConfigMap:**
 
-  custom-values.yaml
   ```
   config:
     dslConfigMap: microgateway-config
@@ -405,7 +335,6 @@ For a full list of available Microgateway configuration parameters refer to the 
 Environment variables can be configured with the Helm chart and used within the [DSL Configuration](#dsl-configuration).
 The example below illustrates how to configure environment variables in combination with the [DSL configuration](#dsl-configuration).
 
-  env-variables.yaml
   ```
   config:
     env:
@@ -414,11 +343,6 @@ The example below illustrates how to configure environment variables in combinat
           value: integration
         - name: DR_LOG_ONLY
           value: true
-  ```
-
-  custom-values.yaml
-  ```
-  config:
     dsl:
       apps:
         - virtual_host:
@@ -430,17 +354,10 @@ The example below illustrates how to configure environment variables in combinat
                 log_only: ${DR_LOG_ONLY:-false}
   ```
 
-Finally, apply the Helm chart configuration file with `-f` parameter.
-
-  ```console
-  helm upgrade -i microgateway airlock/microgateway -f custom-values.yaml -f env-variables.yaml
-  ```
-
 ### Runtime Environment Variables
 The Helm chart also allows to specify environment variables for the runtime container.
 The following example shows how to set the timezone of the microgateway:
 
-env-variables.yaml
 ```
 config:
   env:
@@ -473,34 +390,19 @@ config:
 ```
 
 ## Readiness and Liveness Probes
-Readiness and Liveness Probes are used in Kubernetes and Openshift to determine if a Pod is ready and in good health to process requests.
+The Helm chart defines default values for readiness and liveness probes. Use the parameters `readinessProbe` and `livenessProbe` to disable probes or set probe parameters according to your requirements.
 
-### Readiness Probe
-The readiness probe determines whether a Pod is ready to process requests. This means that requests are only forwarded to this Pod once it is in ready state.
+The following example shows how to increase the initial delays for liveness and readiness probes.
 
-The Helm chart is already pre-configured for the readiness probe endpoint of the Microgateway Pod. A huge Microgateway configuration could require to increase the initial delay time. This can be accomplished by configuring the following parameter:
-
-  ```
-  readinessProbe:
-    initialDelaySeconds: 90
-  ```
-
-If desired, the readiness probe can be disabled with `readinessProbe.enabled=false`. This way, the Pod is ready immediately and receives requests.
-
-### Liveness Probe
-The liveness Probe determines whether a Pod is in good health. If the liveness probe fails, the Pod is terminated and new one is started.
-
-The Helm chart is already pre-configured for the liveness probe endpoint of the Microgateway Pod. A huge Microgateway configuration could require to increase the initial delay time. This can be accomplished by configuring the following parameter:
-
-  ```
-  livenessProbe:
-    initialDelaySeconds: 120
-  ```
-
-If desired, the liveness probe can be disabled with `livenessProbe.enabled=false`.
+```
+readinessProbe:
+  initialDelaySeconds: 90
+livenessProbe:
+  initialDelaySeconds: 120 
+```
 
 ## External connectivity
-The Helm chart can be configured to create a Kubernetes Ingress or Openshift Route to pass external traffic to the Microgateway Pod.
+The Helm chart can create a Kubernetes Ingress or Openshift Route object to pass external traffic to the Microgateway service.
 In case that those objects have to be created with this Helm chart, just follow along with the description and configuration examples.
 If there is already an existing Ingress or Route object and the traffic should only be passed to the Microgateway service, the information in the subchapters should provide useful information about how to integrate into the existing environment.
 
@@ -511,7 +413,7 @@ This Helm chart can be used for Kubernetes and Openshift. While Kubernetes has "
 Kubernetes allows using different kinds of Ingress controllers. Our examples are based on the [nginx-ingress](https://kubernetes.github.io/ingress-nginx) controller.
 
   The example below shows how to install the nginx-ingress-controller with Helm:
-  ```
+  ```console
   helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
   helm repo update
 
@@ -677,46 +579,31 @@ The following subchapters describes how to use and securely deploy the Microgate
 Airlock Microgateway uses sensitive information that should be protected accordingly. E.g. in Kubernetes or Openshift environments this information should be stored in secrets.
 The following subchapters describe which information should be protected and how this can be achieved.
 
-#### Secure handling of license and passphrase
-It is possible to use the following parameters of this Helm chart to configure a license and an encryption passphrase:
-* License: `config.license.*`
-* Passphrase: `config.passphrase.*`
+#### Secure handling of the session store passphrase
+The Helm chart either creates a secret for the session store passphrase or uses an existing one and configures the Microgateway to use it. Storing sensitive information in secrets is best practise and also secure. Nevertheless, ensure that these secrets are not stored in Git where too many people have access to it.
 
-Depending on the settings of the previous parameters, the Helm chart itself creates a secret or uses an existing one and configures the Microgateway to use it. Storing sensitive information in secrets is best practise and also secure. Nevertheless, ensure that these secrets are not stored in Git where too many people have access to it.
-The license has an expiry date and might be used for a Microgateway protecting several web applications while every web application might have its own passphrase. In other words, most likely the license has a different lifecycle than the passphrase which is why they should be stored in different secrets.
+##### Using an existing passphrase secret
 
-##### Creating and referencing external secrets
-
-  The example below shows how to create a secret containing both the license and the passphrase.
-  ```
+The example below shows how to create a secret containing the passphrase.
+  ```console
   kubectl create secret generic microgateway-passphrase --from-file=passphrase=<passphrase_file>
-  kubectl create secret generic microgateway-license --from-file=license=<license_file>
   ```
 
-  Afterwards reference this secret in the Helm chart configuration file.
-
+Reference the secret in the Helm chart configuration file.
   ```
   config:
     passphrase:
       useExistingSecret: true
-      secretName: "microgateway-passphrase"
-    license:
-      useExistingSecret: true
-      secretName: "microgateway-license"     
+      secretName: "microgateway-passphrase"    
   ```
 
 ##### Creating secrets with the Helm Chart
-The example below shows how to create secrets for the passphrase and the license using the Helm Chart.
+The example below shows how to create the passphrase secret using the Helm Chart.
 
 ```
 config:
   passphrase:
     value: "my-passphrase"
-  license:
-    key: |
-      -----BEGIN LICENSE-----
-      <my-license>
-      -----END LICENSE-----
 ```
 
 #### Credentials to pull image from Docker registry
@@ -726,12 +613,11 @@ In order to download this image, the Helm chart needs the Docker credentials to 
 Either an already existing Docker secret is provided (`imagePullSecrets`) during the installation of the Microgateway, or a Kubernetes secret is created with the provided credentials (`imageCredentials`).
 
   The example below shows how to create a secret with the credentials to download the image from the Docker registry.
-  ```
+  ```console
   kubectl create secret docker-registry docker-secret --docker-username=<username> --docker-password=<access_token>
   ```
 
   Afterwards use this secret in the Helm chart configuration file.
-  custom-values.yaml
   ```
   imagePullSecrets:
       - name: "docker-secret"
@@ -762,7 +648,7 @@ Used for backend connection:
 * CA:          `backend-server-validation-ca.crt`
 
   The example below shows how to create a secret containing certificates for frontend and backend connections.
-  ```
+  ```console
   kubectl create secret generic microgateway-tls \
                                 --from-file=frontend-server.crt=<frontend_cert_file> \
                                 --from-file=frontend-server.key=<frontend_key_file> \
@@ -786,7 +672,9 @@ There are two types of JWKS services:
 
 ##### Configure a local JWKS Service with a secret
 Create a secret containing your JWKS file if it does not exist yet:
-`kubectl create secret generic local-jwks --from-file=jwks.json=<jwks_file>`
+```console
+kubectl create secret generic local-jwks --from-file=jwks.json=<jwks_file>
+```
 
 A restart of the Microgateway is required in case of changes in the mounted JWKS secret.
 
@@ -820,10 +708,14 @@ See [Extra Volumes](#extra-volumes) for additional information and an example.
 A client certificate and a server CA certificate may be provided for remote JWKS services.
 
 Client Certificate:
-`kubectl create secret generic jwks-clientsecret --from-file=client.key=<your private key> --from-file=client.crt=<your public key>`
+```console
+kubectl create secret generic jwks-clientsecret --from-file=client.key=<your private key> --from-file=client.crt=<your public key>
+```
 
 Server CA Certificate:
-`kubectl create secret generic jwks-serversecret --from-file=server-validation.crt=<your server ca certificate>`
+```console
+kubectl create secret generic jwks-serversecret --from-file=server-validation.crt=<your server ca certificate>
+```
 
 Use these secrets in the DSL to configure Remote JWKS Services:
 ```
@@ -859,34 +751,33 @@ serviceAccount:
   name: <existing service account>
 ```
 
-## Deployment Smoketest
-The following example shows how to run a smoke test against a microgateway deployment.
-```
-helm test <deployment_name>
-```
-The default URL for the test is '/'. Overwrite the test URL with the parameter 'test_request'.
-```
-test_request: /myapp/login
-```
-## Breaking Changes
-### 2.0.0
+## Configuring a License
+### Using an existing license secret:
+  ```console
+  kubectl create secret generic microgateway-license --from-file=license=<license_file>
+  ```
 
-With the Airlock Microgateway Helm Chart 2.0.0, it is possible to configure the encryption passphrase and the Microgateway license in different secrets.
-Secret names have to be specified for both secrets individually.
-You can still configure the same pre-existing secret as in previous chart versions, but it needs to be referenced for both the password and the license.
-If you do not configure license information, no license will be mounted and the Microgateway will run as community edition.
+ Reference this secret in the Helm chart configuration file:
+  ```
+  config:
+    license:
+      useExistingSecret: true
+      secretName: "microgateway-license"     
+  ```
 
-Required changes:
-- To create a license secret with the Helm chart:
-  - config.license -> config.license.key
-- To mount an existing license secret:
-  - config.license.useExistingSecret: true
-  - config.existingSecret -> config.license.secretName
-- To mount an existing passphrase secret:
-  - config.exsistingSecret -> config.passphrase.secretName.
-  - config.passphrase.useExistingSecret: true.
-- To create a passphrase secret:
-  - config.passphrase -> config.passphrase.value.
+### Creating a license secret with the Helm Chart
+Create a license secret with the Helm chart:
+```
+config:
+  license:
+    key: |
+      -----BEGIN LICENSE-----
+      <my-license>
+      -----END LICENSE-----
+```
 
-## About Ergon
-*Airlock* is a registered trademark of [Ergon](https://www.ergon.ch). Ergon is a Swiss leader in leveraging digitalisation to create unique and effective client benefits, from conception to market, the result of which is the international distribution of globally revered products.
+## Additional Information
+- Introduction: [Airlock Microgateway](https://www.airlock.com/microgateway)
+- Documentation: [Airlock Microgateway Manual](https://docs.airlock.com/microgateway/latest/)
+- Community Support: [Airlock Community Forum](https://forum.airlock.com)
+- Integration Example: [Airlock Minikube Example](https://github.com/ergon/airlock-minikube-example)
