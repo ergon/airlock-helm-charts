@@ -4,11 +4,8 @@ Airlock Microgateway helps you to protect your services and APIs from unauthoriz
 
 The current chart version is: 3.0.0
 
-## Additional Information
-- Introduction: [Airlock Microgateway](https://www.airlock.com/microgateway)
-- Documentation: [Airlock Microgateway Manual](https://docs.airlock.com/microgateway/latest/)
-- Community Support: [Airlock Community Forum](https://forum.airlock.com)
-- Integration Example: [Airlock Minikube Example](https://github.com/ergon/airlock-minikube-example)
+## About Ergon
+*Airlock* is a registered trademark of [Ergon](https://www.ergon.ch). Ergon is a Swiss leader in leveraging digitalisation to create unique and effective client benefits, from conception to market, the result of which is the international distribution of globally revered products.
 
 ## Table of contents
 * [Introduction](#introduction)
@@ -37,7 +34,7 @@ This Helm chart bootstraps [Airlock Microgateway](https://www.airlock.com) on a 
 * Airlock Microgateway is available as premium and community edition. <br>
   Without a valid license, Airlock Microgateway works as community edition with limited functionality. <br>
   For further information refer to [Microgateway Documentation](https://docs.airlock.com/microgateway/latest/). <br>
-  If you want to try the premium features, [request a license key](https://airlock.com/microgateway-premium).
+  If you want to try the premium features, [request a license key](https://airlock.com/microgateway-premium) and [configure it](#configuring-a-license).
 * Redis service for session handling (see chapter [Dependencies](#dependencies))
 
 ## Installing the Chart
@@ -395,7 +392,7 @@ config:
 ## Readiness and Liveness Probes
 The Helm chart defines default values for readiness and liveness probes. Use the parameters `readinessProbe` and `livenessProbe` to disable probes or set probe parameters according to your requirements.
 
-The following example shows how to increase the initial delays for liveness and readyness probes.
+The following example shows how to increase the initial delays for liveness and readiness probes.
 
 ```
 readinessProbe:
@@ -405,7 +402,7 @@ livenessProbe:
 ```
 
 ## External connectivity
-The Helm chart can be configured to create a Kubernetes Ingress or Openshift Route to pass external traffic to the Microgateway Pod.
+The Helm chart can create a Kubernetes Ingress or Openshift Route object to pass external traffic to the Microgateway service.
 In case that those objects have to be created with this Helm chart, just follow along with the description and configuration examples.
 If there is already an existing Ingress or Route object and the traffic should only be passed to the Microgateway service, the information in the subchapters should provide useful information about how to integrate into the existing environment.
 
@@ -779,5 +776,8 @@ config:
       -----END LICENSE-----
 ```
 
-## About Ergon
-*Airlock* is a registered trademark of [Ergon](https://www.ergon.ch). Ergon is a Swiss leader in leveraging digitalisation to create unique and effective client benefits, from conception to market, the result of which is the international distribution of globally revered products.
+## Additional Information
+- Introduction: [Airlock Microgateway](https://www.airlock.com/microgateway)
+- Documentation: [Airlock Microgateway Manual](https://docs.airlock.com/microgateway/latest/)
+- Community Support: [Airlock Community Forum](https://forum.airlock.com)
+- Integration Example: [Airlock Minikube Example](https://github.com/ergon/airlock-minikube-example)
