@@ -4,9 +4,6 @@ Airlock Microgateway helps you to protect your services and APIs from unauthoriz
 
 The current chart version is: 3.0.0
 
-## About Ergon
-*Airlock* is a registered trademark of [Ergon](https://www.ergon.ch). Ergon is a Swiss leader in leveraging digitalisation to create unique and effective client benefits, from conception to market, the result of which is the international distribution of globally revered products.
-
 ## Table of contents
 * [Introduction](#introduction)
 * [Prerequisites](#prerequisites)
@@ -781,3 +778,6 @@ config:
 - Documentation: [Airlock Microgateway Manual](https://docs.airlock.com/microgateway/latest/)
 - Community Support: [Airlock Community Forum](https://forum.airlock.com)
 - Integration Example: [Airlock Minikube Example](https://github.com/ergon/airlock-minikube-example)
+
+## About Ergon
+*Airlock* is a registered trademark of [Ergon](https://www.ergon.ch). Ergon is a Swiss leader in leveraging digitalisation to create unique and effective client benefits, from conception to market, the result of which is the international distribution of globally revered products.
