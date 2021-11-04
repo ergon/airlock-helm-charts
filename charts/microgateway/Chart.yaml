@@ -34,7 +34,7 @@ annotations:
           url: https://docs.airlock.com/microgateway/3.0/#data/airlockmicro.html
     - kind: changed
       description: JWKS Support - DSL Configuration of JWT Access Control has changed
-      links: 
+      links:
         - name: Configuration Guide Access Control with JWKS
           url: https://docs.airlock.com/microgateway/3.0/#data/accesscontro_1.html
   artifacthub.io/links: |
