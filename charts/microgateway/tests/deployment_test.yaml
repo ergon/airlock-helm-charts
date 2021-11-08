@@ -157,6 +157,43 @@ tests:
     templates:
       - deployment.yaml
 
+  - it: does create local jwks file volume
+    set: 
+      config:
+        jwks:
+          localJWKSSecretName: localJWKSSecret
+    asserts:
+      - equal:
+          path: spec.template.spec.volumes[2].name
+          value: local-jwks
+      - equal: 
+          path: spec.template.spec.volumes[2].secret.secretName
+          value: localJWKSSecret    
+    templates:
+      - deployment.yaml
+
+  - it: does create jwks client and server cert volumes
+    set: 
+      config:
+        jwks:
+          clientCertificateSecretName: clientCerts
+          serverCASecretName: serverCerts
+    asserts:
+      - equal:
+          path: spec.template.spec.volumes[2].name
+          value: jwks-clientcert
+      - equal: 
+          path: spec.template.spec.volumes[2].secret.secretName
+          value: clientCerts
+      - equal:
+          path: spec.template.spec.volumes[3].name
+          value: jwks-serverca
+      - equal: 
+          path: spec.template.spec.volumes[3].secret.secretName
+          value: serverCerts              
+    templates:
+      - deployment.yaml
+
   - it: uses existing ConfigMap volume
     set: 
       config:

@@ -1,4 +1,8 @@
 image:
+#  repository:
+#    runtime: docker.io/ergon/airlock-microgateway-nightly
+#    configbuilder: docker.io/ergon/airlock-microgateway-configbuilder-nightly
+#  tag: 3.0.0.sprint5_Build005
   pullPolicy: Always
 
 config:
@@ -10,6 +14,9 @@ config:
           - session_handling: enforce_session
             deny_rule_groups:
               - level: strict
+
+imagePullSecrets:
+  - name: "dockersecret"
 
 hpa:
   enabled: true

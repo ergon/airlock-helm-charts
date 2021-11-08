@@ -46,7 +46,7 @@ tests:
     templates:
       - deployment.yaml
 
-  - it: does create volumes
+  - it: does mount volumes
     asserts:
       - equal:
           path: spec.template.spec.initContainers[0].volumeMounts[0].name
@@ -69,7 +69,44 @@ tests:
     templates:
       - deployment.yaml
 
-  - it: does create extra volumes
+  - it: does mount local jwks volume
+    set: 
+      config:
+        jwks:
+          localJWKSSecretName: localJWKSSecret
+    asserts:
+      - equal:
+          path: spec.template.spec.initContainers[0].volumeMounts[2].name
+          value: local-jwks
+      - equal: 
+          path: spec.template.spec.initContainers[0].volumeMounts[2].mountPath
+          value: /secret/jwks/  
+    templates:
+      - deployment.yaml
+
+  - it: does mount jwks tls secrets
+    set: 
+      config:
+        jwks:
+          clientCertificateSecretName: clientCerts
+          serverCASecretName: serverCerts
+    asserts:
+      - equal:
+          path: spec.template.spec.initContainers[0].volumeMounts[2].name
+          value: jwks-clientcert
+      - equal: 
+          path: spec.template.spec.initContainers[0].volumeMounts[2].mountPath
+          value: /secret/auth/jwks/tls/client/  
+      - equal:
+          path: spec.template.spec.initContainers[0].volumeMounts[3].name
+          value: jwks-serverca
+      - equal: 
+          path: spec.template.spec.initContainers[0].volumeMounts[3].mountPath
+          value: /secret/auth/jwks/tls/server/  
+    templates:
+      - deployment.yaml
+
+  - it: does mount extra volumes
     set:
       extraVolumeMounts:
         - name: mount1
