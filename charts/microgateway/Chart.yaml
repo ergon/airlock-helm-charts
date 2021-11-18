@@ -21,22 +21,15 @@ maintainers:
   - email: support@airlock.com
     name: Airlock
 name: microgateway
-version: 3.0.0
-appVersion: "3.0.0"
+version: 3.0.1
+appVersion: "3.0.1"
 annotations:
   artifacthub.io/changes: |
-    - kind: changed
-      description: Upgrade to Airlock Microgateway 3.0
+    - kind: fixed
+      description: Set the default session.idle_timeout to 600 seconds
       links:
-        - name: Microgateway Release Notes
-          url: https://docs.airlock.com/microgateway/3.0/#data/releasenotes_1.html
         - name: Microgateway Change Log
           url: https://docs.airlock.com/microgateway/3.0/#data/airlockmicro.html
-    - kind: changed
-      description: JWKS Support - DSL Configuration of JWT Access Control has changed
-      links:
-        - name: Configuration Guide Access Control with JWKS
-          url: https://docs.airlock.com/microgateway/3.0/#data/accesscontro_1.html
   artifacthub.io/links: |
     - name: Airlock Microgateway Manual
       url: https://docs.airlock.com/microgateway/latest/
