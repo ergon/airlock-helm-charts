@@ -21,8 +21,8 @@ maintainers:
   - email: support@airlock.com
     name: Airlock
 name: microgateway
-version: 3.0.0
-appVersion: "3.0.0"
+version: 3.0.1
+appVersion: "3.0.1"
 annotations:
   artifacthub.io/changes: |
     - kind: changed
