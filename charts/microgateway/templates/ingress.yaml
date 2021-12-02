@@ -2,6 +2,8 @@
 {{- if $ingress.enabled -}}
 {{- $fullName := include "microgateway.fullname" . -}}
 {{- $svcPort := .Values.service.port -}}
+{{- $numOfHosts := len $ingress.hosts -}}
+
 {{- if semverCompare ">=1.19-0" .Capabilities.KubeVersion.GitVersion -}}
 apiVersion: networking.k8s.io/v1
 {{- else if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion -}}
@@ -34,6 +36,25 @@ spec:
 {{- end }}
   rules:
   {{- if semverCompare ">=1.19-0" .Capabilities.KubeVersion.GitVersion -}}
+    {{- if eq $numOfHosts 0 }}
+    - http: 
+        paths:
+        - path: {{ $ingress.path }}
+          pathType: {{ $ingress.pathType }}
+          backend:
+            service:
+              name: {{ $fullName }}
+              port:
+      {{- with $ingress.servicePortNumber }}
+                number: {{ $ingress.servicePortNumber }}
+      {{- end }}
+      {{- with $ingress.servicePortName }}
+        {{- if not $ingress.servicePortNumber }}
+                name: {{ $ingress.servicePortName }}
+        {{- end }}
+      {{- end }}
+    {{- end }}
+
     {{- range $ingress.hosts }}
     - host: {{ . | quote }}
       http:

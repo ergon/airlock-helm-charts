@@ -207,15 +207,26 @@ tests:
           path: spec.rules[0].http.paths[0].backend.service.port.number
 
 
-  - it: does not add rules if no host is given
+  - it: does add one rule with no host name if hosts are empty
     set:
       ingress.enabled: true
       ingress.path: /asdf/
       ingress.targetPort: 8888
       ingress.hosts: []
-    asserts:
+    asserts:  
       - isNull:
-          path: spec.rules
+          path: spec.rules[0].host
+      - equal:
+          path: spec.rules[0].http.paths[0].path
+          value: "/asdf/"
+      - equal:
+          path: spec.rules[0].http.paths[0].backend.service.name
+          value: "my-microgateway"
+      - equal:
+          path: spec.rules[0].http.paths[0].backend.service.port.name
+          value: http
+      - isNull:
+          path: spec.rules[0].http.paths[0].backend.service.port.number
 
   - it: does not add tls if not specified
     set:

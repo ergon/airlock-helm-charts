@@ -190,9 +190,9 @@ ingress:
     # nginx.ingress.kubernetes.io/proxy-ssl-secret: secretName
   # ingress.labels -- Additional labels to add on the Microgateway ingress.
   labels: {}
-  # ingress.hosts -- List of ingress hosts.
-  hosts:
-    - virtinc.com
+  # ingress.hosts -- List of ingress hosts. A rule will be created for every host. 
+  # Use an empty list to create a rule without a host.
+  hosts: []
   # ingress.pathType -- pathType of the ingress path (used with ingress v1 and higher)
   pathType: Prefix
   # ingress.path -- Path for the ingress.
