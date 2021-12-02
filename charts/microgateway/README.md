@@ -147,7 +147,7 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | ingress | object | See `ingress.*`: | [Kubernetes Ingress](#kubernetes-ingress) |
 | ingress.annotations | object | `{"nginx.ingress.kubernetes.io/rewrite-target":"/"}` | Annotations to set on the ingress. |
 | ingress.enabled | bool | `false` | Create an ingress object. |
-| ingress.hosts | list | `["virtinc.com"]` | List of ingress hosts. |
+| ingress.hosts | list | `[]` | List of ingress hosts. A rule will be created for every host.  Use an empty list to create a rule without a host. |
 | ingress.labels | object | `{}` | Additional labels to add on the Microgateway ingress. |
 | ingress.path | string | `"/"` | Path for the ingress. |
 | ingress.pathType | string | `"Prefix"` | pathType of the ingress path (used with ingress v1 and higher) |
