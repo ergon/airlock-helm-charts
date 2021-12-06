@@ -21,15 +21,12 @@ maintainers:
   - email: support@airlock.com
     name: Airlock
 name: microgateway
-version: 3.0.1
+version: 3.0.2
 appVersion: "3.0.1"
 annotations:
   artifacthub.io/changes: |
-    - kind: fixed
-      description: Set the default session.idle_timeout to 600 seconds
-      links:
-        - name: Microgateway Change Log
-          url: https://docs.airlock.com/microgateway/3.0/#data/airlockmicro.html
+    - kind: added
+      description: Create a default '*'' ingress rule if an empty list of hosts is provided.
   artifacthub.io/links: |
     - name: Airlock Microgateway Manual
       url: https://docs.airlock.com/microgateway/latest/
