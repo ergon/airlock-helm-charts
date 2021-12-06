@@ -191,7 +191,7 @@ ingress:
   # ingress.labels -- Additional labels to add on the Microgateway ingress.
   labels: {}
   # ingress.hosts -- List of ingress hosts. A rule will be created for every host.
-  # Use an empty list to create a wildcard '*' rule..
+  # Use an empty list to create a wildcard '*' rule.
   hosts: []
   # ingress.pathType -- pathType of the ingress path (used with ingress v1 and higher)
   pathType: Prefix
