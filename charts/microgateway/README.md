@@ -2,7 +2,7 @@
 
 Airlock Microgateway helps you to protect your services and APIs from unauthorized or malicious access with little effort. It is a lightweight Web Application Firewall (WAF) and API security gateway designed specifically for use in container environments.
 
-The current chart version is: 3.0.2
+The current chart version is: 3.0.3
 
 ## Table of contents
 * [Introduction](#introduction)
@@ -137,7 +137,7 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | image.repository | object | "See `image.repository.*`" | Image repositories for the Airlock Microgateway. |
 | image.repository.configbuilder | string | `"docker.io/ergon/airlock-microgateway-configbuilder"` | Image repository for the Airlock Microgateway configbuilder image |
 | image.repository.runtime | string | `"docker.io/ergon/airlock-microgateway"` | Image repository for the Airlock Microgateway runtime image |
-| image.tag | string | `"3.0.1"` | Image tag for microgateway and configbuilder image |
+| image.tag | string | `"3.1.0"` | Image tag for microgateway and configbuilder image |
 | imageCredentials | object | See `imageCredentials.*`: | Creates a imagePullSecret with the provided values. |
 | imageCredentials.enabled | bool | `false` | Enable the imagePullSecret creation. |
 | imageCredentials.password | string | `""` | imagePullSecret password/Token |
@@ -168,7 +168,7 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | livenessProbe.timeoutSeconds | int | `5` | Timeout of liveness probes, should roughly reflect allowed timeouts from clients. |
 | nameOverride | string | `""` | Provide a name in place of `microgateway`. |
 | nodeSelector | object | `{}` | Define which nodes the pods are scheduled on. |
-| podAnnotations | object | `{}` | Additional annotations for the Microgateway Pod <br><br> Examples: <br> - prometheus.io/scrape: "true" <br> - prometheus.io/port: "9102" |
+| podAnnotations | object | `{}` | Additional annotations for the Microgateway Pod |
 | podSecurityContext | object | `{}` | [Security context for the pods](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod). |
 | readinessProbe.enabled | bool | `true` | Enable readiness probes. |
 | readinessProbe.failureThreshold | int | `3` | After how many tries the pod stops receiving traffic. |
