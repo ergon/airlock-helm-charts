@@ -26,7 +26,7 @@ appVersion: "3.1.0"
 annotations:
   artifacthub.io/changes: |
     - kind: changed
-       description: Upgrade to Airlock Microgateway 3.1.0
+      description: Upgrade to Airlock Microgateway 3.1.0
   artifacthub.io/links: |
     - name: Airlock Microgateway Manual
       url: https://docs.airlock.com/microgateway/latest/
