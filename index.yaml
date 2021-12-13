@@ -3,6 +3,56 @@ entries:
   microgateway:
   - annotations:
       artifacthub.io/changes: |
+        - kind: changed
+           description: Upgrade to Airlock Microgateway 3.1.0
+      artifacthub.io/license: MIT
+      artifacthub.io/links: |
+        - name: Airlock Microgateway Manual
+          url: https://docs.airlock.com/microgateway/latest/
+        - name: Airlock Community Forum
+          url: https://forum.airlock.com
+        - name: Airlock Minikube Example
+          url: https://github.com/ergon/airlock-minikube-example
+    apiVersion: v1
+    appVersion: 3.1.0
+    created: "2021-12-13T15:15:04.806926305Z"
+    dependencies:
+    - condition: redis.enabled
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: 10.6.12
+    - condition: echo-server.enabled
+      name: echo-server
+      repository: https://ealenn.github.io/charts
+      version: 0.3.0
+    description: |
+      Airlock Microgateway helps you to protect your services and APIs from unauthorized or malicious access with little effort. It is a lightweight Web Application Firewall (WAF) and API security gateway designed specifically for use in container environments.
+    digest: 8b4406785fbb5f2817d55a12521c9adea5793f4bc1ca5922ebd729e731d931a8
+    home: https://www.airlock.com/microgateway
+    icon: https://raw.githubusercontent.com/ergon/airlock-helm-charts/master/charts/microgateway/icon.svg
+    keywords:
+    - WAF
+    - Web Application Firewall
+    - OWASP
+    - Airlock
+    - MicroGateway
+    - Security
+    - Filtering
+    - DevSecOps
+    - shift left
+    - ingress
+    - nginx
+    maintainers:
+    - email: support@airlock.com
+      name: Airlock
+    name: microgateway
+    sources:
+    - https://github.com/ergon/airlock-helm-charts
+    urls:
+    - https://github.com/ergon/airlock-helm-charts/releases/download/microgateway-3.0.3/microgateway-3.0.3.tgz
+    version: 3.0.3
+  - annotations:
+      artifacthub.io/changes: |
         - kind: added
           description: Create a default '*'' ingress rule if an empty list of hosts is provided.
       artifacthub.io/license: MIT
