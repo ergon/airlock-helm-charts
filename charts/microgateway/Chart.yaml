@@ -21,12 +21,12 @@ maintainers:
   - email: support@airlock.com
     name: Airlock
 name: microgateway
-version: 3.0.2
-appVersion: "3.0.1"
+version: 3.0.3
+appVersion: "3.1.0"
 annotations:
   artifacthub.io/changes: |
-    - kind: added
-      description: Create a default '*'' ingress rule if an empty list of hosts is provided.
+    - kind: changed
+       description: Upgrade to Airlock Microgateway 3.1.0
   artifacthub.io/links: |
     - name: Airlock Microgateway Manual
       url: https://docs.airlock.com/microgateway/latest/
