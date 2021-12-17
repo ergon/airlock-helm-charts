@@ -21,12 +21,12 @@ maintainers:
   - email: support@airlock.com
     name: Airlock
 name: microgateway
-version: 3.0.4
-appVersion: "3.1.0"
+version: 3.0.5
+appVersion: "3.1.1"
 annotations:
   artifacthub.io/changes: |
-    - kind: changed
-      description: Upgrade to Airlock Microgateway 3.1.0
+    - kind: security
+      description: Upgrade to Airlock Microgateway 3.1.1
   artifacthub.io/links: |
     - name: Airlock Microgateway Manual
       url: https://docs.airlock.com/microgateway/latest/
