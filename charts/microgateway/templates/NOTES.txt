@@ -41,16 +41,9 @@ The Airlock microgateway has been installed.
   kubectl get pods --selector app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/name={{ include "microgateway.name" . }}
 
 * Microgateway Logs:
-  To see the Microgateway Logs of a Pod run the following commands:
-  export MICROGATEWAYPOD=$(kubectl get pods --selector app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/name={{ include "microgateway.name" . }} | grep {{ template "microgateway.fullname" . }} | head -1 | cut -d ' ' -f 1)
-  kubectl logs $MICROGATEWAYPOD -f
+  To see the logs of the Microgateway runtime container run the following commands:
+  kubectl logs --selector app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/name={{ include "microgateway.name" . }} -f
 
 * Microgateway Init Container Logs:
   To see the logs of the init container run the following commands:
-  export MICROGATEWAYPOD=$(kubectl get pods --selector app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/name={{ include "microgateway.name" . }} | grep {{ template "microgateway.fullname" . }} | head -1 | cut -d ' ' -f 1)
-  kubectl logs $MICROGATEWAYPOD -c configbuilder
-
-* Microgateway Console:
-  To connect to the console of the Microgateway run the follwing commands:
-  export MICROGATEWAYPOD=$(kubectl get pods --selector app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/name={{ include "microgateway.name" . }} | grep {{ template "microgateway.fullname" . }} | head -1 | cut -d ' ' -f 1)
-  kubectl exec -it $MICROGATEWAYPOD -- /bin/bash
+  kubectl logs --selector app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/name={{ include "microgateway.name" . }} -c configbuilder -f
