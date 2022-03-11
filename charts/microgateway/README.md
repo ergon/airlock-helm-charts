@@ -2,7 +2,7 @@
 
 Airlock Microgateway helps you to protect your services and APIs from unauthorized or malicious access with little effort. It is a lightweight Web Application Firewall (WAF) and API security gateway designed specifically for use in container environments.
 
-The current chart version is: 3.0.8
+The current chart version is: 3.0.9
 
 ## Table of contents
 * [Introduction](#introduction)
@@ -137,7 +137,7 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | image.repository | object | "See `image.repository.*`" | Image repositories for the Airlock Microgateway. |
 | image.repository.configbuilder | string | `"docker.io/ergon/airlock-microgateway-configbuilder"` | Image repository for the Airlock Microgateway configbuilder image |
 | image.repository.runtime | string | `"docker.io/ergon/airlock-microgateway"` | Image repository for the Airlock Microgateway runtime image |
-| image.tag | string | `"3.1.4"` | Image tag for microgateway and configbuilder image |
+| image.tag | string | `"3.1.5"` | Image tag for microgateway and configbuilder image |
 | imageCredentials | object | See `imageCredentials.*`: | Creates a imagePullSecret with the provided values. |
 | imageCredentials.enabled | bool | `false` | Enable the imagePullSecret creation. |
 | imageCredentials.password | string | `""` | imagePullSecret password/Token |
