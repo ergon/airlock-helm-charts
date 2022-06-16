@@ -1,6 +1,6 @@
 dependencies:
   - name: redis
-    version: 10.6.12
+    version: 16.8.6
     repository: https://charts.bitnami.com/bitnami
     condition: redis.enabled
   - name: echo-server
