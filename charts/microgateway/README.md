@@ -216,7 +216,7 @@ The Airlock Microgateway Helm chart has the following optional dependencies, whi
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://charts.bitnami.com/bitnami | redis | 15.7.0 |
+| https://charts.bitnami.com/bitnami | redis | 15.7.6 |
 | https://ealenn.github.io/charts | echo-server | 0.4.0 |
 
 ### Redis
