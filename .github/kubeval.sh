@@ -2,7 +2,7 @@
 set -euox pipefail
 
 CHART_DIRS="$(ls -d charts/*)"
-KUBEVAL_VERSION="0.15.0"
+KUBEVAL_VERSION="0.16.1"
 SCHEMA_LOCATION="https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/"
 
 # install kubeval

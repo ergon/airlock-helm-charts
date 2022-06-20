@@ -42,7 +42,7 @@ annotations:
   artifacthub.io/license: MIT
 dependencies:
   - name: redis
-    version: 15.7.0
+    version: 15.7.6
     repository: https://charts.bitnami.com/bitnami
     condition: redis.enabled
   - name: echo-server
