@@ -373,16 +373,23 @@ redis:
   # redis.enabled -- Deploy pre-configured [Redis](#redis).
   enabled: false
   fullnameOverride: redis
-  securityContext:
-    enabled: false
   cluster:
     enabled: false
-  usePassword: false
+  auth:
+    enabled: false
   master:
+    containerSecurityContext:
+      enabled: false
     disableCommands: []
     # do not disable any commands since Microgateway needs full control
     # to configure the redis session store.
     persistence:
+      enabled: false
+  replica:
+    containerSecurityContext:
+      enabled: false
+  metrics:
+    containerSecurityContext:
       enabled: false
 
 # echo-server -- Pre-configured [Echo-Server](#echo-server).

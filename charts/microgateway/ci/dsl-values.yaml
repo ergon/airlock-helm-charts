@@ -23,7 +23,9 @@ hpa:
 
 redis:
   enabled: true
+
 echo-server:
   enabled: true
+
 ingress:
   enabled: true
