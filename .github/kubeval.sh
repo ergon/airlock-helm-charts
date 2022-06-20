@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euox pipefail
 
-CHART_DIRS="$(git diff --find-renames --name-only "$(git rev-parse --abbrev-ref HEAD)" remotes/origin/master -- charts | cut -f1-2 -d '/' | uniq)"
+CHART_DIRS="$(ls -d charts/*)"
 KUBEVAL_VERSION="0.15.0"
 SCHEMA_LOCATION="https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/"
 

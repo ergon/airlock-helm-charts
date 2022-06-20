@@ -216,8 +216,8 @@ The Airlock Microgateway Helm chart has the following optional dependencies, whi
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://charts.bitnami.com/bitnami | redis | 10.6.12 |
 | https://ealenn.github.io/charts | echo-server | 0.3.0 |
+| https://raw.githubusercontent.com/bitnami/charts/pre-2022/bitnami | redis | 10.6.12 |
 
 ### Redis
 In case that session handling is enabled on Airlock Microgateway, a Redis service needs to be available.
