@@ -2,7 +2,7 @@
 
 Airlock Microgateway helps you to protect your services and APIs from unauthorized or malicious access with little effort. It is a lightweight Web Application Firewall (WAF) and API security gateway designed specifically for use in container environments.
 
-The current chart version is: 3.0.13
+The current chart version is: 3.0.14
 
 ## Table of contents
 * [Introduction](#introduction)
@@ -216,8 +216,8 @@ The Airlock Microgateway Helm chart has the following optional dependencies, whi
 
 | Repository | Name | Version |
 |------------|------|---------|
+| https://charts.bitnami.com/bitnami | redis | 15.7.0 |
 | https://ealenn.github.io/charts | echo-server | 0.3.0 |
-| https://raw.githubusercontent.com/bitnami/charts/pre-2022/bitnami | redis | 10.6.12 |
 
 ### Redis
 In case that session handling is enabled on Airlock Microgateway, a Redis service needs to be available.
