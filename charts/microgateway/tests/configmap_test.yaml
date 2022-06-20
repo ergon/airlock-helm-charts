@@ -11,13 +11,13 @@ tests:
           of: ConfigMap
     template: configmap.yaml
 
-  # - it: dsl example
-  #   values:
-  #     - ./values/dsl.yaml
-  #   asserts:
-  #     - matchSnapshot:
-  #         path: data.[config.yaml]
-  #   template: configmap.yaml
+  - it: dsl example
+    values:
+      - ./values/dsl.yaml
+    asserts:
+      - matchSnapshot:
+          path: data.[config.yaml]
+    template: configmap.yaml
 
   - it: should be no configmap if one is provided
     set:
