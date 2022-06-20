@@ -1,4 +1,4 @@
-apiVersion: v1
+apiVersion: v2
 description: |
   Airlock Microgateway helps you to protect your services and APIs from unauthorized or malicious access with little effort. It is a lightweight Web Application Firewall (WAF) and API security gateway designed specifically for use in container environments.
 home: https://www.airlock.com/microgateway
@@ -40,3 +40,12 @@ annotations:
     - name: Airlock Minikube Example
       url: https://github.com/ergon/airlock-minikube-example
   artifacthub.io/license: MIT
+dependencies:
+  - name: redis
+    version: 15.7.0
+    repository: https://charts.bitnami.com/bitnami
+    condition: redis.enabled
+  - name: echo-server
+    version: 0.3.0
+    repository: https://ealenn.github.io/charts
+    condition: echo-server.enabled

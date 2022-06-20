@@ -1,9 +1,0 @@
-dependencies:
-- name: redis
-  repository: https://raw.githubusercontent.com/bitnami/charts/pre-2022/bitnami
-  version: 10.6.12
-- name: echo-server
-  repository: https://ealenn.github.io/charts
-  version: 0.3.0
-digest: sha256:f0a73479bd0af87d09a995e791166faece0bf9e681e105fc780872ec91a5aa3a
-generated: "2022-06-16T17:38:09.04292969+02:00"
