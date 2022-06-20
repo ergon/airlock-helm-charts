@@ -4,6 +4,6 @@ dependencies:
   version: 15.7.0
 - name: echo-server
   repository: https://ealenn.github.io/charts
-  version: 0.3.0
-digest: sha256:ee9e2fc9822948327710401a68a649f0495710948f0b6f56e336ed42f0f7bbd9
-generated: "2022-06-17T14:59:37.112330616+02:00"
+  version: 0.4.0
+digest: sha256:5e12c0d5639ec33e3479b3597a62e3167cdcf3f1655f6e2d805b745930ea0756
+generated: "2022-06-20T12:49:09.421187575+02:00"

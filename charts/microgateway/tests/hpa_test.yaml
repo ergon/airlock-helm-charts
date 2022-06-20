@@ -3,8 +3,7 @@ templates:
   - hpa.yaml
 release:
   name: my-microgateway
-chart:
-  version: 1.0.1
+
 tests:
   - it: does not create hpa if it is not enabled
     set:
@@ -12,6 +11,7 @@ tests:
     asserts:
       - hasDocuments:
           count: 0
+
   - it: does use correct replica values
     set:
       hpa.maxReplicas: 5
@@ -24,6 +24,7 @@ tests:
       - equal:
           path: spec.minReplicas
           value: 1
+
   - it: does use correct targetRef
     set:
       hpa.enabled: true
@@ -34,6 +35,7 @@ tests:
       - equal:
           path: spec.scaleTargetRef.name
           value: my-microgateway
+
   - it: does use correct resource settings - beta1
     capabilities:
       majorVersion: 1
@@ -83,6 +85,7 @@ tests:
       - equal:
           path: spec.metrics[1].resource.target.averageValue
           value: 1Gi
+
   - it: does use correct resource settings without cpu
     capabilities:
       majorVersion: 1

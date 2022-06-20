@@ -1,8 +1,6 @@
 suite: test ingress
 release:
   name: my-microgateway
-chart:
-  version: 1.0.1
 templates:
   - ingress.yaml
 tests:
@@ -12,6 +10,7 @@ tests:
     asserts:
       - hasDocuments:
         count: 0
+
   - it: does use correct api version with 1.19.0
     capabilities:
       majorVersion: 1
@@ -22,6 +21,7 @@ tests:
     - equal:
         path: apiVersion
         value: networking.k8s.io/v1
+
   - it: does use correct api version before 1.14.0
     capabilities:
       majorVersion: 1
@@ -32,6 +32,7 @@ tests:
     - equal:
         path: apiVersion
         value: extensions/v1beta1
+
   - it: does use correct api version with 1.14.0
     capabilities:
       majorVersion: 1
@@ -93,6 +94,7 @@ tests:
       - equal:
           path: spec.rules[1].http.paths[0].backend.servicePort
           value: 8888
+
   - it: does add rules with numeric ports v1
     capabilities:
       majorVersion: 1
@@ -206,7 +208,6 @@ tests:
       - isNull:
           path: spec.rules[0].http.paths[0].backend.service.port.number
 
-
   - it: does add one rule with no host name if hosts are empty
     set:
       ingress.enabled: true
@@ -234,6 +235,7 @@ tests:
     asserts:
       - isNull:
           path: spec.tls
+
   - it: does add tls section if tls hosts are specified
     set:
       ingress.enabled: true
@@ -243,7 +245,6 @@ tests:
             - a.com
             - b.com
         - secretName: secret2
-
     asserts:
       - equal:
           path: spec.tls[0].secretName
