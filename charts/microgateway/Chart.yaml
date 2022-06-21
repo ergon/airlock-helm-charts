@@ -28,7 +28,7 @@ annotations:
     - kind: changed
       description: Helm 3 Migration
     - kind: changed
-      description: Upgrade bitnami/redis subchart to version 15.7.6 (Redis 6.2.6)
+      description: Upgrade bitnami/redis subchart to version 15.7.6 (Redis 6.2.6). Consult the Bitnami Redis upgrade instructions in case of customized Redis configuration.
       links:
         - name: Bitnami Redis Upgrade Instructions
           url: https://github.com/bitnami/charts/tree/master/bitnami/redis
