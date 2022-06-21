@@ -1,0 +1,14 @@
+dsl example:
+  1: |
+    |-
+      apps:
+      - mappings:
+        - backend:
+            hosts:
+            - name: dsl-backend
+              port: 8080
+              protocol: http
+          entry_path: /dsl/
+          name: echo
+        virtual_host:
+          hostname: echo
