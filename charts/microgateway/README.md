@@ -2,7 +2,7 @@
 
 Airlock Microgateway helps you to protect your services and APIs from unauthorized or malicious access with little effort. It is a lightweight Web Application Firewall (WAF) and API security gateway designed specifically for use in container environments.
 
-The current chart version is: 3.0.14
+The current chart version is: 3.0.15
 
 ## Table of contents
 * [Introduction](#introduction)
