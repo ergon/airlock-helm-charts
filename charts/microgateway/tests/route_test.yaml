@@ -1,12 +1,9 @@
 suite: test route
 release:
   name: my-microgateway
-chart:
-  version: 1.0.1
 templates:
   - route.yaml
 tests:
-# test creation of routes with specified host names
   - it: creates 1 route for 1 hostname
     set:
       route.enabled: true
@@ -22,6 +19,7 @@ tests:
           path: spec.host
           value: host1
     template: route.yaml
+
   - it: creates 1 route with empty hostname
     set:
       route.enabled: true
@@ -36,6 +34,7 @@ tests:
       - isNull:
           path: spec.host
     template: route.yaml
+    
   - it: creates 2 routes for 2 hostnames
     set:
       route.enabled: true

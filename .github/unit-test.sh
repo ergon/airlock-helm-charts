@@ -5,4 +5,4 @@ set -euox pipefail
 helm plugin install https://github.com/quintush/helm-unittest
 
 #run unittest
-helm unittest charts/microgateway
+helm unittest -3 charts/microgateway

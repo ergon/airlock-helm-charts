@@ -1,6 +1,6 @@
 dsl example:
   1: |
-    |
+    |-
       apps:
       - mappings:
         - backend:

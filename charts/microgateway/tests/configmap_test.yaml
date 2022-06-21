@@ -1,15 +1,14 @@
 suite: test configmap
 release:
   name: my-microgateway
-chart:
-  version: 1.0.1
+templates:
+- templates/configmap.yaml
 
 tests:
   - it: should be ConfigMap
     asserts:
       - isKind:
           of: ConfigMap
-    template: configmap.yaml
 
   - it: dsl example
     values:
@@ -17,7 +16,6 @@ tests:
     asserts:
       - matchSnapshot:
           path: data.[config.yaml]
-    template: configmap.yaml
 
   - it: should be no configmap if one is provided
     set:
@@ -26,4 +24,3 @@ tests:
     asserts:
       - hasDocuments:
           count: 0  
-    template: configmap.yaml

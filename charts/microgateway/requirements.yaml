@@ -1,9 +1,0 @@
-dependencies:
-  - name: redis
-    version: 10.6.12
-    repository: https://raw.githubusercontent.com/bitnami/charts/pre-2022/bitnami
-    condition: redis.enabled
-  - name: echo-server
-    version: 0.3.0
-    repository: https://ealenn.github.io/charts
-    condition: echo-server.enabled

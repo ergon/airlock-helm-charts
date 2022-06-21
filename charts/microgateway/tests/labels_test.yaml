@@ -31,6 +31,7 @@ tests:
       - equal:
           path: metadata.labels.[app.kubernetes.io/name]
           value: microgateway    
+          
   - it: additional labels are correct
     set:
       hpa.enabled: true
