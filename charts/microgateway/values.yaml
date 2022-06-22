@@ -373,8 +373,7 @@ redis:
   # redis.enabled -- Deploy pre-configured [Redis](#redis).
   enabled: false
   fullnameOverride: redis
-  cluster:
-    enabled: false
+  architecture: standalone
   auth:
     enabled: false
   master:
