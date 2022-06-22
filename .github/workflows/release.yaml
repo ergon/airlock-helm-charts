@@ -30,7 +30,6 @@ jobs:
           helm repo add ealenn https://ealenn.github.io/charts
       - name: Run chart-releaser
         uses: helm/chart-releaser-action@v1.4.0
-        with: 
-          config: .github/cr.yaml
         env:
           CR_TOKEN: '${{ secrets.TECHNICAL_USER_TOKEN }}'
+          CR_SKIP_EXISTING: true
