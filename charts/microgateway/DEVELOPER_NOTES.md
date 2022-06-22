@@ -43,3 +43,13 @@ Readme changes therefore have to be done in the template file 'README.md.gotempl
 ### Testing Readme Generation
 The README.md can be generated using the command `make` in the root directory of this repository.
 It uses a [helm-docs docker image](https://hub.docker.com/r/jnorwood/helm-docs) to create the README.md.
+
+## Releasing
+The Microgateway Helm Chart is automatically released when a pull request is merged into the master branch if the following conditions are true:
+- There are actual changes in the chart.
+- The chart version is incremented.
+
+Make sure that you have updated the artifacthub.io/changes annotation in the Chart.yaml if you plan to release a PR.
+
+### Merging a PR without Releasing
+If you do not change the chart version in the Chart.yaml, the release workflow will not be triggered.
