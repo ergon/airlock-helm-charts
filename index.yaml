@@ -3,6 +3,65 @@ entries:
   microgateway:
   - annotations:
       artifacthub.io/changes: |
+        - kind: changed
+          description: Helm 3 Migration
+        - kind: changed
+          description: Upgrade bitnami/redis subchart to version 15.7.6 (Redis 6.2.6). Consult the Bitnami Redis upgrade instructions in case of customized Redis configuration.
+          links:
+            - name: Bitnami Redis Upgrade Instructions
+              url: https://github.com/bitnami/charts/tree/master/bitnami/redis
+        - kind: fixed
+          description: Run Redis in standalone mode.
+      artifacthub.io/license: MIT
+      artifacthub.io/links: |
+        - name: Airlock Microgateway Manual
+          url: https://docs.airlock.com/microgateway/latest/
+        - name: Airlock Community Forum
+          url: https://forum.airlock.com
+        - name: Airlock Minikube Example
+          url: https://github.com/ergon/airlock-minikube-example
+    apiVersion: v2
+    appVersion: 3.1.9
+    created: "2022-06-22T12:13:13.425171814Z"
+    dependencies:
+    - condition: redis.enabled
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: 15.7.6
+    - condition: echo-server.enabled
+      name: echo-server
+      repository: https://ealenn.github.io/charts
+      version: 0.4.0
+    description: 'Airlock Microgateway helps you to protect your services and APIs
+      from unauthorized or malicious access with little effort. It is a lightweight
+      Web Application Firewall (WAF) and API security gateway designed specifically
+      for use in container environments. '
+    digest: a6f0ba66cd0b4774b4150ae87fcf93879f3570524b007ae226db0bad590c290e
+    home: https://www.airlock.com/microgateway
+    icon: https://raw.githubusercontent.com/ergon/airlock-helm-charts/master/charts/microgateway/icon.svg
+    keywords:
+    - WAF
+    - Web Application Firewall
+    - OWASP
+    - Airlock
+    - MicroGateway
+    - Security
+    - Filtering
+    - DevSecOps
+    - shift left
+    - ingress
+    - nginx
+    maintainers:
+    - email: support@airlock.com
+      name: Airlock
+    name: microgateway
+    sources:
+    - https://github.com/ergon/airlock-helm-charts
+    urls:
+    - https://github.com/ergon/airlock-helm-charts/releases/download/microgateway-3.0.14/microgateway-3.0.14.tgz
+    version: 3.0.14
+  - annotations:
+      artifacthub.io/changes: |
         - kind: security
           description: Upgrade to Airlock Microgateway 3.1.9
           links:
@@ -30,8 +89,10 @@ entries:
       name: echo-server
       repository: https://ealenn.github.io/charts
       version: 0.3.0
-    description: |
-      Airlock Microgateway helps you to protect your services and APIs from unauthorized or malicious access with little effort. It is a lightweight Web Application Firewall (WAF) and API security gateway designed specifically for use in container environments.
+    description: 'Airlock Microgateway helps you to protect your services and APIs
+      from unauthorized or malicious access with little effort. It is a lightweight
+      Web Application Firewall (WAF) and API security gateway designed specifically
+      for use in container environments. '
     digest: 31e056cd0911453065c2ebed51244622eefca650f0f13c3b443bbaaf73335d27
     home: https://www.airlock.com/microgateway
     icon: https://raw.githubusercontent.com/ergon/airlock-helm-charts/master/charts/microgateway/icon.svg
@@ -85,8 +146,10 @@ entries:
       name: echo-server
       repository: https://ealenn.github.io/charts
       version: 0.3.0
-    description: |
-      Airlock Microgateway helps you to protect your services and APIs from unauthorized or malicious access with little effort. It is a lightweight Web Application Firewall (WAF) and API security gateway designed specifically for use in container environments.
+    description: 'Airlock Microgateway helps you to protect your services and APIs
+      from unauthorized or malicious access with little effort. It is a lightweight
+      Web Application Firewall (WAF) and API security gateway designed specifically
+      for use in container environments. '
     digest: 2f4a9f91356b9add01f32af41b76150e8e9ce65e1a0c58d3de6785a6e8aee9fa
     home: https://www.airlock.com/microgateway
     icon: https://raw.githubusercontent.com/ergon/airlock-helm-charts/master/charts/microgateway/icon.svg
@@ -140,8 +203,10 @@ entries:
       name: echo-server
       repository: https://ealenn.github.io/charts
       version: 0.3.0
-    description: |
-      Airlock Microgateway helps you to protect your services and APIs from unauthorized or malicious access with little effort. It is a lightweight Web Application Firewall (WAF) and API security gateway designed specifically for use in container environments.
+    description: 'Airlock Microgateway helps you to protect your services and APIs
+      from unauthorized or malicious access with little effort. It is a lightweight
+      Web Application Firewall (WAF) and API security gateway designed specifically
+      for use in container environments. '
     digest: c0923d644b056a1a1b56f29bc6dd00c0e20b0d2b7c9cb1c902ca9ab6f80ad402
     home: https://www.airlock.com/microgateway
     icon: https://raw.githubusercontent.com/ergon/airlock-helm-charts/master/charts/microgateway/icon.svg
@@ -195,8 +260,10 @@ entries:
       name: echo-server
       repository: https://ealenn.github.io/charts
       version: 0.3.0
-    description: |
-      Airlock Microgateway helps you to protect your services and APIs from unauthorized or malicious access with little effort. It is a lightweight Web Application Firewall (WAF) and API security gateway designed specifically for use in container environments.
+    description: 'Airlock Microgateway helps you to protect your services and APIs
+      from unauthorized or malicious access with little effort. It is a lightweight
+      Web Application Firewall (WAF) and API security gateway designed specifically
+      for use in container environments. '
     digest: 2ecd02a9d2b11cd37ae6f8857d993c5fb12be0c919d02bbfbb072900cf83d83d
     home: https://www.airlock.com/microgateway
     icon: https://raw.githubusercontent.com/ergon/airlock-helm-charts/master/charts/microgateway/icon.svg
@@ -250,8 +317,10 @@ entries:
       name: echo-server
       repository: https://ealenn.github.io/charts
       version: 0.3.0
-    description: |
-      Airlock Microgateway helps you to protect your services and APIs from unauthorized or malicious access with little effort. It is a lightweight Web Application Firewall (WAF) and API security gateway designed specifically for use in container environments.
+    description: 'Airlock Microgateway helps you to protect your services and APIs
+      from unauthorized or malicious access with little effort. It is a lightweight
+      Web Application Firewall (WAF) and API security gateway designed specifically
+      for use in container environments. '
     digest: e6eaa245406dbe6be822ee012fd44cb7306c1113ee8f8d908eedd3216228ae6c
     home: https://www.airlock.com/microgateway
     icon: https://raw.githubusercontent.com/ergon/airlock-helm-charts/master/charts/microgateway/icon.svg
@@ -305,8 +374,10 @@ entries:
       name: echo-server
       repository: https://ealenn.github.io/charts
       version: 0.3.0
-    description: |
-      Airlock Microgateway helps you to protect your services and APIs from unauthorized or malicious access with little effort. It is a lightweight Web Application Firewall (WAF) and API security gateway designed specifically for use in container environments.
+    description: 'Airlock Microgateway helps you to protect your services and APIs
+      from unauthorized or malicious access with little effort. It is a lightweight
+      Web Application Firewall (WAF) and API security gateway designed specifically
+      for use in container environments. '
     digest: b13ce0c6ea4544a8ed1b92b426ec37cb350a4a7191bf57da3ded03e12ff9f3b9
     home: https://www.airlock.com/microgateway
     icon: https://raw.githubusercontent.com/ergon/airlock-helm-charts/master/charts/microgateway/icon.svg
@@ -360,8 +431,10 @@ entries:
       name: echo-server
       repository: https://ealenn.github.io/charts
       version: 0.3.0
-    description: |
-      Airlock Microgateway helps you to protect your services and APIs from unauthorized or malicious access with little effort. It is a lightweight Web Application Firewall (WAF) and API security gateway designed specifically for use in container environments.
+    description: 'Airlock Microgateway helps you to protect your services and APIs
+      from unauthorized or malicious access with little effort. It is a lightweight
+      Web Application Firewall (WAF) and API security gateway designed specifically
+      for use in container environments. '
     digest: 1e61378b8bf6c5e371436901cdb366179b0e0d2e20a2cdd692fb76a2acbdedcd
     home: https://www.airlock.com/microgateway
     icon: https://raw.githubusercontent.com/ergon/airlock-helm-charts/master/charts/microgateway/icon.svg
@@ -410,8 +483,10 @@ entries:
       name: echo-server
       repository: https://ealenn.github.io/charts
       version: 0.3.0
-    description: |
-      Airlock Microgateway helps you to protect your services and APIs from unauthorized or malicious access with little effort. It is a lightweight Web Application Firewall (WAF) and API security gateway designed specifically for use in container environments.
+    description: 'Airlock Microgateway helps you to protect your services and APIs
+      from unauthorized or malicious access with little effort. It is a lightweight
+      Web Application Firewall (WAF) and API security gateway designed specifically
+      for use in container environments. '
     digest: 30b35f77aa7fd823a669a93f8a8f3d245bdaa525726d61a968b70729dfe7a647
     home: https://www.airlock.com/microgateway
     icon: https://raw.githubusercontent.com/ergon/airlock-helm-charts/master/charts/microgateway/icon.svg
@@ -460,8 +535,10 @@ entries:
       name: echo-server
       repository: https://ealenn.github.io/charts
       version: 0.3.0
-    description: |
-      Airlock Microgateway helps you to protect your services and APIs from unauthorized or malicious access with little effort. It is a lightweight Web Application Firewall (WAF) and API security gateway designed specifically for use in container environments.
+    description: 'Airlock Microgateway helps you to protect your services and APIs
+      from unauthorized or malicious access with little effort. It is a lightweight
+      Web Application Firewall (WAF) and API security gateway designed specifically
+      for use in container environments. '
     digest: a96cdded74163b99a7e151b8b86d29a1a242082dcc7fe07842ed03abb0f093d2
     home: https://www.airlock.com/microgateway
     icon: https://raw.githubusercontent.com/ergon/airlock-helm-charts/master/charts/microgateway/icon.svg
@@ -510,8 +587,10 @@ entries:
       name: echo-server
       repository: https://ealenn.github.io/charts
       version: 0.3.0
-    description: |
-      Airlock Microgateway helps you to protect your services and APIs from unauthorized or malicious access with little effort. It is a lightweight Web Application Firewall (WAF) and API security gateway designed specifically for use in container environments.
+    description: 'Airlock Microgateway helps you to protect your services and APIs
+      from unauthorized or malicious access with little effort. It is a lightweight
+      Web Application Firewall (WAF) and API security gateway designed specifically
+      for use in container environments. '
     digest: fd7b4e6913fa6103349265854a114da703c1575435ec8970d6fe662522c36155
     home: https://www.airlock.com/microgateway
     icon: https://raw.githubusercontent.com/ergon/airlock-helm-charts/master/charts/microgateway/icon.svg
@@ -560,8 +639,10 @@ entries:
       name: echo-server
       repository: https://ealenn.github.io/charts
       version: 0.3.0
-    description: |
-      Airlock Microgateway helps you to protect your services and APIs from unauthorized or malicious access with little effort. It is a lightweight Web Application Firewall (WAF) and API security gateway designed specifically for use in container environments.
+    description: 'Airlock Microgateway helps you to protect your services and APIs
+      from unauthorized or malicious access with little effort. It is a lightweight
+      Web Application Firewall (WAF) and API security gateway designed specifically
+      for use in container environments. '
     digest: 715f45565f69d85147981f7a5675a49dd320651c050b042f3466fdb78b6c5833
     home: https://www.airlock.com/microgateway
     icon: https://raw.githubusercontent.com/ergon/airlock-helm-charts/master/charts/microgateway/icon.svg
@@ -613,8 +694,10 @@ entries:
       name: echo-server
       repository: https://ealenn.github.io/charts
       version: 0.3.0
-    description: |
-      Airlock Microgateway helps you to protect your services and APIs from unauthorized or malicious access with little effort. It is a lightweight Web Application Firewall (WAF) and API security gateway designed specifically for use in container environments.
+    description: 'Airlock Microgateway helps you to protect your services and APIs
+      from unauthorized or malicious access with little effort. It is a lightweight
+      Web Application Firewall (WAF) and API security gateway designed specifically
+      for use in container environments. '
     digest: 89b12fd092370d0c32bd67e454ac7472fc31612d9a5479f1d7e187b3126104ab
     home: https://www.airlock.com/microgateway
     icon: https://raw.githubusercontent.com/ergon/airlock-helm-charts/master/charts/microgateway/icon.svg
@@ -673,8 +756,10 @@ entries:
       name: echo-server
       repository: https://ealenn.github.io/charts
       version: 0.3.0
-    description: |
-      Airlock Microgateway helps you to protect your services and APIs from unauthorized or malicious access with little effort. It is a lightweight Web Application Firewall (WAF) and API security gateway designed specifically for use in container environments.
+    description: 'Airlock Microgateway helps you to protect your services and APIs
+      from unauthorized or malicious access with little effort. It is a lightweight
+      Web Application Firewall (WAF) and API security gateway designed specifically
+      for use in container environments. '
     digest: d98ac6c5d696793af8363657db676918cfcb5c8e704a85696711f9f8d107524f
     home: https://www.airlock.com/microgateway
     icon: https://raw.githubusercontent.com/ergon/airlock-helm-charts/master/charts/microgateway/icon.svg
@@ -722,8 +807,10 @@ entries:
       name: echo-server
       repository: https://ealenn.github.io/charts
       version: 0.3.0
-    description: |
-      The *Airlock Microgateway* is the lightweight, container-based deployment form of the *Airlock Gateway*, a software appliance with reverse-proxy, Web Application Firewall (WAF) and API security functionality. Airlock Microgateway is a component of [Airlock Secure Access Hub](https://www.airlock.com/).
+    description: 'The *Airlock Microgateway* is the lightweight, container-based deployment
+      form of the *Airlock Gateway*, a software appliance with reverse-proxy, Web
+      Application Firewall (WAF) and API security functionality. Airlock Microgateway
+      is a component of [Airlock Secure Access Hub](https://www.airlock.com/). '
     digest: 22731ea641020fe744713af732561912c5aaf425b1c02a451663ad46e99766f2
     home: https://www.airlock.com/microgateway
     icon: https://raw.githubusercontent.com/ergon/airlock-helm-charts/master/charts/microgateway/icon.svg
@@ -760,9 +847,10 @@ entries:
       name: echo-server
       repository: https://ealenn.github.io/charts
       version: 0.3.0
-    description: |
-      The *Airlock Microgateway* is a component of the [Airlock Secure Access Hub](https://www.airlock.com/).
-      It is the lightweight, container-based deployment form of the *Airlock Gateway*, a software appliance with reverse-proxy, Web Application Firewall (WAF) and API security functionality.
+    description: 'The *Airlock Microgateway* is a component of the [Airlock Secure
+      Access Hub](https://www.airlock.com/). It is the lightweight, container-based
+      deployment form of the *Airlock Gateway*, a software appliance with reverse-proxy,
+      Web Application Firewall (WAF) and API security functionality. '
     digest: 0bfc50562512fd7c4aa7f968b8afc564608d4748e50daaaa598977c64060af1c
     home: https://www.airlock.com
     keywords:
@@ -791,9 +879,10 @@ entries:
       name: echo-server
       repository: https://ealenn.github.io/charts
       version: 0.3.0
-    description: |
-      The *Airlock Microgateway* is a component of the [Airlock Secure Access Hub](https://www.airlock.com/).
-      It is the lightweight, container-based deployment form of the *Airlock Gateway*, a software appliance with reverse-proxy, Web Application Firewall (WAF) and API security functionality.
+    description: 'The *Airlock Microgateway* is a component of the [Airlock Secure
+      Access Hub](https://www.airlock.com/). It is the lightweight, container-based
+      deployment form of the *Airlock Gateway*, a software appliance with reverse-proxy,
+      Web Application Firewall (WAF) and API security functionality. '
     digest: 87a319a32a446462b48e92fa8f1acdf753d3da2a425b2dfccd1a7f45152ac9e9
     home: https://www.airlock.com
     keywords:
@@ -822,9 +911,10 @@ entries:
       name: echo-server
       repository: https://ealenn.github.io/charts
       version: 0.3.0
-    description: |
-      The *Airlock Microgateway* is a component of the [Airlock Secure Access Hub](https://www.airlock.com/).
-      It is the lightweight, container-based deployment form of the *Airlock Gateway*, a software appliance with reverse-proxy, Web Application Firewall (WAF) and API security functionality.
+    description: 'The *Airlock Microgateway* is a component of the [Airlock Secure
+      Access Hub](https://www.airlock.com/). It is the lightweight, container-based
+      deployment form of the *Airlock Gateway*, a software appliance with reverse-proxy,
+      Web Application Firewall (WAF) and API security functionality. '
     digest: 80467beaaf52acbbe840ff127a3a56f72c97cdd4d1a54052277b2136f6cf1ce0
     home: https://www.airlock.com
     keywords:
@@ -853,9 +943,10 @@ entries:
       name: echo-server
       repository: https://ealenn.github.io/charts
       version: 0.3.0
-    description: |
-      The *Airlock Microgateway* is a component of the [Airlock Secure Access Hub](https://www.airlock.com/).
-      It is the lightweight, container-based deployment form of the *Airlock Gateway*, a software appliance with reverse-proxy, Web Application Firewall (WAF) and API security functionality.
+    description: 'The *Airlock Microgateway* is a component of the [Airlock Secure
+      Access Hub](https://www.airlock.com/). It is the lightweight, container-based
+      deployment form of the *Airlock Gateway*, a software appliance with reverse-proxy,
+      Web Application Firewall (WAF) and API security functionality. '
     digest: 3557ed3ac0edb95e968e7ccdf8d942d37d86ae2e9af8ae8d0e519e2077da3463
     home: https://www.airlock.com
     keywords:
@@ -884,9 +975,10 @@ entries:
       name: echo-server
       repository: https://ealenn.github.io/charts
       version: 0.3.0
-    description: |
-      The *Airlock Microgateway* is a component of the [Airlock Secure Access Hub](https://www.airlock.com/).
-      It is the lightweight, container-based deployment form of the *Airlock Gateway*, a software appliance with reverse-proxy, Web Application Firewall (WAF) and API security functionality.
+    description: 'The *Airlock Microgateway* is a component of the [Airlock Secure
+      Access Hub](https://www.airlock.com/). It is the lightweight, container-based
+      deployment form of the *Airlock Gateway*, a software appliance with reverse-proxy,
+      Web Application Firewall (WAF) and API security functionality. '
     digest: 6518a839fba0b776a61a8a701449307d0dd0d5e910747f05a70695a81f37615d
     home: https://www.airlock.com
     keywords:
@@ -915,9 +1007,10 @@ entries:
       name: echo-server
       repository: https://ealenn.github.io/charts
       version: 0.3.0
-    description: |
-      The *Airlock Microgateway* is a component of the [Airlock Secure Access Hub](https://www.airlock.com/).
-      It is the lightweight, container-based deployment form of the *Airlock Gateway*, a software appliance with reverse-proxy, Web Application Firewall (WAF) and API security functionality.
+    description: 'The *Airlock Microgateway* is a component of the [Airlock Secure
+      Access Hub](https://www.airlock.com/). It is the lightweight, container-based
+      deployment form of the *Airlock Gateway*, a software appliance with reverse-proxy,
+      Web Application Firewall (WAF) and API security functionality. '
     digest: 56c6db0b0debd116830e90c7b2dc7e4e6dda0a3c8006a70ebd71c1240e37b7ea
     home: https://www.airlock.com
     keywords:
@@ -946,9 +1039,10 @@ entries:
       name: echo-server
       repository: https://ealenn.github.io/charts
       version: 0.3.0
-    description: |
-      The *Airlock Microgateway* is a component of the [Airlock Secure Access Hub](https://www.airlock.com/).
-      It is the lightweight, container-based deployment form of the *Airlock Gateway*, a software appliance with reverse-proxy, Web Application Firewall (WAF) and API security functionality.
+    description: 'The *Airlock Microgateway* is a component of the [Airlock Secure
+      Access Hub](https://www.airlock.com/). It is the lightweight, container-based
+      deployment form of the *Airlock Gateway*, a software appliance with reverse-proxy,
+      Web Application Firewall (WAF) and API security functionality. '
     digest: 51154e53d2c09a8b497fc48d88d794feeadf926c21d722a4d3ab503b2c6634b0
     home: https://www.airlock.com
     keywords:
@@ -977,9 +1071,10 @@ entries:
       name: echo-server
       repository: https://ealenn.github.io/charts
       version: 0.3.0
-    description: |
-      The *Airlock Microgateway* is a component of the [Airlock Secure Access Hub](https://www.airlock.com/).
-      It is the lightweight, container-based deployment form of the *Airlock Gateway*, a software appliance with reverse-proxy, Web Application Firewall (WAF) and API security functionality.
+    description: 'The *Airlock Microgateway* is a component of the [Airlock Secure
+      Access Hub](https://www.airlock.com/). It is the lightweight, container-based
+      deployment form of the *Airlock Gateway*, a software appliance with reverse-proxy,
+      Web Application Firewall (WAF) and API security functionality. '
     digest: 59609e760dad252d41fa3c2341125c50b8bb737881e9a680ac26296b1b889716
     home: https://www.airlock.com
     keywords:
@@ -1008,9 +1103,10 @@ entries:
       name: echo-server
       repository: https://ealenn.github.io/charts
       version: 0.3.0
-    description: |
-      The *Airlock Microgateway* is a component of the [Airlock Secure Access Hub](https://www.airlock.com/).
-      It is the lightweight, container-based deployment form of the *Airlock Gateway*, a software appliance with reverse-proxy, Web Application Firewall (WAF) and API security functionality.
+    description: 'The *Airlock Microgateway* is a component of the [Airlock Secure
+      Access Hub](https://www.airlock.com/). It is the lightweight, container-based
+      deployment form of the *Airlock Gateway*, a software appliance with reverse-proxy,
+      Web Application Firewall (WAF) and API security functionality. '
     digest: 0194d51d148e3e83575292574e13ea708cbfafed050fd1398ebd1d0c1027c3be
     home: https://www.airlock.com
     keywords:
@@ -1039,9 +1135,10 @@ entries:
       name: echo-server
       repository: https://ealenn.github.io/charts
       version: 0.3.0
-    description: |
-      The *Airlock Microgateway* is a component of the [Airlock Secure Access Hub](https://www.airlock.com/).
-      It is the lightweight, container-based deployment form of the *Airlock Gateway*, a software appliance with reverse-proxy, Web Application Firewall (WAF) and API security functionality.
+    description: 'The *Airlock Microgateway* is a component of the [Airlock Secure
+      Access Hub](https://www.airlock.com/). It is the lightweight, container-based
+      deployment form of the *Airlock Gateway*, a software appliance with reverse-proxy,
+      Web Application Firewall (WAF) and API security functionality. '
     digest: 3324c2ff2f9c893103cbc24b1471133565ac5747d36913827b67f2584c5d2a35
     home: https://www.airlock.com
     keywords:
@@ -1070,9 +1167,10 @@ entries:
       name: echo-server
       repository: https://ealenn.github.io/charts
       version: 0.3.0
-    description: |
-      The *Airlock Microgateway* is a component of the [Airlock Secure Access Hub](https://www.airlock.com/).
-      It is the lightweight, container-based deployment form of the *Airlock Gateway*, a software appliance with reverse-proxy, Web Application Firewall (WAF) and API security functionality.
+    description: 'The *Airlock Microgateway* is a component of the [Airlock Secure
+      Access Hub](https://www.airlock.com/). It is the lightweight, container-based
+      deployment form of the *Airlock Gateway*, a software appliance with reverse-proxy,
+      Web Application Firewall (WAF) and API security functionality. '
     digest: d4ed94dbc9fb57c42e73c64f516483f68d65820c5c11f6755bfd54d922f985fe
     home: https://www.airlock.com
     keywords:
@@ -1101,9 +1199,10 @@ entries:
       name: echo-server
       repository: https://ealenn.github.io/charts
       version: 0.3.0
-    description: |
-      The *Airlock Microgateway* is a component of the [Airlock Secure Access Hub](https://www.airlock.com/).
-      It is the lightweight, container-based deployment form of the *Airlock Gateway*, a software appliance with reverse-proxy, Web Application Firewall (WAF) and API security functionality.
+    description: 'The *Airlock Microgateway* is a component of the [Airlock Secure
+      Access Hub](https://www.airlock.com/). It is the lightweight, container-based
+      deployment form of the *Airlock Gateway*, a software appliance with reverse-proxy,
+      Web Application Firewall (WAF) and API security functionality. '
     digest: db07fef0bd29ba7c9b41936e25df75fb2b4ec82037c90514defe40c22297c2bd
     home: https://www.airlock.com
     keywords:
@@ -1132,9 +1231,10 @@ entries:
       name: echo-server
       repository: https://ealenn.github.io/charts
       version: 0.3.0
-    description: |
-      The *Airlock Microgateway* is a component of the [Airlock Secure Access Hub](https://www.airlock.com/).
-      It is the lightweight, container-based deployment form of the *Airlock Gateway*, a software appliance with reverse-proxy, Web Application Firewall (WAF) and API security functionality.
+    description: 'The *Airlock Microgateway* is a component of the [Airlock Secure
+      Access Hub](https://www.airlock.com/). It is the lightweight, container-based
+      deployment form of the *Airlock Gateway*, a software appliance with reverse-proxy,
+      Web Application Firewall (WAF) and API security functionality. '
     digest: 83c394f2be018f6b8d418d047e1fa4202294084043fc26ff37db0e141477743f
     home: https://www.airlock.com
     keywords:
@@ -1163,9 +1263,10 @@ entries:
       name: echo-server
       repository: https://ealenn.github.io/charts
       version: 0.3.0
-    description: |
-      The *Airlock Microgateway* is a component of the [Airlock Secure Access Hub](https://www.airlock.com/).
-      It is the lightweight, container-based deployment form of the *Airlock Gateway*, a software appliance with reverse-proxy, Web Application Firewall (WAF) and API security functionality.
+    description: 'The *Airlock Microgateway* is a component of the [Airlock Secure
+      Access Hub](https://www.airlock.com/). It is the lightweight, container-based
+      deployment form of the *Airlock Gateway*, a software appliance with reverse-proxy,
+      Web Application Firewall (WAF) and API security functionality. '
     digest: 7dee0b03ce5386e26e47de69b98dad504f598f569b7e1386bb268cfecd4f17f6
     home: https://www.airlock.com
     keywords:
@@ -1194,9 +1295,10 @@ entries:
       name: echo-server
       repository: https://ealenn.github.io/charts
       version: 0.3.0
-    description: |
-      The *Airlock Microgateway* is a component of the [Airlock Secure Access Hub](https://www.airlock.com/).
-      It is the lightweight, container-based deployment form of the *Airlock Gateway*, a software appliance with reverse-proxy, Web Application Firewall (WAF) and API security functionality.
+    description: 'The *Airlock Microgateway* is a component of the [Airlock Secure
+      Access Hub](https://www.airlock.com/). It is the lightweight, container-based
+      deployment form of the *Airlock Gateway*, a software appliance with reverse-proxy,
+      Web Application Firewall (WAF) and API security functionality. '
     digest: a5b04b20fa8319ff08c00b05ab5c0fc3d4ab529115f0b3b11bd168b90ce32d40
     home: https://www.airlock.com
     keywords:
@@ -1213,4 +1315,4 @@ entries:
     urls:
     - https://github.com/ergon/airlock-helm-charts/releases/download/microgateway-0.6.0/microgateway-0.6.0.tgz
     version: 0.6.0
-generated: "2020-04-27T11:55:22.963617683Z"
+generated: "2022-06-22T12:13:13.425493732Z"
