@@ -33,7 +33,7 @@ annotations:
         - name: Bitnami Redis Upgrade Instructions
           url: https://github.com/bitnami/charts/tree/master/bitnami/redis
     - kind: fixed
-      description: Run Redis in standalone mode.          
+      description: Run Redis in standalone mode.
   artifacthub.io/links: |
     - name: Airlock Microgateway Manual
       url: https://docs.airlock.com/microgateway/latest/
