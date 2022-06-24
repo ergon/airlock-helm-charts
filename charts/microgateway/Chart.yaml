@@ -21,19 +21,17 @@ maintainers:
   - email: support@airlock.com
     name: Airlock
 name: microgateway
-version: 3.0.14
-appVersion: "3.1.9"
+version: 3.0.15
+appVersion: "3.2.0"
 annotations:
   artifacthub.io/changes: |
     - kind: changed
-      description: Helm 3 Migration
-    - kind: changed
-      description: Upgrade bitnami/redis subchart to version 15.7.6 (Redis 6.2.6). Consult the Bitnami Redis upgrade instructions in case of customized Redis configuration.
+      description: Upgrade to Airlock Microgateway 3.2.0
       links:
-        - name: Bitnami Redis Upgrade Instructions
-          url: https://github.com/bitnami/charts/tree/master/bitnami/redis
-    - kind: fixed
-      description: Run Redis in standalone mode.
+        - name: Airlock Microgateway Release Notes
+          url: https://docs.airlock.com/microgateway/3.2/#data/releasenotes_1.html
+        - name: Airlock Microgateway Change Log
+          url: https://docs.airlock.com/microgateway/3.2/#data/airlockmicro.html
   artifacthub.io/links: |
     - name: Airlock Microgateway Manual
       url: https://docs.airlock.com/microgateway/latest/
