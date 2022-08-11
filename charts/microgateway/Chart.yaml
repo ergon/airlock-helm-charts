@@ -26,7 +26,7 @@ appVersion: "3.2.1"
 annotations:
   artifacthub.io/changes: |
     - kind: changed
-      description: Upgrade to Airlock Microgateway 3.2.0
+      description: Upgrade to Airlock Microgateway 3.2.1
       links:
         - name: Airlock Microgateway Release Notes
           url: https://docs.airlock.com/microgateway/3.2/#data/releasenotes_1.html
