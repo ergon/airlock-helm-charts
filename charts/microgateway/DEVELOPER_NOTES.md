@@ -11,7 +11,7 @@ $ helm plugin install https://github.com/quintush/helm-unittest
 ### Run unit tests
 Invoke from toplevel directory of this repository:
 ```console
-$ helm unittest charts/microgateway
+$ helm unittest -3 charts/microgateway
 ```
 ### Working with snapshots
 The ConfigMap tests use snapshots to verify correct rendering of the ConfigMap. These snapshots are checked into the repository as reference.
