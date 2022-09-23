@@ -4,6 +4,63 @@ entries:
   - annotations:
       artifacthub.io/changes: |
         - kind: changed
+          description: Upgrade to Airlock Microgateway 3.2.2
+          links:
+            - name: Airlock Microgateway Release Notes
+              url: https://docs.airlock.com/microgateway/3.2/#data/releasenotes_1.html
+            - name: Airlock Microgateway Change Log
+              url: https://docs.airlock.com/microgateway/3.2/#data/airlockmicro.html
+      artifacthub.io/license: MIT
+      artifacthub.io/links: |
+        - name: Airlock Microgateway Manual
+          url: https://docs.airlock.com/microgateway/latest/
+        - name: Airlock Community Forum
+          url: https://forum.airlock.com
+        - name: Airlock Minikube Example
+          url: https://github.com/ergon/airlock-minikube-example
+    apiVersion: v2
+    appVersion: 3.2.2
+    created: "2022-09-23T14:28:37.823327182Z"
+    dependencies:
+    - condition: redis.enabled
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: 15.7.6
+    - condition: echo-server.enabled
+      name: echo-server
+      repository: https://ealenn.github.io/charts
+      version: 0.4.0
+    description: 'Airlock Microgateway helps you to protect your services and APIs
+      from unauthorized or malicious access with little effort. It is a lightweight
+      Web Application Firewall (WAF) and API security gateway designed specifically
+      for use in container environments. '
+    digest: a8cc380fc6682355be5a7769697163e21605b911bdc9e97ada56147beedb5515
+    home: https://www.airlock.com/microgateway
+    icon: https://raw.githubusercontent.com/ergon/airlock-helm-charts/master/charts/microgateway/icon.svg
+    keywords:
+    - WAF
+    - Web Application Firewall
+    - OWASP
+    - Airlock
+    - MicroGateway
+    - Security
+    - Filtering
+    - DevSecOps
+    - shift left
+    - ingress
+    - nginx
+    maintainers:
+    - email: support@airlock.com
+      name: Airlock
+    name: microgateway
+    sources:
+    - https://github.com/ergon/airlock-helm-charts
+    urls:
+    - https://github.com/ergon/airlock-helm-charts/releases/download/microgateway-3.0.17/microgateway-3.0.17.tgz
+    version: 3.0.17
+  - annotations:
+      artifacthub.io/changes: |
+        - kind: changed
           description: Upgrade to Airlock Microgateway 3.2.1
           links:
             - name: Airlock Microgateway Release Notes
@@ -1429,4 +1486,4 @@ entries:
     urls:
     - https://github.com/ergon/airlock-helm-charts/releases/download/microgateway-0.6.0/microgateway-0.6.0.tgz
     version: 0.6.0
-generated: "2022-08-12T07:26:57.383258749Z"
+generated: "2022-09-23T14:28:37.823592584Z"
