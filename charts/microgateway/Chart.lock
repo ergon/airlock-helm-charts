@@ -1,9 +1,9 @@
 dependencies:
 - name: redis
   repository: https://charts.bitnami.com/bitnami
-  version: 15.7.6
+  version: 17.4.3
 - name: echo-server
   repository: https://ealenn.github.io/charts
-  version: 0.4.0
-digest: sha256:6f912437e88ebd6837864ed473db3f5bd68aec7a5bed04805c73aace32b53e80
-generated: "2022-06-20T12:55:40.278223004+02:00"
+  version: 0.5.0
+digest: sha256:a8913e797ed214855eae34ac27f664092e0e800ec152ab2622dbda684e787352
+generated: "2023-01-18T17:10:14.156498+01:00"
