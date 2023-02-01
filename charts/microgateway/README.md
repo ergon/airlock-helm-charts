@@ -2,7 +2,7 @@
 
 Airlock Microgateway helps you to protect your services and APIs from unauthorized or malicious access with little effort. It is a lightweight Web Application Firewall (WAF) and API security gateway designed specifically for use in container environments.
 
-The current chart version is: 3.0.18
+The current chart version is: 3.0.19
 
 ## Table of contents
 * [Introduction](#introduction)
@@ -137,7 +137,7 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | image.repository | object | "See `image.repository.*`" | Image repositories for the Airlock Microgateway. |
 | image.repository.configbuilder | string | `"docker.io/ergon/airlock-microgateway-configbuilder"` | Image repository for the Airlock Microgateway configbuilder image |
 | image.repository.runtime | string | `"docker.io/ergon/airlock-microgateway"` | Image repository for the Airlock Microgateway runtime image |
-| image.tag | string | `"3.2.3"` | Image tag for microgateway and configbuilder image |
+| image.tag | string | `"3.3.0"` | Image tag for microgateway and configbuilder image |
 | imageCredentials | object | See `imageCredentials.*`: | Creates a imagePullSecret with the provided values. |
 | imageCredentials.enabled | bool | `false` | Enable the imagePullSecret creation. |
 | imageCredentials.password | string | `""` | imagePullSecret password/Token |
@@ -216,8 +216,8 @@ The Airlock Microgateway Helm chart has the following optional dependencies, whi
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://charts.bitnami.com/bitnami | redis | 15.7.6 |
-| https://ealenn.github.io/charts | echo-server | 0.4.0 |
+| https://charts.bitnami.com/bitnami | redis | 17.4.3 |
+| https://ealenn.github.io/charts | echo-server | 0.5.0 |
 
 ### Redis
 In case that session handling is enabled on Airlock Microgateway, a Redis service needs to be available.
