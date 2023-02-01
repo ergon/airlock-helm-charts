@@ -29,9 +29,9 @@ annotations:
       description: Upgrade to Airlock Microgateway 3.3.0
       links:
         - name: Airlock Microgateway Release Notes
-          url: https://docs.airlock.com/microgateway/3.2/#data/releasenotes_1.html
+          url: https://docs.airlock.com/microgateway/3.3/#data/1674151134907.html
         - name: Airlock Microgateway Change Log
-          url: https://docs.airlock.com/microgateway/3.2/#data/airlockmicro.html
+          url: https://docs.airlock.com/microgateway/3.3/#data/1674151134909.html
   artifacthub.io/links: |
     - name: Airlock Microgateway Manual
       url: https://docs.airlock.com/microgateway/latest/
