@@ -36,31 +36,6 @@ tests:
           path: spec.scaleTargetRef.name
           value: my-microgateway
 
-  - it: does use correct resource settings - beta1
-    capabilities:
-      majorVersion: 1
-      minorVersion: 11
-    set:
-      hpa.enabled: true
-      hpa.resource.memory: 1Gi
-      hpa.resource.cpu: 20
-    asserts:
-      - equal:
-          path: apiVersion
-          value: autoscaling/v2beta1
-      - equal:
-          path: spec.metrics[0].resource.name
-          value: cpu
-      - equal:
-          path: spec.metrics[0].resource.targetAverageUtilization
-          value: 20
-      - equal:
-          path: spec.metrics[1].resource.name
-          value: memory
-      - equal:
-          path: spec.metrics[1].resource.targetAverageValue
-          value: 1Gi
-
   - it: does use correct resource settings - beta2
     capabilities:
       majorVersion: 1
@@ -86,10 +61,34 @@ tests:
           path: spec.metrics[1].resource.target.averageValue
           value: 1Gi
 
+  - it: does use correct resource settings - v2
+    capabilities:
+      majorVersion: 1
+      minorVersion: 26
+    set:
+      hpa.enabled: true
+      hpa.resource.memory: 1Gi
+      hpa.resource.cpu: 20
+    asserts:
+      - equal:
+          path: apiVersion
+          value: autoscaling/v2
+      - equal:
+          path: spec.metrics[0].resource.name
+          value: cpu
+      - equal:
+          path: spec.metrics[0].resource.target.averageUtilization
+          value: 20
+      - equal:
+          path: spec.metrics[1].resource.name
+          value: memory
+      - equal:
+          path: spec.metrics[1].resource.target.averageValue
+          value: 1Gi
   - it: does use correct resource settings without cpu
     capabilities:
       majorVersion: 1
-      minorVersion: 12
+      minorVersion: 24
     set:
       hpa.enabled: true
       hpa.resource.memory: 1Gi
