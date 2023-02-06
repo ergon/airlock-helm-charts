@@ -21,17 +21,12 @@ maintainers:
   - email: support@airlock.com
     name: Airlock
 name: microgateway
-version: 3.0.19
+version: 3.0.20
 appVersion: "3.3.0"
 annotations:
   artifacthub.io/changes: |
     - kind: changed
-      description: Upgrade to Airlock Microgateway 3.3.0
-      links:
-        - name: Airlock Microgateway Release Notes
-          url: https://docs.airlock.com/microgateway/3.3/#data/1674151134907.html
-        - name: Airlock Microgateway Change Log
-          url: https://docs.airlock.com/microgateway/3.3/#data/1674151134909.html
+      description: add support for autoscaling API v2
   artifacthub.io/links: |
     - name: Airlock Microgateway Manual
       url: https://docs.airlock.com/microgateway/latest/
