@@ -10,7 +10,7 @@ image:
     # image.repository.configbuilder -- Image repository for the Airlock Microgateway configbuilder image
     configbuilder: docker.io/ergon/airlock-microgateway-configbuilder
   # image.tag -- Image tag for microgateway and configbuilder image
-  tag: "3.3.3"
+  tag: "3.3.4"
   # image.pullPolicy -- Pull policy (`Always`, `IfNotPresent`, `Never`)
   pullPolicy: IfNotPresent
 
