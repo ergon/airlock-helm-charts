@@ -34,7 +34,7 @@ annotations:
           url: https://docs.airlock.com/microgateway/3.4/#data/1697129073212.html
   artifacthub.io/links: |
     - name: Airlock Microgateway Manual
-      url: https://docs.airlock.com/microgateway/latest/
+      url: https://docs.airlock.com/microgateway/3.4/
     - name: Airlock Community Forum
       url: https://forum.airlock.com
     - name: Airlock Minikube Example
