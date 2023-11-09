@@ -30,7 +30,7 @@ This Helm chart bootstraps [Airlock Microgateway](https://www.airlock.com) on a 
 * The Airlock Microgateway image
 * Airlock Microgateway is available as premium and community edition. <br>
   Without a valid license, Airlock Microgateway works as community edition with limited functionality. <br>
-  For further information refer to [Microgateway Documentation](https://docs.airlock.com/microgateway/latest/). <br>
+  For further information refer to [Microgateway Documentation](https://docs.airlock.com/microgateway/3.4/). <br>
   If you want to try the premium features, [request a license key](https://airlock.com/microgateway-premium) and [configure it](#configuring-a-license).
 * Redis service for session handling (see chapter [Dependencies](#dependencies))
 
@@ -179,7 +179,7 @@ The following table lists configuration parameters of the Airlock Microgateway c
 | resources | object | See `resources.*` | Resource requests/limits for the runtime container. <br> [Resource limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) <br> [Configure Quality of Service for Pods](https://kubernetes.io/docs/tasks/configure-pod-container/quality-service-pod/) |
 | resources.limits | object | See `resources.limits.*` | Resource limits for the runtime container. |
 | resources.limits.memory | string | `"4048Mi"` | Memory limit for the runtime container. |
-| resources.requests | object | See `resources.requests.*` | Resource requests for the Microgateway runtime container. These values most like have to be adjusted depending on specific load and usage profiles. <br> Please consult [Microgateway resrouce requirements](https://docs.airlock.com/microgateway/latest/#data/resourcerequ.html) for some ideas about actual Microgateway resource requirements. |
+| resources.requests | object | See `resources.requests.*` | Resource requests for the Microgateway runtime container. These values most like have to be adjusted depending on specific load and usage profiles. <br> Please consult [Microgateway resource requirements](https://docs.airlock.com/microgateway/3.4/#data/1581621320714.html) for some ideas about actual Microgateway resource requirements. |
 | resources.requests.cpu | string | `"30m"` | CPU request for the runtime container. |
 | resources.requests.memory | string | `"256Mi"` | Memory request for the runtime container. |
 | route | object | See `route.*`: | [Openshift Route](#openshift-route) |
@@ -257,7 +257,7 @@ The Microgateway DSL configuration can be provided in 2 different ways:
 The microgateway does not detect DSL changes at runtime. If the DSL configuration is managed by the Helm Chart, a deployment rollout is triggered automatically after a DSL change.
 If the DSL is mounted from a volume not managed by the Helm Chart, a manual restart is required.
 
-For a full list of available Microgateway configuration parameters refer to the [Microgateway Documentation](https://docs.airlock.com/microgateway/latest/)
+For a full list of available Microgateway configuration parameters refer to the [Microgateway Documentation](https://docs.airlock.com/microgateway/3.4/)
 
 **Example DSL Parameter:**
 
@@ -775,7 +775,7 @@ config:
 
 ## Additional Information
 - Introduction: [Airlock Microgateway](https://www.airlock.com/microgateway)
-- Documentation: [Airlock Microgateway Manual](https://docs.airlock.com/microgateway/latest/)
+- Documentation: [Airlock Microgateway Manual](https://docs.airlock.com/microgateway/3.4/)
 - Community Support: [Airlock Community Forum](https://forum.airlock.com)
 - Integration Example: [Airlock Minikube Example](https://github.com/ergon/airlock-minikube-example)
 
