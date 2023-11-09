@@ -30,7 +30,7 @@ This Helm chart bootstraps [Airlock Microgateway](https://www.airlock.com) on a 
 * The Airlock Microgateway image
 * Airlock Microgateway is available as premium and community edition. <br>
   Without a valid license, Airlock Microgateway works as community edition with limited functionality. <br>
-  For further information refer to [Microgateway Documentation](https://docs.airlock.com/microgateway/latest/). <br>
+  For further information refer to [Microgateway Documentation](https://docs.airlock.com/microgateway/3.4/). <br>
   If you want to try the premium features, [request a license key](https://airlock.com/microgateway-premium) and [configure it](#configuring-a-license).
 * Redis service for session handling (see chapter [Dependencies](#dependencies))
 
@@ -144,7 +144,7 @@ The Microgateway DSL configuration can be provided in 2 different ways:
 The microgateway does not detect DSL changes at runtime. If the DSL configuration is managed by the Helm Chart, a deployment rollout is triggered automatically after a DSL change. 
 If the DSL is mounted from a volume not managed by the Helm Chart, a manual restart is required.
 
-For a full list of available Microgateway configuration parameters refer to the [Microgateway Documentation](https://docs.airlock.com/microgateway/latest/)
+For a full list of available Microgateway configuration parameters refer to the [Microgateway Documentation](https://docs.airlock.com/microgateway/3.4/)
 
 **Example DSL Parameter:**
 
@@ -665,7 +665,7 @@ config:
 
 ## Additional Information
 - Introduction: [Airlock Microgateway](https://www.airlock.com/microgateway)
-- Documentation: [Airlock Microgateway Manual](https://docs.airlock.com/microgateway/latest/)
+- Documentation: [Airlock Microgateway Manual](https://docs.airlock.com/microgateway/3.4/)
 - Community Support: [Airlock Community Forum](https://forum.airlock.com)
 - Integration Example: [Airlock Minikube Example](https://github.com/ergon/airlock-minikube-example)
 
