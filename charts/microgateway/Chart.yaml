@@ -21,20 +21,20 @@ maintainers:
   - email: support@airlock.com
     name: Airlock
 name: microgateway
-version: 3.0.34
-appVersion: "3.3.13"
+version: 3.1.0
+appVersion: "3.4.0"
 annotations:
   artifacthub.io/changes: |
     - kind: changed
-      description: Upgrade to Airlock Microgateway 3.3.13
+      description: Upgrade to Airlock Microgateway 3.4.0
       links:
         - name: Airlock Microgateway Release Notes
-          url: https://docs.airlock.com/microgateway/3.3/#data/1674151134907.html
+          url: https://docs.airlock.com/microgateway/3.4/#data/1697129073210.html
         - name: Airlock Microgateway Change Log
-          url: https://docs.airlock.com/microgateway/3.3/#data/1674151134909.html
+          url: https://docs.airlock.com/microgateway/3.4/#data/1697129073212.html
   artifacthub.io/links: |
     - name: Airlock Microgateway Manual
-      url: https://docs.airlock.com/microgateway/latest/
+      url: https://docs.airlock.com/microgateway/3.4/
     - name: Airlock Community Forum
       url: https://forum.airlock.com
     - name: Airlock Minikube Example

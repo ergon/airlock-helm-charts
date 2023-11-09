@@ -10,7 +10,7 @@ image:
     # image.repository.configbuilder -- Image repository for the Airlock Microgateway configbuilder image
     configbuilder: docker.io/ergon/airlock-microgateway-configbuilder
   # image.tag -- Image tag for microgateway and configbuilder image
-  tag: "3.3.13"
+  tag: "3.4.0"
   # image.pullPolicy -- Pull policy (`Always`, `IfNotPresent`, `Never`)
   pullPolicy: IfNotPresent
 
@@ -290,7 +290,7 @@ route:
 # @default -- See `resources.*`
 resources:
   # resources.requests -- Resource requests for the Microgateway runtime container. These values most like have to be adjusted depending on specific load and usage profiles. <br>
-  # Please consult [Microgateway resrouce requirements](https://docs.airlock.com/microgateway/latest/#data/resourcerequ.html)
+  # Please consult [Microgateway resource requirements](https://docs.airlock.com/microgateway/3.4/#data/1581621320714.html)
   # for some ideas about actual Microgateway resource requirements.
   # @default -- See `resources.requests.*`
   requests:
