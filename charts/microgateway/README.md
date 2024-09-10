@@ -2,7 +2,7 @@
 
 Airlock Microgateway helps you to protect your services and APIs from unauthorized or malicious access with little effort. It is a lightweight Web Application Firewall (WAF) and API security gateway designed specifically for use in container environments.
 
-The current chart version is: 3.1.11
+The current chart version is: 3.1.12
 
 ## Table of contents
 * [Introduction](#introduction)
@@ -99,117 +99,117 @@ This chapter provides a simple example to help you get the Airlock Microgateway 
 ## Parameters
 The following table lists configuration parameters of the Airlock Microgateway chart and the default values.
 
-| Key | Type | Default                                                | Description |
-|-----|------|--------------------------------------------------------|-------------|
-| affinity | string | `nil`                                                  | Assign custom [affinity rules](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/) (multiline string). |
-| annotations | object | `{}`                                                   | Additional annotations for the Microgateway Deployment |
-| commonLabels | object | `{}`                                                   | Labels to add to all resources. |
-| config.dsl | object | `{}`                                                   | [DSL configuration](#dsl-configuration) Template rendering fails if `config.dslConfigMap` and `config.dsl` are specified. |
-| config.dslConfigMap | string | ""                                                     | Name of the ConfigMap containing the Microgateway DSL configuration file. <br> The DSL is expected in a data entry called `config.yaml`. <br> <br> Template rendering fails if `config.dslConfigMap` and `config.dsl` are specified. |
-| config.env | object | "See `config.env.*`"                                   | [DSL Environment Variables](#dsl-environment-variables) |
-| config.env.configbuilder | list | `[]`                                                   | [DSL Environment Variables](#dsl-environment-variables) |
-| config.env.runtime | list | `[]`                                                   | [Runtime Environment Variables](#runtime-environment-variables) |
-| config.jwks | object | "see `config.jwks.*`"                                  | [Secrets for JWKS services](#jwks-service-secrets) |
-| config.jwks.clientCertificateSecretName | string | ""                                                     | Name of an existing secret containing:<br><br> Certificate: `client.crt`<br> Private key: `client.key`<br> CA Certificate: `client-ca.crt` <br> The files will be available in '/secret/auth/jwks/tls/client/'. |
-| config.jwks.localJWKSSecretName | string | ""                                                     | Name of an existing secret with a jwks json file. The secret must contain:<br><br> JWKS File: `jwks.json`<br><br> The JWKS file will be available in '/secret/jwks/jwks.json' for reference in local JWKS service configurations in the DSL. |
-| config.jwks.serverCASecretName | string | ""                                                     | Name of an existing secret containing:<br><br> Server CA Certificate: `server-validation.crt`<br> The files will be available in '/secret/auth/jwks/tls/server/'. |
-| config.license | object | ""                                                     | Creates or mounts a secret with an Airlock Microgateway license. <br> If 'useExistingSecret: false' and no 'license.key' is given, the Airlock Microgateway runs in community mode. <br> If 'useExistingSecret: false' and the 'license.key' is given, a secret with the license will be created and mounted. <br> If 'useExistingSecret: true' and 'license.secretName' has a name, the referenced secret will be mounted. <br> If 'useExistingSecret: true' and 'license.key' is given, the license defined in 'secretName' will be used. |
-| config.license.key | string | ""                                                     | The Airlock Microgateway license key which will be stored and used in a secret. |
-| config.license.secretName | string | ""                                                     | Name of an existing secret containing: <br> <br> license: `license` |
-| config.license.useExistingSecret | bool | `false`                                                | Specifies whether a pre-existing secret should be mounted. |
-| config.passphrase | object | ""                                                     | Passphrase used for encryption. <br> If 'useExistingSecret: false' and no 'passphrase.value' is given, a random value will be created and stored in a secret. <br> If 'useExistingSecret: false' and a 'passphrase.value' is given, a secret with the passphrase will be created and mounted. <br> If 'useExistingSecret: true' and no 'passphrase.secretName' has a name, the referenced secret will be mounted. <br> If 'useExistingSecret: true' and 'passphrase.value' is given, the passphrase defined in 'secretName' will be used. |
-| config.passphrase.secretName | string | ""                                                     | Name of an existing secret containing: <br> <br> passphrase: `passphrase` |
-| config.passphrase.useExistingSecret | bool | `false`                                                | Specifies whether a pre-existing secret should be mounted. |
-| config.passphrase.value | string | ""                                                     | The passhprase which will be stored and used in a secret. |
-| config.tlsSecretName | string | ""                                                     | Name of an existing secret containing:<br><br> _Virtual Host:_<br> Certificate: `frontend-server.crt`<br> Private key: `frontend-server.key`<br> CA: `frontend-server-ca.crt` <br> :exclamation: Update `route.tls.destinationCACertificate` accordingly.<br><br> _Backend:_<br> Certificate: `backend-client.crt`<br> Private key: `backend-client.key`<br> CA: `backend-server-validation-ca.crt` |
-| echo-server | object | See `echo-server.*`:                                   | Pre-configured [Echo-Server](#echo-server). |
-| echo-server.enabled | bool | `false`                                                | Deploy pre-configured [Echo-Server](#echo-server). |
-| extraVolumeMounts | list | `[]`                                                   | Add additional volume mounts. |
-| extraVolumes | list | `[]`                                                   | Add additional volumes. [Volumes](https://kubernetes.io/docs/concepts/storage/volumes/) |
-| fullnameOverride | string | `""`                                                   | Provide a name to substitute for the full names of resources. |
-| hpa | object | See `hpa.*`:                                           | [Horizontal Pod Autoscaler](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) to scale <br> Microgateway based on Memory and CPU consumption.<br><br> :exclamation: Check [API versioning](https://kubernetes.io/docs/concepts/overview/kubernetes-api/#api-versioning) when using this Beta feature. |
-| hpa.enabled | bool | `false`                                                | Deploy a horizontal pod autoscaler. |
-| hpa.maxReplicas | int | `10`                                                   | Maximum number of Microgateway replicas. |
-| hpa.minReplicas | int | `1`                                                    | Minimum number of Microgateway replicas. |
-| hpa.resource.cpu | int | `50`                                                   | Average Microgateway CPU consumption in percentage to scale up/down.<br><br> :exclamation: Please set the resource request parameter `resources.cpu` to a value reflecting your actual resource needs if you use autoscaling based on cpu consumption. Otherwise autoscaling will not work as expected. |
-| hpa.resource.memory | string | `"3Gi"`                                                | Average Microgateway Memory consumption to scale up/down.<br><br> :exclamation: Update this setting depending on your `resources.limits.memory` setting. |
-| image.pullPolicy | string | `"IfNotPresent"`                                       | Pull policy (`Always`, `IfNotPresent`, `Never`) |
-| image.repository | object | "See `image.repository.*`"                             | Image repositories for the Airlock Microgateway. |
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| affinity | string | `nil` | Assign custom [affinity rules](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/) (multiline string). |
+| annotations | object | `{}` | Additional annotations for the Microgateway Deployment |
+| commonLabels | object | `{}` | Labels to add to all resources. |
+| config.dsl | object | `{}` | [DSL configuration](#dsl-configuration) Template rendering fails if `config.dslConfigMap` and `config.dsl` are specified. |
+| config.dslConfigMap | string | "" | Name of the ConfigMap containing the Microgateway DSL configuration file. <br> The DSL is expected in a data entry called `config.yaml`. <br> <br> Template rendering fails if `config.dslConfigMap` and `config.dsl` are specified. |
+| config.env | object | "See `config.env.*`" | [DSL Environment Variables](#dsl-environment-variables) |
+| config.env.configbuilder | list | `[]` | [DSL Environment Variables](#dsl-environment-variables) |
+| config.env.runtime | list | `[]` | [Runtime Environment Variables](#runtime-environment-variables) |
+| config.jwks | object | "see `config.jwks.*`" | [Secrets for JWKS services](#jwks-service-secrets) |
+| config.jwks.clientCertificateSecretName | string | "" | Name of an existing secret containing:<br><br> Certificate: `client.crt`<br> Private key: `client.key`<br> CA Certificate: `client-ca.crt` <br> The files will be available in '/secret/auth/jwks/tls/client/'. |
+| config.jwks.localJWKSSecretName | string | "" | Name of an existing secret with a jwks json file. The secret must contain:<br><br> JWKS File: `jwks.json`<br><br> The JWKS file will be available in '/secret/jwks/jwks.json' for reference in local JWKS service configurations in the DSL. |
+| config.jwks.serverCASecretName | string | "" | Name of an existing secret containing:<br><br> Server CA Certificate: `server-validation.crt`<br> The files will be available in '/secret/auth/jwks/tls/server/'. |
+| config.license | object | "" | Creates or mounts a secret with an Airlock Microgateway license. <br> If 'useExistingSecret: false' and no 'license.key' is given, the Airlock Microgateway runs in community mode. <br> If 'useExistingSecret: false' and the 'license.key' is given, a secret with the license will be created and mounted. <br> If 'useExistingSecret: true' and 'license.secretName' has a name, the referenced secret will be mounted. <br> If 'useExistingSecret: true' and 'license.key' is given, the license defined in 'secretName' will be used. |
+| config.license.key | string | "" | The Airlock Microgateway license key which will be stored and used in a secret. |
+| config.license.secretName | string | "" | Name of an existing secret containing: <br> <br> license: `license` |
+| config.license.useExistingSecret | bool | `false` | Specifies whether a pre-existing secret should be mounted. |
+| config.passphrase | object | "" | Passphrase used for encryption. <br> If 'useExistingSecret: false' and no 'passphrase.value' is given, a random value will be created and stored in a secret. <br> If 'useExistingSecret: false' and a 'passphrase.value' is given, a secret with the passphrase will be created and mounted. <br> If 'useExistingSecret: true' and no 'passphrase.secretName' has a name, the referenced secret will be mounted. <br> If 'useExistingSecret: true' and 'passphrase.value' is given, the passphrase defined in 'secretName' will be used. |
+| config.passphrase.secretName | string | "" | Name of an existing secret containing: <br> <br> passphrase: `passphrase` |
+| config.passphrase.useExistingSecret | bool | `false` | Specifies whether a pre-existing secret should be mounted. |
+| config.passphrase.value | string | "" | The passhprase which will be stored and used in a secret. |
+| config.tlsSecretName | string | "" | Name of an existing secret containing:<br><br> _Virtual Host:_<br> Certificate: `frontend-server.crt`<br> Private key: `frontend-server.key`<br> CA: `frontend-server-ca.crt` <br> :exclamation: Update `route.tls.destinationCACertificate` accordingly.<br><br> _Backend:_<br> Certificate: `backend-client.crt`<br> Private key: `backend-client.key`<br> CA: `backend-server-validation-ca.crt` |
+| echo-server | object | See `echo-server.*`: | Pre-configured [Echo-Server](#echo-server). |
+| echo-server.enabled | bool | `false` | Deploy pre-configured [Echo-Server](#echo-server). |
+| extraVolumeMounts | list | `[]` | Add additional volume mounts. |
+| extraVolumes | list | `[]` | Add additional volumes. [Volumes](https://kubernetes.io/docs/concepts/storage/volumes/) |
+| fullnameOverride | string | `""` | Provide a name to substitute for the full names of resources. |
+| hpa | object | See `hpa.*`: | [Horizontal Pod Autoscaler](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) to scale <br> Microgateway based on Memory and CPU consumption.<br><br> :exclamation: Check [API versioning](https://kubernetes.io/docs/concepts/overview/kubernetes-api/#api-versioning) when using this Beta feature. |
+| hpa.enabled | bool | `false` | Deploy a horizontal pod autoscaler. |
+| hpa.maxReplicas | int | `10` | Maximum number of Microgateway replicas. |
+| hpa.minReplicas | int | `1` | Minimum number of Microgateway replicas. |
+| hpa.resource.cpu | int | `50` | Average Microgateway CPU consumption in percentage to scale up/down.<br><br> :exclamation: Please set the resource request parameter `resources.cpu` to a value reflecting your actual resource needs if you use autoscaling based on cpu consumption. Otherwise autoscaling will not work as expected. |
+| hpa.resource.memory | string | `"3Gi"` | Average Microgateway Memory consumption to scale up/down.<br><br> :exclamation: Update this setting depending on your `resources.limits.memory` setting. |
+| image.pullPolicy | string | `"IfNotPresent"` | Pull policy (`Always`, `IfNotPresent`, `Never`) |
+| image.repository | object | "See `image.repository.*`" | Image repositories for the Airlock Microgateway. |
 | image.repository.configbuilder | string | `"docker.io/ergon/airlock-microgateway-configbuilder"` | Image repository for the Airlock Microgateway configbuilder image |
-| image.repository.runtime | string | `"docker.io/ergon/airlock-microgateway"`               | Image repository for the Airlock Microgateway runtime image |
-| image.tag | string | `"3.4.12"`                                             | Image tag for microgateway and configbuilder image |
-| imageCredentials | object | See `imageCredentials.*`:                              | Creates a imagePullSecret with the provided values. |
-| imageCredentials.enabled | bool | `false`                                                | Enable the imagePullSecret creation. |
-| imageCredentials.password | string | `""`                                                   | imagePullSecret password/Token |
-| imageCredentials.registry | string | `"https://index.docker.io/v1/"`                        | imagePullSecret registry |
-| imageCredentials.username | string | `""`                                                   | imagePullSecret username |
-| imagePullSecrets | list | `[]`                                                   | Reference to one or more secrets to use when pulling images. |
-| ingress | object | See `ingress.*`:                                       | [Kubernetes Ingress](#kubernetes-ingress) |
-| ingress.annotations | object | `{"nginx.ingress.kubernetes.io/rewrite-target":"/"}`   | Annotations to set on the ingress. |
-| ingress.enabled | bool | `false`                                                | Create an ingress object. |
-| ingress.hosts | list | `[]`                                                   | List of ingress hosts. A rule will be created for every host. Use an empty list to create a wildcard '*' rule. |
-| ingress.labels | object | `{}`                                                   | Additional labels to add on the Microgateway ingress. |
-| ingress.path | string | `"/"`                                                  | Path for the ingress. |
-| ingress.pathType | string | `"Prefix"`                                             | pathType of the ingress path (used with ingress v1 and higher) |
-| ingress.servicePortName | string | `"http"`                                               | Name of the service target port with ingress API version networking.k8s.io/v1 (Kubernetes version >= 1.19) `ingress.servicePortNumber` takes precedence over `ingress.servicePortName` if both are specified. Possible Values are: `http`, `https`. |
-| ingress.servicePortNumber | string | `nil`                                                  | Number of the service target port with ingress API version networking.k8s.io/v1 (Kubernetes version >= 1.19) `ingress.servicePortNumber` takes precedence over `ingress.servicePortName` if both are specified. |
-| ingress.targetPort | string | `"http"`                                               | Target port of the service with ingress API version networking.k8s.io/v1beta1 (Kubernetes version < 1.19) Possible values are: `http`, `https` or `<number>`. |
-| ingress.tls | list | `[]`                                                   | [Ingress TLS](https://kubernetes.io/docs/concepts/services-networking/ingress/#tls) configuration. |
-| initResources | object | See `initResources.*`                                  | Resource requests/limits for the init container. <br> [Init container resource limits](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/#resources) |
-| initResources.limits | object | See `initResources.limits.*`                           | Resource limits for the init container. |
-| initResources.limits.cpu | string | `"1000m"`                                              | CPU limit for the init container. |
-| initResources.limits.memory | string | `"512Mi"`                                              | Memory limit for the init container. |
-| initResources.requests | object | See `initResources.requests.*`                         | Resource requests for the init container. |
-| initResources.requests.cpu | string | `"30m"`                                                | CPU request for the init container. |
-| initResources.requests.memory | string | `"256Mi"`                                              | Memory request for the init container. |
-| livenessProbe.enabled | bool | `true`                                                 | Enable liveness probes. |
-| livenessProbe.failureThreshold | int | `9`                                                    | After how many subsequent failures the pod gets restarted. |
-| livenessProbe.initialDelaySeconds | int | `90`                                                   | Initial delay in seconds. |
-| livenessProbe.timeoutSeconds | int | `5`                                                    | Timeout of liveness probes, should roughly reflect allowed timeouts from clients. |
-| nameOverride | string | `""`                                                   | Provide a name in place of `microgateway`. |
-| nodeSelector | object | `{}`                                                   | Define which nodes the pods are scheduled on. |
-| podAnnotations | object | `{}`                                                   | Additional annotations for the Microgateway Pod |
-| podSecurityContext | object | `{}`                                                   | [Security context for the pods](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod). |
-| readinessProbe.enabled | bool | `true`                                                 | Enable readiness probes. |
-| readinessProbe.failureThreshold | int | `3`                                                    | After how many tries the pod stops receiving traffic. |
-| readinessProbe.initialDelaySeconds | int | `10`                                                   | Initial delay in seconds. |
-| redis | object | See `redis.*`:                                         | Pre-configured [Redis](#redis) service. |
-| redis.enabled | bool | `false`                                                | Deploy pre-configured [Redis](#redis). |
-| replicaCount | int | `1`                                                    | Desired number of Microgateway pods. |
-| resources | object | See `resources.*`                                      | Resource requests/limits for the runtime container. <br> [Resource limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) <br> [Configure Quality of Service for Pods](https://kubernetes.io/docs/tasks/configure-pod-container/quality-service-pod/) |
-| resources.limits | object | See `resources.limits.*`                               | Resource limits for the runtime container. |
-| resources.limits.memory | string | `"4048Mi"`                                             | Memory limit for the runtime container. |
-| resources.requests | object | See `resources.requests.*`                             | Resource requests for the Microgateway runtime container. These values most like have to be adjusted depending on specific load and usage profiles. <br> Please consult [Microgateway resource requirements](https://docs.airlock.com/microgateway/3.4/#data/1581621320714.html) for some ideas about actual Microgateway resource requirements. |
-| resources.requests.cpu | string | `"30m"`                                                | CPU request for the runtime container. |
-| resources.requests.memory | string | `"256Mi"`                                              | Memory request for the runtime container. |
-| route | object | See `route.*`:                                         | [Openshift Route](#openshift-route) |
-| route.annotations | object | `{}`                                                   | Annotations to set on the route. |
-| route.enabled | bool | `false`                                                | Create a route object. |
-| route.hosts | list | `["virtinc.com"]`                                      | List of host names. <br> A route will be created for every host name listed. No route will be created if no hosts are specified. Use an empty string to generate a route without hostname. |
-| route.labels | object | `{}`                                                   | Additional labels add on the Microgateway route. |
-| route.path | string | `"/"`                                                  | Path for the route. |
-| route.targetPort | string | `"https"`                                              | Target port of the service (`http`, `https` or `<number>`). |
-| route.tls.certificate | string | ""                                                     | Certificate to be used (multiline string). |
-| route.tls.destinationCACertificate | string | Microgateway's default certificate                     | Validate the Microgateway server certificate against this CA. (multiline string).<br> :exclamation: Must be configured with termination `reencrypt`. |
-| route.tls.enabled | bool | `true`                                                 | Enable TLS for the route. |
-| route.tls.insecureEdgeTerminationPolicy | string | `"Redirect"`                                           | Define the insecureEdgeTerminationPolicy of the route (`Allow`, `Redirect`, `None`). |
-| route.tls.key | string | ""                                                     | Private key to be used for certificate (multiline string). |
-| route.tls.termination | string | `"reencrypt"`                                          | Termination of the route (`edge`, `reencrypt`, `passthrough`). |
-| securityContext | object | `{}`                                                   | [Security context for a container](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container). |
-| service.annotations | object | `{}`                                                   | Annotations to set on the service. |
-| service.externalTrafficPolicy | string | `Local` if `service.type=LoadBalancer`                 | [externalTrafficPolicy](https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip) |
-| service.labels | object | `{}`                                                   | Additional labels to add on the service. |
-| service.loadBalancerIP | string | "" if `service.type=LoadBalancer`                      | [loadBalancerIP](https://kubernetes.io/docs/concepts/services-networking/service/#loadbalancer) |
-| service.port | int | `80`                                                   | Service port |
-| service.tlsPort | int | `443`                                                  | Service TLS port |
-| service.type | string | `"ClusterIP"`                                          | [Service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) |
-| serviceAccount | object | "See `serviceAccount.*`"                               | Specifies the service account under which the microgateway will run. A dedicated service account is created and used by default. <br><br> If `serviceAccount.create=true` and no `serviceAccount.name` is given, a name is generated using the fullname template. <br><br> If `serviceAccount.create=false` and no `serviceAccount.name` is given, the microgateway runs under the default service account. |
-| serviceAccount.annotations | object | `{}`                                                   | Annotations to set on the service account. |
-| serviceAccount.create | bool | `true`                                                 | Specifies whether a ServiceAccount should be created |
-| serviceAccount.labels | object | `{}`                                                   | Additional labels added on the service account. |
-| serviceAccount.name | string | `nil`                                                  | The name of the ServiceAccount to use. <br><br> |
-| test_request | string | `"/"`                                                  | Request that will be used as a smoketest when 'helm test' is invoked. |
-| tolerations | list | `[]`                                                   | Tolerations for use with node [taints](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/). |
+| image.repository.runtime | string | `"docker.io/ergon/airlock-microgateway"` | Image repository for the Airlock Microgateway runtime image |
+| image.tag | string | `"3.4.12"` | Image tag for microgateway and configbuilder image |
+| imageCredentials | object | See `imageCredentials.*`: | Creates a imagePullSecret with the provided values. |
+| imageCredentials.enabled | bool | `false` | Enable the imagePullSecret creation. |
+| imageCredentials.password | string | `""` | imagePullSecret password/Token |
+| imageCredentials.registry | string | `"https://index.docker.io/v1/"` | imagePullSecret registry |
+| imageCredentials.username | string | `""` | imagePullSecret username |
+| imagePullSecrets | list | `[]` | Reference to one or more secrets to use when pulling images. |
+| ingress | object | See `ingress.*`: | [Kubernetes Ingress](#kubernetes-ingress) |
+| ingress.annotations | object | `{"nginx.ingress.kubernetes.io/rewrite-target":"/"}` | Annotations to set on the ingress. |
+| ingress.enabled | bool | `false` | Create an ingress object. |
+| ingress.hosts | list | `[]` | List of ingress hosts. A rule will be created for every host. Use an empty list to create a wildcard '*' rule. |
+| ingress.labels | object | `{}` | Additional labels to add on the Microgateway ingress. |
+| ingress.path | string | `"/"` | Path for the ingress. |
+| ingress.pathType | string | `"Prefix"` | pathType of the ingress path (used with ingress v1 and higher) |
+| ingress.servicePortName | string | `"http"` | Name of the service target port with ingress API version networking.k8s.io/v1 (Kubernetes version >= 1.19) `ingress.servicePortNumber` takes precedence over `ingress.servicePortName` if both are specified. Possible Values are: `http`, `https`. |
+| ingress.servicePortNumber | string | `nil` | Number of the service target port with ingress API version networking.k8s.io/v1 (Kubernetes version >= 1.19) `ingress.servicePortNumber` takes precedence over `ingress.servicePortName` if both are specified. |
+| ingress.targetPort | string | `"http"` | Target port of the service with ingress API version networking.k8s.io/v1beta1 (Kubernetes version < 1.19) Possible values are: `http`, `https` or `<number>`. |
+| ingress.tls | list | `[]` | [Ingress TLS](https://kubernetes.io/docs/concepts/services-networking/ingress/#tls) configuration. |
+| initResources | object | See `initResources.*` | Resource requests/limits for the init container. <br> [Init container resource limits](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/#resources) |
+| initResources.limits | object | See `initResources.limits.*` | Resource limits for the init container. |
+| initResources.limits.cpu | string | `"1000m"` | CPU limit for the init container. |
+| initResources.limits.memory | string | `"512Mi"` | Memory limit for the init container. |
+| initResources.requests | object | See `initResources.requests.*` | Resource requests for the init container. |
+| initResources.requests.cpu | string | `"30m"` | CPU request for the init container. |
+| initResources.requests.memory | string | `"256Mi"` | Memory request for the init container. |
+| livenessProbe.enabled | bool | `true` | Enable liveness probes. |
+| livenessProbe.failureThreshold | int | `9` | After how many subsequent failures the pod gets restarted. |
+| livenessProbe.initialDelaySeconds | int | `90` | Initial delay in seconds. |
+| livenessProbe.timeoutSeconds | int | `5` | Timeout of liveness probes, should roughly reflect allowed timeouts from clients. |
+| nameOverride | string | `""` | Provide a name in place of `microgateway`. |
+| nodeSelector | object | `{}` | Define which nodes the pods are scheduled on. |
+| podAnnotations | object | `{}` | Additional annotations for the Microgateway Pod |
+| podSecurityContext | object | `{}` | [Security context for the pods](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod). |
+| readinessProbe.enabled | bool | `true` | Enable readiness probes. |
+| readinessProbe.failureThreshold | int | `3` | After how many tries the pod stops receiving traffic. |
+| readinessProbe.initialDelaySeconds | int | `10` | Initial delay in seconds. |
+| redis | object | See `redis.*`: | Pre-configured [Redis](#redis) service. |
+| redis.enabled | bool | `false` | Deploy pre-configured [Redis](#redis). |
+| replicaCount | int | `1` | Desired number of Microgateway pods. |
+| resources | object | See `resources.*` | Resource requests/limits for the runtime container. <br> [Resource limits](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container) <br> [Configure Quality of Service for Pods](https://kubernetes.io/docs/tasks/configure-pod-container/quality-service-pod/) |
+| resources.limits | object | See `resources.limits.*` | Resource limits for the runtime container. |
+| resources.limits.memory | string | `"4048Mi"` | Memory limit for the runtime container. |
+| resources.requests | object | See `resources.requests.*` | Resource requests for the Microgateway runtime container. These values most like have to be adjusted depending on specific load and usage profiles. <br> Please consult [Microgateway resource requirements](https://docs.airlock.com/microgateway/3.4/#data/1581621320714.html) for some ideas about actual Microgateway resource requirements. |
+| resources.requests.cpu | string | `"30m"` | CPU request for the runtime container. |
+| resources.requests.memory | string | `"256Mi"` | Memory request for the runtime container. |
+| route | object | See `route.*`: | [Openshift Route](#openshift-route) |
+| route.annotations | object | `{}` | Annotations to set on the route. |
+| route.enabled | bool | `false` | Create a route object. |
+| route.hosts | list | `["virtinc.com"]` | List of host names. <br> A route will be created for every host name listed. No route will be created if no hosts are specified. Use an empty string to generate a route without hostname. |
+| route.labels | object | `{}` | Additional labels add on the Microgateway route. |
+| route.path | string | `"/"` | Path for the route. |
+| route.targetPort | string | `"https"` | Target port of the service (`http`, `https` or `<number>`). |
+| route.tls.certificate | string | "" | Certificate to be used (multiline string). |
+| route.tls.destinationCACertificate | string | Microgateway's default certificate | Validate the Microgateway server certificate against this CA. (multiline string).<br> :exclamation: Must be configured with termination `reencrypt`. |
+| route.tls.enabled | bool | `true` | Enable TLS for the route. |
+| route.tls.insecureEdgeTerminationPolicy | string | `"Redirect"` | Define the insecureEdgeTerminationPolicy of the route (`Allow`, `Redirect`, `None`). |
+| route.tls.key | string | "" | Private key to be used for certificate (multiline string). |
+| route.tls.termination | string | `"reencrypt"` | Termination of the route (`edge`, `reencrypt`, `passthrough`). |
+| securityContext | object | `{}` | [Security context for a container](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container). |
+| service.annotations | object | `{}` | Annotations to set on the service. |
+| service.externalTrafficPolicy | string | `Local` if `service.type=LoadBalancer` | [externalTrafficPolicy](https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip) |
+| service.labels | object | `{}` | Additional labels to add on the service. |
+| service.loadBalancerIP | string | "" if `service.type=LoadBalancer` | [loadBalancerIP](https://kubernetes.io/docs/concepts/services-networking/service/#loadbalancer) |
+| service.port | int | `80` | Service port |
+| service.tlsPort | int | `443` | Service TLS port |
+| service.type | string | `"ClusterIP"` | [Service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types) |
+| serviceAccount | object | "See `serviceAccount.*`" | Specifies the service account under which the microgateway will run. A dedicated service account is created and used by default. <br><br> If `serviceAccount.create=true` and no `serviceAccount.name` is given, a name is generated using the fullname template. <br><br> If `serviceAccount.create=false` and no `serviceAccount.name` is given, the microgateway runs under the default service account. |
+| serviceAccount.annotations | object | `{}` | Annotations to set on the service account. |
+| serviceAccount.create | bool | `true` | Specifies whether a ServiceAccount should be created |
+| serviceAccount.labels | object | `{}` | Additional labels added on the service account. |
+| serviceAccount.name | string | `nil` | The name of the ServiceAccount to use. <br><br> |
+| test_request | string | `"/"` | Request that will be used as a smoketest when 'helm test' is invoked. |
+| tolerations | list | `[]` | Tolerations for use with node [taints](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/). |
 
 ## Dependencies
 The Airlock Microgateway Helm chart has the following optional dependencies, which can be enabled for a smooth start.
